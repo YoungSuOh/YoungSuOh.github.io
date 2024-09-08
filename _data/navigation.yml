@@ -7,6 +7,25 @@
 # How to use:
 # {{ site.data.navigation[site.locale].nav.<var_name> | default: 'text' }}
 
+
+# 한국어
+# -------
+ko: &DEFAULT_KO
+  nav:
+    - title: "소개글"
+      section: services
+    - title: "포트폴리오"
+      section: portfolio
+    - title: "기술 스택"
+      section: about
+    - title: "연혁"
+      section: timeline
+    - title: "연락(Contact)"
+      section: contact
+ko-KR:
+  <<: *DEFAULT_KO
+
+
 # English (default)
 # -----------------
 en: &DEFAULT_EN

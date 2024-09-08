@@ -16,15 +16,15 @@ theme: jekyll-agency
 url    : "https://youngsuoh.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "" # the subpath of your site, e.g. /blog
 
-title      : Your Awesome Website
-email      : your-email@example.com #this is also the email contact forms will go to
-description: "Site description"
-author     : Your Name
+title      : YoungSu Oh Portfolio
+email      : paul9119298@gmail.com #this is also the email contact forms will go to
+description: YoungSu Oh Portfolio
+author     : YoungSu Oh
 # logo:     #optional, defaults to site title
   # path: assets\img\clients\creative-market.jpg
   # height: 60 #height in px, defaults to 52px
 
-locale: "en-US" # See available languages in _data/sitetext.yml
+locale: "ko-KR" # See available languages in _data/sitetext.yml
 
 analytics:
   google: #Google Analytics tracking code here

@@ -7,6 +7,104 @@
 # How to use:
 # {{ site.data.ui-text[site.locale].<var_name> | default: 'text' }}
 
+
+# 한국어 (기본)
+# -----------------
+ko: &DEFAULT_KO
+  header:
+    title: 안녕하세요! 백엔드 개발자를 꿈꾸고 있는 오영수입니다!
+    text: 만나서 반갑습니다
+    button: About Me
+    buttonlink: "#services"
+
+  services:
+    title: "소개글"
+    text: "꾸준함과 배움을 추구하는 개발자"
+    section: services
+    list:
+      - title: "안드로이드 개발"
+        desc: "Kotlin을 기반으로 한 안드로이드 앱 개발 경험"
+        icon: fas fa-mobile-alt
+      - title: "서버 개발"
+        desc: "Java와 Spring Boot를 활용한 서버 개발. API 설계 및 데이터 처리 경험"
+        icon: fas fa-laptop
+      - title: "클라우드 & 배포"
+        desc: "AWS 클라우드를 활용한 CI/CD 배포 경험. (EC2, 로드밸런싱, AutoScaling 경험)"
+        icon: fas fa-cloud
+
+  portfolio:
+    title: "포트폴리오"
+    text: "저희의 포트폴리오를 확인하세요."
+    section: portfolio
+    closebutton: "프로젝트 닫기"
+
+  timeline:
+    title: "연혁"
+    text: "개발자 오영수의 성장 과정"
+    section: timeline
+    events:
+      - title: "인하대학교 컴퓨터공학과 편입"
+        year: "2022"
+        desc: "컴퓨터공학과 적응 및 알고리즘 위주 자기주도 학습 진행"
+        image: assets/img/timeline/inha.jpg
+        alt:
+      - title: "첫 프로젝트 경험"
+        year: "2023.06 ~ 2023.08"
+        desc: "대학교 학술 동아리에 들어가 Kotlin과 안드로이드를 학기 중에 학습 후 여름방학 때 첫 협업 경험"
+        image: assets/img/timeline/android.jpg
+        alt:
+      - title: "Spring Boot 서버 개발<br> 및 프로젝트 2회"
+        year: "2023.12 ~ 2024.02 & 2024.03 ~ 2024.06"
+        desc: "2023년도 9월부터 백엔드 서버 공부를 시작으로 <br> 겨울방학 때 1회,<br> 학교 과목인 컴퓨터공학 종합설계 때 1회"
+        image: assets/img/timeline/springboot.png
+        alt: 이미지 대체 텍스트
+      - title: "자격증 취득"
+        year: "2024.04 ~ 2024.09"
+        desc: "1.sqld 자격증 취득 <br>2.정보처리기사 자격증 취득"
+        image: assets/img/timeline/certificate.png
+        alt:
+        align: right
+      - title: "네이버 클라우드 캠프 진행중"
+        year: "2024.07 ~ 진행중"
+        desc: "풀스택 과정을 밟으면서 front-end & back-end의 기초를 다지는 중"
+        image: assets/img/timeline/navercloud.jfif
+        alt:
+        align: 
+    end: "진행중인 <br> 성장 스토리"
+
+  about:
+    title: "기술 스택"
+    text: "쌓아왔던 기술 스택과 정도"
+    body: "열늬열늬 오열늬~"
+    section: about
+
+
+  contact:
+    title: "Contact"
+    text: "해당 내용은 제 구글 메일을 통해 전해집니다."
+    section: contact
+    name: "이름*"
+    name-validation: "이름을 입력해주세요."
+    email: "이메일*"
+    email-validation: "이메일 주소를 입력해주세요."
+    phone: "전화번호"
+    phone-validation: "전화번호를 입력해주세요."
+    message: "메시지*"
+    message-validation: "메시지를 입력해주세요."
+    subject: "문의 양식 제출"
+    submit: "메시지 보내기"
+
+  footer:
+    legal: "개인정보 보호정책"
+    social:
+      - url: https://github.com/YoungSuOh
+        icon: "fab fa-github"
+
+ko-KR:
+  <<: *DEFAULT_KO
+
+
+
 # English (default)
 # -----------------
 en: &DEFAULT_EN
