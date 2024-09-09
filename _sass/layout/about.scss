@@ -1,0 +1,90 @@
+.tech-stack-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* 항목 사이의 간격 */
+      justify-content: center; /* 항목을 중앙에 정렬 */
+    }
+    
+    .progress-wrap {
+      flex: 1 1 calc(50% - 20px); /* 너비를 50%로 설정하고, 간격을 고려 */
+      box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+      margin-bottom: 20px;
+      text-align: left;
+      color: #A0A0A0;
+    }
+    
+    .progress-wrap h3 {
+      color: black;
+    }
+    
+    .progress {
+      height: 6px;
+      box-shadow: none;
+      background: #f2f3f7;
+      overflow: visible;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    
+    .progress-bar1, .progress-bar2, .progress-bar3, .progress-bar4, .progress-bar5, .progress-bar6, .progress-bar7, .progress-bar8, .progress-bar9, .progress-bar10, .progress-bar11 , .progress-bar12  {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      font-size: 12px;
+      line-height: 1.2;
+      color: #000;
+      font-weight: 600;
+      text-align: right;
+      position: relative;
+      overflow: visible;
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      -ms-border-radius: 8px;
+      border-radius: 8px;
+    }
+    .progress-bar1 { background: #2c98f0; }
+    .progress-bar2 { background: greenyellow; }
+    .progress-bar3 { background: orange; }
+    .progress-bar4 { background: yellowgreen; }
+    .progress-bar5 { background: lightblue; }
+    .progress-bar6 { background: lightgreen; }
+    .progress-bar7 { background: pink; }
+    .progress-bar8 { background: purple; }
+    .progress-bar9 { background: red; }
+    .progress-bar10 { background: brown; }
+    .progress-bar11 { background: #ff6600; }
+    .progress-bar12 { background: #ff0000; }
+    
+    .progress-bar1 .color-1 span, .progress-bar2 .color-2 span, .progress-bar3 .color-3 span,
+    .progress-bar4 .color-4 span, .progress-bar5 .color-5 span, .progress-bar6 .color-6 span,
+    .progress-bar7 .color-7 span, .progress-bar8 .color-8 span, .progress-bar9 .color-9 span,
+    .progress-bar10 .color-10 span, .progress-bar11 .color-11 span, .progress-bar12 .color-12 span {
+      position: absolute;
+      top: -22px;
+      right: 0;
+      color: inherit;
+    }
+    
+    .progress-bar1:after, .progress-bar2:after, .progress-bar3:after,
+    .progress-bar4:after, .progress-bar5:after, .progress-bar6:after,
+    .progress-bar7:after, .progress-bar8:after, .progress-bar9:after,
+    .progress-bar10:after, .progress-bar11:after, .progress-bar12:after {
+      position: absolute;
+      top: -2px;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      content: '';
+      background: inherit;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      border-radius: 50%;
+    }
+    
+    *:before, *:after {
+      box-sizing: border-box;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
