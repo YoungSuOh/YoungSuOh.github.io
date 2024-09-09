@@ -74,8 +74,8 @@ ko: &DEFAULT_KO
 
   about:
     title: "기술 스택"
-    text: "쌓아왔던 기술 스택과 정도"
-    body: "열늬열늬 오열늬~"
+    text: "쌓아왔던 기술 스택"
+    body: ""
     section: about
 
 
