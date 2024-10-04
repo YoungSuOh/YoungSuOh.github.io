@@ -1,0 +1,10 @@
+-- build
+bundle exec jekyll build
+bundle exec jekyll serve
+
+-- _data
+sitetext.yml : 메인 텍스트들이 모인 곳
+navigation.yml : 위 상단의 네비게이션바
+
+-- includes
+모든 html파일 존재
