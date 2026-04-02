@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="네이버 클라우드 캠프 Final — 은행 예금·적금 상품 검색/비교 Dr-Rate (React, Spring Boot, Kafka)"
+    />
+    <title>Dr-Rate · Project · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body class="project-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#projects">Projects</a></li>
+            <li><a href="../index.html#blog">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <div class="project-hero">
+        <div
+          class="project-hero-bg"
+          style="background-image: url('../photo/project/dr-rate/thumbnail.png')"
+        ></div>
+        <div class="project-hero-overlay"></div>
+        <div class="project-hero-inner">
+          <p class="project-hero-eyebrow">Naver Cloud Camp Final · 2024.11.06 ~ 2024.01.06</p>
+          <h1 class="project-hero-title">Dr-Rate</h1>
+          <p class="project-hero-lead">은행 예금·적금 상품 검색/비교 금융 플랫폼</p>
+        </div>
+      </div>
+
+      <article class="card article-shell project-article">
+        <div class="post-body project-body">
+          <h2>💡 Topic</h2>
+          <ul>
+            <li>네이버 클라우드 캠프 Final 프로젝트</li>
+            <li>
+              <strong>주제</strong>: 다양한 은행의 예금 및 적금 상품을 검색, 비교할 수 있는 금융 상품 플랫폼
+              <ul>
+                <li>
+                  사용자 서비스와 관리자 서비스를 통해 금융 상품의 등록, 관리 및 사용자 맞춤형 서비스를 제공
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2>🛠 Tech Stack</h2>
+          <ol>
+            <li>
+              <strong>Front-End</strong>
+              <ul>
+                <li><code>HTML</code>, <code>SCSS</code>, <code>Javascript</code>, <code>React</code></li>
+                <li>
+                  Tools
+                  <ul>
+                    <li><code>npm</code> (패키지 매니저)</li>
+                    <li><code>Vite</code> (번들러)</li>
+                    <li><code>Axios</code> (HTTP 비동기 통신 도구)</li>
+                    <li><code>Jotai</code> (상태 관리 도구)</li>
+                    <li><code>Node.js v20</code></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Back-End</strong>
+              <ul>
+                <li><code>Java</code>, <code>Spring Boot</code> (MVC, Spring Data JPA, Spring Security)</li>
+                <li><code>Apache Kafka</code></li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Database</strong>
+              <ul>
+                <li><code>MySQL</code>, <code>MongoDB</code>, <code>Redis</code></li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Deploy</strong>
+              <ul>
+                <li>
+                  <code>NCP</code>
+                  <ul>
+                    <li>Object Storage</li>
+                    <li>Cloud DB for MySQL / Cloud DB for MongoDB / Cloud DB for Redis</li>
+                    <li>Cloud Data Streaming Service</li>
+                    <li>Application Load Balancer / Certificate Manager</li>
+                    <li>AutoScaling / Server Image / Init Script</li>
+                  </ul>
+                </li>
+                <li><code>Docker</code>, <code>Dockerhub</code></li>
+                <li><code>Jenkins</code></li>
+              </ul>
+            </li>
+          </ol>
+
+          <h2>🧑🏻‍💻 Team</h2>
+          <ul>
+            <li>Front-End + BackEnd 8명</li>
+          </ul>
+
+          <h2>🤚🏻 Part</h2>
+          <ul>
+            <li><strong>역할 : 팀장</strong></li>
+            <li>Back-End Github 형상 관리</li>
+            <li>Back-End 파트 프로젝트 구조 설계</li>
+            <li>Figma를 통한 관리자 페이지 UI 설계</li>
+            <li>
+              관리자 페이지 구현
+              <ul>
+                <li>
+                  Front-End (전체 페이지 모바일 반응형 고려한 UI 설계)
+                  <ul>
+                    <li>
+                      관리자 대시 보드 페이지
+                      <ul>
+                        <li>방문자 현황, 일자별 요약, 신규 회원 조회, 1:1 문의 내역 조회 구현</li>
+                        <li>
+                          방문자 현황
+                          <ul>
+                            <li><code>chart.js</code> 사용하여 방문자 현황을 가시적으로 구현</li>
+                          </ul>
+                        </li>
+                        <li>
+                          일자별 요약
+                          <ul>
+                            <li>회원/비회원 방문자 수, 총 방문자 수, 신규 가입자 수 컬럼으로 조회</li>
+                            <li>하루 단위로 오늘 포함 최근 5일 조회</li>
+                            <li>최근 일주일 현황, 이번 달 합계 종합 조회</li>
+                          </ul>
+                        </li>
+                        <li>신규 회원: 신규 회원 조회</li>
+                        <li>1:1 문의 내역: 1:1 문의 내역 조회</li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      사용자 정보 조회 페이지
+                      <ul>
+                        <li>page size 4로 페이징 처리</li>
+                        <li>기본 조회 순서: 신규 회원 순</li>
+                        <li>이메일과 이름으로 검색 가능</li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      관리자 1:1 문의 내역 조회 페이지
+                      <ul>
+                        <li>방 번호, 이름, 이메일로 검색 가능</li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      관리자 1:1 문의 상담 페이지
+                      <ul>
+                        <li>카카오톡 모바일 UI와 유사하게 구현</li>
+                        <li>스크롤 기반 페이징 처리(위로 스크롤 시 다음 페이지)</li>
+                      </ul>
+                    </li>
+
+                    <li>관리자 헤더 모바일 반응형 고려 UI 설계</li>
+                  </ul>
+                </li>
+
+                <li>
+                  Back-End
+                  <ul>
+                    <li>
+                      방문자 현황 집계
+                      <ul>
+                        <li>
+                          매일마다 <code>Redis</code>에 방문자 현황을 저장하고,
+                          Spring Boot <code>@Scheduler</code>로 매일 DB에 저장
+                        </li>
+                        <li>
+                          방문자 현황 집계 Flowchart
+                          <figure class="project-inline-figure">
+                            <img
+                              src="../photo/project/dr-rate/1.png"
+                              alt="Dr-Rate 방문자 현황 집계 Flowchart"
+                              loading="lazy"
+                            />
+                          </figure>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      관리자 1:1 채팅 상담 기능 구현(1:1 채팅 기능)
+                      <ul>
+                        <li><code>websocket</code>을 이용해 실시간 통신 구축</li>
+                        <li><code>stomp protocol</code>로 publish/subscribe 처리</li>
+                        <li>Message broker 용으로 <code>Apache Kafka</code> 토픽 생성</li>
+                        <li>
+                          <code>MongoDB</code>로 채팅방/채팅 내역/채팅 이미지 저장
+                          <ul>
+                            <li>복잡한 쿼리 요구가 적고, 실시간 데이터가 많고 비정형 데이터 저장에 유리해서 선택</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      예금 &amp; 적금 필터링을 통한 상품 조회 기능 구현
+                      <ul>
+                        <li>은행, 나이, 기간, 이자 계산방식, 가입 방식에 따른 필터링(중복 선택 가능)</li>
+                        <li>
+                          <code>QueryDSL</code>로 동적 쿼리 처리
+                          <ul>
+                            <li>선택 조건에 따라 쿼리를 동적으로 변환하여 Data 반환</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      <code>JWT Token</code> 정책 설정
+                      <ul>
+                        <li>
+                          <code>Access Token</code>은 local storage에, <code>Refresh Token</code>은 클라이언트에 넘기지 않고
+                          <code>Redis</code>에 저장하도록 정책 설정
+                        </li>
+                        <li>
+                          보안 강화 정책
+                          <ul>
+                            <li>
+                              <code>Refresh Token</code>을 클라이언트에 넘기지 않고 Document 형태로
+                              <code>Access Token</code>과 함께 Redis에 저장
+                            </li>
+                            <li>
+                              Access Token expired time을 짧게 하면 서버 overhead가 증가할 수 있어,
+                              Redis에 저장해 이를 최소화
+                            </li>
+                            <li>Redis는 private subnet으로 접근 가능해서 Refresh Token 보호에 적합</li>
+                          </ul>
+                        </li>
+                        <li>
+                          <code>Access Token</code> 만료 시
+                          parse하여 해당 userId의 hash 필드에서 Access Token 존재 여부를 확인한 뒤,
+                          Refresh Token으로 reissue 로직 진행
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      CI-CD(배포 과정)
+                      <ul>
+                        <li>Frontend는 VS Code, Backend는 IntelliJ에서 작업한 코드를 GitHub에 push</li>
+                        <li>
+                          Jenkins로 GitHub에서 최신 코드를 가져와 Dockerfile로 빌드
+                          <ul>
+                            <li>
+                              Frontend: Node.js로 빌드 후, 정적 파일을 Nginx 실행 환경으로 구성
+                            </li>
+                            <li>
+                              Backend: Spring Boot 내장 Tomcat을 실행할 환경 구성
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          빌드된 Docker 이미지를 Docker Hub에 push 후 NCP 서버에서 pull하여 컨테이너 실행
+                          <ul>
+                            <li>
+                              Docker 이미지를 백업/재사용 가능하게 하여 동일 환경 배포를 지원하고,
+                              Docker 재사용성을 통해 자동화를 효율화
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <li>
+                      클라우드 구성도
+                      <ul>
+                        <li>NCP 기반으로 VPC 설계 후 애플리케이션 구성</li>
+                        <li>VPC 내부에 Public Subnet / Private Subnet 분리</li>
+                        <li>
+                          Public Subnet은 internet gateway가 열려 있어 외부 통신이 가능
+                        </li>
+                        <li>
+                          Network ACL로 차단 정책을 설정하고,
+                          Front-End Server와 Back-End Server를 각각 target group으로 설정한 로드밸런서들을 연결
+                        </li>
+                        <li>
+                          Object Storage, Cloud DB for MySQL, Cloud DB for MongoDB, Cloud Data Streaming Service 연결
+                        </li>
+                        <li>
+                          로드밸런서는 도메인을 발급 받아 Certificate Manager로 SSL 인증서를 등록하여 HTTPS 통신
+                          <ul>
+                            <li>Server Image와 InitScript를 구성해 AutoScaling으로 트래픽 분산 처리</li>
+                          </ul>
+                        </li>
+                        <li>
+                          Cloud DB for Redis는 NCP에서 기본적으로 Private Subnet만 설정 가능
+                          <ul>
+                            <li>서버를 생성하고 VPC의 ACG 허용 정책에 추가해 VPC 내부에서만 통신 가능하게 구축</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2>🤔 Learned</h2>
+          <h3>1. 서버 배포와 인프라 구성</h3>
+          <ol>
+            <li>
+              <strong>도메인 구입 및 HTTPS 통신 설정</strong>
+              <ul>
+                <li>도메인 구매 후 SSL 인증서를 발급받아 HTTPS 통신을 구현</li>
+                <li>실서비스에서 HTTPS로 보안을 강화하는 방법을 익힘</li>
+              </ul>
+            </li>
+            <li>
+              <strong>로드밸런서와 오토스케일링</strong>
+              <ul>
+                <li>트래픽 증가 대비 로드밸런서와 오토스케일링 설정</li>
+                <li>응답 속도를 안정적으로 유지하도록 설계하는 관점 습득</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Docker와 Jenkins를 활용한 CI/CD 파이프라인 구축</strong>
+              <ul>
+                <li>
+                  Docker: 이미지/컨테이너 개념을 이해하고 배포 환경을 컨테이너로 통합
+                </li>
+                <li>
+                  Jenkins: 파이프라인 빌드/테스트/배포 자동화, 플러그인 설치, 자격 증명 등록,
+                  <code>application.yml</code> 환경변수 관리 방법 학습
+                </li>
+                <li>CI/CD로 배포 시간을 40% 단축, 수동 작업 감소</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>2. 실시간 채팅 기능 구현</h3>
+          <ol>
+            <li>
+              <strong>웹소켓과 STOMP 프로토콜 학습</strong>
+              <ul>
+                <li>WebSocket의 양방향 통신 개념과 STOMP 메시징 구조를 익힘</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Message Broker 활용</strong>
+              <ul>
+                <li>
+                  Apache Kafka로 토픽 생성/삭제 및 메타데이터 갱신 문제를 해결
+                </li>
+                <li>분산 시스템 환경에서 메시지 처리 효율을 이해함</li>
+              </ul>
+            </li>
+            <li>
+              <strong>실시간 데이터 관리</strong>
+              <ul>
+                <li>채팅 내역과 이미지를 효율적으로 저장하기 위해 MongoDB 선택</li>
+                <li>비정형 데이터 저장소 관점 학습</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>3. 브라우저 스토리지 활용</h3>
+          <ol>
+            <li>
+              <strong>Local Storage 개념과 활용</strong>
+              <ul>
+                <li>데이터 저장/관리 방법 학습</li>
+                <li>회원/비회원 방문자 구분 집계에 유용</li>
+                <li>Redis에 방문자 현황 저장 전 local storage로 캐싱해 효율 향상</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>4. QueryDSL을 활용한 동적 쿼리 생성</h3>
+          <ol>
+            <li>
+              <strong>QueryDSL 학습</strong>
+              <ul>
+                <li>필터 조건에 따라 동적 쿼리를 생성하는 방법 학습</li>
+                <li>QueryDSL의 유연성과 타입 안전성 이해</li>
+              </ul>
+            </li>
+            <li>
+              <strong>동적 쿼리의 중요성</strong>
+              <ul>
+                <li>조건에 따라 쿼리를 동적으로 생성해 유연한 데이터 처리를 달성</li>
+                <li>복잡한 필터링도 성능 저하 없이 처리되도록 설계</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h2>System Architecture</h2>
+          <figure class="project-inline-figure">
+            <img
+              src="../photo/project/dr-rate/SA.png"
+              alt="Dr-Rate 시스템 아키텍처 다이어그램"
+              loading="lazy"
+            />
+          </figure>
+
+          <h2>📷 Screenshot</h2>
+          <div class="screenshot-grid">
+            <figure class="screenshot-item">
+              <img src="../photo/project/dr-rate/2.png" alt="Dr-Rate 스크린샷 2" loading="lazy" />
+            </figure>
+            <figure class="screenshot-item">
+              <img src="../photo/project/dr-rate/3.png" alt="Dr-Rate 스크린샷 3" loading="lazy" />
+            </figure>
+            <figure class="screenshot-item">
+              <img src="../photo/project/dr-rate/4.png" alt="Dr-Rate 스크린샷 4" loading="lazy" />
+            </figure>
+            <figure class="screenshot-item">
+              <img src="../photo/project/dr-rate/5.png" alt="Dr-Rate 스크린샷 5" loading="lazy" />
+            </figure>
+            <figure class="screenshot-item">
+              <img src="../photo/project/dr-rate/6.png" alt="Dr-Rate 스크린샷 6" loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <p class="article-back article-back--action">
+          <a class="btn-back" href="../index.html#projects">
+            <span class="btn-back__icon" aria-hidden="true">←</span>
+            프로젝트 목록
+          </a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="../script.js" defer></script>
+  </body>
+</html>
+

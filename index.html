@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#home">YoungSuOh.github.io</a>
+        <nav>
+          <ul class="nav-list" id="main-nav"></ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero" id="home">
+        <div class="hero-card">
+          <h1 id="site-title"></h1>
+          <p id="site-description" class="muted"></p>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <h2 class="section-title">About</h2>
+
+        <div class="about-shell">
+          <div class="about-profile">
+            <div class="about-photo-wrap">
+              <img
+                class="about-photo"
+                src="photo/오영수.jpg"
+                alt="오영수 프로필 사진"
+                width="200"
+                height="200"
+                loading="lazy"
+              />
+            </div>
+            <p class="about-name">오영수</p>
+            <p class="about-tagline muted">
+              지속적인 성장과 통합적 역량을 갖춘 백엔드·인프라 지향 개발자입니다.
+            </p>
+          </div>
+
+          <div class="about-main">
+            <section class="about-block" aria-labelledby="edu-heading">
+              <h3 id="edu-heading" class="about-subtitle">학력</h3>
+              <ul class="about-list">
+                <li>인하대학교 컴퓨터공학과 (2020.03.02 ~ 2025.08.22 졸업)</li>
+                <li>학점은행제 : 2018.09 ~ 2019.08.28 (전문학사 수료)</li>
+                <li>청주대학교 소프트웨어 융합학부 : 2018.03.02 ~ 2018.08 (중퇴)</li>
+                <li>분당중앙고 : 2014.03.03 ~ 2017.02.07</li>
+              </ul>
+            </section>
+
+            <section class="about-block" aria-labelledby="cert-heading">
+              <h3 id="cert-heading" class="about-subtitle">Certificate</h3>
+              <ul class="cert-chips">
+                <li>정보처리기사</li>
+                <li>리눅스마스터 2급</li>
+                <li>NCP Certified Associate</li>
+                <li>NCP Certified Professional</li>
+                <li>SQLD</li>
+              </ul>
+            </section>
+
+            <section class="about-block" aria-labelledby="lang-heading">
+              <h3 id="lang-heading" class="about-subtitle">Language</h3>
+              <ol class="about-list about-list--numbered">
+                <li>TOEIC 840</li>
+                <li>OPIC IH</li>
+              </ol>
+            </section>
+
+            <section class="about-block about-skills" aria-labelledby="skills-heading">
+              <h3 id="skills-heading" class="about-subtitle about-subtitle--emoji">💪 Skills</h3>
+              <p class="muted about-skills-hint">항목을 클릭하면 상세 내용이 펼쳐집니다.</p>
+
+              <div class="skills-accordion">
+                <details class="skill-tier">
+                  <summary class="skill-tier-summary">Language</summary>
+                  <div class="skill-tier-body">
+                    <details class="skill-item">
+                      <summary>C++</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">학습 및 경험</p>
+                        <ul>
+                          <li>
+                            학교에서 주요 학습 언어로 사용하며 자료구조 수업에서 배열, 링크드 리스트(Single, Circular), 스택, 큐, 트리, 힙, BST, 해시 테이블, 그래프 등 다양한 자료구조를 직접 구현.
+                          </li>
+                          <li>
+                            자료구조 실습 시험에서 만점을 받은 경험이 있으며, 이를 통해 알고리즘 구현 능력을 검증받음.
+                          </li>
+                        </ul>
+                        <p class="skill-label">현재 활용</p>
+                        <ul>
+                          <li>코딩 테스트에서 주 언어로 사용 중이며, STL(Standard Template Library)을 적극적으로 활용.</li>
+                          <li>
+                            특히 <code>vector</code>, <code>algorithm</code>, <code>map</code> 등 STL 활용을 통해 효율적인 코드 작성과 문제 해결 경험 다수. (현재 백준 골드 2)
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Java</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">백엔드 개발</p>
+                        <ul>
+                          <li>
+                            Spring Boot를 이용한 백엔드 개발의 주 언어로 가장 많이 사용하며, 서버 개발의 주요 언어로 자리 잡음.
+                          </li>
+                          <li>
+                            OOP(객체지향 프로그래밍)의 4가지 특징(캡슐화, 상속, 다형성, 추상화)을 중시하며, SOLID 원칙을 적용해 유지보수성을 높인 코드 작성 경험.
+                          </li>
+                        </ul>
+                        <p class="skill-label">학업 프로젝트</p>
+                        <ul>
+                          <li>
+                            Java GUI를 활용한 미니 게임 개발 프로젝트에서 쓰레드(thread)를 이용한 FPS 설정, 에러 처리, 최적화 작업을 통해 안정적인 실행 환경 제공.
+                          </li>
+                          <li>해당 프로젝트에서 A+ 학점을 받은 이력을 통해 프로젝트 기획 및 구현 능력을 입증.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>JavaScript</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">웹 프론트엔드 경험</p>
+                        <ul>
+                          <li>네이버 클라우드 캠프에서 4번의 프로젝트를 통해 JavaScript와 jQuery 활용에 익숙해짐.</li>
+                          <li>웹 UI를 설계하면서 어떤 기능을 JavaScript로 처리해야 할지 감을 잡을 수 있는 수준의 실무 능력.</li>
+                        </ul>
+                        <p class="skill-label">API 연동 경험</p>
+                        <ul>
+                          <li><code>ajax</code>, <code>axios</code>를 활용한 API 연동을 통해 서버와의 통신 및 데이터 처리 경험.</li>
+                          <li>프로젝트 진행 중 비동기 통신에 대한 이해도를 높이며 사용자 경험(UX) 개선에 기여.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Kotlin</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">안드로이드 개발 경험</p>
+                        <ul>
+                          <li>대학 수업과 병행하며 안드로이드 프로젝트를 진행, Kotlin을 학습.</li>
+                          <li>구글 지도 API를 활용한 조깅 앱 개발 프로젝트에서 Kotlin으로 UI/UX 설계 및 앱의 주요 기능 구현.</li>
+                        </ul>
+                        <p class="skill-label">현재 수준</p>
+                        <ul>
+                          <li>프로젝트 경험이 1회로 언어 활용에 깊이는 부족하지만, Kotlin의 문법과 안드로이드 앱 개발 기본기를 갖춤.</li>
+                        </ul>
+                      </div>
+                    </details>
+                  </div>
+                </details>
+
+                <details class="skill-tier">
+                  <summary class="skill-tier-summary">Front-End</summary>
+                  <div class="skill-tier-body">
+                    <details class="skill-item">
+                      <summary>HTML, CSS, JSP</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">기초 학습</p>
+                        <ul>
+                          <li>학교 웹 프로그래밍 강의를 통해 HTML과 CSS의 기본적인 사용법을 익히며 웹 화면 설계에 대한 기초적인 감각을 형성.</li>
+                          <li>JSP를 활용하여 간단한 서버 연동 및 동적인 웹 페이지 개발 경험.</li>
+                        </ul>
+                        <p class="skill-label">실무 경험</p>
+                        <ul>
+                          <li>네이버 클라우드 캠프에서 3번의 세미 프로젝트를 통해 HTML, CSS, JSP에 대한 숙련도를 높임.</li>
+                          <li>반응형 웹 페이지와 기본적인 웹 표준을 준수하며 UI 개발 경험.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>React, Scss</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">React 라이브러리 경험</p>
+                        <ul>
+                          <li>네이버 클라우드 캠프에서 React를 학습한 후 최종 프로젝트에서 주로 사용.</li>
+                          <li>React를 활용해 컴포넌트 기반 개발 방식을 이해하고, PATH 경로 라우팅 처리 경험.</li>
+                          <li>프로젝트 중 API 연동, 동적인 UI 구현, 컴포넌트 재사용성을 고려한 설계를 통해 React에 대한 실무 이해도를 높임.</li>
+                          <li>React 상태 관리 도구 활용 측면에서는 아직 이해도 부족.</li>
+                        </ul>
+                        <p class="skill-label">SCSS 적용</p>
+                        <ul>
+                          <li>CSS와 비교해 SCSS의 장점을 활용, 반복 사용을 줄이고 변수 및 믹스를 적용하여 코드의 가독성과 유지보수성을 개선.</li>
+                          <li>네이밍 컨벤션(BEM 방식)을 활용한 체계적인 스타일 관리 경험.</li>
+                        </ul>
+                        <p class="skill-label">반응형 웹 개발</p>
+                        <ul>
+                          <li>관리자 페이지의 모든 화면을 담당하면서 데스크톱과 모바일 환경을 모두 고려한 반응형 UI를 설계.</li>
+                          <li>다양한 해상도에서 UI 테스트를 통해 크로스브라우징 이슈를 해결하며 안정적인 화면을 제공.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Android</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">안드로이드 앱 개발 경험</p>
+                        <ul>
+                          <li>학교 학술 동아리에서 진행한 안드로이드 프로젝트를 통해 기본적인 앱 개발 지식을 습득.</li>
+                          <li>Kotlin을 사용해 Google Maps API를 활용한 조깅 앱 개발 프로젝트를 진행하며 협업 방식과 개발 프로세스에 대한 이해도를 높임.</li>
+                        </ul>
+                        <p class="skill-label">현재 수준</p>
+                        <ul>
+                          <li>앱 개발 경험이 많지 않지만, 안드로이드 프로젝트 진행 중 UI 설계와 기능 구현에서 기여한 경험.</li>
+                        </ul>
+                      </div>
+                    </details>
+                  </div>
+                </details>
+
+                <details class="skill-tier">
+                  <summary class="skill-tier-summary">Back-End</summary>
+                  <div class="skill-tier-body">
+                    <details class="skill-item">
+                      <summary>Spring Framework</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">학습 경험</p>
+                        <ul>
+                          <li>
+                            네이버 클라우드 캠프를 통해 Spring Framework의 핵심 개념인 스프링 빈, AOP(Aspect-Oriented Programming), 스프링 MVC 패턴에 대해 학습.
+                          </li>
+                          <li>
+                            특히 <code>applicationContext.xml</code>을 사용해 스프링 빈을 직접 등록하며, 스프링 컨테이너의 동작 원리를 직관적으로 이해.
+                          </li>
+                        </ul>
+                        <p class="skill-label">AOP 심화 학습</p>
+                        <ul>
+                          <li>AOP의 핵심 기능인 Aspect, Advice, Pointcut을 활용해 로깅, 트랜잭션 관리 등 공통 관심사를 효율적으로 처리하는 방법을 익힘.</li>
+                          <li>이를 통해 코드의 유지보수성과 재사용성을 높이는 설계 방법론에 대해 배움.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Spring Boot Framework</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">숙련도</p>
+                        <ul>
+                          <li>Spring Boot 기반으로 MVC 패턴, JPA, Spring Security를 활용한 개발에 익숙.</li>
+                          <li>JWT를 활용한 인증/인가 로직 구현 경험.</li>
+                        </ul>
+                        <p class="skill-label">QueryDSL 활용</p>
+                        <ul>
+                          <li>네이버 클라우드 캠프 최종 프로젝트에서 QueryDSL을 사용해 복잡한 조건을 가진 동적 쿼리 작성 경험.</li>
+                          <li>성능을 고려한 쿼리 최적화와 페이징 처리 로직 구현.</li>
+                        </ul>
+                        <p class="skill-label">프로젝트 경험</p>
+                        <ul>
+                          <li>Spring Boot를 활용해 총 3번의 프로젝트를 진행하며, 프레임워크 사용에 대한 실무 이해도와 적응력 향상.</li>
+                          <li>RESTful API 설계와 테스트 경험을 통해 안정적이고 확장 가능한 서버 구축 경험.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Apache Kafka</summary>
+                      <div class="skill-item-body">
+                        <ul>
+                          <li>
+                            네이버 클라우드 캠프 최종 프로젝트에서 실시간 채팅 기능 구현 시 Kafka를 Message Broker로 채택. (NCP의 Cloud Data Streaming Service 사용)
+                          </li>
+                          <li><strong>역할 이해</strong>: Kafka의 Topic, Partition, Offset 구조와 Message Broker로서의 역할에 대한 깊은 이해.</li>
+                          <li>
+                            <strong>문제 해결</strong>: Kafka 메타데이터 갱신 문제를 겪으며, 토픽 설정 및 메시지 처리 최적화 방법을 학습.
+                          </li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>MyBatis</summary>
+                      <div class="skill-item-body">
+                        <ul>
+                          <li>2번의 레거시 프로젝트에서 MyBatis Mapper를 사용해 데이터베이스 연동 경험.</li>
+                          <li>SQL 쿼리를 XML로 관리하며 MyBatis의 ResultMap과 Dynamic SQL 활용.</li>
+                          <li>기존 코드의 유지보수 및 리팩토링 경험을 통해 레거시 시스템 이해도 향상.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Database</summary>
+                      <div class="skill-item-body">
+                        <ol class="about-list about-list--numbered">
+                          <li>
+                            <strong>Oracle</strong>
+                            <ul>
+                              <li>네이버 클라우드 캠프 수업에서 Oracle DBMS를 주로 다루며, 다양한 쿼리문 실습을 통해 기초 쌓음.</li>
+                              <li>서브쿼리, 집계 함수, 조인 등의 고급 쿼리문 작성 경험.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            <strong>MySQL</strong>
+                            <ul>
+                              <li>프로젝트에서 주로 사용한 DBMS로, 복잡한 쿼리(join, fetch 등)와 인덱스를 활용한 데이터 최적화 경험.</li>
+                              <li>Spring JPA와의 연계를 통해 데이터베이스 설계와 ORM(Object-Relational Mapping) 활용.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            <strong>MongoDB</strong>
+                            <ul>
+                              <li>실시간 채팅 내역 저장에 사용하며, RDBMS와의 차이점(스키마리스 구조, 성능 특성 등)을 이해.</li>
+                              <li>Document 기반 설계와 효율적인 데이터 조회를 위한 인덱스 활용 경험.</li>
+                            </ul>
+                          </li>
+                          <li>
+                            <strong>Redis</strong>
+                            <ul>
+                              <li>휘발성 데이터와 Refresh Token 저장소로 활용.</li>
+                              <li>캐싱 및 데이터 만료 정책 설정을 통해 서버 부하를 줄이고 성능 최적화 경험.</li>
+                            </ul>
+                          </li>
+                        </ol>
+                      </div>
+                    </details>
+                  </div>
+                </details>
+
+                <details class="skill-tier">
+                  <summary class="skill-tier-summary">CI-CD</summary>
+                  <div class="skill-tier-body">
+                    <details class="skill-item">
+                      <summary>AWS</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">기본 학습</p>
+                        <ul>
+                          <li>VPC와 EC2를 생성해 서버 접속 실습을 통해 클라우드 환경에서 서버를 관리하는 기초적인 방법 학습.</li>
+                          <li>S3를 사용해 React 기반의 정적 웹 페이지를 호스팅하고, S3 버킷을 통해 이미지 업로드 기능 구현.</li>
+                        </ul>
+                        <p class="skill-label">데이터베이스 활용</p>
+                        <ul>
+                          <li>RDS MySQL을 사용해 클라우드 환경에서의 데이터베이스 관리와 연동 경험.</li>
+                          <li>백엔드와 클라우드 DB의 안정적인 통신을 구현하며 데이터 처리 효율성 이해.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Naver Cloud Platform</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">VPC 및 서브넷 설계</p>
+                        <ul>
+                          <li>VPC를 생성해 private subnet과 public subnet을 나누어 서버 배포.</li>
+                          <li>이중화를 고려한 네트워크 설계를 통해 안정성과 보안을 강화.</li>
+                        </ul>
+                        <p class="skill-label">로드 밸런싱 및 HTTPS 적용</p>
+                        <ul>
+                          <li>Application Load Balancer(ALB)를 연결해 트래픽 분산 처리 및 서버 부하 감소.</li>
+                          <li>Certificate Manager를 통해 SSL 인증서를 연결하여 HTTPS 통신 구현.</li>
+                        </ul>
+                        <p class="skill-label">자동 스케일링</p>
+                        <ul>
+                          <li>서버 이미지와 Init Script를 활용해 Auto Scaling 설정, 서버 트래픽 증가에 따라 확장이 자동으로 이루어지도록 구성.</li>
+                          <li>이를 통해 사용량 변화에 따른 비용 최적화와 시스템 안정성 확보.</li>
+                        </ul>
+                        <p class="skill-label">클라우드 서비스 활용</p>
+                        <ul>
+                          <li>Object Storage와 AWS S3 API를 활용해 웹 애플리케이션의 이미지 업로드 기능 구현.</li>
+                          <li>Cloud for MySQL, MongoDB, Redis를 사용하며 클라우드 기반 데이터베이스와의 연동 경험.</li>
+                          <li>Cloud Data Streaming Service를 통해 Kafka를 사용하며 실시간 데이터 처리와 스트리밍 데이터의 효율적인 관리 경험.</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="skill-item">
+                      <summary>Jenkins</summary>
+                      <div class="skill-item-body">
+                        <p class="skill-label">파이프라인 구축</p>
+                        <ul>
+                          <li>Jenkins Pipeline을 활용해 Front-End(React)와 Back-End(Spring Boot) 배포 자동화.</li>
+                          <li>GitHub Webhook을 연동하여 코드 변경 시 자동으로 빌드 및 배포가 이루어지도록 설정.</li>
+                        </ul>
+                        <p class="skill-label">Docker와 통합</p>
+                        <ul>
+                          <li>Docker와 Docker Hub를 활용해 컨테이너 기반 배포를 진행, Docker 이미지를 재사용하여 배포 효율성을 높임.</li>
+                          <li>Jenkins를 통해 Docker 명령어를 실행(<code>docker exec</code>)하며 빌드 및 배포 과정 중 발생한 문제를 디버깅하고 해결.</li>
+                        </ul>
+                        <p class="skill-label">CI/CD 최적화 경험</p>
+                        <ul>
+                          <li>CI/CD 과정을 자동화하며 코드 품질 향상 및 배포 시간 단축을 실현.</li>
+                          <li>Jenkinsfile을 작성해 단계별 빌드, 테스트, 배포 과정 정의.</li>
+                        </ul>
+                      </div>
+                    </details>
+                  </div>
+                </details>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="section history-section" id="history" aria-labelledby="history-heading">
+        <div class="history-head">
+          <h2 id="history-heading" class="history-title">HISTORY</h2>
+          <div class="history-points" role="presentation">
+            <span class="history-points-label">POINT</span>
+            <ul class="history-points-list">
+              <li>지속적인 성장</li>
+              <li>개발에 대한 통합적 접근</li>
+            </ul>
+          </div>
+        </div>
+        <div class="history-rule" aria-hidden="true"></div>
+
+        <div class="history-grid">
+          <article class="history-card">
+            <p class="history-year">2022</p>
+            <p class="history-text">
+              복학 후 동아리 활동에 참여하며 알고리즘과 실무 역량을 꾸준히 쌓고, 개발에 대한 흥미와 기초를 다졌습니다.
+            </p>
+          </article>
+          <article class="history-card">
+            <p class="history-year">2023</p>
+            <p class="history-text">
+              안드로이드·Spring Boot 프로젝트와 공모전에 참여하며 협업 방식과 실전에서의 개발 프로세스에 익숙해졌습니다.
+            </p>
+          </article>
+          <article class="history-card">
+            <p class="history-year">2024</p>
+            <p class="history-text">
+              인하대학교 캡스톤 디자인에서 Spring Boot 기반 백엔드 개발을 리드하며 설계·구현·협업을 경험했습니다.
+            </p>
+          </article>
+          <article class="history-card">
+            <p class="history-year">2025</p>
+            <p class="history-text">
+              네이버 클라우드 캠프에 참여해 React & SpringBoot 기반 Full-Stack 개발과 CI/CD· NCP 기반 클라우드 환경 구축까지 경험을 넓히며 통합적인 시야를 갖추었습니다.
+            </p>
+          </article>
+          <article class="history-card">
+            <p class="history-year">2026</p>
+            <p class="history-text">
+              OPAY 개인 프로젝트를 통해 멱등성과 트랜잭션 기반으로 정합성을 보장하는 결제 시스템을 설계하고, 동시성·부하 테스트와 Prometheus·Grafana 기반 모니터링까지 구축 중입니다.
+            </p>
+          </article>
+        </div>
+
+        <div class="history-footer card">
+          <h3 class="history-footer-title">지속적인 성장과 통합적 역량을 갖춘 개발자</h3>
+          <p class="history-footer-text muted">
+            처음에는 백엔드에 집중했지만, 서비스를 만들기 위해서는 프론트엔드·인프라·운영까지 이해하는 것이 중요하다는 것을 느꼈습니다.
+            네이버 클라우드 캠프와 OPAY 프로젝트 등을 통해 다양한 기술 스택과 협업 경험을 이어가며, 한 영역에 머무르지 않는 개발자로 성장하고 있습니다.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="projects">
+        <h2 class="section-title">Projects</h2>
+        <div class="grid project-grid" id="project-list"></div>
+      </section>
+
+      <section class="section" id="blog">
+        <h2 class="section-title">Blog</h2>
+        <div class="grid grid-2">
+          <aside class="card">
+            <h3>Categories</h3>
+            <ul id="category-list" class="category-list"></ul>
+          </aside>
+          <div id="post-list" class="grid"></div>
+        </div>
+      </section>
+
+      <section class="section" id="archive">
+        <h2 class="section-title">Archive</h2>
+        <article class="card">
+          <table class="archive-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Title</th>
+              </tr>
+            </thead>
+            <tbody id="archive-body"></tbody>
+          </table>
+        </article>
+      </section>
+
+      <section class="section" id="contact">
+        <h2 class="section-title">Contact</h2>
+        <div class="grid grid-3" id="contact-list"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="site-data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

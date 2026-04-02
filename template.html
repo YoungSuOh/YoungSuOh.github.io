@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>글 작성 · 설정 · 프로젝트 생성</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .template-wrap {
+        padding: 2rem 0 3rem;
+      }
+      .template-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+      }
+      textarea,
+      .template-input {
+        width: 100%;
+        background: #ffffff;
+        color: #2b2f3a;
+        border: 1px solid #d8e6ff;
+        border-radius: 12px;
+        padding: 0.65rem 0.85rem;
+        font-family: Consolas, "Cascadia Code", monospace;
+        font-size: 0.85rem;
+        line-height: 1.45;
+        box-sizing: border-box;
+      }
+      textarea {
+        min-height: 200px;
+      }
+      #proj-body-html {
+        min-height: 320px;
+      }
+      #proj-out-html {
+        min-height: 180px;
+      }
+      .button-row {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-top: 0.75rem;
+      }
+      .btn {
+        background: linear-gradient(90deg, #4f80ff, #6b9aff);
+        color: white;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.5rem 0.95rem;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .btn.secondary {
+        background: #ffffff;
+        color: #5a6a8d;
+        border: 1px solid #cfe0ff;
+      }
+      .panel-title {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      .proj-form-grid {
+        display: grid;
+        gap: 0.75rem 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        margin-bottom: 0.75rem;
+      }
+      .proj-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .proj-field label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #5a6480;
+      }
+      .proj-field--full {
+        grid-column: 1 / -1;
+      }
+      .proj-field input[type="number"] {
+        max-width: 120px;
+      }
+      @media (max-width: 900px) {
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">YoungSuOh.github.io</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="template.html">Template</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container template-wrap">
+      <section class="card">
+        <h1 class="article-title" style="margin-bottom: 0.5rem">글·설정 · 프로젝트 HTML 생성</h1>
+        <p class="muted">
+          브라우저는 GitHub에 파일을 직접 쓸 수 없습니다. 아래에서 생성한 HTML은
+          <strong>다운로드</strong>한 뒤 <code>projects/</code>에 저장하고, <code>site-config.json</code>에 항목을
+          추가한 다음 <code>npm run build</code> 하세요.
+        </p>
+        <p class="muted" style="margin-top: 0.75rem">
+          <strong>이미지 경로 규칙:</strong> <code>photo/projects/&lt;slug&gt;/thumbnail.png</code>,
+          스크린샷은 <code>1.png</code>, <code>2.png</code>, … 순서로 같은 폴더에 둡니다.
+        </p>
+      </section>
+
+      <section class="card section" style="margin-top: 1rem">
+        <h2 class="section-title" style="margin-bottom: 1rem">Project HTML 생성기</h2>
+        <p class="muted" style="margin-bottom: 1rem">
+          노션 등에서 복사한 본문은 아래 <strong>본문 HTML</strong>에 붙여넣으세요. 스크린샷 개수만 맞추면
+          <code>&lt;img&gt;</code> 블록이 자동으로 붙습니다.
+        </p>
+
+        <div class="proj-form-grid">
+          <div class="proj-field">
+            <label for="proj-slug">slug (영문·숫자·하이픈)</label>
+            <input id="proj-slug" class="template-input" type="text" placeholder="chuldong-petmen" autocomplete="off" />
+          </div>
+          <div class="proj-field">
+            <label for="proj-screens">스크린샷 개수 (1.png ~)</label>
+            <input id="proj-screens" class="template-input" type="number" min="0" max="40" value="8" />
+          </div>
+          <div class="proj-field proj-field--full">
+            <label for="proj-meta">meta description (검색·미리보기용 한 줄)</label>
+            <input id="proj-meta" class="template-input" type="text" />
+          </div>
+          <div class="proj-field proj-field--full">
+            <label for="proj-doctitle">&lt;title&gt; (탭 제목)</label>
+            <input id="proj-doctitle" class="template-input" type="text" placeholder="프로젝트명 · Project · YoungSuOh Dev Log" />
+          </div>
+          <div class="proj-field">
+            <label for="proj-eyebrow">히어로 소제목 (예: UMC · Android)</label>
+            <input id="proj-eyebrow" class="template-input" type="text" />
+          </div>
+          <div class="proj-field">
+            <label for="proj-hero-title">히어로 제목</label>
+            <input id="proj-hero-title" class="template-input" type="text" />
+          </div>
+          <div class="proj-field proj-field--full">
+            <label for="proj-hero-lead">히어로 한 줄 설명</label>
+            <input id="proj-hero-lead" class="template-input" type="text" />
+          </div>
+          <div class="proj-field">
+            <label for="proj-alt">스크린샷 alt 접두어</label>
+            <input id="proj-alt" class="template-input" type="text" placeholder="출동 펫멘" />
+          </div>
+          <div class="proj-field proj-field--full">
+            <label for="proj-body-html">본문 HTML (Topic, Tech Stack 등 전부)</label>
+            <textarea id="proj-body-html" spellcheck="false"></textarea>
+          </div>
+          <div class="proj-field proj-field--full" style="border-top: 1px solid #ebf1ff; padding-top: 0.75rem">
+            <span class="panel-title">site-config.json에 넣을 항목</span>
+            <div class="proj-form-grid" style="margin: 0">
+              <div class="proj-field">
+                <label for="proj-card-name">카드 제목 (name)</label>
+                <input id="proj-card-name" class="template-input" type="text" />
+              </div>
+              <div class="proj-field proj-field--full">
+                <label for="proj-card-desc">카드 설명 (description)</label>
+                <input id="proj-card-desc" class="template-input" type="text" />
+              </div>
+              <div class="proj-field proj-field--full">
+                <label for="proj-stack">스택 (쉼표로 구분)</label>
+                <input id="proj-stack" class="template-input" type="text" placeholder="Kotlin, Android Studio, GitHub" />
+              </div>
+              <div class="proj-field">
+                <label for="proj-period">기간 (선택, period)</label>
+                <input id="proj-period" class="template-input" type="text" placeholder="2023.06.02 ~ 2023.08.15" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="button" class="btn secondary" id="proj-sample">출동 펫멘 샘플 채우기</button>
+          <button type="button" class="btn" id="proj-generate">HTML 생성</button>
+          <button type="button" class="btn" id="proj-download" disabled>HTML 다운로드</button>
+          <button type="button" class="btn secondary" id="proj-copy-snippet" disabled>site-config 스니펫 복사</button>
+        </div>
+        <p id="proj-msg" class="muted" style="margin-top: 0.5rem"></p>
+
+        <p class="panel-title" style="margin-top: 1rem">생성된 HTML (수정 후 다운로드 가능)</p>
+        <textarea id="proj-out-html" spellcheck="false"></textarea>
+
+        <p class="panel-title" style="margin-top: 1rem">site-config projects 배열에 추가할 JSON</p>
+        <textarea id="proj-out-snippet" spellcheck="false" readonly style="min-height: 140px; background: #f8fbff"></textarea>
+      </section>
+
+      <section class="template-grid section">
+        <article class="card">
+          <h2 class="section-title" style="margin-bottom: 1rem">Site</h2>
+          <p class="panel-title">site-config.json</p>
+          <textarea id="site-config-editor" spellcheck="false" style="min-height: 280px"></textarea>
+          <div class="button-row">
+            <button type="button" class="btn" id="dl-site">site-config.json 다운로드</button>
+          </div>
+          <p id="msg-site" class="muted"></p>
+        </article>
+
+        <article class="card">
+          <h2 class="section-title" style="margin-bottom: 1rem">Posts</h2>
+          <p class="panel-title">data/posts.json</p>
+          <textarea id="posts-editor" spellcheck="false" style="min-height: 280px"></textarea>
+          <div class="button-row">
+            <button type="button" class="btn" id="dl-posts">posts.json 다운로드</button>
+          </div>
+          <p id="msg-posts" class="muted"></p>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title" style="margin-bottom: 0.75rem">새 글 항목 예시 (posts.json)</h2>
+        <pre
+          id="post-sample"
+          style="
+            overflow: auto;
+            background: #f8fbff;
+            border: 1px solid #d8e6ff;
+            border-radius: 12px;
+            padding: 0.9rem;
+            font-size: 0.82rem;
+            line-height: 1.45;
+          "
+        ></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        function escapeHtml(s) {
+          return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function validateSlug(slug) {
+          return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+        }
+
+        function buildProjectHtml(values) {
+          var slug = values.slug;
+          var base = "../photo/projects/" + slug + "/";
+          var meta = escapeHtml(values.metaDescription);
+          var docTitle = escapeHtml(values.docTitle);
+          var eyebrow = escapeHtml(values.eyebrow);
+          var heroTitle = escapeHtml(values.heroTitle);
+          var heroLead = escapeHtml(values.heroLead);
+          var body = values.bodyHtml;
+          var n = Math.max(0, Math.min(40, parseInt(values.screenshotCount, 10) || 0));
+          var altP = escapeHtml(values.altPrefix || values.heroTitle || "스크린샷");
+          var y = new Date().getFullYear();
+
+          var figures = "";
+          for (var i = 1; i <= n; i++) {
+            figures +=
+              "\n            <figure class=\"screenshot-item\">\n              <img src=\"" +
+              base +
+              i +
+              '.png" alt="' +
+              altP +
+              " 스크린샷 " +
+              i +
+              '" loading="lazy" />\n            </figure>';
+          }
+
+          var shotBlock =
+            n > 0
+              ? "\n          <h2>📷 Screenshot</h2>\n          <div class=\"screenshot-grid\">" +
+                figures +
+                "\n          </div>"
+              : "";
+
+          var heroStyle = 'style="background-image: url(\'' + base + "thumbnail.png')\"";
+          return (
+            "<!doctype html>\n<html lang=\"ko\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <meta name=\"description\" content=\"" +
+            meta +
+            '" />\n    <title>' +
+            docTitle +
+            '</title>\n    <link rel="stylesheet" href="../styles.css" />\n  </head>\n  <body class="project-page">\n    <header class="site-header">\n      <div class="container header-inner">\n        <a class="brand" href="../index.html">YoungSuOh Dev Log</a>\n        <nav>\n          <ul class="nav-list">\n            <li><a href="../index.html">Home</a></li>\n            <li><a href="../index.html#projects">Projects</a></li>\n            <li><a href="../index.html#blog">Blog</a></li>\n          </ul>\n        </nav>\n      </div>\n    </header>\n\n    <main class="container article-page">\n      <div class="project-hero">\n        <div class="project-hero-bg" ' +
+            heroStyle +
+            '>\n        </div>\n        <div class="project-hero-overlay"></div>\n        <div class="project-hero-inner">\n          <p class="project-hero-eyebrow">' +
+            eyebrow +
+            '</p>\n          <h1 class="project-hero-title">' +
+            heroTitle +
+            '</h1>\n          <p class="project-hero-lead">' +
+            heroLead +
+            '</p>\n        </div>\n      </div>\n\n      <article class="card article-shell project-article">\n        <div class="post-body project-body">\n' +
+            body.trim() +
+            shotBlock +
+            '\n        </div>\n\n        <p class="article-back article-back--action">\n          <a class="btn-back" href="../index.html#projects">\n            <span class="btn-back__icon" aria-hidden="true">←</span>\n            프로젝트 목록\n          </a>\n        </p>\n      </article>\n    </main>\n\n    <footer class="footer">\n      <div class="container">\n        <small>© ' +
+            y +
+            " YoungSuOh Dev Log</small>\n      </div>\n    </footer>\n  </body>\n</html>\n"
+          );
+        }
+
+        function buildSnippet(values) {
+          const slug = values.slug;
+          const stack = values.stackStr
+            .split(",")
+            .map(function (s) {
+              return s.trim();
+            })
+            .filter(Boolean);
+          const entry = {
+            name: values.cardName,
+            description: values.cardDesc,
+            stack: stack,
+            link: "projects/" + slug + ".html",
+            thumbnail: "photo/projects/" + slug + "/thumbnail.png"
+          };
+          if (values.period && String(values.period).trim()) {
+            entry.period = String(values.period).trim();
+          }
+          return JSON.stringify(entry, null, 2);
+        }
+
+        var sampleBody =
+          '<h2>💡 Topic</h2>\n<ul>\n  <li>중앙 연합 동아리 UMC 프로젝트</li>\n  <li>한 줄 요약을 여기에 작성합니다.</li>\n</ul>\n\n<h2>🛠 Tech Stack</h2>\n<p><code>Kotlin</code>, <code>Android Studio</code></p>';
+
+        document.getElementById("proj-sample").addEventListener("click", function () {
+          document.getElementById("proj-slug").value = "chuldong-petmen";
+          document.getElementById("proj-screens").value = "8";
+          document.getElementById("proj-meta").value =
+            "UMC 중앙 연합 동아리 프로젝트 — 조깅·몬스터 포획 기반 안드로이드 앱";
+          document.getElementById("proj-doctitle").value = "출동 펫멘 · Project · YoungSuOh Dev Log";
+          document.getElementById("proj-eyebrow").value = "UMC · Android";
+          document.getElementById("proj-hero-title").value = "출동 펫멘";
+          document.getElementById("proj-hero-lead").value = "조깅을 몬스터 포획 목표로 즐기는 AR 조깅 앱";
+          document.getElementById("proj-alt").value = "출동 펫멘";
+          document.getElementById("proj-body-html").value = sampleBody;
+          document.getElementById("proj-card-name").value = "출동 펫멘";
+          document.getElementById("proj-card-desc").value =
+            "UMC · 조깅·몬스터 포획 AR 안드로이드 앱 (Kotlin, Retrofit2)";
+          document.getElementById("proj-stack").value = "Kotlin, Android Studio, GitHub";
+          document.getElementById("proj-period").value = "2023.06.02 ~ 2023.08.15";
+          document.getElementById("proj-msg").textContent = "샘플 필드를 채웠습니다. 필요하면 본문을 노션 HTML로 교체하세요.";
+        });
+
+        var lastHtml = "";
+        document.getElementById("proj-generate").addEventListener("click", function () {
+          var slug = document.getElementById("proj-slug").value.trim().toLowerCase();
+          var msg = document.getElementById("proj-msg");
+          if (!validateSlug(slug)) {
+            msg.textContent = "slug는 영문 소문자, 숫자, 하이픈만 사용하세요. (예: my-project)";
+            document.getElementById("proj-download").disabled = true;
+            document.getElementById("proj-copy-snippet").disabled = true;
+            return;
+          }
+          var values = {
+            slug: slug,
+            metaDescription: document.getElementById("proj-meta").value.trim(),
+            docTitle: document.getElementById("proj-doctitle").value.trim(),
+            eyebrow: document.getElementById("proj-eyebrow").value.trim(),
+            heroTitle: document.getElementById("proj-hero-title").value.trim(),
+            heroLead: document.getElementById("proj-hero-lead").value.trim(),
+            bodyHtml: document.getElementById("proj-body-html").value,
+            screenshotCount: document.getElementById("proj-screens").value,
+            altPrefix: document.getElementById("proj-alt").value.trim(),
+            cardName: document.getElementById("proj-card-name").value.trim(),
+            cardDesc: document.getElementById("proj-card-desc").value.trim(),
+            stackStr: document.getElementById("proj-stack").value,
+            period: document.getElementById("proj-period").value.trim()
+          };
+          lastHtml = buildProjectHtml(values);
+          document.getElementById("proj-out-html").value = lastHtml;
+          document.getElementById("proj-out-snippet").value = buildSnippet(values);
+          document.getElementById("proj-download").disabled = false;
+          document.getElementById("proj-copy-snippet").disabled = false;
+          msg.textContent =
+            "생성 완료. 이미지는 photo/projects/" + slug + "/ 에 두고, HTML을 projects/" + slug + ".html 로 저장하세요.";
+        });
+
+        document.getElementById("proj-download").addEventListener("click", function () {
+          var slug = document.getElementById("proj-slug").value.trim().toLowerCase();
+          var text = document.getElementById("proj-out-html").value;
+          if (!text.trim()) return;
+          var blob = new Blob([text], { type: "text/html;charset=utf-8" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = slug + ".html";
+          a.click();
+          URL.revokeObjectURL(a.href);
+          document.getElementById("proj-msg").textContent = "다운로드: " + slug + ".html → projects/ 폴더로 옮기세요.";
+        });
+
+        document.getElementById("proj-copy-snippet").addEventListener("click", async function () {
+          var t = document.getElementById("proj-out-snippet").value;
+          try {
+            await navigator.clipboard.writeText(t);
+            document.getElementById("proj-msg").textContent =
+              "site-config.json의 projects 배열에 붙여넣은 뒤 npm run build 실행하세요.";
+          } catch (_e) {
+            document.getElementById("proj-msg").textContent = "복사 실패. 스니펫을 직접 선택해 복사하세요.";
+          }
+        });
+
+        var siteEl = document.getElementById("site-config-editor");
+        var postsEl = document.getElementById("posts-editor");
+        var msgSite = document.getElementById("msg-site");
+        var msgPosts = document.getElementById("msg-posts");
+        var sampleEl = document.getElementById("post-sample");
+
+        var samplePost = {
+          id: "post-004",
+          slug: "my-new-post",
+          title: "새 글 제목",
+          category: "Backend",
+          summary: "한 줄 요약",
+          date: "2026-04-02",
+          tags: ["tag1", "tag2"],
+          bodyHtml: "<p>본문은 HTML로 작성합니다.</p>"
+        };
+        sampleEl.textContent = JSON.stringify(samplePost, null, 2);
+
+        function download(filename, text) {
+          var blob = new Blob([text], { type: "application/json;charset=utf-8" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+
+        Promise.all([
+          fetch("site-config.json").then(function (r) {
+            return r.ok ? r.text() : Promise.reject();
+          }),
+          fetch("data/posts.json").then(function (r) {
+            return r.ok ? r.text() : Promise.reject();
+          })
+        ])
+          .then(function (pair) {
+            siteEl.value = pair[0];
+            postsEl.value = pair[1];
+            msgSite.textContent = "로드됨 (로컬 서버로 열었을 때)";
+            msgPosts.textContent = "로드됨 (로컬 서버로 열었을 때)";
+          })
+          .catch(function () {
+            msgSite.textContent =
+              "JSON을 불러오지 못했습니다. 저장소 루트에서 로컬 서버로 여세요. (예: python -m http.server)";
+            msgPosts.textContent = msgSite.textContent;
+          });
+
+        document.getElementById("dl-site").addEventListener("click", function () {
+          try {
+            JSON.parse(siteEl.value);
+            download("site-config.json", siteEl.value);
+            msgSite.textContent = "다운로드했습니다. 루트의 site-config.json에 덮어쓰세요.";
+          } catch (_e) {
+            msgSite.textContent = "JSON 형식을 확인하세요.";
+          }
+        });
+
+        document.getElementById("dl-posts").addEventListener("click", function () {
+          try {
+            JSON.parse(postsEl.value);
+            download("posts.json", postsEl.value);
+            msgPosts.textContent = "다운로드했습니다. data/posts.json에 덮어쓰고 npm run build 하세요.";
+          } catch (_e) {
+            msgPosts.textContent = "JSON 형식을 확인하세요.";
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

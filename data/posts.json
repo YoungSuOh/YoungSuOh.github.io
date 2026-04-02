@@ -1,0 +1,32 @@
+[
+  {
+    "id": "post-001",
+    "slug": "nodejs-event-loop",
+    "title": "Node.js 이벤트 루프 정리",
+    "category": "Backend",
+    "summary": "이벤트 루프와 non-blocking I/O의 실제 동작 흐름을 예제로 정리합니다.",
+    "date": "2026-04-01",
+    "tags": ["Node.js", "JavaScript", "Runtime"],
+    "bodyHtml": "<p>Node.js는 단일 스레드에서 이벤트 루프를 통해 비동기 I/O를 처리합니다. 콜 스택이 비면 태스크 큐에서 콜백을 가져와 실행하는 흐름을 이해하면 디버깅이 쉬워집니다.</p>\n<h2>핵심 정리</h2>\n<ul>\n<li>microtask(Promise)와 macrotask(setTimeout) 순서</li>\n<li>blocking 호출이 이벤트 루프에 미치는 영향</li>\n</ul>\n<pre><code>setTimeout(() =&gt; console.log('B'), 0);\nPromise.resolve().then(() =&gt; console.log('A'));</code></pre>"
+  },
+  {
+    "id": "post-002",
+    "slug": "cache-strategies-at-scale",
+    "title": "대규모 트래픽에서 캐시 전략",
+    "category": "System Design",
+    "summary": "읽기 부하를 줄이기 위한 캐시 패턴(Cache Aside, Write Through)을 비교합니다.",
+    "date": "2026-04-01",
+    "tags": ["Cache", "Scalability"],
+    "bodyHtml": "<p>캐시는 읽기 비율이 높은 서비스에서 가장 효과적인 확장 수단입니다. 데이터 일관성 요구 수준에 따라 패턴을 선택합니다.</p>\n<h2>Cache Aside</h2>\n<p>애플리케이션이 캐시를 먼저 조회하고, 미스 시 DB에서 읽어 캐시에 적재합니다.</p>\n<h2>Write Through</h2>\n<p>쓰기 시 캐시와 저장소를 함께 갱신해 일관성을 유지하기 쉽습니다.</p>"
+  },
+  {
+    "id": "post-003",
+    "slug": "index-design-mistakes",
+    "title": "인덱스 설계 실수 5가지",
+    "category": "Database",
+    "summary": "쿼리 플랜을 기반으로 인덱스 설계 시 자주 발생하는 문제를 점검합니다.",
+    "date": "2026-04-01",
+    "tags": ["MySQL", "Index", "SQL"],
+    "bodyHtml": "<p>인덱스는 빠른 조회를 돕지만, 잘못 쓰면 쓰기 비용만 커질 수 있습니다.</p>\n<ol>\n<li>선택도가 낮은 컬럼만 인덱싱</li>\n<li>복합 인덱스 컬럼 순서와 WHERE 절 불일치</li>\n<li>함수/형변환으로 인한 인덱스 미사용</li>\n</ol>\n<p>실제 쿼리 플랜으로 확인하는 습관을 들이세요.</p>"
+  }
+]
