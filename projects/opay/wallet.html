@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OPay Wallet: 내부 PG, 낙관적 락·조건부 UPDATE·멱등성, REQUIRES_NEW 지갑 보장"
+    />
+    <title>Wallet · OPay · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+
+  <body class="project-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#projects">Projects</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <div class="project-hero">
+        <div
+          class="project-hero-bg"
+          style="background-image: url('../../photo/project/opay/OPAY_thumbnail.png')"
+        ></div>
+        <div class="project-hero-overlay"></div>
+        <div class="project-hero-inner">
+          <p class="project-hero-eyebrow">OPay · 개발</p>
+          <h1 class="project-hero-title">Wallet</h1>
+          <p class="project-hero-lead">내부 PG 기반 지갑 — 정합성·동시성·멱등성</p>
+        </div>
+      </div>
+
+      <article class="card article-shell project-article">
+        <div class="post-body project-body">
+          <p>
+            현재 개인 프로젝트 특성상 외부 PG와 연결하여 서비스 개발을 진행하기에는 제약이 있다. 따라서 외부 API를 활용하여 실거래 거래
+            서비스 또는 자체 결제시스템 서비스 구축 2가지 중 고민해야 한다.
+          </p>
+          <p>
+            이 중에서 외부 API를 이용하는 것은 결제 시스템에 대한 이해도를 높일 수 있는 수단이 아니기에
+            <code>Wallet</code> 테이블을 통한 내부 PG(Payment Gateway)를 이용해서 프로젝트를 진행할 예정이다.
+          </p>
+
+          <h2>🎯 핵심 목표</h2>
+          <p>Wallet은 동시성 환경에서도 데이터의 정합성을 보장하는 것을 목표로 설계한다.</p>
+          <ol>
+            <li>음수 잔액 절대 방지</li>
+            <li>동시성 충돌 안전 처리 (여러 요청이 동시에 들어와도 정합성 보장)</li>
+            <li>멱등성 / 재시도 가능한 구조 (실패해도 다시 시도)</li>
+            <li>“지갑 없는 상태”를 없앰 (결제에 필요한 지갑이 반드시 존재, 외부 PG의 역할)</li>
+          </ol>
+
+          <h3>설계 전략</h3>
+          <ul>
+            <li>Java 객체 ×, DB 조건 UPDATE를 통한 돈 계산 (DB가 돈을 계산한다)</li>
+            <li>낙관적 락 + CAS 패턴 (version 기반 충돌 감지)</li>
+            <li>retry를 통한 실패 복구</li>
+          </ul>
+
+          <p>
+            조건부 UPDATE와 낙관적 락(version)을 활용하여 동시성 환경에서도 음수 잔액이 발생하지 않도록 구현할 예정이기에 다음 개념들을
+            살보면 좋다.
+          </p>
+          <ul class="link-chip-list">
+            <li>
+              <a class="link-chip" href="../../posts/Backend/pessimistic-optimistic-lock.html">비관적 락 &amp; 낙관적 락</a>
+            </li>
+            <li><a class="link-chip" href="../../posts/Database/atomic-update.html">Atomic Update</a></li>
+          </ul>
+
+          <h2>개발 과정</h2>
+
+          <pre><code>@Entity
+@Table(name = "wallets", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_wallet_user_id", columnNames = "user_id")
+})
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
+public class Wallet {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // 한 사용자 = 하나의 지갑
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
+    @Column(nullable = false)
+    private Long balance = 0L;
+
+    /**
+     * 낙관적 잠금 버전
+     * 동시성 제어를 위해 사용
+     * 잔액 변경 시마다 증가
+     */
+    @Version
+    @Column(nullable = false)
+    private Integer version = 0;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Builder
+    public Wallet(User user, Long balance) {
+        this.user = user;
+        this.balance = balance != null ? balance : 0L;
+    }
+
+    public boolean deduct(Long amount) {
+        if (amount == null || amount &lt;= 0) {
+            throw new IllegalArgumentException("차감 금액은 0보다 커야 합니다");
+        }
+        if (this.balance &lt; amount) {
+            return false; // 잔액 부족
+        }
+        this.balance -= amount;
+        return true;
+    }
+
+    public void add(Long amount) {
+        if (amount == null || amount &lt;= 0) {
+            throw new IllegalArgumentException("증가 금액은 0보다 커야 합니다");
+        }
+        this.balance += amount;
+    }
+}</code></pre>
+
+          <ul>
+            <li>
+              여기서의 핵심은 <code>@Version</code>을 통한 낙관적 락 <strong>(Optimistic Lock)</strong>이라 할 수 있다.
+              <ul>
+                <li>version은 “내가 본 잔액 상태가 아직 유효한지 검증”하는 일종의 도구 역할이다.</li>
+              </ul>
+            </li>
+            <li>동시성 상황에서 다음과 같은 문제가 발생할 수 있다.</li>
+          </ul>
+
+          <pre><code>// 초기 상태
+balance = 1000
+
+// 동시 요청
+Thread A → 500 차감
+Thread B → 500 차감
+
+// version이 없다면
+A: 1000 → 500
+B: 1000 → 500
+
+결과 : 잔액 500 남음 -&gt; 정상은 500을 2개 요청했으므로 0이 맞음</code></pre>
+
+          <p>따라서 version을 통해서 동시성 문제를 해결한다.</p>
+          <ul>
+            <li>
+              Thread A
+              <pre><code>version = 1 조회
+→ UPDATE WHERE version = 1 성공
+→ version = 2</code></pre>
+            </li>
+            <li>
+              Thread B
+              <pre><code>version = 1 조회
+→ UPDATE WHERE version = 1 실패 (이미 2됨)</code></pre>
+            </li>
+            <li>결과 : A 성공, B 실패 → retry</li>
+          </ul>
+
+          <pre><code>public interface WalletRepository extends JpaRepository&lt;Wallet, Long&gt; {
+    Optional&lt;Wallet&gt; findByUserId(Long userId);
+
+    /**
+     * 사용자 ID로 지갑 조회 (낙관적 잠금)
+     * 동시성 제어를 위해 사용 (벌크 UPDATE와 함께 사용 시 커밋 시 버전 충돌 발생하므로, 잔액 증감에는 사용하지 않음)
+     */
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("SELECT w FROM Wallet w WHERE w.user.id = :userId")
+    Optional&lt;Wallet&gt; findByUserIdWithLock(@Param("userId") Long userId);
+
+    /**
+     * 사용자 ID로 지갑 버전만 조회
+     * 벌크 UPDATE 전 버전 확인용 (엔티티를 영속 컨텍스트에 올리지 않음)
+     */
+    @Query("SELECT w.version FROM Wallet w WHERE w.user.id = :userId")
+    Optional&lt;Integer&gt; findVersionByUserId(@Param("userId") Long userId);
+
+    /**
+     * 사용자 ID로 지갑 버전·잔액만 조회
+     * 차감 실패 시 잔액 부족 vs 버전 충돌 구분용
+     */
+    @Query("SELECT w.version AS version, w.balance AS balance FROM Wallet w WHERE w.user.id = :userId")
+    Optional&lt;WalletVersionBalance&gt; findVersionAndBalanceByUserId(@Param("userId") Long userId);
+
+    /**
+     * 잔액 차감 (원자적 연산)
+     * 조건부 업데이트로 동시성 제어
+     * @return 업데이트된 행 수 (1이면 성공, 0이면 실패)
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Wallet w SET w.balance = w.balance - :amount, w.version = w.version + 1 " +
+           "WHERE w.user.id = :userId AND w.balance &gt;= :amount AND w.version = :version")
+    int deductBalance(@Param("userId") Long userId,
+                      @Param("amount") Long amount,
+                      @Param("version") Integer version);
+
+    /**
+     * 잔액 증가 (원자적 연산)
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Wallet w SET w.balance = w.balance + :amount, w.version = w.version + 1 " +
+           "WHERE w.user.id = :userId AND w.version = :version")
+    int addBalance(@Param("userId") Long userId,
+                   @Param("amount") Long amount,
+                   @Param("version") Integer version);
+}</code></pre>
+
+          <ul>
+            <li>DB 레벨에서 동시성 문제를 해결하기 위해 조건부 UPDATE 기반의 원자적 연산(CAS 패턴)으로 설계하였다.</li>
+            <li>
+              핵심 구조
+              <pre><code>UPDATE wallet
+SET balance = balance - ?, version = version + 1
+WHERE balance &gt;= ? AND version = ?</code></pre>
+              <ul>
+                <li>
+                  <code>version</code>을 조건으로 사용하여 <strong>현재 상태가 내가 조회한 상태와 일치할 때만 업데이트</strong>하도록 하였고, 이를
+                  통해 동시 요청 환경에서도 단 하나의 요청만 성공하도록 보장하였다.
+                </li>
+                <li>
+                  또한 영속성 컨텍스트 기반 변경이 아닌 <code>@Modifying</code> + <code>@Query</code>를 통한 <strong>Bulk Update로 DB에 직접
+                  반영</strong>하여 조회 → 검증 → 수정 과정을 하나의 쿼리로 처리함으로써 <strong>race condition 없이 데이터 정합성을 확보</strong>하였다.
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <pre><code>@Slf4j
+@Component
+@RequiredArgsConstructor
+public class WalletEnsureHolder {
+
+    private final WalletRepository walletRepository;
+    private final UserRepository userRepository;
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void ensureWalletExists(Long userId) {
+        if (walletRepository.findByUserId(userId).isPresent()) {
+            return;
+        }
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -&gt; new IllegalArgumentException("사용자를 찾을 수 없습니다: " + userId));
+        Wallet wallet = Wallet.builder()
+                .user(user)
+                .balance(0L)
+                .build();
+        Wallet saved = walletRepository.save(wallet);
+        log.info("지갑 생성: userId={}, walletId={}", userId, saved.getId());
+    }
+}</code></pre>
+
+          <h3>⚠️ 문제 상황</h3>
+          <ul>
+            <li>개발 과정에서 다음과 같은 상황을 고려했다.</li>
+            <li>결제 트랜잭션 진행 중 Wallet 생성 → 이후 결제 실패 → 전체 롤백</li>
+            <li>문제는 Wallet도 같이 롤백되므로 다음 요청에도 계속 Wallet을 생성해야 하는 소요가 발생한다.</li>
+            <li>
+              따라서 <code>propagation = Propagation.REQUIRES_NEW</code>를 통해 지갑 생성을 위한 별도의 트랜잭션을 생성하여
+              <strong>“지갑은 결제의 일부가 아니라, 결제를 위한 전제 조건”</strong>으로 두었다.
+            </li>
+          </ul>
+
+          <pre><code>@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class WalletService {
+
+    private final WalletRepository walletRepository;
+    private final UserRepository userRepository;
+    private final WalletEnsureHolder walletEnsureHolder;
+
+    /**
+     * 사용자 지갑 조회 — 지갑이 없으면 생성
+     */
+    @Transactional
+    public Wallet getOrCreateWallet(Long userId) {
+        return walletRepository.findByUserId(userId)
+                .orElseGet(() -&gt; {
+                    User user = userRepository.findById(userId)
+                            .orElseThrow(() -&gt; new IllegalArgumentException("사용자를 찾을 수 없습니다: " + userId));
+
+                    Wallet wallet = Wallet.builder()
+                            .user(user)
+                            .balance(0L)
+                            .build();
+
+                    Wallet saved = walletRepository.save(wallet);
+                    log.info("지갑 생성: userId={}, walletId={}", userId, saved.getId());
+                    return saved;
+                });
+    }
+
+    /**
+     * 잔액 차감 (원자적 연산)
+     * 버전만 조회 후 벌크 UPDATE로 동시성·음수 잔액 방지
+     */
+    @Transactional
+    public boolean deductBalance(Long userId, Long amount) {
+        if (amount == null || amount &lt;= 0) {
+            throw new IllegalArgumentException("차감 금액은 0보다 커야 합니다");
+        }
+
+        walletEnsureHolder.ensureWalletExists(userId);
+
+        int maxRetries = 3;
+        int retryCount = 0;
+
+        while (retryCount &lt; maxRetries) {
+            Integer version = walletRepository.findVersionByUserId(userId)
+                    .orElseThrow(() -&gt; new IllegalStateException("지갑이 존재하지 않습니다: userId=" + userId));
+
+            int updated = walletRepository.deductBalance(userId, amount, version);
+
+            if (updated &gt; 0) {
+                log.info("잔액 차감 성공: userId={}, amount={}", userId, amount);
+                return true;
+            }
+
+            // updated == 0: 버전 충돌 또는 잔액 부족
+            var versionBalance = walletRepository.findVersionAndBalanceByUserId(userId).orElse(null);
+            if (versionBalance != null &amp;&amp; versionBalance.getBalance() &lt; amount) {
+                log.warn("잔액 부족: userId={}, balance={}, amount={}",
+                        userId, versionBalance.getBalance(), amount);
+                return false;
+            }
+
+            log.warn("잔액 차감 재시도 (버전 충돌): userId={}, retryCount={}", userId, retryCount);
+            retryCount++;
+        }
+
+        log.error("잔액 차감 실패 (최대 재시도 초과): userId={}, amount={}", userId, amount);
+        return false;
+    }
+
+    /**
+     * 잔액 증가 (원자적 연산)
+     * 버전만 조회 후 벌크 UPDATE로 동시성 제어 (커밋 시 버전 충돌 없음)
+     */
+    @Transactional
+    public void addBalance(Long userId, Long amount) {
+        if (amount == null || amount &lt;= 0) {
+            throw new IllegalArgumentException("증가 금액은 0보다 커야 합니다");
+        }
+
+        walletEnsureHolder.ensureWalletExists(userId);
+
+        int maxRetries = 3;
+        int retryCount = 0;
+
+        while (retryCount &lt; maxRetries) {
+            Integer version = walletRepository.findVersionByUserId(userId)
+                    .orElseThrow(() -&gt; new IllegalStateException("지갑이 존재하지 않습니다: userId=" + userId));
+
+            int updated = walletRepository.addBalance(userId, amount, version);
+
+            if (updated &gt; 0) {
+                log.info("잔액 증가 성공: userId={}, amount={}", userId, amount);
+                return;
+            }
+
+            log.warn("잔액 증가 재시도 (버전 충돌): userId={}, retryCount={}", userId, retryCount);
+            retryCount++;
+        }
+
+        throw new RuntimeException("잔액 증가 실패 (최대 재시도 초과): userId=" + userId);
+    }
+}</code></pre>
+
+          <ul>
+            <li>지갑은 항상 존재 → <code>walletEnsureHolder.ensureWalletExists(userId)</code>로 조건을 만족시킨다.</li>
+            <li>
+              잔액 추가·차감 메서드는 version 기반 Bulk Update를 통해 동시성 문제를 방지하도록 설계하였고, 실패 시 retry로 재시도 로직을
+              구현했다.
+            </li>
+          </ul>
+        </div>
+
+        <p class="article-back article-back--action">
+          <a class="btn-back" href="./index.html">
+            <span class="btn-back__icon" aria-hidden="true">←</span>
+            OPay로 돌아가기
+          </a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="../../script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<h2>사용해본 Java 버전과 선택 이유</h2>
+
+<h3>1. Java 11 (Spring Framework)</h3>
+<p><strong>사용 이유:</strong> Spring Framework 기반 애플리케이션 개발.</p>
+<p><strong>활용한 특징 예시</strong></p>
+<ol>
+  <li><code>RestTemplate</code> 대신 <code>java.net.http.HttpClient</code> 등으로 HTTP 요청 처리.</li>
+</ol>
+
+<h3>2. Java 17 (Spring Boot)</h3>
+<p><strong>사용 이유:</strong> Spring Boot에서 안정적인 LTS로 Java 17 채택.</p>
+<p><strong>활용한 특징 예시</strong></p>
+<ol>
+  <li>Spring Boot 3.2부터 제공되는 <code>RestClient</code>로 HTTP 클라이언트 구성.</li>
+</ol>
+
+<h2>Java 8, 11, 17 요약</h2>
+
+<h3>Java 8 (2014, LTS 계열의 시작점으로 널리 사용)</h3>
+<p><strong>핵심:</strong> 람다, Stream API, 인터페이스 <code>default</code>/<code>static</code>, <code>java.time</code>, Optional 등.</p>
+
+<p><strong>1) 람다</strong></p>
+<pre><code>new Thread(new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Hello, Java 8!");
+    }
+}).start();
+
+new Thread(() -&gt; System.out.println("Hello, Java 8!")).start();</code></pre>
+
+<p><strong>2) Stream API</strong></p>
+<pre><code>List&lt;String&gt; list = Arrays.asList("apple", "banana", "cherry");
+list.stream()
+    .filter(s -&gt; s.startsWith("a"))
+    .forEach(System.out::println);</code></pre>
+
+<p><strong>3) 인터페이스 default &amp; static</strong></p>
+<pre><code>interface MyInterface {
+    default void sayHello() {
+        System.out.println("Hello from default method!");
+    }
+}</code></pre>
+
+<p><strong>4) java.time</strong></p>
+<pre><code>LocalDate today = LocalDate.now();
+System.out.println(today);</code></pre>
+
+<p><strong>5) 메서드 레퍼런스</strong> — <code>list.forEach(System.out::println);</code></p>
+
+<p><strong>6) Optional</strong></p>
+<pre><code>Optional&lt;String&gt; optional = Optional.ofNullable(null);
+System.out.println(optional.orElse("기본값"));</code></pre>
+
+<h3>Java 11 (2018, LTS)</h3>
+<p><strong>핵심:</strong> HTTP Client API, 런타임·GC 개선, String 유틸, <code>java Main.java</code> 단일 파일 실행 등.</p>
+<pre><code>var list = List.of("a", "b", "c");
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://example.com"))
+    .build();
+HttpResponse&lt;String&gt; response = client.send(request, HttpResponse.BodyHandlers.ofString());
+System.out.println(response.body());</code></pre>
+<pre><code>String str = "  hello  ";
+System.out.println(str.strip());
+System.out.println(str.isBlank());</code></pre>
+
+<h3>Java 17 (2021, LTS)</h3>
+<p><strong>핵심:</strong> <code>sealed</code> 클래스, <code>switch</code> 표현식, <code>instanceof</code> 패턴 매칭 등.</p>
+<pre><code>sealed class Animal permits Dog, Cat {}
+
+final class Dog extends Animal {}
+final class Cat extends Animal {}</code></pre>
+<pre><code>String result = switch (day) {
+    case "Monday", "Tuesday" -&gt; "Weekday";
+    case "Saturday", "Sunday" -&gt; "Weekend";
+    default -&gt; "Unknown";
+};</code></pre>
+<pre><code>if (obj instanceof String s) {
+    System.out.println(s.toUpperCase());
+}</code></pre>
+
+<h2>JDK와 JRE의 차이</h2>
+
+<h3>JDK (Java Development Kit)</h3>
+<p>개발에 필요한 도구가 포함된 키트입니다. <strong>JRE + 컴파일러·디버거 등</strong>입니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>구성 요소</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>JRE</td>
+      <td>실행 환경</td>
+    </tr>
+    <tr>
+      <td>javac</td>
+      <td><code>.java</code> → 바이트코드 <code>.class</code></td>
+    </tr>
+    <tr>
+      <td>java</td>
+      <td>JVM에서 바이트코드 실행</td>
+    </tr>
+    <tr>
+      <td>jar</td>
+      <td>아카이브 패키징</td>
+    </tr>
+    <tr>
+      <td>jdb</td>
+      <td>디버거</td>
+    </tr>
+    <tr>
+      <td>javadoc</td>
+      <td>문서 생성</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>JRE (Java Runtime Environment)</h3>
+<p>프로그램 <strong>실행</strong>만 할 때 필요한 환경입니다. JDK의 일부이며, 개발 도구는 없고 <strong>JVM + 표준 라이브러리</strong> 중심입니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>구성 요소</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>JVM</td>
+      <td>바이트코드 실행</td>
+    </tr>
+    <tr>
+      <td>클래스 라이브러리</td>
+      <td><code>java.lang</code>, <code>java.util</code> 등</td>
+    </tr>
+    <tr>
+      <td>클래스 로더</td>
+      <td><code>.class</code> 로딩</td>
+    </tr>
+    <tr>
+      <td>GC</td>
+      <td>메모리 관리</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="muted" style="margin-top: 2rem">
+  <a class="text-link" href="java-bytecode-interpreter-jit.html">← 이전: ByteCode · JIT</a>
+  ·
+  <a class="text-link" href="java-equality-types-call-by-value.html">다음: 동일성 · 타입 · Call by Value →</a>
+</p>

@@ -247,13 +247,54 @@ h1 {
   margin: 0;
 }
 
-/* 사이드바와 높이 맞추느라 #post-list가 늘어나면 카드·태그가 세로로 늘어남 → 시작 정렬 */
-#blog .grid-2 #post-list {
+/* 사이드바와 높이 맞추느라 목록 열이 늘어나면 카드·태그가 세로로 늘어남 → 시작 정렬 */
+#blog .grid-2 .blog-posts-column {
   align-self: start;
+  min-width: 0;
 }
 
 #post-list.grid {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.blog-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(219, 228, 245, 0.95);
+}
+
+.blog-pager__btn {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card);
+  border: 1px solid rgba(219, 228, 245, 0.95);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.blog-pager__btn:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: #84aaff;
+  background: #f5f9ff;
+}
+
+.blog-pager__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.blog-pager__info {
+  color: var(--muted);
+  font-size: 0.88rem;
+  padding: 0 0.35rem;
 }
 
 .post-meta {
@@ -695,6 +736,38 @@ h1 {
   color: var(--muted);
   background: rgba(61, 107, 255, 0.04);
   border-radius: 0 10px 10px 0;
+}
+
+.post-body figure {
+  margin: 1.25rem 0;
+}
+
+.post-body figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.post-body th,
+.post-body td {
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.post-body th {
+  background: #f4f7fd;
+  font-weight: 600;
 }
 
 .project-page .article-shell {

@@ -39,6 +39,7 @@ window.BLOG_DATA = {
     }
   ],
   "blogCategories": [
+    "Java",
     "Backend",
     "System Design",
     "Database",
@@ -58,7 +59,7 @@ window.BLOG_DATA = {
         "JPA",
         "Database"
       ],
-      "link": "posts/pessimistic-optimistic-lock.html"
+      "link": "posts/Backend/pessimistic-optimistic-lock.html"
     },
     {
       "id": "post-004",
@@ -71,7 +72,85 @@ window.BLOG_DATA = {
         "Concurrency",
         "Transaction"
       ],
-      "link": "posts/atomic-update.html"
+      "link": "posts/Database/atomic-update.html"
+    },
+    {
+      "id": "post-005",
+      "title": "자바 기본 — 특징·단점·실행 과정·JVM",
+      "category": "Java",
+      "summary": "OOP·JVM·GC·멀티스레드, 단점, 실행 4단계, JVM 구조·클래스 로딩(로딩·링킹·초기화)·실행 엔진·GC까지 정리합니다.",
+      "date": "2023-09-14",
+      "tags": [
+        "Java",
+        "JVM",
+        "OOP"
+      ],
+      "link": "posts/Java/java-fundamentals-jvm.html"
+    },
+    {
+      "id": "post-006",
+      "title": "Java ByteCode와 Interpreter vs JIT",
+      "category": "Java",
+      "summary": "바이트코드(.class) 생성·실행 예시, 인터프리터와 JIT 컴파일러의 역할과 트레이드오프를 정리합니다.",
+      "date": "2023-11-27",
+      "tags": [
+        "Java",
+        "JVM",
+        "Bytecode"
+      ],
+      "link": "posts/Java/java-bytecode-interpreter-jit.html"
+    },
+    {
+      "id": "post-007",
+      "title": "Java 8·11·17과 JDK / JRE",
+      "category": "Java",
+      "summary": "실사용 Java 11·17, 버전별 핵심 기능(람다·HTTP Client·sealed 등), JDK와 JRE 구성 비교표입니다.",
+      "date": "2024-02-08",
+      "tags": [
+        "Java",
+        "JDK",
+        "LTS"
+      ],
+      "link": "posts/Java/java-versions-jdk-jre.html"
+    },
+    {
+      "id": "post-008",
+      "title": "동일성·동등성·타입·Call by Value",
+      "category": "Java",
+      "summary": "==와 equals, hashCode, toString, static main, 리터럴/상수, 기본형·참조형, 오토박싱 성능, 값 전달 semantics.",
+      "date": "2024-05-19",
+      "tags": [
+        "Java",
+        "Object",
+        "Memory"
+      ],
+      "link": "posts/Java/java-equality-types-call-by-value.html"
+    },
+    {
+      "id": "post-009",
+      "title": "Java Serialization",
+      "category": "Java",
+      "summary": "직렬화·역직렬화 개념, 필요 이유, ObjectOutputStream/ObjectInputStream 예제와 실무 주의사항을 정리합니다.",
+      "date": "2024-09-03",
+      "tags": [
+        "Java",
+        "IO",
+        "Serialization"
+      ],
+      "link": "posts/Java/java-serialization.html"
+    },
+    {
+      "id": "post-010",
+      "title": "자바 객체 지향 — 오버로딩·상속·인터페이스·final",
+      "category": "Java",
+      "summary": "오버로딩/오버라이딩, 다형성, 상속 vs 조합, instanceof, 인터페이스 vs 추상 클래스, final 키워드까지 정리합니다.",
+      "date": "2024-12-11",
+      "tags": [
+        "Java",
+        "OOP",
+        "Design"
+      ],
+      "link": "posts/Java/java-oop-polymorphism-interface.html"
     }
   ],
   "projects": [
@@ -89,7 +168,7 @@ window.BLOG_DATA = {
         "k6",
         "React"
       ],
-      "link": "projects/opay.html",
+      "link": "projects/opay/index.html",
       "thumbnail": "photo/project/opay/OPAY_thumbnail.png",
       "period": "2026.01.26 ~ 현재"
     },
@@ -107,7 +186,7 @@ window.BLOG_DATA = {
         "Jenkins",
         "Docker"
       ],
-      "link": "projects/dr-rate.html",
+      "link": "projects/dr-rate/index.html",
       "thumbnail": "photo/project/dr-rate/thumbnail.png",
       "period": "2024.11.06 ~ 2025.01.06"
     },
@@ -120,7 +199,7 @@ window.BLOG_DATA = {
         "MySQL",
         "AWS"
       ],
-      "link": "projects/hi-buddy.html",
+      "link": "projects/hi-buddy/index.html",
       "thumbnail": "photo/project/hi-buddy/thumbnail.png",
       "period": "2024.03.10 ~ 2024.06.18"
     },
@@ -132,7 +211,7 @@ window.BLOG_DATA = {
         "Android Studio",
         "GitHub"
       ],
-      "link": "projects/chuldong-petmen.html",
+      "link": "projects/chuldong-petmen/index.html",
       "thumbnail": "photo/project/chuldong-petmen/thumbnail.png",
       "period": "2023.06.02 ~ 2023.08.15"
     }

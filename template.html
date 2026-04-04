@@ -109,8 +109,8 @@
         <h1 class="article-title" style="margin-bottom: 0.5rem">글·설정 · 프로젝트 HTML 생성</h1>
         <p class="muted">
           브라우저는 GitHub에 파일을 직접 쓸 수 없습니다. 아래에서 생성한 HTML은
-          <strong>다운로드</strong>한 뒤 <code>projects/</code>에 저장하고, <code>site-config.json</code>에 항목을
-          추가한 다음 <code>npm run build</code> 하세요.
+          <strong>다운로드</strong>한 뒤 <code>projects/&lt;slug&gt;/index.html</code>로 저장하고,
+          <code>site-config.json</code>에 항목을 추가한 다음 <code>npm run build</code> 하세요.
         </p>
         <p class="muted" style="margin-top: 0.75rem">
           <strong>이미지 경로 규칙:</strong> <code>photo/projects/&lt;slug&gt;/thumbnail.png</code>,
@@ -261,7 +261,7 @@
 
         function buildProjectHtml(values) {
           var slug = values.slug;
-          var base = "../photo/projects/" + slug + "/";
+          var base = "../../photo/projects/" + slug + "/";
           var meta = escapeHtml(values.metaDescription);
           var docTitle = escapeHtml(values.docTitle);
           var eyebrow = escapeHtml(values.eyebrow);
@@ -298,7 +298,7 @@
             meta +
             '" />\n    <title>' +
             docTitle +
-            '</title>\n    <link rel="stylesheet" href="../styles.css" />\n  </head>\n  <body class="project-page">\n    <header class="site-header">\n      <div class="container header-inner">\n        <a class="brand" href="../index.html">YoungSuOh Dev Log</a>\n        <nav>\n          <ul class="nav-list">\n            <li><a href="../index.html">Home</a></li>\n            <li><a href="../index.html#projects">Projects</a></li>\n            <li><a href="../index.html#blog">Blog</a></li>\n          </ul>\n        </nav>\n      </div>\n    </header>\n\n    <main class="container article-page">\n      <div class="project-hero">\n        <div class="project-hero-bg" ' +
+            '</title>\n    <link rel="stylesheet" href="../../styles.css" />\n  </head>\n  <body class="project-page">\n    <header class="site-header">\n      <div class="container header-inner">\n        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>\n        <nav>\n          <ul class="nav-list">\n            <li><a href="../../index.html">Home</a></li>\n            <li><a href="../../index.html#projects">Projects</a></li>\n            <li><a href="../../index.html#blog">Blog</a></li>\n          </ul>\n        </nav>\n      </div>\n    </header>\n\n    <main class="container article-page">\n      <div class="project-hero">\n        <div class="project-hero-bg" ' +
             heroStyle +
             '>\n        </div>\n        <div class="project-hero-overlay"></div>\n        <div class="project-hero-inner">\n          <p class="project-hero-eyebrow">' +
             eyebrow +
@@ -309,7 +309,7 @@
             '</p>\n        </div>\n      </div>\n\n      <article class="card article-shell project-article">\n        <div class="post-body project-body">\n' +
             body.trim() +
             shotBlock +
-            '\n        </div>\n\n        <p class="article-back article-back--action">\n          <a class="btn-back" href="../index.html#projects">\n            <span class="btn-back__icon" aria-hidden="true">←</span>\n            프로젝트 목록\n          </a>\n        </p>\n      </article>\n    </main>\n\n    <footer class="footer">\n      <div class="container">\n        <small>© ' +
+            '\n        </div>\n\n        <p class="article-back article-back--action">\n          <a class="btn-back" href="../../index.html#projects">\n            <span class="btn-back__icon" aria-hidden="true">←</span>\n            프로젝트 목록\n          </a>\n        </p>\n      </article>\n    </main>\n\n    <footer class="footer">\n      <div class="container">\n        <small>© ' +
             y +
             " YoungSuOh Dev Log</small>\n      </div>\n    </footer>\n  </body>\n</html>\n"
           );
@@ -327,7 +327,7 @@
             name: values.cardName,
             description: values.cardDesc,
             stack: stack,
-            link: "projects/" + slug + ".html",
+            link: "projects/" + slug + "/index.html",
             thumbnail: "photo/projects/" + slug + "/thumbnail.png"
           };
           if (values.period && String(values.period).trim()) {
@@ -389,7 +389,7 @@
           document.getElementById("proj-download").disabled = false;
           document.getElementById("proj-copy-snippet").disabled = false;
           msg.textContent =
-            "생성 완료. 이미지는 photo/projects/" + slug + "/ 에 두고, HTML을 projects/" + slug + ".html 로 저장하세요.";
+            "생성 완료. 이미지는 photo/projects/" + slug + "/ 에 두고, HTML을 projects/" + slug + "/index.html 로 저장하세요.";
         });
 
         document.getElementById("proj-download").addEventListener("click", function () {
@@ -399,10 +399,11 @@
           var blob = new Blob([text], { type: "text/html;charset=utf-8" });
           var a = document.createElement("a");
           a.href = URL.createObjectURL(blob);
-          a.download = slug + ".html";
+          a.download = "index.html";
           a.click();
           URL.revokeObjectURL(a.href);
-          document.getElementById("proj-msg").textContent = "다운로드: " + slug + ".html → projects/ 폴더로 옮기세요.";
+          document.getElementById("proj-msg").textContent =
+            "다운로드한 index.html을 projects/" + slug + "/ 폴더에 넣으세요.";
         });
 
         document.getElementById("proj-copy-snippet").addEventListener("click", async function () {
@@ -477,7 +478,8 @@
           try {
             JSON.parse(postsEl.value);
             download("posts.json", postsEl.value);
-            msgPosts.textContent = "다운로드했습니다. data/posts.json에 덮어쓰고 npm run build 하세요.";
+            msgPosts.textContent =
+              "다운로드했습니다. data/posts.json에 덮어쓰고 npm run build 하세요. (빌드 시 posts/{카테고리폴더}/slug.html 로 생성됩니다.)";
           } catch (_e) {
             msgPosts.textContent = "JSON 형식을 확인하세요.";
           }

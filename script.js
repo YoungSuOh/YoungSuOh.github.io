@@ -14,6 +14,19 @@
 
   const data = getData();
 
+  const POSTS_PER_PAGE = 6;
+  const blogState = { category: "All", page: 1 };
+
+  function sortPostsByDateDesc(posts) {
+    return posts.slice().sort((a, b) => {
+      if (a.date < b.date) return 1;
+      if (a.date > b.date) return -1;
+      if (a.id < b.id) return 1;
+      if (a.id > b.id) return -1;
+      return 0;
+    });
+  }
+
   function renderNav() {
     const nav = document.getElementById("main-nav");
     if (!nav) return;
@@ -42,7 +55,7 @@
       .join("");
 
     root.querySelectorAll("button").forEach((button) => {
-      button.addEventListener("click", () => renderPosts(button.dataset.category));
+      button.addEventListener("click", () => renderPosts(button.dataset.category, 1));
     });
   }
 
@@ -66,20 +79,54 @@
     `;
   }
 
-  function renderPosts(category = "All") {
+  function renderPager(totalPages, currentPage, itemCount) {
+    const pager = document.getElementById("blog-pager");
+    if (!pager) return;
+    if (itemCount === 0) {
+      pager.innerHTML = "";
+      return;
+    }
+    const prevDisabled = currentPage <= 1;
+    const nextDisabled = currentPage >= totalPages;
+    pager.innerHTML = `
+      <button type="button" class="blog-pager__btn" data-blog-page="${currentPage - 1}" ${prevDisabled ? "disabled" : ""} aria-label="이전 페이지">이전</button>
+      <span class="blog-pager__info">${currentPage} / ${totalPages}</span>
+      <button type="button" class="blog-pager__btn" data-blog-page="${currentPage + 1}" ${nextDisabled ? "disabled" : ""} aria-label="다음 페이지">다음</button>
+    `;
+    pager.querySelectorAll("[data-blog-page]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const p = Number(btn.getAttribute("data-blog-page"));
+        if (p >= 1 && p <= totalPages) renderPosts(undefined, p);
+      });
+    });
+  }
+
+  function renderPosts(category, page) {
     const root = document.getElementById("post-list");
     if (!root) return;
 
-    const filtered =
-      category === "All"
-        ? data.posts
-        : data.posts.filter((post) => post.category === category);
+    if (category !== undefined && category !== null) blogState.category = category;
+    if (typeof page === "number" && page >= 1) blogState.page = page;
 
-    root.innerHTML = filtered.length
-      ? filtered.map(postCard).join("")
+    const { category: cat, page: pg } = blogState;
+
+    const filtered =
+      cat === "All" ? data.posts : data.posts.filter((post) => post.category === cat);
+
+    const sorted = sortPostsByDateDesc(filtered);
+    const totalPages = Math.max(1, Math.ceil(sorted.length / POSTS_PER_PAGE));
+    let currentPage = Math.min(Math.max(1, blogState.page), totalPages);
+    blogState.page = currentPage;
+
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const slice = sorted.slice(start, start + POSTS_PER_PAGE);
+
+    root.innerHTML = slice.length
+      ? slice.map(postCard).join("")
       : `<div class="card muted">선택한 카테고리에 글이 없습니다.</div>`;
 
-    renderCategories(category);
+    renderPager(totalPages, currentPage, sorted.length);
+    renderCategories(cat);
   }
 
   function renderProjects() {
@@ -168,7 +215,7 @@
   if (data) {
     renderNav();
     renderHero();
-    renderPosts();
+    renderPosts("All", 1);
     renderProjects();
     renderArchive();
     renderContacts();

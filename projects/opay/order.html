@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OPay Order: 주문·OrderItem 가격 스냅샷, totalAmount/paidAmount, 상태 흐름, OrderItemInfo로 검증·실행 분리"
+    />
+    <title>Order · OPay · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+
+  <body class="project-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#projects">Projects</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <div class="project-hero">
+        <div
+          class="project-hero-bg"
+          style="background-image: url('../../photo/project/opay/OPAY_thumbnail.png')"
+        ></div>
+        <div class="project-hero-overlay"></div>
+        <div class="project-hero-inner">
+          <p class="project-hero-eyebrow">OPay · 개발</p>
+          <h1 class="project-hero-title">Order</h1>
+          <p class="project-hero-lead">상품 묶음 주문 · 총액·결제액·상태 관리</p>
+        </div>
+      </div>
+
+      <article class="card article-shell project-article">
+        <div class="post-body project-body">
+          <p>
+            사용자가 선택한 상품을 한 번에 묶은 주문 단위이다. 주문 총액, 결제 완료 금액, 주문·배송 상태를 관리한다.
+          </p>
+
+          <h2>1️⃣ 전체적인 구조</h2>
+          <pre><code>User (1) ----&lt; Order &gt;---- (N) OrderItem &gt;---- Product
+  |                            |
+  | (1:1)                      | (N:1)
+  v                            v
+Wallet (1) ----&lt; Transaction   Order
+  |              (N)              |
+  |            (paymentId, orderId로 Payment/Order 참조)
+  |
+  +---- 잔액 차감/증가는 Repository bulk UPDATE + version</code></pre>
+
+          <ul>
+            <li>
+              <strong>주문 생성</strong>: Order 생성 → OrderItem 생성(주문 시점 가격 스냅샷, 재고 차감) → 필요 시 장바구니 정리
+            </li>
+            <li>
+              <strong>결제 처리</strong>: Payment(READY) 생성 → approve 시 Transaction(PENDING) 생성 → Wallet 잔액 차감(원자적) →
+              Transaction SUCCESS, Payment SUCCESS, Order.paidAmount 갱신
+            </li>
+          </ul>
+
+          <h2>개발 과정</h2>
+
+          <pre><code>@Entity
+@Table(name = "orders")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
+public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(name = "total_amount", nullable = false)
+    private Long totalAmount;
+
+    @Column(name = "paid_amount", nullable = false)
+    private Long paidAmount = 0L;
+
+    @Column(nullable = false, length = 30)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status = OrderStatus.PENDING;
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Builder
+    public Order(User user, Long totalAmount, Long paidAmount, OrderStatus status) {
+        this.user = user;
+        this.totalAmount = totalAmount;
+        this.paidAmount = paidAmount != null ? paidAmount : 0L;
+        this.status = status != null ? status : OrderStatus.PENDING;
+    }
+
+    public void updateStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void updatePaidAmount(Long paidAmount) {
+        if (paidAmount &lt; 0) {
+            throw new IllegalArgumentException("결제 금액은 0 이상이어야 합니다");
+        }
+        if (paidAmount &gt; this.totalAmount) {
+            throw new IllegalArgumentException("결제 금액은 주문 총 금액을 초과할 수 없습니다");
+        }
+        this.paidAmount = paidAmount;
+    }
+
+    public void cancel() {
+        if (this.status == OrderStatus.DELIVERED) {
+            throw new IllegalArgumentException("배송 완료된 주문은 취소할 수 없습니다");
+        }
+        this.status = OrderStatus.CANCELLED;
+    }
+
+    public enum OrderStatus {
+        PENDING,      // 주문 대기
+        CONFIRMED,    // 주문 확정
+        PREPARING,    // 준비 중
+        SHIPPED,      // 배송 중
+        DELIVERED,    // 배송 완료
+        CANCELLED     // 취소됨
+    }
+}</code></pre>
+
+          <ul>
+            <li>
+              핵심은 <strong>“이 주문은 아직 얼마를 더 내야 하는가?”</strong>를 담는 구조다.
+              <ul>
+                <li><code>totalAmount</code> — 총 결제 금액</li>
+                <li><code>paidAmount</code> — 지금까지 결제된 금액</li>
+                <li>부분 결제·분할 결제·재시도 결제·환불 후 재결제 등을 염두에 둔다.</li>
+              </ul>
+            </li>
+            <li>
+              주문 상태 흐름
+              <pre><code>PENDING → CONFIRMED → PREPARING → SHIPPED → DELIVERED</code></pre>
+              결제 성공 후 재고 부족, 배송 지연 등 시나리오를 고려해 다섯 단계로 정리했다.
+            </li>
+          </ul>
+
+          <pre><code>@Entity
+@Table(name = "order_items")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
+public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(nullable = false)
+    private Long price; // 주문 당시 스냅
+
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Builder
+    public OrderItem(User user, Order order, Product product, Integer quantity, Long price) {
+        this.user = user;
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public Long getTotalPrice() {
+        return this.price * this.quantity;
+    }
+}</code></pre>
+
+          <ul>
+            <li>주문 시점의 상품 상태(가격·수량)를 보존하는 엔티티</li>
+            <li>
+              <pre><code>Order (전체)
+ └── OrderItem (각 상품 라인)</code></pre>
+            </li>
+            <li>
+              <code>User</code>를 넣을지 검토했으나, 초기 설계에서는 조인·조회·감사 추적을 고려해 포함했다. 추후 테스트 후 조정 가능.
+            </li>
+          </ul>
+
+          <pre><code>class OrderItemInfo {
+    Product product;
+    Integer quantity;
+    Long price;
+
+    OrderItemInfo(Product product, Integer quantity, Long price) {
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
+}
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
+
+    @Transactional
+    public OrderResponse createOrder(Long userId, OrderRequest request, boolean clearCart) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -&gt; new IllegalArgumentException("사용자를 찾을 수 없습니다: " + userId));
+
+        List&lt;OrderItemInfo&gt; orderItemInfos = request.getItems().stream()
+                .map(itemRequest -&gt; {
+                    Product product = productRepository.findById(itemRequest.getProductId())
+                            .orElseThrow(() -&gt; new IllegalArgumentException(
+                                    "상품을 찾을 수 없습니다: " + itemRequest.getProductId()));
+
+                    if (product.getStock() &lt; itemRequest.getQuantity()) {
+                        throw new IllegalArgumentException(
+                                "재고가 부족합니다. 상품: " + product.getName() +
+                                ", 현재 재고: " + product.getStock() +
+                                ", 주문 수량: " + itemRequest.getQuantity());
+                    }
+
+                    Long orderPrice = product.getPrice();
+                    return new OrderItemInfo(product, itemRequest.getQuantity(), orderPrice);
+                })
+                .collect(Collectors.toList());
+
+        long totalAmount = orderItemInfos.stream()
+                .mapToLong(info -&gt; info.price * info.quantity)
+                .sum();
+
+        Order order = Order.builder()
+                .user(user)
+                .totalAmount(totalAmount)
+                .paidAmount(0L)
+                .status(Order.OrderStatus.PENDING)
+                .build();
+
+        Order savedOrder = orderRepository.save(order);
+
+        List&lt;OrderItem&gt; savedOrderItems = orderItemInfos.stream()
+                .map(info -&gt; {
+                    info.product.updateStock(-info.quantity);
+                    return OrderItem.builder()
+                            .user(user)
+                            .order(savedOrder)
+                            .product(info.product)
+                            .quantity(info.quantity)
+                            .price(info.price)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        savedOrderItems = orderItemRepository.saveAll(savedOrderItems);
+        log.info("주문 생성 완료: orderId={}, userId={}, totalAmount={}",
+                savedOrder.getId(), userId, totalAmount);
+
+        if (clearCart) {
+            request.getItems().forEach(itemRequest -&gt; {
+                Cart cart = cartRepository.findByUserIdAndProductId(userId, itemRequest.getProductId())
+                        .orElse(null);
+                if (cart != null) {
+                    cartRepository.delete(cart);
+                }
+            });
+            log.info("주문 후 장바구니 정리 완료: userId={}", userId);
+        }
+
+        List&lt;OrderItemResponse&gt; itemResponses = savedOrderItems.stream()
+                .map(OrderItemResponse::from)
+                .collect(Collectors.toList());
+
+        return OrderResponse.from(savedOrder, itemResponses);
+    }
+
+    @Transactional
+    public OrderResponse updateOrderStatus(Long orderId, Long userId, Order.OrderStatus status) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -&gt; new IllegalArgumentException("주문을 찾을 수 없습니다: " + orderId));
+
+        if (!order.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("본인의 주문만 수정할 수 있습니다");
+        }
+
+        order.updateStatus(status);
+        log.info("주문 상태 업데이트: orderId={}, status={}", orderId, status);
+
+        List&lt;OrderItem&gt; orderItems = orderItemRepository.findByOrderIdOrderByCreatedAtAsc(orderId);
+        List&lt;OrderItemResponse&gt; itemResponses = orderItems.stream()
+                .map(OrderItemResponse::from)
+                .collect(Collectors.toList());
+
+        return OrderResponse.from(order, itemResponses);
+    }
+}</code></pre>
+
+          <ul>
+            <li><code>createOrder</code>: 주문 생성 + 재고 차감</li>
+            <li><code>updateOrderStatus</code>: 주문 상태 변경</li>
+            <li>
+              <code>OrderItemInfo</code>는 검증이 끝난 주문 스냅샷이다. 검증 단계와 실행 단계를 나눈다.
+            </li>
+          </ul>
+
+          <p><strong>OrderItemInfo가 없을 때의 문제</strong></p>
+          <pre><code>for (item : request) {
+    Product p = find()
+    check stock
+    total += p.price * quantity
+}
+
+// 다시 반복
+for (item : request) {
+    Product p = find()  // 또 조회
+    create OrderItem
+    p.updateStock()
+}</code></pre>
+          <ul>
+            <li>Product 이중 조회(비효율)</li>
+            <li>중간에 데이터가 바뀔 수 있음</li>
+            <li>코드 중복</li>
+            <li>검증·실행 분리가 어려움</li>
+          </ul>
+          <p>그래서 <code>OrderItemInfo</code>로 일관된 스냅샷을 잡고, 중간 변경으로 인한 오류를 줄이도록 설계했다.</p>
+
+          <pre><code>@RestController
+@RequestMapping("/orders")
+@RequiredArgsConstructor
+public class OrderController {
+
+    private final OrderService orderService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @PostMapping
+    public ResponseEntity&lt;OrderResponse&gt; createOrder(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @Valid @RequestBody OrderRequest request,
+            @RequestParam(required = false, defaultValue = "true") boolean clearCart) {
+
+        Long userId = getUserIdFromToken(token);
+        OrderResponse response = orderService.createOrder(userId, request, clearCart);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * PATCH /api/orders/{id}/status
+     */
+    @PatchMapping("/{id}/status")
+    public ResponseEntity&lt;OrderResponse&gt; updateOrderStatus(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @PathVariable Long id,
+            @RequestParam Order.OrderStatus status) {
+
+        Long userId = getUserIdFromToken(token);
+        OrderResponse response = orderService.updateOrderStatus(id, userId, status);
+        return ResponseEntity.ok(response);
+    }
+}</code></pre>
+
+          <h3>관련 문서</h3>
+          <ul class="link-chip-list">
+            <li><a class="link-chip" href="./wallet.html">Wallet</a></li>
+            <li><a class="link-chip" href="./transaction.html">Transaction</a></li>
+            <li><a class="link-chip" href="./payment-design.html">결제 시스템 설계</a></li>
+          </ul>
+        </div>
+
+        <p class="article-back article-back--action">
+          <a class="btn-back" href="./index.html">
+            <span class="btn-back__icon" aria-hidden="true">←</span>
+            OPay로 돌아가기
+          </a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="../../script.js" defer></script>
+  </body>
+</html>

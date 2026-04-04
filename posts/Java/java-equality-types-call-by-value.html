@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="==와 equals, hashCode, toString, static main, 리터럴/상수, 기본형·참조형, 오토박싱 성능, 값 전달 semantics." />
+    <title>동일성·동등성·타입·Call by Value · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-05-19 · Java</p>
+        <h1 class="article-title">동일성·동등성·타입·Call by Value</h1>
+        <p class="article-lead muted">==와 equals, hashCode, toString, static main, 리터럴/상수, 기본형·참조형, 오토박싱 성능, 값 전달 semantics.</p>
+        <div class="tags article-tags"><span class="tag">Java</span><span class="tag">Object</span><span class="tag">Memory</span></div>
+        <div class="article-body post-body">
+<h2>동일성과 동등성</h2>
+<p><strong>동일성(Identity)</strong>은 같은 메모리 주소(참조)를 가리키는지, <strong>동등성(Equality)</strong>은 값이 같은지를 뜻합니다.</p>
+
+<h3>동일성 (<code>==</code>)</h3>
+<pre><code>String str1 = new String("Java");
+String str2 = new String("Java");
+System.out.println(str1 == str2); // false (서로 다른 객체)
+
+String str3 = str1;
+System.out.println(str1 == str3); // true
+
+String str4 = "Java";
+String str5 = "Java";
+System.out.println(str4 == str5); // true (문자열 상수 풀)</code></pre>
+
+<h3>동등성 (<code>equals()</code>)</h3>
+<pre><code>String str1 = new String("Java");
+String str2 = new String("Java");
+System.out.println(str1.equals(str2)); // true</code></pre>
+
+<h2>hashCode와 equals</h2>
+<p><code>hashCode()</code>는 해시 기반 컬렉션에서 버킷을 찾을 때 쓰는 정수입니다. <strong>equals가 true면 hashCode도 같아야</strong> 합니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>항목</th>
+      <th>equals()</th>
+      <th>hashCode()</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>역할</td>
+      <td>값이 같은지</td>
+      <td>해시 테이블용 정수</td>
+    </tr>
+    <tr>
+      <td>반환</td>
+      <td>boolean</td>
+      <td>int</td>
+    </tr>
+    <tr>
+      <td>오버라이드</td>
+      <td>값 비교 시</td>
+      <td>equals 오버라이드 시 함께</td>
+    </tr>
+  </tbody>
+</table>
+<p>equals만 오버라이드하고 hashCode를 그대로 두면, HashSet/HashMap에서 논리적으로 같은 객체가 중복 저장될 수 있습니다.</p>
+<pre><code>class Person {
+    String name;
+    Person(String name) { this.name = name; }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return this.name.equals(person.name);
+    }
+}
+
+HashSet&lt;Person&gt; set = new HashSet&lt;&gt;();
+set.add(new Person("Alice"));
+set.add(new Person("Alice"));
+// hashCode 미구현 시 size가 2가 될 수 있음</code></pre>
+
+<h2>toString()</h2>
+<p>객체를 문자열로 표현합니다. 기본 구현은 클래스명@해시코드 형태이므로, 디버깅·로그를 위해 자주 오버라이드합니다.</p>
+<pre><code>@Override
+public String toString() {
+    return "Person{name='" + name + "', age=" + age + "}";
+}</code></pre>
+
+<h2>main()이 static인 이유</h2>
+<p>JVM이 진입점을 찾을 때 <strong>아직 인스턴스가 없습니다</strong>. static이면 클래스 로드만으로 <code>main</code>을 호출할 수 있습니다.</p>
+
+<h2>상수와 리터럴</h2>
+<table>
+  <thead>
+    <tr>
+      <th>구분</th>
+      <th>리터럴</th>
+      <th>상수</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>의미</td>
+      <td>값 그 자체 (<code>10</code>, <code>"Hi"</code>)</td>
+      <td><code>final</code>로 고정된 변수</td>
+    </tr>
+    <tr>
+      <td>예</td>
+      <td><code>true</code>, <code>3.14</code></td>
+      <td><code>static final int MAX = 100;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Primitive Type과 Reference Type</h2>
+<p>기본형은 값이 스택에 직접 쌓이는 형태로 다루어지고, 참조형은 힙의 객체 주소를 참조합니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>타입</th>
+      <th>크기/비고</th>
+      <th>기본값</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>byte</td>
+      <td>1 byte</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>short</td>
+      <td>2 byte</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>int</td>
+      <td>4 byte</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>long</td>
+      <td>8 byte</td>
+      <td>0L</td>
+    </tr>
+    <tr>
+      <td>float</td>
+      <td>4 byte</td>
+      <td>0.0f</td>
+    </tr>
+    <tr>
+      <td>double</td>
+      <td>8 byte</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>char</td>
+      <td>2 byte</td>
+      <td><code>'\u0000'</code></td>
+    </tr>
+    <tr>
+      <td>boolean</td>
+      <td>JVM 구현에 따름</td>
+      <td>false</td>
+    </tr>
+  </tbody>
+</table>
+<p>참조형: 클래스, 배열, 인터페이스 타입 변수, enum 등 — <code>null</code> 가능.</p>
+
+<h3>AutoBoxing과 성능</h3>
+<figure>
+  <img src="../../photo/posts/Java/4.png" alt="박싱과 언박싱 개념도" width="800" loading="lazy" decoding="async" />
+</figure>
+<pre><code>int i = 10;
+Integer num = i;   // 오토박싱
+int j = num;         // 오토언박싱</code></pre>
+<p>루프 안에서 Wrapper를 매번 쓰면 박싱 비용이 누적됩니다. 동일 타입으로 연산하는 편이 유리합니다.</p>
+<pre><code>Long sum = 0L;
+for (long i = 0; i &lt; 1_000_000; i++) sum += i; // 느림
+
+long sum2 = 0L;
+for (long i = 0; i &lt; 1_000_000; i++) sum2 += i; // 상대적으로 빠름</code></pre>
+
+<h2>Call by Value</h2>
+<p>Java는 항상 <strong>값 복사</strong>로 인자를 넘깁니다. 기본형은 값이 복사되고, 참조형은 <strong>참조값(주소)</strong>이 복사됩니다.</p>
+<pre><code>public static void modifyValue(int num) {
+    num = 20;
+}
+int original = 10;
+modifyValue(original); // original은 여전히 10</code></pre>
+<pre><code>public static void modifyPerson(Person p) {
+    p.name = "Alice";
+}
+Person person = new Person("Bob");
+modifyPerson(person); // person.name은 Alice (같은 객체를 가리킴)</code></pre>
+
+<p class="muted" style="margin-top: 2rem">
+  <a class="text-link" href="java-versions-jdk-jre.html">← 이전: Java 버전 · JDK/JRE</a>
+  ·
+  <a class="text-link" href="java-serialization.html">다음: Serialization →</a>
+</p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

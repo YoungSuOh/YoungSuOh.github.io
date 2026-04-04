@@ -19,7 +19,32 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
-function buildPostPage(post, siteTitle) {
+/** 카테고리 → URL/폴더명 (공백·슬래시는 하이픈) */
+function categoryToDir(category) {
+  return String(category || "Uncategorized")
+    .trim()
+    .replace(/\s*\/\s*/g, "-")
+    .replace(/\s+/g, "-");
+}
+
+function resolvePostBody(post) {
+  if (post.bodyFile) {
+    const bodyPath = path.join(root, "data", post.bodyFile);
+    if (!fs.existsSync(bodyPath)) {
+      console.error("Missing body file for post", post.id, ":", bodyPath);
+      process.exit(1);
+    }
+    return fs.readFileSync(bodyPath, "utf8").trim();
+  }
+  if (post.bodyHtml == null || post.bodyHtml === "") {
+    console.error("Post needs bodyHtml or bodyFile:", post.id);
+    process.exit(1);
+  }
+  return post.bodyHtml;
+}
+
+function buildPostPage(post, siteTitle, rootPrefix) {
+  const rp = rootPrefix || "../";
   const title = escapeHtml(post.title);
   const summary = escapeHtml(post.summary);
   const date = escapeHtml(post.date);
@@ -35,17 +60,17 @@ function buildPostPage(post, siteTitle) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="${summary}" />
     <title>${title} · ${escapeHtml(siteTitle)}</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="${rp}styles.css" />
   </head>
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="../index.html">${escapeHtml(siteTitle)}</a>
+        <a class="brand" href="${rp}index.html">${escapeHtml(siteTitle)}</a>
         <nav>
           <ul class="nav-list">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../index.html#blog">Blog</a></li>
-            <li><a href="../index.html#archive">Archive</a></li>
+            <li><a href="${rp}index.html">Home</a></li>
+            <li><a href="${rp}index.html#blog">Blog</a></li>
+            <li><a href="${rp}index.html#archive">Archive</a></li>
           </ul>
         </nav>
       </div>
@@ -61,7 +86,7 @@ function buildPostPage(post, siteTitle) {
 ${post.bodyHtml}
         </div>
         <p class="article-back">
-          <a class="text-link" href="../index.html#blog">← 목록으로</a>
+          <a class="text-link" href="${rp}index.html#blog">← 목록으로</a>
         </p>
       </article>
     </main>
@@ -119,7 +144,8 @@ function main() {
       console.error("Each post needs id and slug:", post);
       process.exit(1);
     }
-    const link = `posts/${post.slug}.html`;
+    const catDir = categoryToDir(post.category);
+    const link = `posts/${catDir}/${post.slug}.html`;
     return {
       id: post.id,
       title: post.title,
@@ -132,8 +158,13 @@ function main() {
   });
 
   for (const post of postsRaw) {
-    const html = buildPostPage(post, siteTitle);
-    const filePath = path.join(outDir, `${post.slug}.html`);
+    const catDir = categoryToDir(post.category);
+    const subDir = path.join(outDir, catDir);
+    fs.mkdirSync(subDir, { recursive: true });
+    const resolved = { ...post, bodyHtml: resolvePostBody(post) };
+    const rootPrefix = "../../";
+    const html = buildPostPage(resolved, siteTitle, rootPrefix);
+    const filePath = path.join(subDir, `${post.slug}.html`);
     fs.writeFileSync(filePath, html, "utf8");
     console.log("Wrote", path.relative(root, filePath));
   }

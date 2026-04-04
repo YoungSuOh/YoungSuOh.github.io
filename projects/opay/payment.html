@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="OPay Payment: 멱등성, READY/PAYING/SUCCESS, request·approve 분리, Transaction·Wallet 연동, 재처리·감사"
+    />
+    <title>Payment · OPay · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+
+  <body class="project-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#projects">Projects</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <div class="project-hero">
+        <div
+          class="project-hero-bg"
+          style="background-image: url('../../photo/project/opay/OPAY_thumbnail.png')"
+        ></div>
+        <div class="project-hero-overlay"></div>
+        <div class="project-hero-inner">
+          <p class="project-hero-eyebrow">OPay · 개발</p>
+          <h1 class="project-hero-title">Payment</h1>
+          <p class="project-hero-lead">멱등성 · 요청/승인 분리 · 지갑·원장과의 흐름</p>
+        </div>
+      </div>
+
+      <article class="card article-shell project-article">
+        <div class="post-body project-body">
+          <h2>🎯 설계 목표</h2>
+          <ol>
+            <li>중복 요청으로 인한 <strong>이중 결제 방지</strong></li>
+            <li>결제 도중 장애 발생 시 <strong>재처리 가능 구조</strong></li>
+            <li>모든 금액 흐름의 <strong>추적 및 감사 가능성 확보</strong></li>
+            <li>결제 상태와 비즈니스 상태의 <strong>명확한 분리</strong></li>
+            <li>환불, 부분 결제 등 <strong>확장 가능한 구조</strong></li>
+          </ol>
+
+          <h2>1️⃣ 전체 아키텍처</h2>
+          <pre><code>Payment 요청
+   │
+   │ (idempotencyKey)
+   ▼
+Payment 생성 (READY)
+   │
+   ▼
+approvePayment()
+   │
+   ├─ Payment → PAYING
+   │
+   ├─ Transaction 생성 (PENDING)
+   │
+   ├─ Wallet 잔액 차감 (원자적)
+   │
+   ├─ Transaction → SUCCESS
+   │
+   ├─ Payment → SUCCESS
+   │
+   └─ Order paidAmount 증가</code></pre>
+
+          <h2>개발</h2>
+
+          <pre><code>@RestController
+@RequestMapping("/payments")
+@RequiredArgsConstructor
+public class PaymentController {
+
+    private final PaymentService paymentService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @PostMapping("/request")
+    public ResponseEntity&lt;PaymentResponse&gt; requestPayment(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @Valid @RequestBody PaymentRequest request) {
+
+        Long userId = getUserIdFromToken(token);
+        var payment = paymentService.requestPayment(
+                request.getOrderId(),
+                request.getAmount(),
+                request.getMethod(),
+                request.getIdempotencyKey()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(PaymentResponse.from(payment));
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity&lt;PaymentResponse&gt; approvePayment(
+            @RequestHeader(value = "Authorization", required = false) String token,
+            @Valid @RequestBody PaymentApproveRequest request) {
+
+        Long userId = getUserIdFromToken(token);
+        var payment = paymentService.approvePayment(
+                request.getPaymentId(),
+                request.getIdempotencyKey()
+        );
+
+        return ResponseEntity.ok(PaymentResponse.from(payment));
+    }
+}</code></pre>
+
+          <ul>
+            <li><code>/request</code> — 결제 요청 생성(Payment 생성)</li>
+            <li><code>/approve</code> — 실제 잔액 차감(Transaction + Wallet)</li>
+          </ul>
+
+          <pre><code>@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class PaymentService {
+
+    private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
+    private final WalletRepository walletRepository;
+    private final WalletService walletService;
+    private final TransactionService transactionService;
+
+    @Transactional
+    public Payment requestPayment(Long orderId, Long amount,
+                                 Payment.PaymentMethod method, String idempotencyKey) {
+        Optional&lt;Payment&gt; existing = paymentRepository.findByIdempotencyKey(idempotencyKey);
+        if (existing.isPresent()) {
+            log.info("중복 결제 요청 무시: idempotencyKey={}, paymentId={}",
+                    idempotencyKey, existing.get().getId());
+            return existing.get();
+        }
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -&gt; new IllegalArgumentException("주문을 찾을 수 없습니다: " + orderId));
+
+        if (amount &lt;= 0) {
+            throw new IllegalArgumentException("결제 금액은 0보다 커야 합니다");
+        }
+        if (amount &gt; order.getTotalAmount() - order.getPaidAmount()) {
+            throw new IllegalArgumentException("결제 금액이 주문 잔액을 초과합니다");
+        }
+
+        Payment payment = Payment.builder()
+                .order(order)
+                .amount(amount)
+                .method(method)
+                .status(Payment.PaymentStatus.READY)
+                .idempotencyKey(idempotencyKey)
+                .build();
+
+        Payment saved = paymentRepository.save(payment);
+        log.info("결제 요청 생성: paymentId={}, orderId={}, amount={}, method={}",
+                saved.getId(), orderId, amount, method);
+
+        return saved;
+    }
+
+    @Transactional
+    public Payment approvePayment(Long paymentId, String idempotencyKey) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -&gt; new IllegalArgumentException("결제를 찾을 수 없습니다: " + paymentId));
+
+        if (!payment.getIdempotencyKey().equals(idempotencyKey)) {
+            throw new IllegalArgumentException("멱등성 키가 일치하지 않습니다");
+        }
+
+        if (payment.getStatus() == Payment.PaymentStatus.SUCCESS) {
+            log.info("이미 처리된 결제: paymentId={}", paymentId);
+            return payment;
+        }
+
+        if (!payment.canRetry()) {
+            throw new IllegalStateException("재시도할 수 없는 결제 상태입니다: " + payment.getStatus());
+        }
+
+        payment.startPayment();
+
+        try {
+            Long userId = payment.getOrder().getUser().getId();
+            Long orderId = payment.getOrder().getId();
+
+            Wallet wallet = walletRepository.findByUserId(userId)
+                    .orElseThrow(() -&gt; new IllegalArgumentException("지갑을 찾을 수 없습니다: " + userId));
+
+            Transaction transaction = transactionService.createTransaction(
+                    userId,
+                    wallet.getId(),
+                    payment.getId(),
+                    orderId,
+                    Transaction.TransactionType.PAY,
+                    payment.getAmount(),
+                    idempotencyKey + "_transaction"
+            );
+
+            boolean deducted = walletService.deductBalance(userId, payment.getAmount());
+
+            if (!deducted) {
+                transaction.markAsFail();
+                payment.markAsFail();
+                log.error("결제 실패 (잔액 부족): paymentId={}, userId={}, amount={}",
+                        paymentId, userId, payment.getAmount());
+                throw new IllegalArgumentException("잔액이 부족합니다");
+            }
+
+            transactionService.markTransactionAsSuccess(transaction.getId());
+            payment.markAsSuccess();
+
+            payment.getOrder().updatePaidAmount(
+                    payment.getOrder().getPaidAmount() + payment.getAmount());
+
+            log.info("결제 승인 완료: paymentId={}, transactionId={}, userId={}, amount={}",
+                    paymentId, transaction.getId(), userId, payment.getAmount());
+
+            return payment;
+
+        } catch (Exception e) {
+            payment.markAsFail();
+            log.error("결제 처리 중 오류 발생: paymentId={}, error={}", paymentId, e.getMessage());
+            throw new RuntimeException("결제 처리 중 오류가 발생했습니다: " + e.getMessage(), e);
+        }
+    }
+}</code></pre>
+
+          <p><strong><code>approvePayment</code> 전체 흐름</strong></p>
+          <pre><code>1. Payment 조회
+2. idempotency 검증
+3. 상태 체크 (SUCCESS / 재시도 가능 여부)
+4. Payment → PAYING
+
+5. Transaction(PENDING) 생성
+6. Wallet 차감 (원자적)
+
+7. 성공
+   → Transaction SUCCESS
+   → Payment SUCCESS
+   → Order 업데이트
+
+8. 실패
+   → Transaction FAIL
+   → Payment FAIL</code></pre>
+
+          <pre><code>public interface PaymentRepository extends JpaRepository&lt;Payment, Long&gt; {
+    Optional&lt;Payment&gt; findByIdempotencyKey(String idempotencyKey);
+}</code></pre>
+
+          <p>
+            <code>IdempotencyKey</code>로 “이 요청이 이미 처리된 요청인가?”를 판별한다.
+          </p>
+
+          <h3>관련 문서</h3>
+          <ul class="link-chip-list">
+            <li><a class="link-chip" href="./wallet.html">Wallet</a></li>
+            <li><a class="link-chip" href="./transaction.html">Transaction</a></li>
+            <li><a class="link-chip" href="./order.html">Order</a></li>
+            <li><a class="link-chip" href="./payment-design.html">결제 시스템 설계</a></li>
+          </ul>
+        </div>
+
+        <p class="article-back article-back--action">
+          <a class="btn-back" href="./index.html">
+            <span class="btn-back__icon" aria-hidden="true">←</span>
+            OPay로 돌아가기
+          </a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="../../script.js" defer></script>
+  </body>
+</html>
