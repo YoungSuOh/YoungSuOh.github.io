@@ -1,32 +1,22 @@
 [
   {
     "id": "post-001",
-    "slug": "nodejs-event-loop",
-    "title": "Node.js 이벤트 루프 정리",
+    "slug": "pessimistic-optimistic-lock",
+    "title": "비관적 락 & 낙관적 락",
     "category": "Backend",
-    "summary": "이벤트 루프와 non-blocking I/O의 실제 동작 흐름을 예제로 정리합니다.",
-    "date": "2026-04-01",
-    "tags": ["Node.js", "JavaScript", "Runtime"],
-    "bodyHtml": "<p>Node.js는 단일 스레드에서 이벤트 루프를 통해 비동기 I/O를 처리합니다. 콜 스택이 비면 태스크 큐에서 콜백을 가져와 실행하는 흐름을 이해하면 디버깅이 쉬워집니다.</p>\n<h2>핵심 정리</h2>\n<ul>\n<li>microtask(Promise)와 macrotask(setTimeout) 순서</li>\n<li>blocking 호출이 이벤트 루프에 미치는 영향</li>\n</ul>\n<pre><code>setTimeout(() =&gt; console.log('B'), 0);\nPromise.resolve().then(() =&gt; console.log('A'));</code></pre>"
+    "summary": "동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다.",
+    "date": "2026-04-03",
+    "tags": ["Concurrency", "JPA", "Database"],
+    "bodyHtml": "<h2>1️⃣ 문제 : 동시성</h2>\n<p>여러 요청이 같은 데이터를 동시에 수정하면 문제가 생김</p>\n<ul>\n<li>예시 (지갑)</li>\n</ul>\n<pre><code>현재 잔액 = 10000</code></pre>\n<p>동시에 결제 요청</p>\n<pre><code>A → 7000 결제\nB → 5000 결제</code></pre>\n<p>그 결과</p>\n<pre><code>A update → 3000\nB update → 5000</code></pre>\n<p>최종 결과</p>\n<pre><code>balance = 5000</code></pre>\n\n<h2>2️⃣ 해결 방법 = Lock</h2>\n<p>이 문제를 해결하는 방법이 <strong>Lock(잠금)</strong>이다.</p>\n<p>대표적으로 두 가지가 있다.</p>\n<pre><code>비관적 락 (Pessimistic Lock)\n낙관적 락 (Optimistic Lock)</code></pre>\n\n<h2>3️⃣ 비관적 락 (Pessimistic Lock)</h2>\n<p>충돌이 발생할 가능성이 높다고 가정하고 처음부터 DB에 Lock을 걸어버리는 방식</p>\n<p>→ 내가 쓰는 동안 다른 사람 접근 금지</p>\n<p><strong>동작 방식</strong></p>\n<ul>\n<li>\n예시\n<pre><code>Thread A → 지갑 조회 + LOCK\nThread B → 지갑 조회 시도</code></pre>\n<p>DB 상태</p>\n<pre><code>A → 사용 중\nB → 대기</code></pre>\n<ul>\n<li>A가 끝나야 B가 실행된다.</li>\n</ul>\n</li>\n</ul>\n<p><strong>실제 SQL</strong></p>\n<pre><code>SELECT *\nFROM wallets\nWHERE id = 1\nFOR UPDATE</code></pre>\n<ul>\n<li><code>FOR UPDATE</code>가 <strong>row lock</strong>을 건다</li>\n</ul>\n<p><strong>JPA 사용 방법</strong></p>\n<pre><code>@Lock(LockModeType.PESSIMISTIC_WRITE)\nWallet findById(Long id);</code></pre>\n<p>✅ 특징</p>\n<ul>\n<li>\n<strong>장점</strong>\n<ul>\n<li>데이터 충돌 절대 발생 안함</li>\n</ul>\n</li>\n<li>\n<strong>단점</strong>\n<ul>\n<li>대기 발생</li>\n<li>성능 저하</li>\n<li>DeadLock 가능</li>\n</ul>\n</li>\n</ul>\n\n<h2>4️⃣ 낙관적 락 (Optimistic Lock)</h2>\n<p>충돌이 거의 없다고 가정하여 <strong>일단 실행하고, 충돌 발생 시 롤백하는 방식</strong></p>\n<p><strong>동작 방식</strong></p>\n<ul>\n<li>\n지갑 상태\n<pre><code>balance = 10000\nversion = 1</code></pre>\n</li>\n<li>\nThread A\n<pre><code>update wallet\nset balance = 3000\nwhere id = 1\nand version = 1</code></pre>\n<ul>\n<li>\n성공\n<pre><code>version = 2</code></pre>\n</li>\n</ul>\n</li>\n<li>\nThread B\n<pre><code>update wallet\nwhere version = 1</code></pre>\n<ul>\n<li>\n하지만 실제 DB\n<pre><code>version = 2</code></pre>\n</li>\n<li>\n그래서\n<pre><code>update 0 rows</code></pre>\n</li>\n<li>JPA는 <code>OptimisticLockException</code> 을 발생시킨다.</li>\n</ul>\n</li>\n</ul>"
   },
   {
-    "id": "post-002",
-    "slug": "cache-strategies-at-scale",
-    "title": "대규모 트래픽에서 캐시 전략",
-    "category": "System Design",
-    "summary": "읽기 부하를 줄이기 위한 캐시 패턴(Cache Aside, Write Through)을 비교합니다.",
-    "date": "2026-04-01",
-    "tags": ["Cache", "Scalability"],
-    "bodyHtml": "<p>캐시는 읽기 비율이 높은 서비스에서 가장 효과적인 확장 수단입니다. 데이터 일관성 요구 수준에 따라 패턴을 선택합니다.</p>\n<h2>Cache Aside</h2>\n<p>애플리케이션이 캐시를 먼저 조회하고, 미스 시 DB에서 읽어 캐시에 적재합니다.</p>\n<h2>Write Through</h2>\n<p>쓰기 시 캐시와 저장소를 함께 갱신해 일관성을 유지하기 쉽습니다.</p>"
-  },
-  {
-    "id": "post-003",
-    "slug": "index-design-mistakes",
-    "title": "인덱스 설계 실수 5가지",
+    "id": "post-004",
+    "slug": "atomic-update",
+    "title": "Atomic Update",
     "category": "Database",
-    "summary": "쿼리 플랜을 기반으로 인덱스 설계 시 자주 발생하는 문제를 점검합니다.",
-    "date": "2026-04-01",
-    "tags": ["MySQL", "Index", "SQL"],
-    "bodyHtml": "<p>인덱스는 빠른 조회를 돕지만, 잘못 쓰면 쓰기 비용만 커질 수 있습니다.</p>\n<ol>\n<li>선택도가 낮은 컬럼만 인덱싱</li>\n<li>복합 인덱스 컬럼 순서와 WHERE 절 불일치</li>\n<li>함수/형변환으로 인한 인덱스 미사용</li>\n</ol>\n<p>실제 쿼리 플랜으로 확인하는 습관을 들이세요.</p>"
+    "summary": "Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다.",
+    "date": "2026-04-03",
+    "tags": ["SQL", "Concurrency", "Transaction"],
+    "bodyHtml": "<h2>1️⃣ Atomic의 의미</h2>\n<p>어떤 작업 <strong>전부 성공</strong>하거나, <strong>전부 실패</strong>하는 특성</p>\n<ul>\n<li>예시</li>\n</ul>\n<pre><code>A → 성공\nB → 실패</code></pre>\n<p>이런 상태가 아니라</p>\n<pre><code>A + B 둘 다 성공\n또는\nA + B 둘 다 실패</code></pre>\n\n<h2>2️⃣ 문제: 일반적인 업데이트 방식</h2>\n<pre><code>Wallet wallet = walletRepository.findByUserId(userId);\n\nif(wallet.getBalance() &gt;= amount){\n    wallet.setBalance(wallet.getBalance() - amount);\n}</code></pre>\n<p>SQL 흐름</p>\n<pre><code>1. SELECT balance (조회)\n2. Java에서 검증 (검증)\n3. UPDATE balance (수정)</code></pre>\n<p>⚠️ 여기서 발생하는 문제 (Race Condition)</p>\n<p>동시에 두 요청이 들어온다.</p>\n<p>지갑 상태</p>\n<pre><code>balance = 10000</code></pre>\n<p>요청</p>\n<pre><code>A → 7000 결제\nB → 5000 결제</code></pre>\n<p>흐름</p>\n<pre><code>A SELECT balance → 10000\nB SELECT balance → 10000</code></pre>\n<p>A 실행</p>\n<pre><code>UPDATE balance = 3000</code></pre>\n<p>B 실행</p>\n<pre><code>UPDATE balance = 5000</code></pre>\n<p>최종 결과</p>\n<pre><code>balance = 5000</code></pre>\n<p>하지만 실제 결제 금액</p>\n<pre><code>7000 + 5000 = 12000</code></pre>\n<p>그래서 <strong>2000원이 공짜 결제된다.</strong></p>\n<p>⇒ 이걸 <strong>Lost Update</strong> + <strong>Race Condition</strong></p>\n\n<h2>3️⃣ 해결 방법: Atomic Update</h2>\n<p>Atomic Update는 <strong>검증 + 수정</strong>을 <strong>한 번의 SQL</strong>로 처리하는 방식이다.</p>\n<p>예시</p>\n<pre><code>UPDATE wallet\nSET balance = balance - 5000\nWHERE user_id = 1\nAND balance &gt;= 5000</code></pre>\n<p>이 쿼리는 DB 내부에서 이렇게 동작한다.</p>\n<ol>\n<li><code>balance &gt;= 5000</code> 검증</li>\n<li><code>balance</code> 차감</li>\n</ol>\n<p>⇒ 두 작업이 한 번의 연산으로 실행된다.</p>\n\n<h2>4️⃣ 지갑 시스템에서의 Atomic Update</h2>\n<pre><code>UPDATE Wallet w\nSET w.balance = w.balance - :amount,\n    w.version = w.version + 1\nWHERE w.user.id = :userId\nAND w.balance &gt;= :amount\nAND w.version = :version</code></pre>\n<p>이 쿼리는 한 번에 다음을 수행한다.</p>\n<ol>\n<li>\n<strong>DB 확인</strong>\n<ul>\n<li>버전이 동일한가?</li>\n<li>잔액이 충분한가?</li>\n</ul>\n</li>\n<li>\n<strong>DB 업데이트</strong>\n<ul>\n<li>잔액 차감</li>\n<li>버전 증가</li>\n</ul>\n</li>\n</ol>"
   }
 ]

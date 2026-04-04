@@ -236,6 +236,8 @@ h1 {
 .post-card {
   display: grid;
   gap: 0.65rem;
+  align-items: start;
+  align-self: start;
 }
 
 .post-card-title {
@@ -243,6 +245,11 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.02em;
   margin: 0;
+}
+
+/* 사이드바와 높이 맞추느라 #post-list가 늘어나면 카드·태그가 세로로 늘어남 → 시작 정렬 */
+#blog .grid-2 #post-list {
+  align-self: start;
 }
 
 #post-list.grid {
@@ -258,15 +265,24 @@ h1 {
   display: flex;
   gap: 0.45rem;
   flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
 }
 
 .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
   color: #5376b8;
   border: 1px solid #c6d9ff;
   border-radius: 999px;
-  padding: 0.15rem 0.5rem;
+  padding: 0.3rem 0.65rem;
   background: #f7fbff;
+  white-space: nowrap;
 }
 
 .project-grid {
@@ -380,15 +396,22 @@ h1 {
   display: flex;
   gap: 0.35rem;
   flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
 }
 
 .project-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.2rem 0.5rem;
+  padding: 0.28rem 0.55rem;
   border-radius: 6px;
   border: 1px solid transparent;
-  line-height: 1.2;
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
 .project-tag--0 {
@@ -554,6 +577,61 @@ h1 {
   border: 1px solid rgba(157, 182, 255, 0.45);
 }
 
+.link-chip-list {
+  list-style: none;
+  margin: 0 0 1.15rem;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  max-width: 420px;
+}
+
+.link-chip-list li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.58rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.58rem 0.88rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #274894;
+  border: 1px solid rgba(176, 199, 255, 0.75);
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+  box-shadow: 0 3px 10px rgba(45, 85, 160, 0.08);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
+}
+
+.link-chip::before {
+  content: "📄";
+  font-size: 0.96rem;
+  line-height: 1;
+  opacity: 0.88;
+}
+
+.link-chip:hover {
+  color: #1e3f88;
+  background: linear-gradient(180deg, #ffffff 0%, #eff5ff 100%);
+  border-color: rgba(112, 151, 255, 0.62);
+  box-shadow: 0 7px 18px rgba(45, 85, 160, 0.13);
+  transform: translateY(-1px);
+}
+
+.project-body .link-chip,
+.post-body .link-chip {
+  display: inline-flex;
+  text-decoration: none;
+}
+
 .post-body {
   font-size: 1.02rem;
   color: #2f3545;
@@ -580,7 +658,6 @@ h1 {
 .post-body ul,
 .post-body ol {
   margin: 0 0 1.1rem;
-  padding-left: 1.35rem;
 }
 
 .post-body li {

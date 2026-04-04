@@ -2,6 +2,11 @@
 
 개발자 오영수의 깃허브 자기소개 및 블로그입니다.
 
+접속 URL : https://youngsuoh.github.io/
+
+## 로컬에서 실행
+
+- 파이썬 필요
 
 ```bash
 python -m http.server 8000

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다." />
+    <title>비관적 락 &amp; 낙관적 락 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#blog">Blog</a></li>
+            <li><a href="../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-04-03 · Backend</p>
+        <h1 class="article-title">비관적 락 &amp; 낙관적 락</h1>
+        <p class="article-lead muted">동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Concurrency</span><span class="tag">JPA</span><span class="tag">Database</span></div>
+        <div class="article-body post-body">
+<h2>1️⃣ 문제 : 동시성</h2>
+<p>여러 요청이 같은 데이터를 동시에 수정하면 문제가 생김</p>
+<ul>
+<li>예시 (지갑)</li>
+</ul>
+<pre><code>현재 잔액 = 10000</code></pre>
+<p>동시에 결제 요청</p>
+<pre><code>A → 7000 결제
+B → 5000 결제</code></pre>
+<p>그 결과</p>
+<pre><code>A update → 3000
+B update → 5000</code></pre>
+<p>최종 결과</p>
+<pre><code>balance = 5000</code></pre>
+
+<h2>2️⃣ 해결 방법 = Lock</h2>
+<p>이 문제를 해결하는 방법이 <strong>Lock(잠금)</strong>이다.</p>
+<p>대표적으로 두 가지가 있다.</p>
+<pre><code>비관적 락 (Pessimistic Lock)
+낙관적 락 (Optimistic Lock)</code></pre>
+
+<h2>3️⃣ 비관적 락 (Pessimistic Lock)</h2>
+<p>충돌이 발생할 가능성이 높다고 가정하고 처음부터 DB에 Lock을 걸어버리는 방식</p>
+<p>→ 내가 쓰는 동안 다른 사람 접근 금지</p>
+<p><strong>동작 방식</strong></p>
+<ul>
+<li>
+예시
+<pre><code>Thread A → 지갑 조회 + LOCK
+Thread B → 지갑 조회 시도</code></pre>
+<p>DB 상태</p>
+<pre><code>A → 사용 중
+B → 대기</code></pre>
+<ul>
+<li>A가 끝나야 B가 실행된다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>실제 SQL</strong></p>
+<pre><code>SELECT *
+FROM wallets
+WHERE id = 1
+FOR UPDATE</code></pre>
+<ul>
+<li><code>FOR UPDATE</code>가 <strong>row lock</strong>을 건다</li>
+</ul>
+<p><strong>JPA 사용 방법</strong></p>
+<pre><code>@Lock(LockModeType.PESSIMISTIC_WRITE)
+Wallet findById(Long id);</code></pre>
+<p>✅ 특징</p>
+<ul>
+<li>
+<strong>장점</strong>
+<ul>
+<li>데이터 충돌 절대 발생 안함</li>
+</ul>
+</li>
+<li>
+<strong>단점</strong>
+<ul>
+<li>대기 발생</li>
+<li>성능 저하</li>
+<li>DeadLock 가능</li>
+</ul>
+</li>
+</ul>
+
+<h2>4️⃣ 낙관적 락 (Optimistic Lock)</h2>
+<p>충돌이 거의 없다고 가정하여 <strong>일단 실행하고, 충돌 발생 시 롤백하는 방식</strong></p>
+<p><strong>동작 방식</strong></p>
+<ul>
+<li>
+지갑 상태
+<pre><code>balance = 10000
+version = 1</code></pre>
+</li>
+<li>
+Thread A
+<pre><code>update wallet
+set balance = 3000
+where id = 1
+and version = 1</code></pre>
+<ul>
+<li>
+성공
+<pre><code>version = 2</code></pre>
+</li>
+</ul>
+</li>
+<li>
+Thread B
+<pre><code>update wallet
+where version = 1</code></pre>
+<ul>
+<li>
+하지만 실제 DB
+<pre><code>version = 2</code></pre>
+</li>
+<li>
+그래서
+<pre><code>update 0 rows</code></pre>
+</li>
+<li>JPA는 <code>OptimisticLockException</code> 을 발생시킨다.</li>
+</ul>
+</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -49,41 +49,29 @@ window.BLOG_DATA = {
   "posts": [
     {
       "id": "post-001",
-      "title": "Node.js 이벤트 루프 정리",
+      "title": "비관적 락 & 낙관적 락",
       "category": "Backend",
-      "summary": "이벤트 루프와 non-blocking I/O의 실제 동작 흐름을 예제로 정리합니다.",
-      "date": "2026-04-01",
+      "summary": "동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다.",
+      "date": "2026-04-03",
       "tags": [
-        "Node.js",
-        "JavaScript",
-        "Runtime"
+        "Concurrency",
+        "JPA",
+        "Database"
       ],
-      "link": "posts/nodejs-event-loop.html"
+      "link": "posts/pessimistic-optimistic-lock.html"
     },
     {
-      "id": "post-002",
-      "title": "대규모 트래픽에서 캐시 전략",
-      "category": "System Design",
-      "summary": "읽기 부하를 줄이기 위한 캐시 패턴(Cache Aside, Write Through)을 비교합니다.",
-      "date": "2026-04-01",
-      "tags": [
-        "Cache",
-        "Scalability"
-      ],
-      "link": "posts/cache-strategies-at-scale.html"
-    },
-    {
-      "id": "post-003",
-      "title": "인덱스 설계 실수 5가지",
+      "id": "post-004",
+      "title": "Atomic Update",
       "category": "Database",
-      "summary": "쿼리 플랜을 기반으로 인덱스 설계 시 자주 발생하는 문제를 점검합니다.",
-      "date": "2026-04-01",
+      "summary": "Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다.",
+      "date": "2026-04-03",
       "tags": [
-        "MySQL",
-        "Index",
-        "SQL"
+        "SQL",
+        "Concurrency",
+        "Transaction"
       ],
-      "link": "posts/index-design-mistakes.html"
+      "link": "posts/atomic-update.html"
     }
   ],
   "projects": [
@@ -121,7 +109,7 @@ window.BLOG_DATA = {
       ],
       "link": "projects/dr-rate.html",
       "thumbnail": "photo/project/dr-rate/thumbnail.png",
-      "period": "2024.11.06 ~ 2024.01.06"
+      "period": "2024.11.06 ~ 2025.01.06"
     },
     {
       "name": "Hi-Buddy",

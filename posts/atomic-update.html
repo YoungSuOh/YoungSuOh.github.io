@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다." />
+    <title>Atomic Update · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#blog">Blog</a></li>
+            <li><a href="../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-04-03 · Database</p>
+        <h1 class="article-title">Atomic Update</h1>
+        <p class="article-lead muted">Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">SQL</span><span class="tag">Concurrency</span><span class="tag">Transaction</span></div>
+        <div class="article-body post-body">
+<h2>1️⃣ Atomic의 의미</h2>
+<p>어떤 작업 <strong>전부 성공</strong>하거나, <strong>전부 실패</strong>하는 특성</p>
+<ul>
+<li>예시</li>
+</ul>
+<pre><code>A → 성공
+B → 실패</code></pre>
+<p>이런 상태가 아니라</p>
+<pre><code>A + B 둘 다 성공
+또는
+A + B 둘 다 실패</code></pre>
+
+<h2>2️⃣ 문제: 일반적인 업데이트 방식</h2>
+<pre><code>Wallet wallet = walletRepository.findByUserId(userId);
+
+if(wallet.getBalance() &gt;= amount){
+    wallet.setBalance(wallet.getBalance() - amount);
+}</code></pre>
+<p>SQL 흐름</p>
+<pre><code>1. SELECT balance (조회)
+2. Java에서 검증 (검증)
+3. UPDATE balance (수정)</code></pre>
+<p>⚠️ 여기서 발생하는 문제 (Race Condition)</p>
+<p>동시에 두 요청이 들어온다.</p>
+<p>지갑 상태</p>
+<pre><code>balance = 10000</code></pre>
+<p>요청</p>
+<pre><code>A → 7000 결제
+B → 5000 결제</code></pre>
+<p>흐름</p>
+<pre><code>A SELECT balance → 10000
+B SELECT balance → 10000</code></pre>
+<p>A 실행</p>
+<pre><code>UPDATE balance = 3000</code></pre>
+<p>B 실행</p>
+<pre><code>UPDATE balance = 5000</code></pre>
+<p>최종 결과</p>
+<pre><code>balance = 5000</code></pre>
+<p>하지만 실제 결제 금액</p>
+<pre><code>7000 + 5000 = 12000</code></pre>
+<p>그래서 <strong>2000원이 공짜 결제된다.</strong></p>
+<p>⇒ 이걸 <strong>Lost Update</strong> + <strong>Race Condition</strong></p>
+
+<h2>3️⃣ 해결 방법: Atomic Update</h2>
+<p>Atomic Update는 <strong>검증 + 수정</strong>을 <strong>한 번의 SQL</strong>로 처리하는 방식이다.</p>
+<p>예시</p>
+<pre><code>UPDATE wallet
+SET balance = balance - 5000
+WHERE user_id = 1
+AND balance &gt;= 5000</code></pre>
+<p>이 쿼리는 DB 내부에서 이렇게 동작한다.</p>
+<ol>
+<li><code>balance &gt;= 5000</code> 검증</li>
+<li><code>balance</code> 차감</li>
+</ol>
+<p>⇒ 두 작업이 한 번의 연산으로 실행된다.</p>
+
+<h2>4️⃣ 지갑 시스템에서의 Atomic Update</h2>
+<pre><code>UPDATE Wallet w
+SET w.balance = w.balance - :amount,
+    w.version = w.version + 1
+WHERE w.user.id = :userId
+AND w.balance &gt;= :amount
+AND w.version = :version</code></pre>
+<p>이 쿼리는 한 번에 다음을 수행한다.</p>
+<ol>
+<li>
+<strong>DB 확인</strong>
+<ul>
+<li>버전이 동일한가?</li>
+<li>잔액이 충분한가?</li>
+</ul>
+</li>
+<li>
+<strong>DB 업데이트</strong>
+<ul>
+<li>잔액 차감</li>
+<li>버전 증가</li>
+</ul>
+</li>
+</ol>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
