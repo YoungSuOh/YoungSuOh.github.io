@@ -53,7 +53,7 @@ window.BLOG_DATA = {
       "title": "비관적 락 & 낙관적 락",
       "category": "Backend",
       "summary": "동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다.",
-      "date": "2026-04-03",
+      "date": "2025-01-09",
       "tags": [
         "Concurrency",
         "JPA",
@@ -66,7 +66,7 @@ window.BLOG_DATA = {
       "title": "Atomic Update",
       "category": "Database",
       "summary": "Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다.",
-      "date": "2026-04-03",
+      "date": "2025-01-08",
       "tags": [
         "SQL",
         "Concurrency",
@@ -151,6 +151,76 @@ window.BLOG_DATA = {
         "Design"
       ],
       "link": "posts/Java/java-oop-polymorphism-interface.html"
+    },
+    {
+      "id": "post-011",
+      "title": "Java 정리 ① — 문자열·예외·제네릭",
+      "category": "Java",
+      "summary": "String 리터럴 vs new String, StringBuilder·StringBuffer, Exception·Error, throw·throws, finally, Throwable, 제네릭까지 정리합니다.",
+      "date": "2024-03-27",
+      "tags": [
+        "Java",
+        "String",
+        "Exception",
+        "Generics"
+      ],
+      "link": "posts/Java/java-notes-strings-exceptions-generics.html"
+    },
+    {
+      "id": "post-012",
+      "title": "Java 정리 ② — 람다·스트림·어노테이션·리플렉션",
+      "category": "Java",
+      "summary": "람다·함수형 인터페이스, Stream 중간·최종 연산, 어노테이션·메타 어노테이션, 리플렉션과 프레임워크 연결을 정리합니다.",
+      "date": "2024-07-14",
+      "tags": [
+        "Java",
+        "Lambda",
+        "Stream",
+        "Reflection"
+      ],
+      "link": "posts/Java/java-notes-lambda-stream-annotations.html"
+    },
+    {
+      "id": "post-013",
+      "title": "Java 정리 ③ — System.out.println과 성능",
+      "category": "Java",
+      "summary": "표준 출력의 I/O 비용, flush·synchronized, BufferedWriter·로깅 프레임워크 대안을 정리합니다.",
+      "date": "2024-10-03",
+      "tags": [
+        "Java",
+        "I/O",
+        "Performance",
+        "Logging"
+      ],
+      "link": "posts/Java/java-notes-system-out-depth.html"
+    },
+    {
+      "id": "post-014",
+      "title": "Outbox 패턴",
+      "category": "System Design",
+      "summary": "DB와 메시지 브로커 간 정합성 — 이벤트 유실·불일치 문제와 Outbox 테이블, 폴링·CDC 기반 전송 흐름을 정리합니다.",
+      "date": "2026-03-14",
+      "tags": [
+        "Kafka",
+        "Consistency",
+        "Event-Driven"
+      ],
+      "link": "posts/System-Design/transactional-outbox-pattern.html"
+    },
+    {
+      "id": "post-015",
+      "title": "OPay 동시성 테스트 & Trouble Shooting",
+      "category": "Troubleshooting",
+      "summary": "k6로 단일 상품 Hot Spot 부하 테스트, MySQL 데드락·커넥션 풀, 벌크 재고·Kafka·Transactional Outbox로 재고 확정을 분리한 과정을 정리합니다.",
+      "date": "2026-03-18",
+      "tags": [
+        "OPay",
+        "k6",
+        "Concurrency",
+        "Kafka",
+        "MySQL"
+      ],
+      "link": "projects/opay/concurrency-testing.html"
     }
   ],
   "projects": [

@@ -1,0 +1,41 @@
+<p class="muted">
+  <a class="text-link" href="java-notes-strings-exceptions-generics.html">① 문자열·예외·제네릭</a> ·
+  <a class="text-link" href="java-notes-lambda-stream-annotations.html">② 람다·스트림·어노테이션</a> · <strong>③ System.out 심화</strong>
+</p>
+
+<h2>Q1) <code>System.out.println</code>이 성능이 좋지 않다고 하는 이유</h2>
+<ol>
+  <li>
+    <strong>I/O는 상대적으로 비쌉니다.</strong> <code>System.out</code>은 <code>PrintStream</code>이고, 콘솔·터미널로 넘기는 과정에서 OS·인코딩 처리 등이 겹칩니다.
+  </li>
+  <li>
+    <strong>라인 단위로 flush에 가깝게 동작하는 경향</strong> — 구현에 따라 다르지만, 매번 즉시 보이게 하려는 특성 때문에 <strong>버퍼를 크게 쌓아 두지 못하는</strong> 경우가 많아 호출 빈도가 곧 I/O 빈도가 됩니다.
+  </li>
+  <li>
+    <strong><code>PrintStream</code>의 출력 메서드는 <code>synchronized</code>로 동기화</strong>되어 있어, 멀티스레드에서 락 경합이 날 수 있습니다.
+  </li>
+</ol>
+
+<h2>대안</h2>
+<h3>1) <code>BufferedWriter</code> 등으로 버퍼링</h3>
+<pre><code>BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+bw.write("Hello, World!");
+bw.newLine();
+bw.flush(); // 필요할 때만
+bw.close();</code></pre>
+
+<h3>2) SLF4J + Logback 등 로깅 프레임워크</h3>
+<pre><code>import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+class Example {
+  private static final Logger log = LoggerFactory.getLogger(Example.class);
+  void run() {
+    log.info("메시지");
+  }
+}</code></pre>
+<p>비동기 어펜더·레벨 필터·파일 롤링 등을 쓰면 운영·성능 모두 유리한 경우가 많습니다. <strong>애플리케이션 로그는 <code>System.out</code> 대신 로거</strong>가 일반적입니다.</p>
+
+<p class="muted" style="margin-top: 2rem">
+  <a class="text-link" href="java-notes-lambda-stream-annotations.html">← 이전: ② 람다 · 스트림 · 어노테이션</a>
+</p>

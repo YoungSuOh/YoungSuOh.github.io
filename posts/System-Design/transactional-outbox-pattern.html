@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="DB와 메시지 브로커 간 정합성 — 이벤트 유실·불일치 문제와 Outbox 테이블, 폴링·CDC 기반 전송 흐름을 정리합니다." />
+    <title>Outbox 패턴 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-03-14 · System Design</p>
+        <h1 class="article-title">Outbox 패턴</h1>
+        <p class="article-lead muted">DB와 메시지 브로커 간 정합성 — 이벤트 유실·불일치 문제와 Outbox 테이블, 폴링·CDC 기반 전송 흐름을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Kafka</span><span class="tag">Consistency</span><span class="tag">Event-Driven</span></div>
+        <div class="article-body post-body">
+<h2>Outbox 패턴</h2>
+
+<h3>1. Outbox</h3>
+<p>
+  DB 트랜잭션과 메시지 브로커의 일관성을 유지하기 위해 사용되는 패턴이다.
+</p>
+<ol>
+  <li>
+    서비스에서 DB에 변경을 저장하는 동시에 메시지 브로커에 이벤트를 발행해야 할 때, 두 작업이 원자적으로 수행되지 않으면 정합성이 깨질 수 있다.
+  </li>
+  <li>
+    예시
+    <ol>
+      <li>사용자가 주문을 생성(order 테이블에 INSERT)</li>
+      <li>이벤트 브로커(Kafka)에 “주문 생성됨” 이벤트 발행</li>
+      <li>
+        주문 데이터는 DB에 반영됐는데 브로커에는 메시지가 나가지 않은 경우 →
+        <strong>이벤트 유실</strong> 가능
+      </li>
+      <li>
+        반대로 이벤트 발행 후 DB 커밋 전에 장애가 나면? →
+        <strong>이벤트와 실제 데이터 불일치</strong>
+      </li>
+    </ol>
+  </li>
+  <li>
+    그래서 메시지를 브로커에 바로 보내지 않고, <strong>먼저 DB(Outbox 테이블)에 기록</strong>한 뒤
+    별도 프로세스가 읽어 브로커로 전달한다.
+  </li>
+  <li>
+    동작 흐름
+    <ol>
+      <li>애플리케이션이 비즈니스 데이터와 함께 이벤트를 아웃박스 테이블에도 저장한다.</li>
+      <li>DB 트랜잭션이 커밋되면 이벤트 행도 함께 영속화된다.</li>
+      <li>별도 프로세스(폴링 또는 CDC)가 Outbox에서 이벤트를 읽어 메시지 브로커로 전송한다.</li>
+      <li>전송이 끝나면 해당 레코드를 삭제하거나 전송 완료 상태로 갱신한다.</li>
+    </ol>
+  </li>
+</ol>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

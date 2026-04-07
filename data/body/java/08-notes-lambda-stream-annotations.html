@@ -1,0 +1,140 @@
+<p class="muted">
+  <a class="text-link" href="java-notes-strings-exceptions-generics.html">① 문자열·예외·제네릭</a> · <strong>② 람다·스트림·어노테이션</strong> ·
+  <a class="text-link" href="java-notes-system-out-depth.html">③ System.out 심화</a>
+</p>
+
+<h2>Q1) 람다란?</h2>
+<p>메서드를 <strong>값처럼 전달</strong>하기 위한 문법으로, 함수형 인터페이스의 단일 추상 메서드를 구현하는 코드를 짧게 씁니다.</p>
+<pre><code>(매개변수) -&gt; { 실행 코드 }</code></pre>
+<pre><code>Runnable r1 = new Runnable() {
+  @Override public void run() { System.out.println("익명 클래스"); }
+};
+Runnable r2 = () -&gt; System.out.println("람다");</code></pre>
+<ul>
+  <li><code>@FunctionalInterface</code> — 추상 메서드가 하나인 인터페이스(디폴트·정적 메서드는 제외 규칙 참고).</li>
+  <li>컬렉션·API와 함께 쓰면 반복문 대신 <strong>선언적</strong>으로 동작을 조합하기 좋습니다.</li>
+</ul>
+
+<h2>Q2) Stream이란?</h2>
+<p>요소의 흐름에 대해 <strong>중간 연산</strong>(filter, map, sorted …)과 <strong>최종 연산</strong>(forEach, collect, reduce …)을 체이닝하는 API입니다. <strong>지연 평가</strong>는 최종 연산 시점에 일어납니다.</p>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Charlie");
+names.stream()
+    .filter(n -&gt; n.startsWith("A"))
+    .forEach(System.out::println);</code></pre>
+<pre><code>List&lt;String&gt; upper = names.stream()
+    .map(String::toUpperCase)
+    .sorted()
+    .collect(Collectors.toList());</code></pre>
+
+<h2>Q3) 람다와 스트림이 생긴 이유</h2>
+<ol>
+  <li><strong>가독성</strong> — “무엇을 할지”에 가까운 표현.</li>
+  <li><strong>간결함</strong> — 보일러플레이트 감소.</li>
+  <li>병렬 스트림 등과 결합한 처리(주의해서 사용) 등 확장 여지.</li>
+</ol>
+<pre><code>List&lt;Integer&gt; result = numbers.stream()
+    .filter(n -&gt; n % 2 == 0)
+    .map(n -&gt; n * n)
+    .sorted()
+    .collect(Collectors.toList());</code></pre>
+
+<h2>Q4) 어노테이션(Annotation)</h2>
+<p>코드에 붙는 <strong>메타데이터</strong>입니다. 컴파일러·런타임·프레임워크가 읽고 동작을 바꿉니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>어노테이션</th>
+      <th>역할</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@Override</code></td>
+      <td>부모 메서드 오버라이드 검증</td>
+    </tr>
+    <tr>
+      <td><code>@Deprecated</code></td>
+      <td>사용 중단 경고</td>
+    </tr>
+    <tr>
+      <td><code>@SuppressWarnings</code></td>
+      <td>특정 컴파일 경고 억제</td>
+    </tr>
+    <tr>
+      <td><code>@FunctionalInterface</code></td>
+      <td>함수형 인터페이스 명시</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>메타 어노테이션</h3>
+<table>
+  <thead>
+    <tr>
+      <th>이름</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@Retention</code></td>
+      <td>SOURCE / CLASS / RUNTIME 유지 범위</td>
+    </tr>
+    <tr>
+      <td><code>@Target</code></td>
+      <td>적용 위치(TYPE, METHOD, FIELD …)</td>
+    </tr>
+    <tr>
+      <td><code>@Documented</code></td>
+      <td>Javadoc 포함</td>
+    </tr>
+    <tr>
+      <td><code>@Inherited</code></td>
+      <td>클래스 상속 시 전달</td>
+    </tr>
+    <tr>
+      <td><code>@Repeatable</code></td>
+      <td>동일 요소에 반복 적용</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Q5) 어노테이션이 필요한 이유</h2>
+<ul>
+  <li>설정을 코드 옆에 두어 <strong>가독성·응집도</strong> 향상</li>
+  <li>프레임워크가 스캔해 <strong>보일러플레이트 감소</strong>(Spring, JPA 등)</li>
+  <li>컴파일 타임 검사(<code>@Override</code> 등)</li>
+</ul>
+
+<h2>리플렉션(Reflection)</h2>
+<p>런타임에 클래스·메서드·필드 정보를 읽고, 객체 생성·메서드 호출·필드 접근을 <strong>동적</strong>으로 수행하는 API입니다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>사례</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Spring, JPA</td>
+      <td>빈 등록, 프록시, 엔티티 매핑 등에 활용</td>
+    </tr>
+    <tr>
+      <td>Jackson / Gson</td>
+      <td>필드·getter 기반 직렬화</td>
+    </tr>
+    <tr>
+      <td>동적 프록시</td>
+      <td>AOP 등</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>어노테이션과의 관계</strong> 어노테이션은 그 자체로 로직이 없고, <strong>RUNTIME</strong>으로 유지된 경우 리플렉션으로 읽어 실제 동작(프레임워크)이 연결됩니다.</p>
+<p>직접 리플렉션으로 어노테이션을 파싱하는 유틸을 만든 경험이 없더라도, Spring이 컨텍스트 기동 시 클래스패스를 스캔해 빈을 등록한다는 흐름은 같은 계열 개념으로 이해할 수 있습니다.</p>
+
+<p class="muted" style="margin-top: 2rem">
+  <a class="text-link" href="java-notes-strings-exceptions-generics.html">← 이전: ① 문자열 · 예외 · 제네릭</a>
+  ·
+  <a class="text-link" href="java-notes-system-out-depth.html">다음: ③ System.out 심화 →</a>
+</p>
