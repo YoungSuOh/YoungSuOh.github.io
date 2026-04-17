@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Spring DI(Dependency Injection)의 필요성, 주입 방식(생성자/필드/세터), 장단점을 예시 코드와 함께 정리합니다."
+    />
+    <title>[Spring] DI (Dependency Injection) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-09-23 · Backend</p>
+        <h1 class="article-title">[Spring] DI (Dependency Injection)</h1>
+        <p class="article-lead muted">
+          객체 생성 책임을 컨테이너로 분리해 결합도를 낮추고, 테스트/확장성을 높이는 의존성 주입(DI)을 정리합니다.
+        </p>
+        <div class="tags article-tags">
+          <span class="tag">Spring</span><span class="tag">DI</span><span class="tag">OOP</span><span class="tag">Testability</span>
+        </div>
+
+        <div class="article-body post-body">
+          <h2>DI 란?</h2>
+          <ul>
+            <li>객체 간 의존 관계를 개발자가 직접 묶는 것이 아니라, <strong>외부 컨테이너(Spring)가 주입</strong>하는 방식</li>
+          </ul>
+
+          <p><strong>DI의 핵심 목적</strong></p>
+          <ul>
+            <li>객체 간 결합도를 낮춤(<strong>Loosely Coupled</strong>)</li>
+            <li>유지보수/확장성 향상(<strong>High Maintainability &amp; Extensibility</strong>)</li>
+            <li>단위 테스트 용이(<strong>Easier Unit Testing</strong>)</li>
+          </ul>
+
+          <h2>DI가 왜 필요한가?</h2>
+          <p>직접 객체를 생성해도 동작은 하지만, 변경 요구가 생길수록 비용이 커진다.</p>
+
+          <h3>DI 이전 방식의 문제</h3>
+          <pre><code>public class OrderService {
+    private PaymentService paymentService = new PaymentService(); // 직접 객체 생성
+
+    public void processOrder() {
+        paymentService.pay();
+    }
+}</code></pre>
+          <ul>
+            <li><strong>강한 결합</strong>: <code>OrderService</code>가 구현체 생성까지 책임</li>
+            <li><strong>확장성 저하</strong>: 결제 구현체 변경 시 호출부도 수정 (OCP 위반 가능)</li>
+            <li><strong>테스트 어려움</strong>: mock 대체가 어려워 단위 테스트가 무거워짐</li>
+          </ul>
+
+          <h2>DI를 통한 해결</h2>
+          <pre><code>public interface PaymentService {
+    void pay();
+}</code></pre>
+          <pre><code>@Service
+public class KakaoPayService implements PaymentService {
+    public void pay() {}
+}</code></pre>
+          <pre><code>class OrderService {
+    private final PaymentService paymentService;
+
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}</code></pre>
+          <ul>
+            <li>객체 생성 책임을 외부로 분리</li>
+            <li>구체 클래스가 아닌 <strong>추상(인터페이스)</strong>에 의존하도록 전환</li>
+          </ul>
+
+          <h2>의존성 주입 방법</h2>
+
+          <h3>1) 생성자 주입 (Constructor Injection)</h3>
+          <p>생성자를 통해 의존성을 주입하는 방식</p>
+          <ul>
+            <li><strong>불변성</strong>: 필드를 <code>final</code>로 두기 쉬움</li>
+            <li><strong>순환 참조 감지</strong>: 애플리케이션 시작 시점에 문제 노출</li>
+            <li><strong>테스트 용이</strong>: 생성자 인자로 mock 주입이 쉬움</li>
+          </ul>
+          <pre><code>@Component
+public class OrderService {
+    private final PaymentService paymentService;
+
+    @Autowired // Spring 4.3+ 에서는 단일 생성자면 생략 가능
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}</code></pre>
+
+          <h3>2) 필드 주입 (Field Injection)</h3>
+          <p>필드에 <code>@Autowired</code>를 직접 붙이는 방식</p>
+          <ul>
+            <li>코드는 짧지만 의존성이 숨겨져 구조 파악이 어렵다.</li>
+            <li>컨테이너 없이 객체를 생성하기 어려워 순수 단위 테스트가 불편하다.</li>
+          </ul>
+          <pre><code>@Component
+public class OrderService {
+    @Autowired
+    private PaymentService paymentService;
+}</code></pre>
+          <p><strong>단점</strong></p>
+          <ol>
+            <li>의존성 교체/제어가 어렵다 (private 필드)</li>
+            <li><code>new OrderService()</code> 시 주입이 없어 <code>null</code> 문제 가능</li>
+            <li>생성자 주입 대비 설계 결함이 늦게 드러날 수 있다</li>
+          </ol>
+
+          <h3>3) 세터 주입 (Setter Injection)</h3>
+          <p><code>@Autowired</code>를 붙인 setter 메서드로 주입하는 방식</p>
+          <ul>
+            <li>객체 생성 후에도 의존성 변경 가능</li>
+            <li>선택적 의존성 처리에 유용</li>
+            <li>대신 가변성이 커지고, 호출 순서에 따라 null 상태가 생길 수 있음</li>
+          </ul>
+          <pre><code>@Component
+public class OrderService {
+    private PaymentService paymentService;
+
+    @Autowired
+    public void setPaymentService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}</code></pre>
+          <ul>
+            <li><code>@Autowired</code>는 기본적으로 주입 대상이 없으면 오류</li>
+            <li>대상이 없어도 동작시키려면 <code>@Autowired(required = false)</code> 사용 가능</li>
+          </ul>
+          <p><strong>단점</strong></p>
+          <ol>
+            <li>의존성이 완전히 세팅되기 전 객체가 사용될 위험</li>
+            <li>setter 노출로 객체 상태 변경 가능성이 증가</li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
+

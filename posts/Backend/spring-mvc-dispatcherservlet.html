@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Spring MVC의 DispatcherServlet 중심 요청 처리 흐름(HandlerMapping, HandlerAdapter, ViewResolver, View 렌더링)을 정리합니다."
+    />
+    <title>[Spring] Spring MVC (DispatcherServlet) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-09-20 · Backend</p>
+        <h1 class="article-title">[Spring] Spring MVC (DispatcherServlet)</h1>
+        <p class="article-lead muted">
+          Spring MVC의 핵심인 <code>DispatcherServlet</code>이 요청을 받아 컨트롤러 실행, 뷰 선택, 응답 반환까지 이어지는 흐름을 정리합니다.
+        </p>
+        <div class="tags article-tags">
+          <span class="tag">Spring</span><span class="tag">MVC</span><span class="tag">DispatcherServlet</span>
+        </div>
+
+        <div class="article-body post-body">
+          <ul>
+            <li>스프링 MVC도 컨트롤러를 사용하여 클라이언트 요청을 처리한다.</li>
+            <li>스프링에서는 <strong>DispatcherServlet이 MVC에서 C(Control) 흐름의 중심</strong>을 담당한다.</li>
+          </ul>
+
+          <h2>스프링 MVC의 구성 요소</h2>
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring MVC/MVC.png"
+              alt="Spring MVC 요청 처리 다이어그램"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted"><code>photo/posts/Backend/Spring/Spring MVC/MVC.png</code></figcaption>
+          </figure>
+
+          <ol>
+            <li><strong>클라이언트 요청</strong> (HTTP Request)</li>
+            <li>
+              <strong>DispatcherServlet이 요청 수신</strong>
+              <ul>
+                <li>
+                  DispatcherServlet은 Spring MVC의 <strong>Front Controller</strong>로, 모든 HTTP 요청을 받아 적절한 컨트롤러로 전달하고
+                  응답 생성을 조율한다.
+                </li>
+              </ul>
+              <pre><code>&lt;servlet&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt; &lt;!-- 모든 요청을 받음 --&gt;
+&lt;/servlet-mapping&gt;</code></pre>
+            </li>
+            <li><strong>HandlerMapping</strong>에서 요청을 처리할 컨트롤러를 찾음</li>
+            <li>
+              <strong>Controller 실행</strong>
+              <ul>
+                <li><code>HandlerAdapter</code>가 해당 컨트롤러 메서드를 실행하고 결과를 반환한다.</li>
+              </ul>
+              <pre><code>@GetMapping("/hello")
+public String hello() {
+    return "helloView";
+}</code></pre>
+              <p>컨트롤러는 보통 <code>String</code> 형태의 <strong>뷰 이름(View Name)</strong>을 반환한다.</p>
+            </li>
+            <li>
+              <strong>ViewResolver로 View 찾기</strong>
+              <ul>
+                <li>컨트롤러가 반환한 뷰 이름을 기준으로 적절한 View를 찾는다.</li>
+              </ul>
+              <pre><code>return "helloView"; // ViewResolver가 해당 뷰를 찾음</code></pre>
+              <p>일반적으로 <code>.jsp</code>, <code>.html</code> 같은 뷰 파일 경로를 조합한다.</p>
+              <pre><code>&lt;bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"&gt;
+    &lt;property name="prefix" value="/WEB-INF/views/" /&gt;
+    &lt;property name="suffix" value=".jsp" /&gt;
+&lt;/bean&gt;</code></pre>
+            </li>
+            <li><strong>View 렌더링 후 응답 반환</strong>: 최종 렌더링 결과가 HTTP Response로 클라이언트에 전달된다.</li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
+

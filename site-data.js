@@ -41,11 +41,12 @@ window.BLOG_DATA = {
   "blogCategories": [
     "Java",
     "Backend",
-    "System Design",
+    "Dev",
+    "Troubleshooting",
     "Database",
     "DevOps / Infra",
-    "Algorithm",
-    "Troubleshooting"
+    "System Design",
+    "Algorithm"
   ],
   "posts": [
     {
@@ -60,6 +61,118 @@ window.BLOG_DATA = {
         "Database"
       ],
       "link": "posts/Backend/pessimistic-optimistic-lock.html"
+    },
+    {
+      "id": "post-016",
+      "title": "[Spring] SOLID",
+      "category": "Backend",
+      "summary": "Spring 관점에서 SOLID(단일 책임, 개방-폐쇄, 리스코프 치환, 인터페이스 분리, 의존관계 역전) 원칙을 예시 코드로 정리합니다.",
+      "date": "2023-09-18",
+      "tags": [
+        "Spring",
+        "SOLID",
+        "OOP",
+        "Design"
+      ],
+      "link": "posts/Backend/spring-solid.html"
+    },
+    {
+      "id": "post-019",
+      "title": "[Spring] Spring Container",
+      "category": "Backend",
+      "summary": "스프링 컨테이너의 역할, ApplicationContext, 생성자/Setter 주입, Bean 생명주기와 스코프를 정리합니다.",
+      "date": "2023-09-20",
+      "tags": [
+        "Spring",
+        "Container",
+        "DI",
+        "Bean"
+      ],
+      "link": "posts/Backend/spring-container.html"
+    },
+    {
+      "id": "post-020",
+      "title": "[Spring] Spring MVC (DispatcherServlet)",
+      "category": "Backend",
+      "summary": "DispatcherServlet이 요청을 받아 HandlerMapping/HandlerAdapter/ViewResolver를 거쳐 응답을 반환하는 Spring MVC 흐름을 정리합니다.",
+      "date": "2023-09-20",
+      "tags": [
+        "Spring",
+        "MVC",
+        "DispatcherServlet",
+        "Web"
+      ],
+      "link": "posts/Backend/spring-mvc-dispatcherservlet.html"
+    },
+    {
+      "id": "post-021",
+      "title": "[Spring] Spring Bean",
+      "category": "Backend",
+      "summary": "Spring Bean의 개념, 등록 방식(@Component/@Bean/XML), 사용 방법, 라이프사이클, Scope를 정리합니다.",
+      "date": "2023-09-19",
+      "tags": [
+        "Spring",
+        "Bean",
+        "DI",
+        "Scope"
+      ],
+      "link": "posts/Backend/spring-bean.html"
+    },
+    {
+      "id": "post-022",
+      "title": "[Spring] AOP(Aspect Oriented Programming)",
+      "category": "Backend",
+      "summary": "AOP의 핵심 개념(Aspect, Advice, Pointcut, JoinPoint, Weaving)과 Spring 프록시 기반 동작을 정리합니다.",
+      "date": "2023-10-18",
+      "tags": [
+        "Spring",
+        "AOP",
+        "Aspect",
+        "Proxy"
+      ],
+      "link": "posts/Backend/spring-aop.html"
+    },
+    {
+      "id": "post-023",
+      "title": "[Spring] DI (Dependency Injection)",
+      "category": "Backend",
+      "summary": "DI의 필요성과 효과, 생성자/필드/세터 주입 방식의 특징과 장단점을 코드 예시로 정리합니다.",
+      "date": "2023-09-23",
+      "tags": [
+        "Spring",
+        "DI",
+        "OOP",
+        "Testing"
+      ],
+      "link": "posts/Backend/spring-di.html"
+    },
+    {
+      "id": "post-024",
+      "title": "[Spring] Maven & Gradle",
+      "category": "Backend",
+      "summary": "Java/Spring 프로젝트에서 사용하는 Maven과 Gradle의 차이와 기본 의존성 선언 방법을 정리합니다.",
+      "date": "2023-09-23",
+      "tags": [
+        "Spring",
+        "Maven",
+        "Gradle",
+        "Build"
+      ],
+      "link": "posts/Backend/spring-maven-gradle.html"
+    },
+    {
+      "id": "post-025",
+      "title": "즉시 로딩(EAGER) vs 지연로딩(LAZY)",
+      "category": "Backend",
+      "summary": "JPA EAGER/LAZY 차이, N+1 문제와 LazyInitializationException, 실무에서의 LAZY 기본 전략과 Fetch Join 활용을 정리합니다.",
+      "date": "2023-09-30",
+      "tags": [
+        "JPA",
+        "Hibernate",
+        "EAGER",
+        "LAZY"
+      ],
+      "link": "posts/Backend/eager-vs-lazy-loading.html"
     },
     {
       "id": "post-004",
@@ -206,6 +319,34 @@ window.BLOG_DATA = {
         "Event-Driven"
       ],
       "link": "posts/System-Design/transactional-outbox-pattern.html"
+    },
+    {
+      "id": "post-017",
+      "title": "Builder 패턴",
+      "category": "System Design",
+      "summary": "생성 과정과 표현을 분리해 복잡한 객체를 단계적으로 만드는 Builder 패턴 — 필수·선택 속성, 장단점, Java 예시 코드.",
+      "date": "2024-05-12",
+      "tags": [
+        "Design Pattern",
+        "Builder",
+        "Java"
+      ],
+      "link": "posts/System-Design/builder-pattern.html"
+    },
+    {
+      "id": "post-018",
+      "title": "PinterSemi 프로젝트 대댓글 기능",
+      "category": "Dev",
+      "summary": "댓글·대댓글을 프론트 DFS로만 묶으면 O(N²)에 가까운 렌더링 비용이 든다는 문제를, parentCommentSeq·WITH RECURSIVE·정렬로 DB에서 정리한 뒤 JS에서 트리로 만드는 과정을 정리합니다.",
+      "date": "2024-10-03",
+      "tags": [
+        "PinterSemi",
+        "MySQL",
+        "Spring",
+        "jQuery",
+        "Comment"
+      ],
+      "link": "posts/Dev/pintersemi-nested-comments.html"
     },
     {
       "id": "post-015",

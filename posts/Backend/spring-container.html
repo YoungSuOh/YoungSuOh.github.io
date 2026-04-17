@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Spring Container의 역할과 ApplicationContext, 생성자/Setter 주입 방식, Bean 생명주기와 메모리 관리를 정리합니다."
+    />
+    <title>[Spring] Spring Container · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-09-20 · Backend</p>
+        <h1 class="article-title">[Spring] Spring Container</h1>
+        <p class="article-lead muted">
+          스프링 컨테이너는 객체(Bean)의 생성, 관리, 생명주기를 책임지는 핵심입니다.
+        </p>
+        <div class="tags article-tags">
+          <span class="tag">Spring</span><span class="tag">DI</span><span class="tag">ApplicationContext</span>
+        </div>
+
+        <div class="article-body post-body">
+          <p>
+            애플리케이션에서 필요한 객체를 직접 만들지 않고, <strong>스프링 컨테이너가 대신 객체를 생성·관리</strong>하며 필요한 시점에
+            주입해 줍니다.
+          </p>
+
+          <h2>스프링 컨테이너의 역할</h2>
+          <ol>
+            <li>
+              <strong>객체(Bean) 생성</strong><br />
+              <code>@Component</code>, <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code>,
+              <code>@Bean</code> 설정을 기반으로 Bean을 생성
+            </li>
+            <li>
+              <strong>의존성 주입(DI)</strong><br />
+              <code>@Autowired</code>, <code>@Qualifier</code>, <code>@Resource</code> 등을 통해 필요한 객체를 자동 주입
+            </li>
+            <li>
+              <strong>객체 생명주기 관리</strong><br />
+              생성 → 초기화 → 사용 → 소멸 과정을 관리하며 <code>@PostConstruct</code>, <code>@PreDestroy</code> 사용 가능
+            </li>
+            <li>
+              <strong>객체 조회 및 제공</strong><br />
+              필요 시 <code>ApplicationContext.getBean()</code>으로 조회 가능
+            </li>
+          </ol>
+
+          <h2>ApplicationContext: 스프링 컨테이너</h2>
+
+          <h3>1) 생성자 주입</h3>
+          <ol>
+            <li>생성자를 통해 의존 관계를 연결하는 방식</li>
+            <li>
+              XML 설정 파일에서는 <code>&lt;bean&gt;</code> 하위에 <code>&lt;constructor-arg&gt;</code>를 사용
+              <ol>
+                <li>전달 인자가 기본 타입이면 <code>value</code> 속성 사용</li>
+                <li><code>index</code> 속성으로 순서 지정 가능</li>
+                <li><code>type</code> 속성으로 타입 지정 가능</li>
+                <li>객체 전달은 <code>ref</code> 속성 사용</li>
+              </ol>
+            </li>
+          </ol>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container1.png"
+              alt="constructor-arg value 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">constructor-arg: value 사용</figcaption>
+          </figure>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container2.png"
+              alt="constructor-arg index 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">constructor-arg: index 사용</figcaption>
+          </figure>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container3.png"
+              alt="constructor-arg type 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">constructor-arg: type 사용</figcaption>
+          </figure>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container4.png"
+              alt="constructor-arg ref 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">constructor-arg: ref 사용</figcaption>
+          </figure>
+
+          <h3>2) Setter 주입</h3>
+          <ol>
+            <li>setter 메서드를 이용해 의존 관계를 연결하는 방식</li>
+            <li>
+              <code>&lt;property&gt;</code> 요소의 <code>name</code> 속성으로 주입 대상 필드를 지정
+              <ol>
+                <li>기본값 전달 가능</li>
+                <li>객체 전달 시 <code>ref</code> 사용 (예: Foo 빈이 Bar 빈을 참조)</li>
+              </ol>
+            </li>
+          </ol>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container5.png"
+              alt="property value 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">property: 기본값 주입</figcaption>
+          </figure>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/Spring Container/Spring Container6.png"
+              alt="property ref 예시"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted">property: ref로 객체 주입</figcaption>
+          </figure>
+
+          <h2>스프링 컨테이너를 사용하는 이유</h2>
+          <ol>
+            <li><strong>객체 생명주기를 스프링이 관리</strong>해 필요 시 생성·소멸 제어가 쉽다.</li>
+            <li><strong>DI로 결합도를 낮출 수 있어</strong> 유지보수에 유리하다.</li>
+            <li><strong>싱글톤 패턴이 기본 적용</strong>되어 같은 Bean을 반복 생성하지 않고 공유한다.</li>
+            <li><strong>AOP 적용이 쉬워</strong> 로깅·트랜잭션 같은 공통 관심사를 분리할 수 있다.</li>
+          </ol>
+
+          <h2>스프링 컨테이너와 메모리</h2>
+          <p>
+            스프링 컨테이너는 Bean 메타데이터와 인스턴스를 메모리에 보관·관리합니다. Bean 인스턴스 자체는 일반적으로 JVM Heap에 존재합니다.
+          </p>
+
+          <h3>Bean 저장 관점 정리</h3>
+          <ul>
+            <li>
+              <strong>Singleton (기본)</strong>: 컨테이너당 1개 인스턴스를 공유. (Spring Bean Registry에서 참조 관리)
+            </li>
+            <li><strong>Prototype</strong>: 요청할 때마다 새로운 인스턴스 생성</li>
+            <li>
+              <strong>Request / Session / Application</strong>: 웹 스코프 기준으로 요청·세션·애플리케이션 범위에서 관리
+            </li>
+          </ul>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
+

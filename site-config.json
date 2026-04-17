@@ -17,11 +17,12 @@
   "blogCategories": [
     "Java",
     "Backend",
-    "System Design",
+    "Dev",
+    "Troubleshooting",
     "Database",
     "DevOps / Infra",
-    "Algorithm",
-    "Troubleshooting"
+    "System Design",
+    "Algorithm"
   ],
   "projects": [
     {

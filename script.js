@@ -181,6 +181,7 @@
     root.innerHTML = data.posts
       .slice()
       .sort((a, b) => (a.date < b.date ? 1 : -1))
+      .slice(0, 5)
       .map((post) => {
         const titleCell =
           post.link && post.link !== "#"

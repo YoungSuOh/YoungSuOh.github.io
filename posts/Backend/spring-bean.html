@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Spring Bean의 개념, 등록 방식, 사용 방법, 라이프사이클, Scope를 예시 코드와 함께 정리합니다."
+    />
+    <title>[Spring] Spring Bean · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-09-19 · Backend</p>
+        <h1 class="article-title">[Spring] Spring Bean</h1>
+        <p class="article-lead muted"><strong>Spring Bean</strong>은 <strong>Spring 컨테이너가 관리하는 객체</strong>를 의미한다.</p>
+        <div class="tags article-tags">
+          <span class="tag">Spring</span><span class="tag">Bean</span><span class="tag">DI</span><span class="tag">Scope</span>
+        </div>
+
+        <div class="article-body post-body">
+          <p>
+            Spring 애플리케이션에서는 보통 객체를 직접 생성하지 않고, Spring 컨테이너가 객체를 생성·관리하고 필요할 때 주입하도록 사용한다.
+          </p>
+
+          <h2>Spring Bean의 특징</h2>
+          <ol>
+            <li>
+              <strong>Spring 컨테이너가 생성 및 관리</strong><br />
+              개발자가 <code>new</code> 키워드로 직접 만들기보다 컨테이너가 Bean을 관리한다.
+            </li>
+            <li>
+              <strong>싱글톤(Singleton) 기본 적용</strong><br />
+              기본적으로 Bean은 싱글톤으로 생성되어 애플리케이션에서 공유된다.
+            </li>
+            <li>
+              <strong>의존성 주입(Dependency Injection, DI) 지원</strong><br />
+              <code>@Autowired</code> 등으로 다른 Bean을 주입할 수 있다.
+            </li>
+            <li>
+              <strong>라이프사이클 관리</strong><br />
+              <code>@PostConstruct</code>, <code>@PreDestroy</code>로 생성/종료 시점을 제어할 수 있다.
+            </li>
+          </ol>
+
+          <h2>Spring Bean 등록 방법</h2>
+          <ol>
+            <li>
+              <strong>@Component 기반 등록</strong><br />
+              <code>@Component</code>, <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code> 사용 시 자동 등록
+            </li>
+            <li>
+              <strong>@Bean 기반 등록 (Java Config)</strong>
+              <pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public MyComponent myComponent() {
+        return new MyComponent();
+    }
+}</code></pre>
+            </li>
+            <li>
+              <strong>XML 기반 등록 (예전 방식)</strong>
+              <p>applicationContext.xml을 생성해 Namespaces 및 Bean 정의를 작성한다.</p>
+              <figure style="margin: 1rem 0">
+                <img
+                  src="../../photo/posts/Backend/Spring/Spring Bean/Spring Bean.png"
+                  alt="Spring Bean XML 등록 예시"
+                  loading="lazy"
+                  style="width: 100%; height: auto; border-radius: 12px"
+                />
+                <figcaption class="muted"><code>photo/posts/Backend/Spring/Spring Bean/Spring Bean.png</code></figcaption>
+              </figure>
+              <p>예시 클래스</p>
+              <pre><code>public class MessageBeanEn implements MessageBean {
+    public MessageBeanEn() {
+        System.out.println("MessageBeanEn의 기본 생성자");
+    }
+    @Override
+    public void sayHello(String name) {
+        System.out.println("Hello " + name);
+    }
+}
+
+public class MessageBeanKo implements MessageBean {
+    public MessageBeanKo() {
+        System.out.println("MessageBeanKo의 기본 생성자");
+    }
+    @Override
+    public void sayHello(String name) {
+        System.out.println("안녕 " + name);
+    }
+}</code></pre>
+              <p>빈 등록</p>
+              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"&gt;
+    &lt;bean id="messageBeanEn" class="sample01.MessageBeanEn"/&gt;
+    &lt;bean id="messageBeanKo" class="sample01.MessageBeanKo"/&gt;
+&lt;/beans&gt;</code></pre>
+              <p>빈 호출</p>
+              <pre><code>public class HelloSpring {
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        MessageBean messageBean1 = (MessageBean) context.getBean("messageBeanEn");
+        messageBean1.sayHello("spring1");
+
+        MessageBean messageBean2 = (MessageBean) context.getBean("messageBeanKo");
+        messageBean2.sayHello("spring2");
+    }
+}</code></pre>
+            </li>
+          </ol>
+
+          <h2>Spring Bean 사용 방법</h2>
+          <ol>
+            <li>
+              <strong>@Autowired를 사용한 DI</strong>
+              <pre><code>@Component
+public class MyService {
+    private final MyComponent myComponent;
+
+    @Autowired
+    public MyService(MyComponent myComponent) {
+        this.myComponent = myComponent;
+    }
+
+    public void execute() {
+        myComponent.doSomething();
+    }
+}</code></pre>
+            </li>
+            <li>
+              <strong>ApplicationContext에서 직접 가져오기</strong>
+              <pre><code>public static void main(String[] args) {
+    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+    MyComponent myComponent = context.getBean(MyComponent.class);
+    myComponent.doSomething();
+}</code></pre>
+              <p>대부분의 경우에는 <code>@Autowired</code> 기반 DI를 권장한다.</p>
+            </li>
+          </ol>
+
+          <h2>Spring Bean의 라이프사이클</h2>
+          <ol>
+            <li>객체 생성</li>
+            <li>의존성 주입 (<code>@Autowired</code>)</li>
+            <li>초기화 메서드 실행 (<code>@PostConstruct</code>)</li>
+            <li>사용</li>
+            <li>소멸 전 메서드 실행 (<code>@PreDestroy</code>)</li>
+            <li>Bean 소멸</li>
+          </ol>
+          <pre><code>@Component
+public class MyComponent {
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Bean이 생성되었습니다!");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("Bean이 소멸됩니다!");
+    }
+}</code></pre>
+          <blockquote>
+            <p><code>@PostConstruct</code>는 생성 직후, <code>@PreDestroy</code>는 소멸 직전에 실행된다.</p>
+          </blockquote>
+
+          <h2>Bean Scope</h2>
+          <p>
+            Spring은 기본적으로 Singleton 스코프를 사용하며, 상황에 따라 다른 스코프를 선택할 수 있다.
+          </p>
+          <ul>
+            <li>
+              <strong>Singleton</strong> (<code>@Scope("singleton")</code>)<br />
+              컨테이너당 하나의 인스턴스를 공유한다.
+            </li>
+            <li>
+              <strong>Prototype</strong> (<code>@Scope("prototype")</code>)<br />
+              요청할 때마다 새 객체를 생성한다.
+            </li>
+            <li>
+              <strong>Request</strong> (<code>@Scope(value = WebApplicationContext.SCOPE_REQUEST)</code>)<br />
+              HTTP 요청 단위로 인스턴스를 제공한다.
+            </li>
+            <li>
+              <strong>Session</strong> (<code>@Scope(value = WebApplicationContext.SCOPE_SESSION)</code>)<br />
+              세션 동안 동일 인스턴스를 유지한다.
+            </li>
+            <li>
+              <strong>Application</strong> (<code>@Scope(value = WebApplicationContext.SCOPE_APPLICATION)</code>)<br />
+              애플리케이션 전역에서 공유한다.
+            </li>
+            <li><strong>WebSocket</strong> (<code>@Scope("websocket")</code>)</li>
+          </ul>
+
+          <h3>등록 방법</h3>
+          <ol>
+            <li>
+              <strong>@Scope 어노테이션</strong>
+              <pre><code>@Component
+@Scope("singleton") // 기본값
+public class SingletonBean {
+    public SingletonBean() {
+        System.out.println("Singleton Bean 생성됨!");
+    }
+}</code></pre>
+            </li>
+            <li>
+              <strong>XML 설정</strong>
+              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"&gt;
+    &lt;bean id="messageBeanEn" class="sample01.MessageBeanEn"/&gt;
+    &lt;bean id="messageBeanKo" class="sample01.MessageBeanKo" scope="prototype"/&gt;
+&lt;/beans&gt;</code></pre>
+            </li>
+            <li>
+              <strong>component-scan과 함께 사용</strong>
+              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd"&gt;
+    &lt;context:component-scan base-package="sample01"/&gt;
+&lt;/beans&gt;</code></pre>
+            </li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
+
