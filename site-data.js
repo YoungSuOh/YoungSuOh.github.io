@@ -188,6 +188,96 @@ window.BLOG_DATA = {
       "link": "posts/Database/atomic-update.html"
     },
     {
+      "id": "post-066",
+      "title": "인덱스(Index)",
+      "category": "Database",
+      "summary": "인덱스의 기본 개념, B-Tree 구조, 생성 기준과 주의할 안티패턴을 정리합니다.",
+      "date": "2024-01-19",
+      "tags": ["Index", "B-Tree", "Performance"],
+      "link": "posts/Database/index-basics.html"
+    },
+    {
+      "id": "post-067",
+      "title": "트랜잭션(Transaction)",
+      "category": "Database",
+      "summary": "트랜잭션의 ACID 특성과 격리 수준, 실무에서의 경계 설정 방법을 정리합니다.",
+      "date": "2024-02-07",
+      "tags": ["Transaction", "ACID", "Isolation"],
+      "link": "posts/Database/transaction-basics.html"
+    },
+    {
+      "id": "post-068",
+      "title": "락(Lock)",
+      "category": "Database",
+      "summary": "공유락/배타락과 데드락 원리, 락 경합을 줄이는 쿼리 설계 전략을 정리합니다.",
+      "date": "2024-02-26",
+      "tags": ["Lock", "Deadlock", "Concurrency"],
+      "link": "posts/Database/lock-basics.html"
+    },
+    {
+      "id": "post-069",
+      "title": "SQL 튜닝(SQL Tuning)",
+      "category": "Database",
+      "summary": "느린 SQL을 진단하고 개선하는 기본 절차와 튜닝 체크리스트를 정리합니다.",
+      "date": "2024-03-14",
+      "tags": ["SQL Tuning", "Query", "Performance"],
+      "link": "posts/Database/sql-tuning.html"
+    },
+    {
+      "id": "post-070",
+      "title": "실행 계획(Execution Plan)",
+      "category": "Database",
+      "summary": "실행 계획의 핵심 지표와 풀스캔/인덱스 스캔 판별, 병목 찾는 방법을 정리합니다.",
+      "date": "2024-04-04",
+      "tags": ["Execution Plan", "Explain", "Optimization"],
+      "link": "posts/Database/execution-plan.html"
+    },
+    {
+      "id": "post-071",
+      "title": "MVCC",
+      "category": "Database",
+      "summary": "MVCC의 동작 원리와 Undo/버전 관리, 격리 수준과의 관계를 정리합니다.",
+      "date": "2024-05-02",
+      "tags": ["MVCC", "Isolation", "Snapshot"],
+      "link": "posts/Database/mvcc.html"
+    },
+    {
+      "id": "post-072",
+      "title": "커넥션 풀(Connection Pool)",
+      "category": "Database",
+      "summary": "커넥션 풀의 필요성과 핵심 설정(max pool size, timeout) 튜닝 포인트를 정리합니다.",
+      "date": "2024-05-29",
+      "tags": ["Connection Pool", "HikariCP", "DB"],
+      "link": "posts/Database/connection-pool.html"
+    },
+    {
+      "id": "post-073",
+      "title": "샤딩(Sharding)",
+      "category": "Database",
+      "summary": "수평 분할(샤딩)의 전략 범위/해시/디렉터리 방식과 트레이드오프를 정리합니다.",
+      "date": "2024-06-21",
+      "tags": ["Sharding", "Scale Out", "Database"],
+      "link": "posts/Database/sharding.html"
+    },
+    {
+      "id": "post-074",
+      "title": "리플리케이션(Replication)",
+      "category": "Database",
+      "summary": "Primary-Replica 구조와 복제 지연, 읽기 분리 설계 시 주의점을 정리합니다.",
+      "date": "2024-07-11",
+      "tags": ["Replication", "Primary-Replica", "HA"],
+      "link": "posts/Database/replication.html"
+    },
+    {
+      "id": "post-075",
+      "title": "캐시(Cache)",
+      "category": "Database",
+      "summary": "Cache Aside/Write Through 전략과 캐시 무효화, 만료 정책 설계 포인트를 정리합니다.",
+      "date": "2024-08-01",
+      "tags": ["Cache", "Redis", "Performance"],
+      "link": "posts/Database/cache.html"
+    },
+    {
       "id": "post-005",
       "title": "자바 기본 — 특징·단점·실행 과정·JVM",
       "category": "Java",
@@ -332,6 +422,150 @@ window.BLOG_DATA = {
         "Java"
       ],
       "link": "posts/System-Design/builder-pattern.html"
+    },
+    {
+      "id": "post-050",
+      "title": "Singleton 패턴",
+      "category": "System Design",
+      "summary": "애플리케이션에서 인스턴스를 하나만 유지하는 Singleton 패턴의 개념과 주의점을 정리합니다.",
+      "date": "2024-01-17",
+      "tags": ["Design Pattern", "Singleton", "System Design"],
+      "link": "posts/System-Design/singleton-pattern.html"
+    },
+    {
+      "id": "post-051",
+      "title": "Factory Method 패턴",
+      "category": "System Design",
+      "summary": "객체 생성 책임을 서브클래스에 위임하는 Factory Method 패턴을 정리합니다.",
+      "date": "2024-02-06",
+      "tags": ["Design Pattern", "Factory Method", "OOP"],
+      "link": "posts/System-Design/factory-method-pattern.html"
+    },
+    {
+      "id": "post-052",
+      "title": "Abstract Factory 패턴",
+      "category": "System Design",
+      "summary": "서로 연관된 객체군을 일관성 있게 생성하는 Abstract Factory 패턴을 정리합니다.",
+      "date": "2024-02-28",
+      "tags": ["Design Pattern", "Abstract Factory", "System Design"],
+      "link": "posts/System-Design/abstract-factory-pattern.html"
+    },
+    {
+      "id": "post-053",
+      "title": "Prototype 패턴",
+      "category": "System Design",
+      "summary": "기존 객체를 복제해 생성 비용을 줄이는 Prototype 패턴을 정리합니다.",
+      "date": "2024-03-15",
+      "tags": ["Design Pattern", "Prototype", "Object Copy"],
+      "link": "posts/System-Design/prototype-pattern.html"
+    },
+    {
+      "id": "post-054",
+      "title": "Adapter 패턴",
+      "category": "System Design",
+      "summary": "호환되지 않는 인터페이스를 연결해 재사용성을 높이는 Adapter 패턴을 정리합니다.",
+      "date": "2024-04-03",
+      "tags": ["Design Pattern", "Adapter", "Integration"],
+      "link": "posts/System-Design/adapter-pattern.html"
+    },
+    {
+      "id": "post-055",
+      "title": "Decorator 패턴",
+      "category": "System Design",
+      "summary": "기존 객체를 감싸 기능을 동적으로 확장하는 Decorator 패턴을 정리합니다.",
+      "date": "2024-04-24",
+      "tags": ["Design Pattern", "Decorator", "AOP"],
+      "link": "posts/System-Design/decorator-pattern.html"
+    },
+    {
+      "id": "post-056",
+      "title": "Proxy 패턴",
+      "category": "System Design",
+      "summary": "대리 객체를 통해 접근 제어/지연 로딩을 구현하는 Proxy 패턴을 정리합니다.",
+      "date": "2024-05-16",
+      "tags": ["Design Pattern", "Proxy", "Lazy Loading"],
+      "link": "posts/System-Design/proxy-pattern.html"
+    },
+    {
+      "id": "post-057",
+      "title": "Facade 패턴",
+      "category": "System Design",
+      "summary": "복잡한 하위 시스템을 단순한 인터페이스로 감싸는 Facade 패턴을 정리합니다.",
+      "date": "2024-06-05",
+      "tags": ["Design Pattern", "Facade", "Architecture"],
+      "link": "posts/System-Design/facade-pattern.html"
+    },
+    {
+      "id": "post-058",
+      "title": "Composite 패턴",
+      "category": "System Design",
+      "summary": "트리 구조에서 부분과 전체를 동일하게 다루는 Composite 패턴을 정리합니다.",
+      "date": "2024-06-27",
+      "tags": ["Design Pattern", "Composite", "Tree"],
+      "link": "posts/System-Design/composite-pattern.html"
+    },
+    {
+      "id": "post-059",
+      "title": "Bridge 패턴",
+      "category": "System Design",
+      "summary": "추상화와 구현을 분리해 독립적으로 확장하는 Bridge 패턴을 정리합니다.",
+      "date": "2024-07-18",
+      "tags": ["Design Pattern", "Bridge", "Abstraction"],
+      "link": "posts/System-Design/bridge-pattern.html"
+    },
+    {
+      "id": "post-060",
+      "title": "Strategy 패턴",
+      "category": "System Design",
+      "summary": "알고리즘을 교체 가능하게 캡슐화하는 Strategy 패턴을 정리합니다.",
+      "date": "2024-08-08",
+      "tags": ["Design Pattern", "Strategy", "Payment"],
+      "link": "posts/System-Design/strategy-pattern.html"
+    },
+    {
+      "id": "post-061",
+      "title": "Observer 패턴",
+      "category": "System Design",
+      "summary": "상태 변화 이벤트를 구독자에게 전파하는 Observer 패턴을 정리합니다.",
+      "date": "2024-08-29",
+      "tags": ["Design Pattern", "Observer", "Event-Driven"],
+      "link": "posts/System-Design/observer-pattern.html"
+    },
+    {
+      "id": "post-062",
+      "title": "Command 패턴",
+      "category": "System Design",
+      "summary": "요청을 객체로 캡슐화해 실행/취소/기록을 유연하게 만드는 Command 패턴을 정리합니다.",
+      "date": "2024-09-19",
+      "tags": ["Design Pattern", "Command", "Encapsulation"],
+      "link": "posts/System-Design/command-pattern.html"
+    },
+    {
+      "id": "post-063",
+      "title": "State 패턴",
+      "category": "System Design",
+      "summary": "객체의 상태에 따라 동작을 분리하는 State 패턴을 정리합니다.",
+      "date": "2024-10-10",
+      "tags": ["Design Pattern", "State", "Workflow"],
+      "link": "posts/System-Design/state-pattern.html"
+    },
+    {
+      "id": "post-064",
+      "title": "Template Method 패턴",
+      "category": "System Design",
+      "summary": "알고리즘 골격을 상위 클래스에 두고 일부 단계를 하위 클래스에서 구현하는 Template Method 패턴을 정리합니다.",
+      "date": "2024-10-31",
+      "tags": ["Design Pattern", "Template Method", "Inheritance"],
+      "link": "posts/System-Design/template-method-pattern.html"
+    },
+    {
+      "id": "post-065",
+      "title": "Chain of Responsibility 패턴",
+      "category": "System Design",
+      "summary": "요청을 처리 가능한 핸들러로 체인 전달하는 Chain of Responsibility 패턴을 정리합니다.",
+      "date": "2024-11-21",
+      "tags": ["Design Pattern", "Chain of Responsibility", "Middleware"],
+      "link": "posts/System-Design/chain-of-responsibility-pattern.html"
     },
     {
       "id": "post-018",
