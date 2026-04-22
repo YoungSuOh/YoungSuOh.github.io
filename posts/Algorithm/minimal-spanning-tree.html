@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Minimal Spanning Tree(최소 신장 트리)의 개념과 Kruskal/Prim 알고리즘을 정리합니다."
+    />
+    <title>Minimal Spanning Tree(최소 신장 트리) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-09-07 · Algorithm</p>
+        <h1 class="article-title">Minimal Spanning Tree(최소 신장 트리)</h1>
+        <p class="article-lead muted">신장 트리의 개념과 MST를 구하는 Kruskal/Prim 알고리즘 정리</p>
+        <div class="tags article-tags">
+          <span class="tag">MST</span>
+          <span class="tag">Kruskal</span>
+          <span class="tag">Prim</span>
+        </div>
+
+        <div class="article-body post-body">
+          <h3>사전 지식</h3>
+          <p><a href="./disjoint-set-union-find.html">Disjoint Set &amp; Union Find</a></p>
+
+          <ul>
+            <li>신장 트리: 주어진 방향성이 없는 그래프의 부분 그래프들 중에서 <strong>모든 정점을 포함하는 트리</strong>를 의미</li>
+            <li>부분 그래프: 주어진 그래프에서 일부 정점과 간선 만을 택해서 구성한 새로운 그래프를 의미</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/1.png" alt="신장 트리 예시 1" loading="lazy" />
+          </figure>
+
+          <ul>
+            <li>오른쪽 그래프들은 전부 왼쪽 그래프의 신장 트리이다.</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/2.png" alt="신장 트리 반례 예시" loading="lazy" />
+          </figure>
+
+          <ul>
+            <li>오른쪽 그래프들이 전부 왼쪽 그래프의 신장 트리가 아니다</li>
+            <li>첫번째는 <strong>가운데 정점이 연결되지 않았다.</strong> (연결 그래프여야 하는 트리의 조건 위배)</li>
+            <li>두번째와 세번째 그래프는 <strong>사이클이 존재</strong> → 신장트리가 아님</li>
+            <li>네번째는 <strong>원래 없던 간선이 등장</strong> → 부분 그래프가 아님</li>
+          </ul>
+
+          <p>최소 신장 트리: 신장 트리 중에서 간선의 합이 최소인 트리를 의미</p>
+
+          <h3>최소 신장 트리를 구하는 방법</h3>
+          <h4>크루스칼 알고리즘</h4>
+          <p>
+            가장 비용이 낮은 간선부터 시작해 간선을 크기 순으로 살펴보며 서로 떨어져 있던 정점들을 합쳐나가서 총 V-1개의 간선을 택하는
+            알고리즘이다.
+          </p>
+          <ol>
+            <li>간선을 크기를 오름차순으로 정렬하고 <strong>제일 낮은 비용의 간선을 선택</strong></li>
+            <li>
+              현재 선택한 간선이 정점 u, v를 연결하는 간선이라고 할 때, 만약 <strong>u, v가 같은 그룹</strong>이라면 넘어가고, 다른
+              그룹이라면 같은 그룹으로 만들고 현재 선택한 간선을 최소 신장 트리에 추가
+            </li>
+            <li>최소 신장 트리에 V-1개의 간선을 추가시켰다면 종료</li>
+          </ol>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/3.png" alt="크루스칼 적용 예시 시작" loading="lazy" />
+          </figure>
+          <ul>
+            <li>맨 처음에는 모든 정점이 서로 다른 그룹에 속해 있는 상태로 시작</li>
+            <li>비용이 가장 낮은 간선부터 선택한다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/4.png" alt="크루스칼 단계 1" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/5.png" alt="크루스칼 단계 2" loading="lazy" />
+          </figure>
+          <ul>
+            <li><strong>같은 그룹</strong>인 경우는 간선을 추가하지 않고 넘어간다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/6.png" alt="크루스칼 단계 3" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/7.png" alt="크루스칼 단계 4" loading="lazy" />
+          </figure>
+          <ul>
+            <li>정점이 5개이면 간선 4개(V-1)를 고르면 MST 완성</li>
+          </ul>
+
+          <p>
+            같은 그룹인지 판단할 때 Flood Fill도 가능하지만 비효율적이다. Union-Find를 사용하면 거의 상수 시간으로 판별 가능해서
+            Kruskal을 <code>O(E log E)</code>에 해결할 수 있다.
+          </p>
+
+          <h4>Prim 알고리즘</h4>
+          <p>한 정점에서 시작해 확장해 나가는 알고리즘.</p>
+          <ol>
+            <li>임의의 정점을 선택해 최소 신장 트리에 추가</li>
+            <li>MST에 포함된 정점과 포함되지 않은 정점을 연결하는 간선 중 비용이 가장 작은 것을 추가</li>
+            <li>간선이 V-1개가 될 때까지 반복</li>
+          </ol>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/8.png" alt="Prim 알고리즘 기본" loading="lazy" />
+          </figure>
+          <ul>
+            <li>다음은 프림 알고리즘의 수행 과정이다</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/9.png" alt="Prim 단계 1" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/10.png" alt="Prim 단계 2" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/11.png" alt="Prim 단계 3" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/12.png" alt="Prim 단계 4" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/13.png" alt="Prim 단계 5" loading="lazy" />
+          </figure>
+          <ul>
+            <li>기본 구현은 <code>O(VE)</code>로 비효율적일 수 있다.</li>
+            <li>따라서 우선순위 큐를 사용하면 효율적으로 개선할 수 있다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/14.png" alt="Prim PQ 도입" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/15.png" alt="Prim PQ 단계 1" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/16.png" alt="Prim PQ 단계 2" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/17.png" alt="Prim PQ 단계 3" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/18.png" alt="Prim PQ 단계 4" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/19.png" alt="Prim PQ 단계 5" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/20.png" alt="Prim PQ 단계 6" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/21.png" alt="Prim PQ 단계 7" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/22.png" alt="Prim PQ 단계 8" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/23.png" alt="Prim PQ 단계 9" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/24.png" alt="Prim PQ 단계 10" loading="lazy" />
+          </figure>
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Minimal Spanning Tree/25.png" alt="Prim PQ 단계 11" loading="lazy" />
+          </figure>
+
+          <h3>C++ tuple</h3>
+          <ul>
+            <li>C++에서 <code>tuple</code>은 다양한 유형의 데이터 그룹을 단일 객체로 묶을 수 있는 자료구조이다.</li>
+            <li><strong>여러 개의 서로 다른 유형의 값을 하나의 단위로 다뤄야 할 때</strong> 유용하다.</li>
+            <li><code>tuple</code>은 <code>std::pair</code>와 비슷하지만, <strong>두 개 이상의 값을 저장</strong>할 수 있다.</li>
+          </ul>
+
+          <p>사용법</p>
+          <pre><code class="language-cpp">#include &lt;tuple&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    std::tuple&lt;int, double, std::string&gt; myTuple(1, 3.14, "hello");
+    // 다른 방법: auto를 사용하여 초기화
+    auto myTuple2 = std::make_tuple(2, 2.71, "world");
+
+    // 출력
+    std::cout &lt;&lt; std::get&lt;0&gt;(myTuple) &lt;&lt; " ";
+    std::cout &lt;&lt; std::get&lt;1&gt;(myTuple) &lt;&lt; " ";
+    std::cout &lt;&lt; std::get&lt;2&gt;(myTuple) &lt;&lt; std::endl;
+
+    return 0;
+}
+
+result
+1 3.14 hello</code></pre>
+
+          <p><code>tuple</code> 엘리먼트 접근</p>
+          <pre><code class="language-cpp">int a = std::get&lt;0&gt;(t1); // 1
+double b = std::get&lt;1&gt;(t2); // 3.5
+std::string c = std::get&lt;2&gt;(t1); // Hello</code></pre>
+
+          <p><code>std::tie</code>를 사용한 값 추출</p>
+          <pre><code class="language-cpp">int x;
+double y;
+std::string z;
+std::tie(x, y, z) = t1;</code></pre>
+
+          <p>비교 연산(사전 순서)</p>
+          <pre><code class="language-cpp">if (t1 &lt; t2) {
+    std::cout &lt;&lt; "t1 is less than t2" &lt;&lt; std::endl;
+}</code></pre>
+
+          <p><code>tuple</code>의 사용 시기</p>
+          <ol>
+            <li>
+              <strong>복합 데이터 반환</strong>
+              <pre><code class="language-cpp">std::tuple&lt;int, double, std::string&gt; getData() {
+    return std::make_tuple(1, 2.5, "Hello");
+}</code></pre>
+            </li>
+            <li>
+              간단한 데이터 구조
+              <pre><code class="language-cpp">std::tuple&lt;int, int&gt; coordinates = std::make_tuple(10, 20);</code></pre>
+            </li>
+            <li>
+              임시로 여러 데이터를 묶어서 처리
+              <pre><code class="language-cpp">std::vector&lt;std::tuple&lt;int, int, int&gt;&gt; edges;
+edges.push_back(std::make_tuple(1, 2, 3));
+edges.push_back(std::make_tuple(4, 5, 6));</code></pre>
+            </li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

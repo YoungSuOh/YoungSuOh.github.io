@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="OPay 모니터링 개발 - Actuator, Prometheus, Grafana 구성 및 데이터 흐름 정리" />
+    <title>모니터링 · OPay · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+
+  <body class="project-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#projects">Projects</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <div class="project-hero">
+        <div
+          class="project-hero-bg"
+          style="background-image: url('../../photo/project/opay/OPAY_thumbnail.png')"
+        ></div>
+        <div class="project-hero-overlay"></div>
+        <div class="project-hero-inner">
+          <p class="project-hero-eyebrow">OPay · 개발</p>
+          <h1 class="project-hero-title">모니터링 개발</h1>
+          <p class="project-hero-lead">Actuator · Prometheus · Grafana 기반 운영 관측 구성</p>
+        </div>
+      </div>
+
+      <article class="card article-shell project-article">
+        <div class="post-body project-body">
+          <p><strong>날짜 : 2026.04.01</strong></p>
+          <p><strong>제목 : 모니터링 개발</strong></p>
+
+          <h2>1️⃣ 전체 구조와 데이터 흐름</h2>
+
+          <pre><code class="language-yaml">┌─────────────────────────────────────────────────────────────────────────────┐
+│  [1] OPay Backend (Spring Boot) - localhost:8080                             │
+│      • Actuator가 /api/actuator/prometheus 에서 메트릭 텍스트 노출            │
+│      • Micrometer가 JVM, HTTP, DB 등 메트릭 수집 → Prometheus 포맷으로 출력   │
+└───────────────────────────────────┬───────────────────────────────────────┘
+                                     │
+                     HTTP GET (10초마다)  ← scrape
+                                     │
+┌────────────────────────────────────▼───────────────────────────────────────┐
+│  [2] Prometheus (Docker, port 9090)                                          │
+│      • prometheus.yml 에 따라 "어디를(타깃), 어떤 경로로, 얼마나 자주" 수집할지 결정  │
+│      • 수집한 메트릭을 시계열 DB(TSDB)에 저장                                  │
+└───────────────────────────────────┬───────────────────────────────────────┘
+                                     │
+                     Grafana가 PromQL로 쿼리 (사용자가 보는 대시보드/패널)
+                                     │
+┌────────────────────────────────────▼───────────────────────────────────────┐
+│  [3] Grafana (Docker, port 3000)                                             │
+│      • datasources.yml → Prometheus를 "데이터 소스"로 자동 등록                 │
+│      • dashboards.yml + json → OPay Overview 대시보드 자동 로드                 │
+│      • 대시보드 패널마다 PromQL 쿼리 실행 → 차트/숫자로 시각화                   │
+└─────────────────────────────────────────────────────────────────────────────┘</code></pre>
+
+          <ul>
+            <li>디렉토리 구조</li>
+          </ul>
+
+          <pre><code class="language-yaml">monitoring/
+├── docker-compose.yml          # Prometheus + Grafana 컨테이너
+├── prometheus/
+│   └── prometheus.yml          # OPay 백엔드 스크래핑 설정
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/
+│       │   └── datasources.yml # Prometheus 데이터 소스 자동 등록
+│       └── dashboards/
+│           ├── dashboards.yml
+│           └── json/
+│               └── opay-overview.json  # 기본 대시보드</code></pre>
+
+          <p><strong>Prometheus + Grafana 실행</strong></p>
+          <p>(Docker Desktop 실행 후)</p>
+          <pre><code class="language-java">cd c:\OPay\monitoring
+docker compose up -d</code></pre>
+
+          <h2>2️⃣ 각 설정/코드의 역할</h2>
+
+          <ol>
+            <li><strong>OPay Backend 쪽</strong></li>
+          </ol>
+
+          <p><strong><code>application.yml</code> - management (Actuator + Prometheus)</strong></p>
+
+          <pre><code class="language-yaml"># Actuator + Prometheus (모니터링)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      # Enable histogram buckets required by histogram_quantile() queries in Prometheus/Grafana.
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+      # Optional direct percentile series (can be used without histogram_quantile).
+      percentiles:
+        http:
+          server:
+            requests: [0.95, 0.99]</code></pre>
+
+          <ul>
+            <li>
+              "무엇을(health/metrics/prometheus), 어떤 경로(/api/actuator)로, 어떤 이름(application)으로 노출할지"를 정의하는 설정
+              <ul>
+                <li>실제 열리는 엔트포인트</li>
+                <li><code>/actuator/health</code></li>
+                <li><code>/actuator/metrics</code></li>
+                <li><code>/actuator/prometheus</code> ⭐ (제일 중요)</li>
+              </ul>
+            </li>
+            <li>
+              health 상세 정보 설정
+              <pre><code class="language-yaml">endpoint:
+  health:
+    show-details: when-authorized</code></pre>
+            </li>
+            <li>
+              health endpoint에서 DB, Redis 등 상태를 얼마나 자세히 보여줄지 결정
+              <ul>
+                <li>옵션</li>
+              </ul>
+              <table>
+                <thead>
+                  <tr>
+                    <th>값</th>
+                    <th>의미</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>never</td>
+                    <td>UP/DOWN만</td>
+                  </tr>
+                  <tr>
+                    <td>always</td>
+                    <td>모든 상세 정보 노출</td>
+                  </tr>
+                  <tr>
+                    <td>when-authorized</td>
+                    <td>인증된 요청만 상세</td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              공통 태그 설정
+              <pre><code class="language-yaml">metrics:
+  tags:
+    application: ${spring.application.name}</code></pre>
+              <ul>
+                <li>모든 Metric에 공통 label 추가</li>
+                <li>예시</li>
+              </ul>
+              <pre><code class="language-yaml">http_server_requests_seconds_count{application="opay-backend"}</code></pre>
+              <ul>
+                <li>왜 중요하냐</li>
+                <li>Prometheus/Grafana에서:</li>
+                <li>서비스별 필터링</li>
+                <li>멀티 인스턴스 구분</li>
+              </ul>
+            </li>
+            <li>
+              historgram 설정
+              <pre><code class="language-yaml">distribution:
+  percentiles-histogram:
+    http:
+      server:
+        requests: true</code></pre>
+              <ul>
+                <li>HTTP 요청 시간을 버킷(bucket) 형태로 저장</li>
+                <li>Historgram이 있어야 p95, p99까지 계산 가능</li>
+              </ul>
+              <pre><code class="language-yaml">percentiles:
+  http:
+    server:
+      requests: [0.95, 0.99]</code></pre>
+              <ul>
+                <li>Spring이 직접 P95, P99 계산해서 메트릭으로 제공</li>
+              </ul>
+            </li>
+          </ul>
+
+          <ol start="2">
+            <li><strong>build.gradle - 의존성</strong></li>
+          </ol>
+
+          <pre><code class="language-yaml">implementation 'org.springframework.boot:spring-boot-starter-actuator'
+runtimeOnly 'io.micrometer:micrometer-registry-prometheus'</code></pre>
+
+          <ol start="3">
+            <li><strong>Prometheus 쪽</strong></li>
+          </ol>
+
+          <p><strong><code>monitoring/prometheus/prometheus.yml</code></strong></p>
+
+          <pre><code class="language-yaml">global:
+  scrape_interval: 15s      # 기본 수집 주기
+  evaluation_interval: 15s  # 알람 규칙 평가 주기 (현재 규칙 없음)
+
+scrape_configs:
+  - job_name: 'opay-backend'                    # 수집 대상 이름 (메트릭에 job="opay-backend" 붙음)
+    metrics_path: /api/actuator/prometheus    # 스크래핑할 URL 경로
+    static_configs:
+      - targets: ['host.docker.internal:8080'] # Backend 주소 (Docker 안에서 호스트 = host.docker.internal)
+    scrape_interval: 10s                        # 이 job만 10초마다 수집</code></pre>
+
+          <ul>
+            <li>전체 연결 흐름</li>
+          </ul>
+
+          <pre><code class="language-yaml">[Prometheus 컨테이너]
+        ↓
+http://host.docker.internal:8080
+        ↓
+[Spring Boot 앱]</code></pre>
+
+          <ol start="4">
+            <li><strong>Grafana 쪽</strong></li>
+          </ol>
+
+          <p><strong><code>monitoring/docker-compose.yml</code></strong></p>
+
+          <pre><code class="language-yaml">services:
+  prometheus:
+    image: prom/prometheus:v2.47.0 # Prometheus 공식 이미지
+    container_name: opay-prometheus # 컨테이너 이름
+    ports:
+      - "9090:9090" # 호스트 9090 -> 컨테이너 9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml # A -> B로 scrape(Prometheus) 설정이 들어감
+      - prometheus_data:/prometheus # TSDB 저장 위치
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml' # 어떤 설정 파일 쓸지
+      - '--storage.tsdb.path=/prometheus' # 메트릭 저장 위치
+      - '--web.enable-lifecycle' # 핫 리로드 가능 (?)
+    restart: unless-stopped # 컨테이너 자동 재시작
+
+  grafana:
+    image: grafana/grafana:10.2.0 # Grafane 버전
+    container_name: opay-grafana
+    ports:
+      - "3000:3000" # 호스트 3000 -> 컨테이너 3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin # 계정 설정
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false # 회원 가입 막기
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+    volumes: # 대시보드, 설정 저
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on: # Grafana는 Prometheus 이후 실행
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+  grafana_data:</code></pre>
+
+          <ul>
+            <li>Docker로 Prometheus + Grafana를 각각 컨테이너로 띄우고 연결하는 구성</li>
+          </ul>
+
+          <pre><code class="language-yaml">[Spring Boot]
+      ↑ (scrape)
+[Prometheus]  →  [Grafana]</code></pre>
+
+          <p><strong><code>monitoring/grafana/provisioning/datasources/datasources.yml</code></strong></p>
+          <p>Grafana가 “어디에서 데이터를 가져올지” 자동으로 등록하는 설정</p>
+          <p>
+            앞에서 본 docker-compose의 <code>provisioning</code>이 바로 이 파일을 읽어서 <strong>Grafana 시작 시 자동으로 datasource를
+              생성</strong>
+          </p>
+          <p>즉, Grafana가 <strong>Prometheus를 데이터 소스로 자동 연결하는 설정</strong></p>
+
+          <pre><code class="language-yaml">apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false</code></pre>
+
+          <p><strong><code>monitoring/grafana/provisioning/dashboards/dashboards.yml</code></strong></p>
+          <p>Grafana 대시보드를 “자동으로 로딩하고 유지관리하는 설정”</p>
+          <p>즉, 화면 UI 자동 구성</p>
+
+          <pre><code class="language-yaml">apiVersion: 1
+
+providers:
+  - name: 'OPay Default'
+    orgId: 1 # Grafana 조직 ID (멀티 조직ID)
+    folder: 'OPay'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/provisioning/dashboards/json</code></pre>
+
+        </div>
+
+        <p class="article-back article-back--action">
+          <a class="btn-back" href="./index.html">
+            <span class="btn-back__icon" aria-hidden="true">←</span>
+            OPay 메인으로
+          </a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+
+    <script src="../../script.js" defer></script>
+  </body>
+</html>

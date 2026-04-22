@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Deque(덱)의 구조와 성질을 정리합니다." />
+    <title>Deque · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-07-01 · Algorithm</p>
+        <h1 class="article-title">Deque</h1>
+        <p class="article-lead muted">
+          디큐, 혹은 덱이라고 불리는 이 자료구조는 선출후입 구조였던 queue에서 전단 삽입, 후단 삭제 기능을 추가한 자료구조이다.
+        </p>
+        <div class="tags article-tags">
+          <span class="tag">Deque</span>
+          <span class="tag">Data Structure</span>
+          <span class="tag">STL</span>
+        </div>
+
+        <div class="article-body post-body">
+          <p>
+            디큐, 혹은 덱이라고 불리는 이 자료구조는 선출후입 구조였던 queue에서 전단 삽입, 후단 삭제 기능을 추가한 자료구조이다.
+            여전히 가운데에 접근은 불가능하지만, 전단 혹은 후단에서 추가와 삭제가 모두 가능한 자료구조이다.
+          </p>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Deque/1.png" alt="Deque 구조 설명 이미지" loading="lazy" />
+          </figure>
+
+          <h3>덱의 성질</h3>
+          <ol>
+            <li>원소의 추가가 O(1)</li>
+            <li>원소의 제거가 O(1)</li>
+            <li>제일 앞/뒤의 원소 확인이 O(1)</li>
+            <li>제일 앞/뒤가 아닌 나머지 원소들의 확인/변경이 원칙적으로 불가</li>
+            <li>독특하게도 STL deque에서는 인덱스로 원소를 접근 가능하다.</li>
+            <li>
+              앞쪽과 뒤쪽의 추가와 제거가 필요하면 STL deque이 필요하지만 그렇지 않다면 메모리 할당이 연속적인 vector를 사용하는 것이
+              효과적이다.
+            </li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

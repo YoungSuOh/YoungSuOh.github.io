@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Greedy 알고리즘의 아이디어와 풀이 흐름을 정리합니다." />
+    <title>Greedy · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-07-07 · Algorithm</p>
+        <h1 class="article-title">Greedy</h1>
+        <p class="article-lead muted">매번 선택에서 지금 가장 최적인 답을 근시안적으로 택하는 알고리즘</p>
+        <div class="tags article-tags">
+          <span class="tag">Greedy</span>
+          <span class="tag">Algorithm</span>
+          <span class="tag">Optimization</span>
+        </div>
+
+        <div class="article-body post-body">
+          <p>: 매번 선택에서 지금 가장 최적인 답을 근시안적으로 택하는 알고리즘</p>
+          <p>= 관찰을 통해 탐색 범위를 줄이는 알고리즘</p>
+
+          <ul>
+            <li>내 개인적인 생각으로는 그리디는 CS 알고리즘이라기보다는 인간이 아이디어를 떠올리면서 자연스럽게 떠올리는 최적의 아이디어라고 생각이 된다.</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Greedy/1.png" alt="Greedy 예시 이미지" loading="lazy" />
+          </figure>
+
+          <ul>
+            <li>이처럼 각 리스트의 가장 앞에 있는 2개의 원소만 확인하면 되기 때문에 O(N+M)에 수행된다. (원래는 O((N+M)^2)</li>
+          </ul>
+
+          <h3>일반적으로 그리디 알고리즘을 푸는 방법</h3>
+          <ol>
+            <li>관찰을 통해 탐색 범위를 줄이는 방법을 고안한다.</li>
+            <li>탐색 범위를 줄여도 올바른 결과를 낸다는 사실을 수학적으로 증명한다.</li>
+            <li>구현해서 문제를 통과한다.</li>
+          </ol>
+
+          <h3>절망적인 풀이 흐름</h3>
+          <ol>
+            <li>관찰을 통해 탐색 범위를 줄이는 잘못된 방법을 고안한다.</li>
+            <li>탐색 범위를 줄여도 올바를 결과를 낸다는 강한 믿음을 가진다.</li>
+            <li>믿음을 가지고 구현하다가 틀린다.</li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

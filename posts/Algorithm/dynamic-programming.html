@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dynamic Programming(DP)의 개념, 접근 방식, 예제를 정리합니다." />
+    <title>Dynamic Programming (DP) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-08-01 · Algorithm</p>
+        <h1 class="article-title">Dynamic Programming (DP)</h1>
+        <p class="article-lead muted">최적화 문제를 작은 문제로 나눠 해결하고, 계산 결과를 재사용하는 전략</p>
+        <div class="tags article-tags">
+          <span class="tag">Dynamic Programming</span>
+          <span class="tag">Algorithm</span>
+          <span class="tag">DP</span>
+        </div>
+
+        <div class="article-body post-body">
+          <ul>
+            <li>optimization problem을 해결하는 전략 중 하나</li>
+            <li>subproblem(s)의 optimal solution(s)을 활용해서 problem의 optimal solution을 찾는 방식</li>
+            <li><strong>겹치는 subproblems는 한번만 계산하고 그 결과를 저장</strong>한 뒤 재사용한다</li>
+          </ul>
+
+          <h2>DP의 2가지 접근 방식</h2>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Top-Down Approach (Divide &amp; Conquer)</th>
+                <th>Bottom-Up Approach (작은거부터 해결하다 보면 큰것도 해결)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>구조</td>
+                <td>recursive</td>
+                <td>iterative</td>
+              </tr>
+              <tr>
+                <td>subproblem 결과 저장</td>
+                <td>memorization</td>
+                <td>tabulation</td>
+              </tr>
+              <tr>
+                <td>언제 선호되는지</td>
+                <td>subproblems의 일부만 계산해도 최종 optimal solution을 구할 수 있을 때</td>
+                <td>모든 subproblems을 계산해야 최종 optimal solution을 구할 수 있을 때</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>DP를 사용한 알고리즘 설계 순서</h2>
+          <ol>
+            <li>주어진 문제의 optimal solution이 구조적으로 어떤 특징을 가지는지 분석한다</li>
+            <li>재귀적인 형태로 optimal solution의 value를 정의한다</li>
+            <li>(주로) Bottom-Up 방식으로 optimal solution의 value를 구한다</li>
+            <li>지금까지 계산된 정보를 바탕으로 optimal solution을 구한다.</li>
+          </ol>
+
+          <h2>예제</h2>
+          <hr />
+
+          <h3>Climbing Stairs</h3>
+          <ul>
+            <li>정상까지 오르는데 n번의 스텝이 필요한 계단이 있다.</li>
+            <li>한번에 한 스텝 혹은 두 스텝을 오를 수 있을 때, 계단의 정상까지 오르기 위해 몇 개의 유니크한 방법이 있는지 구하시오</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/1.png"
+              alt="Climbing Stairs 예제 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>풀이</li>
+          </ul>
+          <ol>
+            <li>주어진 문제를 subproblem들로 나눈다</li>
+            <li>
+              그 subproblem들 각각의 optimal solution을 활용해서 원래 problem의 optimal solution을 구할 수 있을까?
+              <ol>
+                <li>여기 문제에서 힌트는 <code>한 스텝 혹은 두 스텝을 오를 수 있다</code> 이다.</li>
+              </ol>
+            </li>
+          </ol>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/2.jpg"
+              alt="Top-Down 방식 계산 이미지"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>사진처럼 Top-Down 방식으로 계산할 수 있다</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/3.jpg"
+              alt="중복 호출 비효율 설명 이미지"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li><strong>중복되는 함수 호출이 너무 많아서 비효율적인 단점</strong>이 존재한다.</li>
+            <li>동일한 문제를 계속 풀어야 한다.</li>
+            <li>즉, 겹치는 SUB PROBLEM이 많다</li>
+            <li>따라서 동일한 input에 대한 function call은 처음 한번만 계산하고 결과를 메모해뒀다가 이후에 재사용하는 방식으로 해결하자!</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/4.jpg"
+              alt="메모이제이션 설명 이미지"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>한번 계산을 하면 배열에 저장을 하기 때문에 다시는 계산을 하지 않아도 된다.</li>
+          </ul>
+
+          <ul>
+            <li>정리</li>
+            <li>
+              Top-Down Approach 방식을 사용
+              <ul>
+                <li>재귀적이다 (recursive)</li>
+                <li>메모리에 저장을 한다 (memorization)</li>
+                <li>function call에 대한 결과를 저장한다는 뜻이다.</li>
+              </ul>
+            </li>
+            <li>
+              Bottom-Up 방식을 사용한다면??
+            </li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/5.jpg"
+              alt="Bottom-Up 방식 설명 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>시간 복잡도</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/6.png"
+              alt="Climbing Stairs 시간 복잡도 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <h3>Maximum SubArray</h3>
+          <ul>
+            <li>정수 배열 nums에서 가장 큰 합계를 가지는 subarray를 찾아서 그 합계를 반환하시오.</li>
+            <li>배열에서 max sum을 가지는 subarray를 max subarray라고 정의하자.</li>
+          </ul>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/7.jpg"
+              alt="Maximum SubArray 정의 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>total_max와 cur_max 정의</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/8.jpg"
+              alt="total_max와 cur_max 설명 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>이렇게 구현하면 중복되는 subproblem이 존재하게 됨 → dp로 중복 없애야 함</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/9.jpg"
+              alt="중복 subproblem 설명 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>Bottom-Up 방식으로 구현</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/10.jpg"
+              alt="Maximum SubArray Bottom-Up 구현 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>시간 복잡도</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Dynamic Programming/11.png"
+              alt="Maximum SubArray 시간 복잡도 이미지"
+              loading="lazy"
+            />
+          </figure>
+
+          <h2>언제 DP를 사용할 수 있는가?</h2>
+          <p>DB를 사용하기 위해서는 확인해야 하는 2가지 조건이 존재한다</p>
+          <ol>
+            <li>
+              optimization problem이 <code>optimal substructure</code> 이어야 한다.
+              <ol>
+                <li><code>f(n) = f(n-2) + f(n-1)</code></li>
+              </ol>
+            </li>
+            <li>optimization problem이 <code>overlapping subproblems</code> 을 가져야 한다. → 겹치는 문제가 있어야 함.</li>
+          </ol>
+        </div>
+
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

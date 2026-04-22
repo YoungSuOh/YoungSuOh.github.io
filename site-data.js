@@ -349,6 +349,318 @@ window.BLOG_DATA = {
       "link": "posts/Dev/pintersemi-nested-comments.html"
     },
     {
+      "id": "post-026",
+      "title": "Array",
+      "category": "Algorithm",
+      "summary": "배열의 핵심 성질과 시간 복잡도(O(1) 접근, 끝 삽입/삭제, 중간 삽입/삭제 O(N))를 정리합니다.",
+      "date": "2023-06-25",
+      "tags": [
+        "Array",
+        "Data Structure",
+        "Time Complexity"
+      ],
+      "link": "posts/Algorithm/array.html"
+    },
+    {
+      "id": "post-027",
+      "title": "Queue",
+      "category": "Algorithm",
+      "summary": "큐(Queue)의 FIFO 구조와 배열 기반 구현 시 head/tail 동작, 시간 복잡도를 정리합니다.",
+      "date": "2023-06-30",
+      "tags": [
+        "Queue",
+        "Data Structure",
+        "FIFO"
+      ],
+      "link": "posts/Algorithm/queue.html"
+    },
+    {
+      "id": "post-028",
+      "title": "Deque",
+      "category": "Algorithm",
+      "summary": "Deque(덱)의 양방향 삽입/삭제 특성과 시간 복잡도, STL deque 사용 포인트를 정리합니다.",
+      "date": "2023-07-01",
+      "tags": [
+        "Deque",
+        "Data Structure",
+        "STL"
+      ],
+      "link": "posts/Algorithm/deque.html"
+    },
+    {
+      "id": "post-029",
+      "title": "Greedy",
+      "category": "Algorithm",
+      "summary": "Greedy 알고리즘의 핵심 아이디어와 문제 접근 흐름(관찰, 증명, 구현)을 정리합니다.",
+      "date": "2023-07-07",
+      "tags": [
+        "Greedy",
+        "Algorithm",
+        "Optimization"
+      ],
+      "link": "posts/Algorithm/greedy.html"
+    },
+    {
+      "id": "post-030",
+      "title": "Stack",
+      "category": "Algorithm",
+      "summary": "Stack의 LIFO 구조와 push/pop/isEmpty/isFull 동작, 스택 포인터 개념을 정리합니다.",
+      "date": "2023-06-28",
+      "tags": [
+        "Stack",
+        "Data Structure",
+        "LIFO"
+      ],
+      "link": "posts/Algorithm/stack.html"
+    },
+    {
+      "id": "post-031",
+      "title": "Sort",
+      "category": "Algorithm",
+      "summary": "대표 정렬 알고리즘(Bubble, Selection, Insertion, Merge, Heap, Quick, Radix)의 특징과 복잡도를 정리합니다.",
+      "date": "2023-07-10",
+      "tags": [
+        "Sort",
+        "Algorithm",
+        "Complexity"
+      ],
+      "link": "posts/Algorithm/sort.html"
+    },
+    {
+      "id": "post-032",
+      "title": "Binary Search",
+      "category": "Algorithm",
+      "summary": "정렬된 배열에서 탐색 범위를 절반씩 줄여가는 이분 탐색의 조건과 구현(반복/재귀)을 정리합니다.",
+      "date": "2023-07-15",
+      "tags": [
+        "Binary Search",
+        "Algorithm",
+        "Search"
+      ],
+      "link": "posts/Algorithm/binary-search.html"
+    },
+    {
+      "id": "post-033",
+      "title": "Dynamic Programming (DP)",
+      "category": "Algorithm",
+      "summary": "DP의 핵심 개념(최적 부분 구조, 중복 부분 문제), Top-Down/Bottom-Up 접근과 대표 예제를 정리합니다.",
+      "date": "2023-08-01",
+      "tags": [
+        "Dynamic Programming",
+        "Algorithm",
+        "DP"
+      ],
+      "link": "posts/Algorithm/dynamic-programming.html"
+    },
+    {
+      "id": "post-034",
+      "title": "DFS (Depth-First Search)",
+      "category": "Algorithm",
+      "summary": "DFS의 핵심 개념, 동작 방식(재귀/스택), 시간 복잡도와 사용 예시를 정리합니다.",
+      "date": "2023-07-20",
+      "tags": [
+        "DFS",
+        "Graph",
+        "Traversal"
+      ],
+      "link": "posts/Algorithm/dfs.html"
+    },
+    {
+      "id": "post-035",
+      "title": "BFS (Breadth-First Search)",
+      "category": "Algorithm",
+      "summary": "BFS의 핵심 개념, 큐 기반 탐색, 최단 거리 문제에 적용하는 방법을 정리합니다.",
+      "date": "2023-07-22",
+      "tags": [
+        "BFS",
+        "Graph",
+        "Shortest Path"
+      ],
+      "link": "posts/Algorithm/bfs.html"
+    },
+    {
+      "id": "post-036",
+      "title": "Floyd-Warshall",
+      "category": "Algorithm",
+      "summary": "모든 노드 쌍 최단 경로를 구하는 Floyd-Warshall 알고리즘의 핵심 원리와 점화식을 정리합니다.",
+      "date": "2023-08-09",
+      "tags": [
+        "Floyd-Warshall",
+        "Graph",
+        "Dynamic Programming"
+      ],
+      "link": "posts/Algorithm/floyd-warshall.html"
+    },
+    {
+      "id": "post-037",
+      "title": "Two Pointer",
+      "category": "Algorithm",
+      "summary": "Two Pointer 기법의 핵심 아이디어, 자주 쓰는 패턴(양끝/슬라이딩 윈도우), 예제 코드를 정리합니다.",
+      "date": "2023-08-15",
+      "tags": [
+        "Two Pointer",
+        "Algorithm",
+        "Sliding Window"
+      ],
+      "link": "posts/Algorithm/two-pointer.html"
+    },
+    {
+      "id": "post-038",
+      "title": "Disjoint Set & Union Find",
+      "category": "Algorithm",
+      "summary": "Disjoint Set과 Union-Find의 개념, 연산(make-set/union/find), 경로 압축과 union-by-rank 최적화를 정리합니다.",
+      "date": "2023-08-30",
+      "tags": [
+        "Disjoint Set",
+        "Union-Find",
+        "Data Structure"
+      ],
+      "link": "posts/Algorithm/disjoint-set-union-find.html"
+    },
+    {
+      "id": "post-039",
+      "title": "Minimal Spanning Tree(최소 신장 트리)",
+      "category": "Algorithm",
+      "summary": "신장 트리/최소 신장 트리 개념과 Kruskal, Prim 알고리즘의 동작 방식 및 복잡도를 정리합니다.",
+      "date": "2023-09-07",
+      "tags": [
+        "MST",
+        "Kruskal",
+        "Prim"
+      ],
+      "link": "posts/Algorithm/minimal-spanning-tree.html"
+    },
+    {
+      "id": "post-040",
+      "title": "Dijkstra",
+      "category": "Algorithm",
+      "summary": "하나의 시작점에서 모든 정점까지의 최단 거리를 구하는 Dijkstra 알고리즘과 DP 관점을 정리합니다.",
+      "date": "2023-09-12",
+      "tags": [
+        "Dijkstra",
+        "Shortest Path",
+        "Graph"
+      ],
+      "link": "posts/Algorithm/dijkstra.html"
+    },
+    {
+      "id": "post-041",
+      "title": "Hash",
+      "category": "Algorithm",
+      "summary": "해시 자료구조의 개념, 충돌 처리(Chaining/Open Addressing), probing 전략과 구현 예제를 정리합니다.",
+      "date": "2023-09-18",
+      "tags": [
+        "Hash",
+        "Data Structure",
+        "Hash Table"
+      ],
+      "link": "posts/Algorithm/hash.html"
+    },
+    {
+      "id": "post-042",
+      "title": "Bit Masking",
+      "category": "Algorithm",
+      "summary": "비트 연산으로 상태를 압축/관리하는 Bit Masking의 핵심 연산과 활용 패턴을 정리합니다.",
+      "date": "2023-09-24",
+      "tags": [
+        "Bit Masking",
+        "Bitwise",
+        "Optimization"
+      ],
+      "link": "posts/Algorithm/bit-masking.html"
+    },
+    {
+      "id": "post-043",
+      "title": "슬라이딩 윈도우",
+      "category": "Algorithm",
+      "summary": "연속 구간 문제를 O(N)으로 푸는 Sliding Window 패턴과 구현 포인트를 정리합니다.",
+      "date": "2023-09-30",
+      "tags": [
+        "Sliding Window",
+        "Two Pointer",
+        "Array"
+      ],
+      "link": "posts/Algorithm/sliding-window.html"
+    },
+    {
+      "id": "post-044",
+      "title": "SCC (Strongly Connected Component)",
+      "category": "Algorithm",
+      "summary": "방향 그래프에서 강한 연결 요소(SCC)의 개념과 Kosaraju/Tarjan 접근을 정리합니다.",
+      "date": "2023-10-07",
+      "tags": [
+        "SCC",
+        "Graph",
+        "DFS"
+      ],
+      "link": "posts/Algorithm/scc.html"
+    },
+    {
+      "id": "post-045",
+      "title": "Ad Hoc",
+      "category": "Algorithm",
+      "summary": "정형화된 알고리즘보다 문제 관찰/구현력이 중요한 Ad Hoc 문제 접근법을 정리합니다.",
+      "date": "2023-10-13",
+      "tags": [
+        "Ad Hoc",
+        "Implementation",
+        "Problem Solving"
+      ],
+      "link": "posts/Algorithm/ad-hoc.html"
+    },
+    {
+      "id": "post-046",
+      "title": "Back-Tracking",
+      "category": "Algorithm",
+      "summary": "탐색 중간에 조건을 위반하는 경로를 가지치기하는 Back-Tracking의 구조를 정리합니다.",
+      "date": "2023-10-20",
+      "tags": [
+        "Backtracking",
+        "DFS",
+        "Recursion"
+      ],
+      "link": "posts/Algorithm/back-tracking.html"
+    },
+    {
+      "id": "post-047",
+      "title": "에라토스테네스의 체",
+      "category": "Algorithm",
+      "summary": "N 이하의 소수를 빠르게 구하는 에라토스테네스의 체 원리와 구현 방법을 정리합니다.",
+      "date": "2023-10-26",
+      "tags": [
+        "Prime",
+        "Sieve of Eratosthenes",
+        "Math"
+      ],
+      "link": "posts/Algorithm/sieve-of-eratosthenes.html"
+    },
+    {
+      "id": "post-048",
+      "title": "위상 정렬(Topological Sort)",
+      "category": "Algorithm",
+      "summary": "방향 그래프의 선후 관계를 지키는 위상 정렬 개념과 indegree+queue 기반 구현을 정리합니다.",
+      "date": "2023-11-04",
+      "tags": [
+        "Topological Sort",
+        "Graph",
+        "DAG"
+      ],
+      "link": "posts/Algorithm/topological-sort.html"
+    },
+    {
+      "id": "post-049",
+      "title": "Segment Tree",
+      "category": "Algorithm",
+      "summary": "구간 질의와 점 업데이트를 빠르게 처리하는 Segment Tree의 개념, 구성, 쿼리/업데이트 방식을 정리합니다.",
+      "date": "2023-11-18",
+      "tags": [
+        "Segment Tree",
+        "Range Query",
+        "Data Structure"
+      ],
+      "link": "posts/Algorithm/segment-tree.html"
+    },
+    {
       "id": "post-015",
       "title": "OPay 동시성 테스트 & Trouble Shooting",
       "category": "Troubleshooting",

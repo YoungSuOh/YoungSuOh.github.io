@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Back-Tracking의 개념, 가지치기 원리, 대표 예제를 정리합니다." />
+    <title>Back-Tracking · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header"><div class="container header-inner"><a class="brand" href="../../index.html">YoungSuOh Dev Log</a></div></header>
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2023-10-20 · Algorithm</p>
+        <h1 class="article-title">Back-Tracking</h1>
+        <p class="article-lead muted">가능성이 없는 경로를 조기에 중단하며 탐색하는 기법</p>
+        <div class="article-body post-body">
+          <p>Back-Tracking은 DFS 기반 탐색에서 조건 위반 경로를 즉시 잘라내 시간 낭비를 줄이는 방식이다.</p>
+          <h3>구조</h3>
+          <ol>
+            <li>선택(choose)</li>
+            <li>유효성 검사(pruning)</li>
+            <li>재귀 탐색</li>
+            <li>복구(un-choose)</li>
+          </ol>
+          <h3>Java 예제 (순열)</h3>
+          <pre><code class="language-java">void perm(int[] arr, boolean[] used, List&lt;Integer&gt; path) {
+    if (path.size() == arr.length) {
+        System.out.println(path);
+        return;
+    }
+    for (int i = 0; i &lt; arr.length; i++) {
+        if (used[i]) continue;
+        used[i] = true;
+        path.add(arr[i]);
+        perm(arr, used, path);
+        path.remove(path.size() - 1);
+        used[i] = false;
+    }
+}</code></pre>
+          <h3>대표 문제</h3>
+          <ul>
+            <li>N-Queen</li>
+            <li>부분집합/순열/조합 생성</li>
+            <li>스도쿠, 미로 탐색의 제약 만족형 문제</li>
+          </ul>
+        </div>
+        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+      </article>
+    </main>
+  </body>
+</html>
