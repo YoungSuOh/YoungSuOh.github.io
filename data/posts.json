@@ -1,5 +1,15 @@
 [
   {
+    "id": "post-076",
+    "slug": "claude-and-claude-code-guide",
+    "title": "Claude & Claude Code 완벽 가이드",
+    "category": "Claude",
+    "summary": "Claude(대화형 AI)와 Claude Code(에이전트형 코딩 도구)의 모델 라인업·인터페이스·Tool Use부터 설치, 슬래시 명령, MCP, 보안·비용 통제까지 처음 도입하는 개발자를 위해 한 번에 정리합니다.",
+    "date": "2026-04-15",
+    "tags": ["Claude", "Claude Code", "MCP", "AI", "Developer Tools"],
+    "manual": true
+  },
+  {
     "id": "post-001",
     "slug": "pessimistic-optimistic-lock",
     "title": "비관적 락 & 낙관적 락",

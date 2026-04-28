@@ -158,6 +158,10 @@ function main() {
   });
 
   for (const post of postsRaw) {
+    if (post.manual) {
+      console.log("Skipped (manual)", `posts/${categoryToDir(post.category)}/${post.slug}.html`);
+      continue;
+    }
     const catDir = categoryToDir(post.category);
     const subDir = path.join(outDir, catDir);
     fs.mkdirSync(subDir, { recursive: true });
