@@ -52,6 +52,21 @@ window.BLOG_DATA = {
   ],
   "posts": [
     {
+      "id": "post-077",
+      "title": "Claude 실전 사용법",
+      "category": "Claude",
+      "summary": "Claude Code CLI 명령어, 슬래시 커맨드, CLAUDE.md, MCP 연결, Hooks 자동화, 권한 제어, 비용 최적화까지 — 개발자가 실무에서 바로 써먹을 수 있는 패턴을 정리합니다.",
+      "date": "2026-04-16",
+      "tags": [
+        "Claude",
+        "Claude Code",
+        "CLI",
+        "MCP",
+        "Developer Tools"
+      ],
+      "link": "posts/Claude/claude-practical-guide.html"
+    },
+    {
       "id": "post-076",
       "title": "Claude & Claude Code 완벽 가이드",
       "category": "Claude",
