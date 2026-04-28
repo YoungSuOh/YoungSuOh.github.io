@@ -1,0 +1,153 @@
+<h2>1️⃣ 즉시 로딩 (EAGER)</h2>
+          <p>엔티티를 조회할 때 연관 엔티티도 함께 조회한다.</p>
+          <pre><code>@Entity
+class Order {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
+}</code></pre>
+
+          <p>예시</p>
+          <pre><code>// 조회 코드
+Order order = orderRepository.findById(1L);
+
+// 실제 SQL
+SELECT o.*, u.*
+FROM orders o
+LEFT JOIN users u
+ON o.user_id = u.id
+WHERE o.id = 1</code></pre>
+
+          <p><strong>특징</strong></p>
+          <ol>
+            <li>코드가 단순해 보인다.</li>
+            <li><code>LazyInitializationException</code>은 비교적 덜 발생한다.</li>
+            <li>불필요한 JOIN/연쇄 JOIN이 발생할 수 있다.</li>
+            <li>Repository 메서드 하나가 매우 무거운 JOIN 쿼리가 될 수 있다.</li>
+          </ol>
+
+          <h2>2️⃣ 지연 로딩 (LAZY)</h2>
+          <p>연관 엔티티는 실제 접근 시점에 조회한다.</p>
+          <pre><code>@Entity
+class Order {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+}</code></pre>
+
+          <p>예시</p>
+          <pre><code>// 조회
+Order order = orderRepository.findById(1L);
+
+// SQL
+SELECT *
+FROM orders
+WHERE id = 1  // User 조회 안함
+
+// User 접근 시
+order.getUser().getName();
+
+// SQL
+SELECT *
+FROM users
+WHERE id = ?</code></pre>
+
+          <p><strong>특징</strong></p>
+          <ol>
+            <li>필요한 데이터만 조회한다.</li>
+            <li>쿼리 흐름을 비교적 명확히 통제할 수 있다.</li>
+            <li>JOIN 폭발을 방지할 수 있다.</li>
+            <li>
+              N+1 문제가 발생할 수 있다.
+              <pre><code>// 리스트 조회 (1번)
+List&lt;Order&gt; orders = orderRepository.findAll();
+
+// SQL
+SELECT * FROM orders
+
+// 이후 N번
+orders.forEach(o -&gt; o.getUser().getName());
+
+// SQL
+SELECT * FROM users WHERE id=1
+SELECT * FROM users WHERE id=2
+SELECT * FROM users WHERE id=3
+...
+
+// 총 N+1번 조회</code></pre>
+            </li>
+            <li>
+              <code>LazyInitializationException</code> 위험이 있다.
+              <ul>
+                <li>LAZY 초기화에는 영속성 컨텍스트(Session)가 필요하다.</li>
+                <li>트랜잭션이 끝난 뒤 프록시 초기화가 일어나면 예외가 날 수 있다.</li>
+              </ul>
+              <pre><code>@Entity
+class Order {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+}
+
+// Service
+@Transactional
+public Order getOrder(Long id) {
+    // SELECT * FROM orders WHERE id=1 (User는 아직 미조회)
+    return orderRepository.findById(id).get();
+}
+
+// Service 종료 -> 영속성 컨텍스트 종료
+
+// Controller
+@GetMapping("/orders/{id}")
+public Order getOrder(@PathVariable Long id) {
+    return orderService.getOrder(id);
+}
+
+// Error
+org.hibernate.LazyInitializationException:
+could not initialize proxy - no Session</code></pre>
+              <p>
+                Spring이 응답 객체를 JSON으로 직렬화할 때(Jackson), getter를 호출하면서 <code>order.getUser()</code>가 실행되어 LAZY 로딩이
+                트리거될 수 있다.
+              </p>
+              <p>그래서 실무에서는 엔티티를 그대로 반환하지 않고 Response DTO로 변환해 반환하는 방식을 주로 사용한다.</p>
+            </li>
+          </ol>
+
+          <h2>✅ 실제 실무 전략</h2>
+          <ol>
+            <li>
+              기본은 LAZY
+              <pre><code>@ManyToOne(fetch = FetchType.LAZY)
+@OneToMany(fetch = FetchType.LAZY)</code></pre>
+            </li>
+            <li>
+              필요한 구간에서 Fetch Join으로 N+1 해결
+              <pre><code>public interface OrderRepository extends JpaRepository&lt;Order, Long&gt; {
+
+    @Query("SELECT o FROM Order o JOIN FETCH o.member")
+    List&lt;Order&gt; findAllWithMember();
+}
+
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+
+    public List&lt;Order&gt; getOrders() {
+        return orderRepository.findAllWithMember();
+    }
+}
+
+// SQL
+SELECT o.*, u.*
+FROM orders o
+JOIN users u
+ON o.user_id = u.id</code></pre>
+            </li>
+          </ol>

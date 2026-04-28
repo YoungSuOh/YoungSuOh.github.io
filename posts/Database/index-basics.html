@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="인덱스의 원리, 설계 기준, 튜닝 체크리스트를 정리합니다." />
+    <meta name="description" content="인덱스(Index) 정리" />
     <title>인덱스(Index) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-01-19 · Database</p>
         <h1 class="article-title">인덱스(Index)</h1>
+        <p class="article-lead muted">인덱스(Index) 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>인덱스는 데이터를 빠르게 찾기 위한 보조 자료구조다. 대부분의 RDBMS에서 B-Tree 계열로 구현된다.</p>
+<p>인덱스는 데이터를 빠르게 찾기 위한 보조 자료구조다. 대부분의 RDBMS에서 B-Tree 계열로 구현된다.</p>
           <h3>왜 필요한가?</h3>
           <ul>
             <li>인덱스가 없으면 조건 검색 시 테이블 전체를 순회(Full Scan)해야 하는 경우가 많다.</li>
@@ -56,8 +59,16 @@ ON orders (user_id, status, created_at DESC);</code></pre>
             <li>인덱스 추가 후 쓰기 TPS 영향 측정</li>
           </ul>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

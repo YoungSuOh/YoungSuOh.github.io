@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="JPA 즉시 로딩(EAGER)과 지연 로딩(LAZY)의 차이, N+1, LazyInitializationException, 실무 전략을 정리합니다."
-    />
+    <meta name="description" content="EAGER는 조회할 때 바로, LAZY는 실제 사용할 때 가져온다." />
     <title>즉시 로딩(EAGER) vs 지연로딩(LAZY) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -28,13 +25,10 @@
       <article class="card article-shell">
         <p class="article-meta">2023-09-30 · Backend</p>
         <h1 class="article-title">즉시 로딩(EAGER) vs 지연로딩(LAZY)</h1>
-        <p class="article-lead muted"><code>EAGER</code>는 조회할 때 바로, <code>LAZY</code>는 실제 사용할 때 가져온다.</p>
-        <div class="tags article-tags">
-          <span class="tag">JPA</span><span class="tag">Hibernate</span><span class="tag">EAGER</span><span class="tag">LAZY</span>
-        </div>
-
+        <p class="article-lead muted">EAGER는 조회할 때 바로, LAZY는 실제 사용할 때 가져온다.</p>
+        <div class="tags article-tags"><span class="tag">JPA</span><span class="tag">Hibernate</span><span class="tag">EAGER</span><span class="tag">LAZY</span></div>
         <div class="article-body post-body">
-          <h2>1️⃣ 즉시 로딩 (EAGER)</h2>
+<h2>1️⃣ 즉시 로딩 (EAGER)</h2>
           <p>엔티티를 조회할 때 연관 엔티티도 함께 조회한다.</p>
           <pre><code>@Entity
 class Order {
@@ -188,7 +182,6 @@ ON o.user_id = u.id</code></pre>
             </li>
           </ol>
         </div>
-
         <p class="article-back">
           <a class="text-link" href="../../index.html#blog">← 목록으로</a>
         </p>
@@ -202,4 +195,3 @@ ON o.user_id = u.id</code></pre>
     </footer>
   </body>
 </html>
-

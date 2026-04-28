@@ -1,0 +1,232 @@
+<h2>⚠️ 문제점</h2>
+          <ul>
+            <li>
+              게시글의 모든 댓글을 가져와 렌더링만 프론트에서 처리하면, 부모·자식 관계를 매번 탐색하는 방식에 따라
+              <strong>O(N²)에 가까운 시간</strong>이 들 수 있어 댓글이 많아질수록 렌더링이 급격히 느려질 수 있다.
+            </li>
+            <li>
+              기존에는 댓글을 프론트로 가져온 뒤 부모·자식 계층을 <strong>DFS</strong>로만 구성했다.
+            </li>
+          </ul>
+
+          <h2>1. CommentDTO — 자기 참조용 필드</h2>
+          <pre><code>@Getter
+@Setter
+public class CommentDTO {
+    private long seq_comment;
+    private long seq_board;
+    private String name;
+    private String commentContent;
+    private Date logtime;
+    /** null이면 최상위 댓글, 값이 있으면 대댓글 */
+    private Long parentCommentSeq;
+}</code></pre>
+
+          <h2>2. DB 스키마 — parentCommentSeq</h2>
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Dev/대댓글/1.png"
+              alt="CommentTable parentCommentSeq 스키마"
+              loading="lazy"
+              style="width: 100%; max-width: 720px; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted"><code>photo/posts/Dev/대댓글/1.png</code></figcaption>
+          </figure>
+          <pre><code>ALTER TABLE CommentTable ADD COLUMN parentCommentSeq INT NULL;
+
+ALTER TABLE CommentTable
+ADD CONSTRAINT fk_parent_comment
+FOREIGN KEY (parentCommentSeq)
+REFERENCES CommentTable(seq_comment)
+ON DELETE CASCADE;</code></pre>
+          <ul>
+            <li>기본값은 <code>NULL</code>. <code>parentCommentSeq</code>가 <code>seq_comment</code>를 참조하는 자기 참조 FK.</li>
+            <li><code>parentCommentSeq = null</code> → 최상위 댓글.</li>
+            <li>
+              <code>ON DELETE CASCADE</code>로 부모 댓글 삭제 시, 그를 부모로 두는 <strong>대댓글도 함께 삭제</strong>.
+            </li>
+          </ul>
+
+          <h2>3. 입력 쿼리</h2>
+          <pre><code>INSERT INTO CommentTable
+    (seq_board, name, commentContent, parentCommentSeq)
+VALUES
+    (#{seq_board}, #{name}, #{commentContent}, #{parentCommentSeq})</code></pre>
+          <p>클라이언트가 <code>parentCommentSeq</code>를 넘기면 저장하고, 없으면 <code>null</code>.</p>
+
+          <h2>4. ⭐ 계층 조회 — WITH RECURSIVE</h2>
+          <pre><code>WITH RECURSIVE CommentTree AS (
+    SELECT
+        seq_comment,
+        seq_board,
+        name,
+        commentContent,
+        logtime,
+        parentCommentSeq
+    FROM
+        CommentTable
+    WHERE
+        seq_board = #{seq_board}
+        AND parentCommentSeq IS NULL
+    UNION ALL
+    SELECT
+        c.seq_comment,
+        c.seq_board,
+        c.name,
+        c.commentContent,
+        c.logtime,
+        c.parentCommentSeq
+    FROM
+        CommentTable c
+    INNER JOIN
+        CommentTree ct
+        ON c.parentCommentSeq = ct.seq_comment
+)
+SELECT *
+FROM CommentTree
+ORDER BY
+    COALESCE(parentCommentSeq, seq_comment),
+    seq_comment ASC,
+    logtime ASC</code></pre>
+
+          <h3>WITH RECURSIVE</h3>
+          <ul>
+            <li>재귀적으로 부모–자식을 따라가며 트리 형태의 행 집합을 만든다.</li>
+            <li><code>CommentTree</code>는 그 결과를 담는 임시 결과 집합(CTE)이다.</li>
+          </ul>
+
+          <h3>앵커: 부모 댓글만</h3>
+          <pre><code>SELECT seq_comment, seq_board, name, commentContent, logtime, parentCommentSeq
+FROM CommentTable
+WHERE seq_board = #{seq_board} AND parentCommentSeq IS NULL</code></pre>
+
+          <h3>재귀: 대댓글 붙이기</h3>
+          <pre><code>UNION ALL
+SELECT c.seq_comment, c.seq_board, c.name, c.commentContent, c.logtime, c.parentCommentSeq
+FROM CommentTable c
+INNER JOIN CommentTree ct ON c.parentCommentSeq = ct.seq_comment</code></pre>
+          <p>
+            <code>CommentTree</code>에 이미 포함된 행의 <code>seq_comment</code>를 부모로 갖는 행만 다음 단계로 붙인다. 즉
+            <code>c.parentCommentSeq = ct.seq_comment</code>로 연결된 대댓글을 단계적으로 확장한다.
+          </p>
+
+          <h3>정렬</h3>
+          <ul>
+            <li>
+              <code>COALESCE(parentCommentSeq, seq_comment)</code>: 최상위는 <code>seq_comment</code>로 그룹 키를 잡고, 대댓글은 부모
+              id로 같은 스레드끼리 모은다.
+            </li>
+            <li><code>seq_comment ASC</code>, <code>logtime ASC</code>: 스레드 내 순서·시간 순.</li>
+          </ul>
+
+          <h2>5. CommentController</h2>
+          <pre><code>@Controller
+@RequestMapping("/comment")
+public class CommentController {
+
+    @Autowired
+    private CommentService commentService;
+
+    @RequestMapping(value = "/commentList", method = RequestMethod.POST)
+    @ResponseBody
+    public List&lt;CommentDTO&gt; commentList(@RequestParam("seq_board") String seq_board) {
+        return commentService.commentList(seq_board);
+    }
+}</code></pre>
+
+          <h2>6. JavaScript — 트리 구성 후 렌더링</h2>
+          <p>서버는 <strong>정렬된 플랫 리스트</strong>를 주고, 화면에서는 <strong>트리 객체</strong>로 바꾼 뒤 HTML을 만든다.</p>
+          <pre><code>function buildCommentTree(comments, parentSeq = null) {
+    const result = [];
+    comments.forEach(function (comment) {
+        if (comment.parentCommentSeq === parentSeq) {
+            const newComment = Object.assign({}, comment, {
+                replies: buildCommentTree(comments, comment.seq_comment)
+            });
+            result.push(newComment);
+        }
+    });
+    return result;
+}
+
+$.ajax({
+    type: 'POST',
+    url: '/Inbeomstagram/comment/commentList',
+    data: { seq_board: seqBoard },
+    success: function (commentList) {
+        const commentTree = buildCommentTree(commentList);
+
+        function renderComments(comments) {
+            let commentHtml = '';
+            comments.forEach(function (comment) {
+                commentHtml +=
+                    '&lt;div class="comment-content" data-seq="' + comment.seq_comment + '"&gt;' +
+                    '&lt;strong&gt;' + comment.name + '&lt;/strong&gt; : ' +
+                    comment.commentContent +
+                    ' (' + formatDate(comment.logtime) + ')';
+
+                if (memberName === comment.name) {
+                    commentHtml +=
+                        '&lt;button class="options-btn" data-seq="' + comment.seq_comment + '"&gt;⋯&lt;/button&gt;';
+                }
+
+                commentHtml +=
+                    '&lt;button class="reply-btn" data-seq="' + comment.seq_comment + '"&gt;답글 달기&lt;/button&gt;';
+                commentHtml += '&lt;/div&gt;';
+
+                if (comment.replies.length &gt; 0) {
+                    commentHtml += '&lt;div class="reply-list" style="margin-left: 30px;"&gt;';
+                    commentHtml += renderComments(comment.replies);
+                    commentHtml += '&lt;/div&gt;';
+                }
+            });
+            return commentHtml;
+        }
+
+        const commentHtml = renderComments(commentTree);
+        $('#comment-list').html(commentHtml);
+        $('#comment-num').text('댓글 ' + commentList.length + '개');
+    },
+    error: function () {
+        alert('댓글을 불러오는 데 실패했습니다.');
+    }
+});</code></pre>
+          <ul>
+            <li><code>buildCommentTree</code>: <code>parentSeq</code> 기준으로 자식만 골라 재귀적으로 <code>replies</code>를 채운다.</li>
+            <li><code>renderComments</code>: 트리를 순회하며 문자열 HTML을 만들고, 대댓글은 들여쓰기로 표현한다.</li>
+          </ul>
+
+          <h2>정리</h2>
+          <ol>
+            <li><strong>SQL</strong>: 부모·자식 관계에 맞게 정렬된 리스트를 반환한다(중첩 JSON 트리가 아님).</li>
+            <li><strong>JavaScript</strong>: 그 리스트를 트리로 바꿔 렌더링한다.</li>
+            <li>기존처럼 프론트만으로 매번 관계를 찾는 비용을 줄이고, <strong>DB에서 한 번에 계층을 전개·정렬</strong>하는 쪽으로 역할을 나눴다.</li>
+          </ol>
+
+          <h3>트리 구조로 변환하는 이유</h3>
+          <p>부모–자식이 여러 단계로 깊어질수록 플랫 리스트만으로는 “누구의 자식인지”를 바로 보기 어렵다.</p>
+          <pre><code>부모 댓글 1
+  대댓글 1-1
+  대댓글 1-2
+부모 댓글 2
+  대댓글 2-1
+    대댓글 2-1-1
+  대댓글 2-2</code></pre>
+
+          <h3>SQL만으로 중첩 트리를 “반환”하기 어려운 이유</h3>
+          <ul>
+            <li>RDB는 기본이 행 단위 결과 집합이다.</li>
+            <li>부모–자식 관계는 컬럼으로 표현할 수 있어도, 애플리케이션에서 쓰기 좋은 중첩 구조를 그대로 만들어 주진 않는다.</li>
+          </ul>
+
+          <h3>이 구조가 항상 최선인가?</h3>
+          <p>
+            트리 렌더링은 결국 프론트에서도 가능하지만, 정렬·계층 전개를 DB에 맡기면 애플리케이션 서버(Tomcat 등)와 브라우저 쪽 반복
+            탐색 부담을 줄이는 데 도움이 될 수 있다. 다만 정렬 키(<code>COALESCE</code> 등) 설계에 따라 스레드 내 순서가 기대와 어긋날 수 있으므로,
+            실제 데이터 패턴에 맞게 ORDER BY를 검증하는 것이 중요하다.
+          </p>
+
+          <h2>프로젝트 링크</h2>
+          <p>
+            <a href="https://github.com/YoungSuOh/PinterSemi">https://github.com/YoungSuOh/PinterSemi</a>
+          </p>

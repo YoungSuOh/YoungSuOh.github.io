@@ -1,0 +1,80 @@
+<h3>한 줄 정의</h3>
+          <p>서로 연관된 객체군을 일관된 규칙으로 생성하기 위한 팩토리 패턴.</p>
+
+          <h3>Factory Method와 차이</h3>
+          <ul>
+            <li>Factory Method: 보통 제품 1종의 생성 지점을 분리</li>
+            <li>Abstract Factory: 관련된 여러 제품군을 한 번에 생성</li>
+          </ul>
+
+          <h3>문제 상황</h3>
+          <p>UI 테마(라이트/다크)마다 버튼, 모달, 입력창을 같은 스타일로 맞춰 생성해야 할 때 유용하다.</p>
+
+          <h3>Java 예제</h3>
+          <pre><code class="language-java">interface Button { String render(); }
+interface Dialog { String open(); }
+
+class LightButton implements Button {
+    public String render() { return "LightButton"; }
+}
+class DarkButton implements Button {
+    public String render() { return "DarkButton"; }
+}
+
+class LightDialog implements Dialog {
+    public String open() { return "LightDialog"; }
+}
+class DarkDialog implements Dialog {
+    public String open() { return "DarkDialog"; }
+}
+
+interface UIFactory {
+    Button createButton();
+    Dialog createDialog();
+}
+
+class LightUIFactory implements UIFactory {
+    public Button createButton() { return new LightButton(); }
+    public Dialog createDialog() { return new LightDialog(); }
+}
+
+class DarkUIFactory implements UIFactory {
+    public Button createButton() { return new DarkButton(); }
+    public Dialog createDialog() { return new DarkDialog(); }
+}</code></pre>
+
+          <h3>장점 / 단점</h3>
+          <ul>
+            <li>장점: 제품군 일관성 유지, 클라이언트 코드 단순화</li>
+            <li>단점: 제품 타입(인터페이스) 추가 시 모든 팩토리에 수정이 전파됨</li>
+          </ul>
+
+          <h3>실무 포인트</h3>
+          <ul>
+            <li>멀티 플랫폼(Web/Mobile/Desktop)별 컴포넌트 생성</li>
+            <li>DB 벤더별 객체 생성 정책 분리</li>
+            <li>테스트 환경별 Mock 제품군 교체</li>
+          </ul>
+
+          <h3>패턴 다이어그램</h3>
+          <figure class="screenshot-item">
+            <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Abstract Factory diagram">
+              <rect x="20" y="85" width="130" height="55" rx="10" fill="#eef6ff" stroke="#3b82f6" />
+              <text x="85" y="118" text-anchor="middle" font-size="14" fill="#1e3a8a">Client</text>
+              <rect x="200" y="85" width="170" height="55" rx="10" fill="#f5f3ff" stroke="#8b5cf6" />
+              <text x="285" y="118" text-anchor="middle" font-size="14" fill="#4c1d95">AbstractFactory</text>
+              <rect x="420" y="35" width="140" height="50" rx="10" fill="#ecfeff" stroke="#06b6d4" />
+              <text x="490" y="65" text-anchor="middle" font-size="12" fill="#155e75">LightFactory</text>
+              <rect x="420" y="145" width="140" height="50" rx="10" fill="#ecfeff" stroke="#06b6d4" />
+              <text x="490" y="175" text-anchor="middle" font-size="12" fill="#155e75">DarkFactory</text>
+              <rect x="610" y="35" width="130" height="50" rx="10" fill="#fff7ed" stroke="#f97316" />
+              <text x="675" y="65" text-anchor="middle" font-size="12" fill="#9a3412">Button/Dialog A</text>
+              <rect x="610" y="145" width="130" height="50" rx="10" fill="#fff7ed" stroke="#f97316" />
+              <text x="675" y="175" text-anchor="middle" font-size="12" fill="#9a3412">Button/Dialog B</text>
+              <line x1="150" y1="112" x2="200" y2="112" stroke="#2563eb" stroke-width="3" />
+              <line x1="370" y1="112" x2="420" y2="60" stroke="#7c3aed" stroke-width="2.5" />
+              <line x1="370" y1="112" x2="420" y2="170" stroke="#7c3aed" stroke-width="2.5" />
+              <line x1="560" y1="60" x2="610" y2="60" stroke="#0891b2" stroke-width="2.5" />
+              <line x1="560" y1="170" x2="610" y2="170" stroke="#0891b2" stroke-width="2.5" />
+            </svg>
+          </figure>

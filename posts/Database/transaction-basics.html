@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="트랜잭션의 ACID, 격리 수준, 실무 경계 설정을 정리합니다." />
+    <meta name="description" content="트랜잭션(Transaction) 정리" />
     <title>트랜잭션(Transaction) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-02-07 · Database</p>
         <h1 class="article-title">트랜잭션(Transaction)</h1>
+        <p class="article-lead muted">트랜잭션(Transaction) 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>트랜잭션은 여러 쿼리를 하나의 논리 작업으로 묶어, 전부 성공 또는 전부 실패를 보장하는 단위다.</p>
+<p>트랜잭션은 여러 쿼리를 하나의 논리 작업으로 묶어, 전부 성공 또는 전부 실패를 보장하는 단위다.</p>
           <h3>ACID</h3>
           <ul>
             <li>Atomicity: 전부 성공/실패</li>
@@ -52,8 +55,16 @@ COMMIT;</code></pre>
             <li>락 경합이 잦으면 격리 수준/쿼리 순서 재검토</li>
           </ul>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,17 @@
+<p>리플리케이션은 Primary의 변경 로그를 Replica에 전파해 읽기 확장과 장애 대응성을 높이는 방식이다.</p>
+          <h3>구성</h3>
+          <ul>
+            <li>Primary: 쓰기 트래픽 담당</li>
+            <li>Replica: 읽기 트래픽 분산</li>
+          </ul>
+          <h3>핵심 이슈</h3>
+          <ul>
+            <li>복제 지연(Replica Lag)</li>
+            <li>Failover 시점 데이터 일관성</li>
+            <li>읽기 분리 후 read-after-write 보장</li>
+          </ul>
+          <h3>실무 팁</h3>
+          <ul>
+            <li>쓰기 직후 조회는 Primary로 라우팅하는 전략 고려</li>
+            <li>Lag 임계치 초과 시 Replica 트래픽 차단 정책 준비</li>
+          </ul>

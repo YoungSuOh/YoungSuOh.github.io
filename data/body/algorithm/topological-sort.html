@@ -1,0 +1,251 @@
+<p>방향 그래프에서 간선으로 주어진 정점 간 선후 관계를 위배하지 않도록 나열하는 정렬</p>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/1.png"
+              alt="위상 정렬 기본 예시"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>위상 정렬을 했을 때 A는 C보다 앞에 등장해야 함</li>
+            <li>
+              하나의 그래프에는 여러 개의 위상 정렬 결과가 있을 수 있다.
+              <ul>
+                <li>ABCDEF, ACEDBF, BADCEF, BADFCE 등이 전부 올바른 위상 정렬</li>
+                <li>BDACED는 F가 D보다 먼저 나오기 때문에 잘못된 위상 정렬</li>
+              </ul>
+            </li>
+            <li>
+              그래프 안에 사이클이 존재할 경우 올바른 위상 정렬이 존재할 수 없다.
+              <figure class="screenshot-item">
+                <img
+                  src="../../photo/posts/Algorithm/Topological Sort/2.png"
+                  alt="사이클이 있으면 위상 정렬 불가"
+                  loading="lazy"
+                />
+              </figure>
+            </li>
+          </ul>
+
+          <ul>
+            <li>다음은 위상 정렬의 예이다 (대학교의 선수과목)</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/3.png"
+              alt="선수 과목 그래프"
+              loading="lazy"
+            />
+          </figure>
+
+          <h3>알고리즘의 설명</h3>
+          <ul>
+            <li>제일 앞에 오는 원소는 들어오는 간선(indegree)이 0이어야 한다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/4.png"
+              alt="indegree 0 정점 찾기"
+              loading="lazy"
+            />
+          </figure>
+
+          <ul>
+            <li>임의로 A를 택하면 위상 정렬의 첫 정점은 A이다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/5.png"
+              alt="A 선택"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>A와 A에서 뻗어나가는 간선을 제거한 것처럼 생각하고 다음 정점을 고른다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/6.png"
+              alt="다음 후보 C,G"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>임의로 C를 택하고 같은 과정을 반복한다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/7.png"
+              alt="C 선택"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/8.png"
+              alt="반복 과정"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/9.png"
+              alt="반복 과정 2"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/10.png"
+              alt="반복 과정 3"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/11.png"
+              alt="반복 과정 4"
+              loading="lazy"
+            />
+          </figure>
+
+          <h3>알고리즘 코드로 구현</h3>
+          <ol>
+            <li>정점/간선을 실제로 지우지 않고 indegree만 감소시켜도 된다.</li>
+            <li>indegree 0 정점을 효율적으로 관리하기 위해 큐를 사용한다.</li>
+          </ol>
+          <ol>
+            <li>모든 간선을 읽으며 indegree 테이블 채우기</li>
+            <li>indegree가 0인 정점들을 모두 큐에 넣기</li>
+            <li>큐에서 정점을 꺼내 결과에 추가</li>
+            <li>인접 정점 indegree를 1 감소, 0이 되면 큐에 추가</li>
+            <li>큐가 빌 때까지 반복</li>
+          </ol>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/12.png"
+              alt="수행 과정 1"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/13.png"
+              alt="수행 과정 2"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/14.png"
+              alt="수행 과정 3"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/15.png"
+              alt="수행 과정 4"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/16.png"
+              alt="수행 과정 5"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/17.png"
+              alt="수행 과정 6"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/18.png"
+              alt="수행 과정 7"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Topological Sort/19.png"
+              alt="수행 과정 8"
+              loading="lazy"
+            />
+          </figure>
+
+          <pre><code class="language-cpp">vector&lt;int&gt; adj[10];
+int deg[10];
+int n;
+
+queue&lt;int&gt; q;
+vector&lt;int&gt; result;
+
+for (int i = 1; i &lt;= n; i++) {
+    if (deg[i] == 0) q.push(i);
+}
+while (!q.empty()) {
+    int cur = q.front(); q.pop();
+    result.push_back(cur);
+    for (int nxt : adj[cur]) {
+        deg[nxt]--;
+        if (deg[nxt] == 0) q.push(nxt);
+    }
+}
+if (result.size() != n)
+    cout &lt;&lt; "cycle exists";
+else {
+    for (auto x : result) cout &lt;&lt; x &lt;&lt; " ";
+}</code></pre>
+
+          <h3>예제 코드 (Java)</h3>
+          <pre><code class="language-java">import java.util.*;
+
+public class TopologicalSortExample {
+    public static List&lt;Integer&gt; topologicalSort(int n, int[][] edges) {
+        List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;();
+        for (int i = 0; i &lt;= n; i++) graph.add(new ArrayList&lt;&gt;());
+        int[] indegree = new int[n + 1];
+
+        for (int[] e : edges) {
+            int u = e[0], v = e[1];
+            graph.get(u).add(v);
+            indegree[v]++;
+        }
+
+        Queue&lt;Integer&gt; q = new ArrayDeque&lt;&gt;();
+        for (int i = 1; i &lt;= n; i++) {
+            if (indegree[i] == 0) q.offer(i);
+        }
+
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            result.add(cur);
+            for (int nxt : graph.get(cur)) {
+                if (--indegree[nxt] == 0) q.offer(nxt);
+            }
+        }
+
+        if (result.size() != n) {
+            throw new IllegalStateException("cycle exists");
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int n = 7;
+        int[][] edges = {
+                {1, 2}, {1, 3}, {2, 5},
+                {3, 4}, {4, 6}, {5, 6}, {6, 7}
+        };
+        System.out.println(topologicalSort(n, edges));
+    }
+}</code></pre>

@@ -1,0 +1,20 @@
+<p>Bit Masking은 집합/상태 정보를 비트 단위로 저장해 메모리와 연산을 줄이는 방법이다.</p>
+          <h3>핵심 연산</h3>
+          <ul>
+            <li>추가: <code>mask | (1 &lt;&lt; k)</code></li>
+            <li>삭제: <code>mask &amp; ~(1 &lt;&lt; k)</code></li>
+            <li>토글: <code>mask ^ (1 &lt;&lt; k)</code></li>
+            <li>포함 확인: <code>(mask &amp; (1 &lt;&lt; k)) != 0</code></li>
+          </ul>
+          <h3>Java 예제</h3>
+          <pre><code class="language-java">int mask = 0;
+mask |= (1 &lt;&lt; 2);        // 2번 원소 추가
+mask |= (1 &lt;&lt; 4);        // 4번 원소 추가
+boolean has2 = (mask &amp; (1 &lt;&lt; 2)) != 0;
+mask &amp;= ~(1 &lt;&lt; 2);       // 2번 원소 제거</code></pre>
+          <h3>자주 쓰는 곳</h3>
+          <ul>
+            <li>부분집합 순회 (<code>for (sub = mask; sub &gt; 0; sub = (sub - 1) &amp; mask)</code>)</li>
+            <li>방문 상태 압축 DP (TSP, 외판원 등)</li>
+            <li>알파벳 출현 체크(26비트)</li>
+          </ul>

@@ -1,0 +1,309 @@
+<p>
+            : 주어진 데이터의 구간 합과 데이터 업데이트를 빠르게 수행하기 위한 자료구조. 이때 구간 합이라는 것은 합 배열을 뜻한다.
+          </p>
+
+          <h3>합 배열</h3>
+          <ul>
+            <li>다음은 합 배열을 구하는 과정이다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/1.jpg"
+              alt="합 배열 만드는 과정"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>합 배열의 현재 인덱스 값은 그전 인덱스까지의 누적합이다.</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/2.jpg"
+              alt="합 배열 구간합 계산"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>2~5 인덱스의 구간 합은 합배열의 5에서 1을 빼서 구할 수 있다.</li>
+          </ul>
+
+          <h3>왜 세그먼트 트리를 사용해야 될까?</h3>
+          <ul>
+            <li>데이터 업데이트 문제가 발생: <strong>합 배열의 데이터 업데이트가 굉장히 느리다</strong></li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/3.jpg"
+              alt="합 배열 업데이트 비효율"
+              loading="lazy"
+            />
+          </figure>
+          <ul>
+            <li>따라서 업데이트가 훨씬 빠른 Segment Tree를 사용한다.</li>
+          </ul>
+
+          <h3>세그먼트 트리의 종류</h3>
+          <ul>
+            <li>구간 합, 구간 곱, 구간의 최대/최소</li>
+          </ul>
+
+          <h3>세그먼트 트리 구현하기</h3>
+          <ol>
+            <li>
+              트리 초기화 하기
+              <ol>
+                <li>leaf 노드 개수가 데이터 개수 N 이상이 되도록 트리 배열을 만든다.</li>
+                <li>
+                  Sample data: {5, 8, 4, 3, 7, 2, 1, 6}
+                  <ol>
+                    <li>
+                      트리 크기: <code>2^k &gt;= N</code>을 만족하는 최소 k를 구한 뒤, 배열 크기를 <code>2^(k+1)</code>로 둔다.
+                    </li>
+                    <li>N=8이면 k=3, 배열 크기=16</li>
+                  </ol>
+                </li>
+                <li>leaf 시작 인덱스는 <code>2^k</code>가 된다. (예: 8)</li>
+              </ol>
+            </li>
+          </ol>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/4.jpg"
+              alt="세그먼트 트리 초기화 1"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/5.png"
+              alt="세그먼트 트리 초기화 2"
+              loading="lazy"
+            />
+          </figure>
+
+          <ol start="2">
+            <li>
+              세그먼트 트리 조건에 맞게 트리 구성
+              <ol>
+                <li>
+                  구간 합
+                  <figure class="screenshot-item">
+                    <img
+                      src="../../photo/posts/Algorithm/Segment Tree/6.jpg"
+                      alt="구간 합 트리 구성"
+                      loading="lazy"
+                    />
+                  </figure>
+                  <figure class="screenshot-item">
+                    <img
+                      src="../../photo/posts/Algorithm/Segment Tree/7.jpg"
+                      alt="구간 합 트리 구성 상세"
+                      loading="lazy"
+                    />
+                  </figure>
+                </li>
+                <li>
+                  최대
+                  <figure class="screenshot-item">
+                    <img
+                      src="../../photo/posts/Algorithm/Segment Tree/8.jpg"
+                      alt="최대 트리 구성"
+                      loading="lazy"
+                    />
+                  </figure>
+                </li>
+                <li>
+                  최소
+                  <figure class="screenshot-item">
+                    <img
+                      src="../../photo/posts/Algorithm/Segment Tree/9.png"
+                      alt="최소 트리 구성"
+                      loading="lazy"
+                    />
+                  </figure>
+                </li>
+              </ol>
+            </li>
+          </ol>
+
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/10.png"
+              alt="세그먼트 트리 구성 결과"
+              loading="lazy"
+            />
+          </figure>
+
+          <ol start="3">
+            <li>
+              주어진 쿼리 인덱스를 세그먼트 트리 인덱스로 변경
+              <ol>
+                <li>세그먼트 트리 index = 주어진 질의 index + 2^k - 1</li>
+                <li>예: 쿼리 1~3이면 8~11</li>
+              </ol>
+            </li>
+            <li>
+              쿼리값 구하는 과정
+              <ol>
+                <li><code>start_index % 2 == 1</code>이면 해당 노드 선택</li>
+                <li><code>end_index % 2 == 0</code>이면 해당 노드 선택</li>
+                <li><code>start_index = (start_index + 1) / 2</code></li>
+                <li><code>end_index = (end_index - 1) / 2</code></li>
+                <li>선택된 노드들은 질의 범위에 영향을 주는 독립 노드다.</li>
+              </ol>
+            </li>
+          </ol>
+
+          <h3>예제</h3>
+          <ul>
+            <li>쿼리 2~6의 구간합 구하기</li>
+          </ul>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/11.jpg"
+              alt="세그먼트 트리 예제 1"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/12.jpg"
+              alt="세그먼트 트리 start index"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/13.jpg"
+              alt="세그먼트 트리 부모 이동"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/14.jpg"
+              alt="세그먼트 트리 오른쪽 자식 선택 이유"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/15.png"
+              alt="세그먼트 트리 end index"
+              loading="lazy"
+            />
+          </figure>
+          <figure class="screenshot-item">
+            <img
+              src="../../photo/posts/Algorithm/Segment Tree/16.png"
+              alt="세그먼트 트리 예제 진행"
+              loading="lazy"
+            />
+          </figure>
+
+          <h3>데이터 업데이트</h3>
+          <ul>
+            <li>부모로 올라가며 갱신한다는 점은 같지만, 트리 종류별 갱신 방식은 다르다.</li>
+            <li>
+              구간 합: 변경량(diff)만큼 부모로 올라가며 더함
+              <figure class="screenshot-item">
+                <img
+                  src="../../photo/posts/Algorithm/Segment Tree/17.png"
+                  alt="구간 합 업데이트"
+                  loading="lazy"
+                />
+              </figure>
+            </li>
+            <li>
+              최대: 형제 노드와 비교해 큰 값으로 부모 갱신
+              <figure class="screenshot-item">
+                <img
+                  src="../../photo/posts/Algorithm/Segment Tree/18.png"
+                  alt="최대 업데이트"
+                  loading="lazy"
+                />
+              </figure>
+            </li>
+            <li>
+              최소: 형제 노드와 비교해 작은 값으로 부모 갱신
+              <figure class="screenshot-item">
+                <img
+                  src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/48dd8bf3-986e-4386-97dd-ae94198cf0ed/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7(109).png"
+                  alt="최소 업데이트"
+                  loading="lazy"
+                />
+              </figure>
+            </li>
+          </ul>
+
+          <h3>예제 코드 (Java)</h3>
+          <pre><code class="language-java">import java.util.Arrays;
+
+public class SegmentTreeExample {
+    static class SegmentTree {
+        private final int n;
+        private final long[] tree;
+
+        public SegmentTree(int[] arr) {
+            this.n = arr.length;
+            this.tree = new long[n * 4];
+            build(arr, 1, 0, n - 1);
+        }
+
+        private void build(int[] arr, int node, int left, int right) {
+            if (left == right) {
+                tree[node] = arr[left];
+                return;
+            }
+            int mid = (left + right) / 2;
+            build(arr, node * 2, left, mid);
+            build(arr, node * 2 + 1, mid + 1, right);
+            tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        }
+
+        // 구간 합 쿼리 [ql, qr]
+        public long query(int ql, int qr) {
+            return query(1, 0, n - 1, ql, qr);
+        }
+
+        private long query(int node, int left, int right, int ql, int qr) {
+            if (qr < left || right < ql) return 0; // 겹치지 않음
+            if (ql <= left && right <= qr) return tree[node]; // 완전 포함
+            int mid = (left + right) / 2;
+            return query(node * 2, left, mid, ql, qr)
+                    + query(node * 2 + 1, mid + 1, right, ql, qr);
+        }
+
+        // 점 업데이트: index 값을 newValue로 변경
+        public void update(int index, int newValue) {
+            update(1, 0, n - 1, index, newValue);
+        }
+
+        private void update(int node, int left, int right, int index, int newValue) {
+            if (index < left || right < index) return;
+            if (left == right) {
+                tree[node] = newValue;
+                return;
+            }
+            int mid = (left + right) / 2;
+            update(node * 2, left, mid, index, newValue);
+            update(node * 2 + 1, mid + 1, right, index, newValue);
+            tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 8, 4, 3, 7, 2, 1, 6};
+        SegmentTree seg = new SegmentTree(arr);
+
+        System.out.println("초기 배열: " + Arrays.toString(arr));
+        System.out.println("구간합 [1, 5] = " + seg.query(1, 5)); // 8+4+3+7+2 = 24
+
+        // index 4(값 7) -> 10으로 업데이트
+        seg.update(4, 10);
+        arr[4] = 10;
+
+        System.out.println("업데이트 후 배열: " + Arrays.toString(arr));
+        System.out.println("구간합 [1, 5] = " + seg.query(1, 5)); // 27
+    }
+}</code></pre>

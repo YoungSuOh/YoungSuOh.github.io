@@ -1,0 +1,26 @@
+<h2>Maven</h2>
+          <ul>
+            <li>XML(<code>pom.xml</code>) 기반으로 선언적이고 직관적이지만, 설정이 길어질 수 있다.</li>
+            <li><code>mvn package</code>, <code>mvn install</code> 같은 명령으로 빌드 과정이 단순하다.</li>
+            <li>Java, Spring 프로젝트에서 널리 사용된다.</li>
+          </ul>
+
+          <p><code>pom.xml</code></p>
+          <pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;version&gt;3.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+          <h2>Gradle 특징</h2>
+          <ul>
+            <li>Groovy/Kotlin DSL 기반(<code>build.gradle</code>)으로 더 간결한 문법을 제공한다.</li>
+            <li>Spring Boot 2.5+ 프로젝트에서는 Gradle을 더 추천하는 경우가 많다.</li>
+          </ul>
+
+          <p><code>build.gradle</code></p>
+          <pre><code>dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.0.0'
+}</code></pre>

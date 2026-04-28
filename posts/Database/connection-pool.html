@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="커넥션 풀의 원리와 설정 튜닝 포인트를 정리합니다." />
+    <meta name="description" content="커넥션 풀(Connection Pool) 정리" />
     <title>커넥션 풀(Connection Pool) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-05-29 · Database</p>
         <h1 class="article-title">커넥션 풀(Connection Pool)</h1>
+        <p class="article-lead muted">커넥션 풀(Connection Pool) 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>커넥션 풀은 DB 연결을 매 요청마다 새로 만들지 않고 재사용해 지연과 리소스 소모를 줄인다.</p>
+<p>커넥션 풀은 DB 연결을 매 요청마다 새로 만들지 않고 재사용해 지연과 리소스 소모를 줄인다.</p>
           <h3>핵심 설정</h3>
           <ul>
             <li><code>maximumPoolSize</code>: 동시에 빌릴 수 있는 최대 커넥션 수</li>
@@ -43,8 +46,16 @@ spring.datasource.hikari.connection-timeout=3000
 spring.datasource.hikari.idle-timeout=600000
 spring.datasource.hikari.max-lifetime=1800000</code></pre>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

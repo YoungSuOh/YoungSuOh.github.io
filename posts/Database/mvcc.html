@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="MVCC의 버전 관리 원리와 실무 주의점을 정리합니다." />
+    <meta name="description" content="MVCC 정리" />
     <title>MVCC · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-05-02 · Database</p>
         <h1 class="article-title">MVCC</h1>
+        <p class="article-lead muted">MVCC 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>MVCC는 데이터를 덮어쓰지 않고 버전을 남겨, 읽기와 쓰기가 동시에 진행되더라도 충돌을 줄이는 동시성 제어 방식이다.</p>
+<p>MVCC는 데이터를 덮어쓰지 않고 버전을 남겨, 읽기와 쓰기가 동시에 진행되더라도 충돌을 줄이는 동시성 제어 방식이다.</p>
           <h3>동작 개념</h3>
           <ul>
             <li>읽기 트랜잭션은 시작 시점의 스냅샷을 기준으로 조회</li>
@@ -43,8 +46,16 @@
             <li>버전 청소(vacuum/purge) 지연 시 저장소와 성능에 영향</li>
           </ul>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

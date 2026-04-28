@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Spring 관점에서 SOLID(단일 책임, 개방-폐쇄, 리스코프 치환, 인터페이스 분리, 의존관계 역전) 원칙을 예시 코드와 함께 정리합니다."
-    />
+    <meta name="description" content="Spring에서 SOLID 원칙을 어떻게 자연스럽게 적용할 수 있는지, DI·다형성·역할 분리 관점에서 정리합니다." />
     <title>[Spring] SOLID · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -28,16 +25,10 @@
       <article class="card article-shell">
         <p class="article-meta">2023-09-18 · Backend</p>
         <h1 class="article-title">[Spring] SOLID</h1>
-        <p class="article-lead muted">
-          Spring에서 SOLID 원칙을 어떻게 자연스럽게 적용할 수 있는지, DI·다형성·역할 분리 관점에서 정리합니다.
-        </p>
-        <div class="tags article-tags">
-          <span class="tag">Spring</span><span class="tag">SOLID</span><span class="tag">OOP</span
-          ><span class="tag">Design</span>
-        </div>
-
+        <p class="article-lead muted">Spring에서 SOLID 원칙을 어떻게 자연스럽게 적용할 수 있는지, DI·다형성·역할 분리 관점에서 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Spring</span><span class="tag">SOLID</span><span class="tag">OOPDesign</span></div>
         <div class="article-body post-body">
-          <h2>단일 책임 원칙(Single Responsibility Principle/SRP)</h2>
+<h2>단일 책임 원칙(Single Responsibility Principle/SRP)</h2>
           <p>“클래스는 단 하나의 책임만 가져야 한다.”</p>
           <ul>
             <li>Spring에서는 <strong>Service, Repository, Controller를 분리</strong>하여 각각의 역할을 담당하게 한다.</li>
@@ -246,7 +237,6 @@ public class NotificationService {
             <li><code>NotificationService</code>는 <code>MessageSender</code> 역할에만 의존하므로 구현체 교체가 쉽다.</li>
           </ul>
         </div>
-
         <p class="article-back">
           <a class="text-link" href="../../index.html#blog">← 목록으로</a>
         </p>
@@ -260,4 +250,3 @@ public class NotificationService {
     </footer>
   </body>
 </html>
-

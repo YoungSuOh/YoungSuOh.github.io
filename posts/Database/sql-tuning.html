@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SQL 튜닝 절차와 실행 계획 기반 최적화 포인트를 정리합니다." />
+    <meta name="description" content="SQL 튜닝(SQL Tuning) 정리" />
     <title>SQL 튜닝(SQL Tuning) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-03-14 · Database</p>
         <h1 class="article-title">SQL 튜닝(SQL Tuning)</h1>
+        <p class="article-lead muted">SQL 튜닝(SQL Tuning) 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>SQL 튜닝은 느린 쿼리의 원인을 실행 계획과 통계로 분석해, 더 적은 비용으로 동일 결과를 얻도록 개선하는 작업이다.</p>
+<p>SQL 튜닝은 느린 쿼리의 원인을 실행 계획과 통계로 분석해, 더 적은 비용으로 동일 결과를 얻도록 개선하는 작업이다.</p>
           <h3>튜닝 루프</h3>
           <ol>
             <li>느린 쿼리 수집(로그/APM)</li>
@@ -51,8 +54,16 @@ FROM orders
 WHERE created_at >= '2024-03-01 00:00:00'
   AND created_at <  '2024-03-02 00:00:00';</code></pre>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,105 @@
+<h2>AOP란?</h2>
+          <ul>
+            <li>
+              애플리케이션의 <strong>핵심 기능</strong>과 <strong>부가 기능</strong>을 분리하고, 부가 기능을 <strong>Aspect</strong>라는 모듈로
+              관리하는 개발 방식이다.
+            </li>
+            <li>
+              중복되는 공통 코드는 핵심 메서드 안에 반복 작성하지 않고, 필요한 지점에 삽입해 사용한다.
+            </li>
+          </ul>
+
+          <blockquote>
+            <p><strong>Aspect = Advice + Pointcut</strong></p>
+            <ul>
+              <li><strong>Advice</strong>: 언제/어떻게 부가 기능을 넣을지 (Before, After, Around 등)</li>
+              <li><strong>Pointcut</strong>: 어떤 대상/지점에 적용할지</li>
+            </ul>
+          </blockquote>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/AOP/AOP1.png"
+              alt="AOP 핵심/공통 관심사 분리 개념"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted"><code>photo/posts/Backend/Spring/AOP/AOP1.png</code></figcaption>
+          </figure>
+
+          <p>중복되는 공통 코드를 분리해두고, 각 핵심 로직 실행 지점에 결합해 재사용하는 구조다.</p>
+
+          <figure style="margin: 1rem 0">
+            <img
+              src="../../photo/posts/Backend/Spring/AOP/AOP2.png"
+              alt="Spring AOP 구성 요소 다이어그램"
+              loading="lazy"
+              style="width: 100%; height: auto; border-radius: 12px"
+            />
+            <figcaption class="muted"><code>photo/posts/Backend/Spring/AOP/AOP2.png</code></figcaption>
+          </figure>
+
+          <h2>스프링 AOP의 주요 구성 요소</h2>
+          <ol>
+            <li>
+              <strong>Target</strong>
+              <ul>
+                <li>핵심 비즈니스 메서드를 가진 대상 클래스</li>
+                <li>부가기능이 적용될 실제 객체</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Advice</strong>
+              <ul>
+                <li>부가기능 자체를 담은 모듈</li>
+                <li>핵심 로직에 언제 적용할지 정의</li>
+                <li>예: <code>Before</code>, <code>After Returning</code>, <code>After Throwing</code>, <code>Around</code></li>
+              </ul>
+            </li>
+            <li>
+              <strong>JoinPoint</strong>
+              <ul>
+                <li>Advice가 적용 가능한 지점</li>
+                <li>Spring AOP에서는 기본적으로 메서드 실행 지점 중심으로 동작</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Pointcut</strong>
+              <ul>
+                <li>여러 JoinPoint 중에서 실제 적용 대상을 선별하는 규칙</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Proxy</strong>
+              <ul>
+                <li>Target 앞단에서 부가기능을 실행하는 대리 객체</li>
+                <li>클라이언트는 보통 Target 대신 Proxy를 호출</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Advisor</strong>
+              <ul>
+                <li><code>Advice + Pointcut</code>을 묶은 단위</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Aspect</strong>
+              <ul>
+                <li>관점 모듈, 실무에서는 Advice와 Pointcut을 모아 정의한 클래스(예: <code>@Aspect</code>)</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Weaving</strong>
+              <ul>
+                <li>Advice를 핵심 로직에 연결(적용)하는 과정</li>
+                <li>Spring AOP는 런타임 프록시 기반으로, 메서드 호출 시점에 적용된다.</li>
+              </ul>
+            </li>
+          </ol>
+
+          <h2>요약</h2>
+          <ul>
+            <li>핵심 코드와 공통 코드를 분리해 코드 중복을 줄인다.</li>
+            <li>공통 코드를 한 곳(Aspect)에서 관리하므로 변경 지점이 줄어든다.</li>
+            <li>스프링은 프록시 기반 AOP로 메서드 실행 지점에 부가기능을 끼워 넣는다.</li>
+          </ul>

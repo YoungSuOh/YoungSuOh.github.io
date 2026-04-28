@@ -6,7 +6,13 @@
     "category": "Claude",
     "summary": "Claude Code CLI 명령어, 슬래시 커맨드, CLAUDE.md, MCP 연결, Hooks 자동화, 권한 제어, 비용 최적화까지 — 개발자가 실무에서 바로 써먹을 수 있는 패턴을 정리합니다.",
     "date": "2026-04-16",
-    "tags": ["Claude", "Claude Code", "CLI", "MCP", "Developer Tools"],
+    "tags": [
+      "Claude",
+      "Claude Code",
+      "CLI",
+      "MCP",
+      "Developer Tools"
+    ],
     "bodyFile": "body/claude/claude-practical-guide.html"
   },
   {
@@ -16,7 +22,13 @@
     "category": "Claude",
     "summary": "Claude(대화형 AI)와 Claude Code(에이전트형 코딩 도구)의 모델 라인업·인터페이스·Tool Use부터 설치, 슬래시 명령, MCP, 보안·비용 통제까지 처음 도입하는 개발자를 위해 한 번에 정리합니다.",
     "date": "2026-04-15",
-    "tags": ["Claude", "Claude Code", "MCP", "AI", "Developer Tools"],
+    "tags": [
+      "Claude",
+      "Claude Code",
+      "MCP",
+      "AI",
+      "Developer Tools"
+    ],
     "manual": true
   },
   {
@@ -26,7 +38,11 @@
     "category": "Backend",
     "summary": "동시 수정 문제와 비관적 락·낙관적 락의 차이, SQL·JPA에서의 적용을 정리합니다.",
     "date": "2025-01-09",
-    "tags": ["Concurrency", "JPA", "Database"],
+    "tags": [
+      "Concurrency",
+      "JPA",
+      "Database"
+    ],
     "bodyHtml": "<h2>1️⃣ 문제 : 동시성</h2>\n<p>여러 요청이 같은 데이터를 동시에 수정하면 문제가 생김</p>\n<ul>\n<li>예시 (지갑)</li>\n</ul>\n<pre><code>현재 잔액 = 10000</code></pre>\n<p>동시에 결제 요청</p>\n<pre><code>A → 7000 결제\nB → 5000 결제</code></pre>\n<p>그 결과</p>\n<pre><code>A update → 3000\nB update → 5000</code></pre>\n<p>최종 결과</p>\n<pre><code>balance = 5000</code></pre>\n\n<h2>2️⃣ 해결 방법 = Lock</h2>\n<p>이 문제를 해결하는 방법이 <strong>Lock(잠금)</strong>이다.</p>\n<p>대표적으로 두 가지가 있다.</p>\n<pre><code>비관적 락 (Pessimistic Lock)\n낙관적 락 (Optimistic Lock)</code></pre>\n\n<h2>3️⃣ 비관적 락 (Pessimistic Lock)</h2>\n<p>충돌이 발생할 가능성이 높다고 가정하고 처음부터 DB에 Lock을 걸어버리는 방식</p>\n<p>→ 내가 쓰는 동안 다른 사람 접근 금지</p>\n<p><strong>동작 방식</strong></p>\n<ul>\n<li>\n예시\n<pre><code>Thread A → 지갑 조회 + LOCK\nThread B → 지갑 조회 시도</code></pre>\n<p>DB 상태</p>\n<pre><code>A → 사용 중\nB → 대기</code></pre>\n<ul>\n<li>A가 끝나야 B가 실행된다.</li>\n</ul>\n</li>\n</ul>\n<p><strong>실제 SQL</strong></p>\n<pre><code>SELECT *\nFROM wallets\nWHERE id = 1\nFOR UPDATE</code></pre>\n<ul>\n<li><code>FOR UPDATE</code>가 <strong>row lock</strong>을 건다</li>\n</ul>\n<p><strong>JPA 사용 방법</strong></p>\n<pre><code>@Lock(LockModeType.PESSIMISTIC_WRITE)\nWallet findById(Long id);</code></pre>\n<p>✅ 특징</p>\n<ul>\n<li>\n<strong>장점</strong>\n<ul>\n<li>데이터 충돌 절대 발생 안함</li>\n</ul>\n</li>\n<li>\n<strong>단점</strong>\n<ul>\n<li>대기 발생</li>\n<li>성능 저하</li>\n<li>DeadLock 가능</li>\n</ul>\n</li>\n</ul>\n\n<h2>4️⃣ 낙관적 락 (Optimistic Lock)</h2>\n<p>충돌이 거의 없다고 가정하여 <strong>일단 실행하고, 충돌 발생 시 롤백하는 방식</strong></p>\n<p><strong>동작 방식</strong></p>\n<ul>\n<li>\n지갑 상태\n<pre><code>balance = 10000\nversion = 1</code></pre>\n</li>\n<li>\nThread A\n<pre><code>update wallet\nset balance = 3000\nwhere id = 1\nand version = 1</code></pre>\n<ul>\n<li>\n성공\n<pre><code>version = 2</code></pre>\n</li>\n</ul>\n</li>\n<li>\nThread B\n<pre><code>update wallet\nwhere version = 1</code></pre>\n<ul>\n<li>\n하지만 실제 DB\n<pre><code>version = 2</code></pre>\n</li>\n<li>\n그래서\n<pre><code>update 0 rows</code></pre>\n</li>\n<li>JPA는 <code>OptimisticLockException</code> 을 발생시킨다.</li>\n</ul>\n</li>\n</ul>"
   },
   {
@@ -36,7 +52,11 @@
     "category": "Database",
     "summary": "Read-modify-write 경쟁 조건(Lost Update)과, 검증·갱신을 한 번의 UPDATE로 묶는 Atomic Update 및 지갑·버전 조건까지 정리합니다.",
     "date": "2025-01-08",
-    "tags": ["SQL", "Concurrency", "Transaction"],
+    "tags": [
+      "SQL",
+      "Concurrency",
+      "Transaction"
+    ],
     "bodyHtml": "<h2>1️⃣ Atomic의 의미</h2>\n<p>어떤 작업 <strong>전부 성공</strong>하거나, <strong>전부 실패</strong>하는 특성</p>\n<ul>\n<li>예시</li>\n</ul>\n<pre><code>A → 성공\nB → 실패</code></pre>\n<p>이런 상태가 아니라</p>\n<pre><code>A + B 둘 다 성공\n또는\nA + B 둘 다 실패</code></pre>\n\n<h2>2️⃣ 문제: 일반적인 업데이트 방식</h2>\n<pre><code>Wallet wallet = walletRepository.findByUserId(userId);\n\nif(wallet.getBalance() &gt;= amount){\n    wallet.setBalance(wallet.getBalance() - amount);\n}</code></pre>\n<p>SQL 흐름</p>\n<pre><code>1. SELECT balance (조회)\n2. Java에서 검증 (검증)\n3. UPDATE balance (수정)</code></pre>\n<p>⚠️ 여기서 발생하는 문제 (Race Condition)</p>\n<p>동시에 두 요청이 들어온다.</p>\n<p>지갑 상태</p>\n<pre><code>balance = 10000</code></pre>\n<p>요청</p>\n<pre><code>A → 7000 결제\nB → 5000 결제</code></pre>\n<p>흐름</p>\n<pre><code>A SELECT balance → 10000\nB SELECT balance → 10000</code></pre>\n<p>A 실행</p>\n<pre><code>UPDATE balance = 3000</code></pre>\n<p>B 실행</p>\n<pre><code>UPDATE balance = 5000</code></pre>\n<p>최종 결과</p>\n<pre><code>balance = 5000</code></pre>\n<p>하지만 실제 결제 금액</p>\n<pre><code>7000 + 5000 = 12000</code></pre>\n<p>그래서 <strong>2000원이 공짜 결제된다.</strong></p>\n<p>⇒ 이걸 <strong>Lost Update</strong> + <strong>Race Condition</strong></p>\n\n<h2>3️⃣ 해결 방법: Atomic Update</h2>\n<p>Atomic Update는 <strong>검증 + 수정</strong>을 <strong>한 번의 SQL</strong>로 처리하는 방식이다.</p>\n<p>예시</p>\n<pre><code>UPDATE wallet\nSET balance = balance - 5000\nWHERE user_id = 1\nAND balance &gt;= 5000</code></pre>\n<p>이 쿼리는 DB 내부에서 이렇게 동작한다.</p>\n<ol>\n<li><code>balance &gt;= 5000</code> 검증</li>\n<li><code>balance</code> 차감</li>\n</ol>\n<p>⇒ 두 작업이 한 번의 연산으로 실행된다.</p>\n\n<h2>4️⃣ 지갑 시스템에서의 Atomic Update</h2>\n<pre><code>UPDATE Wallet w\nSET w.balance = w.balance - :amount,\n    w.version = w.version + 1\nWHERE w.user.id = :userId\nAND w.balance &gt;= :amount\nAND w.version = :version</code></pre>\n<p>이 쿼리는 한 번에 다음을 수행한다.</p>\n<ol>\n<li>\n<strong>DB 확인</strong>\n<ul>\n<li>버전이 동일한가?</li>\n<li>잔액이 충분한가?</li>\n</ul>\n</li>\n<li>\n<strong>DB 업데이트</strong>\n<ul>\n<li>잔액 차감</li>\n<li>버전 증가</li>\n</ul>\n</li>\n</ol>"
   },
   {
@@ -46,7 +66,11 @@
     "category": "Java",
     "summary": "OOP·JVM·GC·멀티스레드, 단점, 실행 4단계, JVM 구조·클래스 로딩(로딩·링킹·초기화)·실행 엔진·GC까지 정리합니다.",
     "date": "2023-09-14",
-    "tags": ["Java", "JVM", "OOP"],
+    "tags": [
+      "Java",
+      "JVM",
+      "OOP"
+    ],
     "bodyFile": "body/java/01-fundamentals-jvm.html"
   },
   {
@@ -56,7 +80,11 @@
     "category": "Java",
     "summary": "바이트코드(.class) 생성·실행 예시, 인터프리터와 JIT 컴파일러의 역할과 트레이드오프를 정리합니다.",
     "date": "2023-11-27",
-    "tags": ["Java", "JVM", "Bytecode"],
+    "tags": [
+      "Java",
+      "JVM",
+      "Bytecode"
+    ],
     "bodyFile": "body/java/02-bytecode-jit.html"
   },
   {
@@ -66,7 +94,11 @@
     "category": "Java",
     "summary": "실사용 Java 11·17, 버전별 핵심 기능(람다·HTTP Client·sealed 등), JDK와 JRE 구성 비교표입니다.",
     "date": "2024-02-08",
-    "tags": ["Java", "JDK", "LTS"],
+    "tags": [
+      "Java",
+      "JDK",
+      "LTS"
+    ],
     "bodyFile": "body/java/03-versions-jdk-jre.html"
   },
   {
@@ -76,7 +108,11 @@
     "category": "Java",
     "summary": "==와 equals, hashCode, toString, static main, 리터럴/상수, 기본형·참조형, 오토박싱 성능, 값 전달 semantics.",
     "date": "2024-05-19",
-    "tags": ["Java", "Object", "Memory"],
+    "tags": [
+      "Java",
+      "Object",
+      "Memory"
+    ],
     "bodyFile": "body/java/04-equality-types.html"
   },
   {
@@ -86,7 +122,11 @@
     "category": "Java",
     "summary": "직렬화·역직렬화 개념, 필요 이유, ObjectOutputStream/ObjectInputStream 예제와 실무 주의사항을 정리합니다.",
     "date": "2024-09-03",
-    "tags": ["Java", "IO", "Serialization"],
+    "tags": [
+      "Java",
+      "IO",
+      "Serialization"
+    ],
     "bodyFile": "body/java/05-serialization.html"
   },
   {
@@ -96,7 +136,11 @@
     "category": "Java",
     "summary": "오버로딩/오버라이딩, 다형성, 상속 vs 조합, instanceof, 인터페이스 vs 추상 클래스, final 키워드까지 정리합니다.",
     "date": "2024-12-11",
-    "tags": ["Java", "OOP", "Design"],
+    "tags": [
+      "Java",
+      "OOP",
+      "Design"
+    ],
     "bodyFile": "body/java/06-oop.html"
   },
   {
@@ -106,7 +150,12 @@
     "category": "Java",
     "summary": "String 리터럴 vs new String, StringBuilder·StringBuffer, Exception·Error, throw·throws, finally, Throwable, 제네릭까지 정리합니다.",
     "date": "2024-03-27",
-    "tags": ["Java", "String", "Exception", "Generics"],
+    "tags": [
+      "Java",
+      "String",
+      "Exception",
+      "Generics"
+    ],
     "bodyFile": "body/java/07-notes-strings-exceptions-generics.html"
   },
   {
@@ -116,7 +165,12 @@
     "category": "Java",
     "summary": "람다·함수형 인터페이스, Stream 중간·최종 연산, 어노테이션·메타 어노테이션, 리플렉션과 프레임워크 연결을 정리합니다.",
     "date": "2024-07-14",
-    "tags": ["Java", "Lambda", "Stream", "Reflection"],
+    "tags": [
+      "Java",
+      "Lambda",
+      "Stream",
+      "Reflection"
+    ],
     "bodyFile": "body/java/08-notes-lambda-stream-annotations.html"
   },
   {
@@ -126,7 +180,12 @@
     "category": "Java",
     "summary": "표준 출력의 I/O 비용, flush·synchronized, BufferedWriter·로깅 프레임워크 대안을 정리합니다.",
     "date": "2024-10-03",
-    "tags": ["Java", "I/O", "Performance", "Logging"],
+    "tags": [
+      "Java",
+      "I/O",
+      "Performance",
+      "Logging"
+    ],
     "bodyFile": "body/java/09-notes-system-out-depth.html"
   },
   {
@@ -136,7 +195,792 @@
     "category": "System Design",
     "summary": "DB와 메시지 브로커 간 정합성 — 이벤트 유실·불일치 문제와 Outbox 테이블, 폴링·CDC 기반 전송 흐름을 정리합니다.",
     "date": "2026-03-14",
-    "tags": ["Kafka", "Consistency", "Event-Driven"],
+    "tags": [
+      "Kafka",
+      "Consistency",
+      "Event-Driven"
+    ],
     "bodyFile": "body/system-design/outbox-pattern.html"
+  },
+  {
+    "id": "post-078",
+    "slug": "ad-hoc",
+    "title": "Ad Hoc",
+    "category": "Algorithm",
+    "summary": "정형화된 알고리즘보다 문제 해석/구현 디테일이 핵심인 유형",
+    "date": "2023-10-13",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/ad-hoc.html"
+  },
+  {
+    "id": "post-079",
+    "slug": "array",
+    "title": "Array",
+    "category": "Algorithm",
+    "summary": "메모리 상에 원소를 연속하게 배치한 자료구조",
+    "date": "2023-06-25",
+    "tags": [
+      "Array",
+      "Data Structure",
+      "Time Complexity"
+    ],
+    "bodyFile": "body/algorithm/array.html"
+  },
+  {
+    "id": "post-080",
+    "slug": "back-tracking",
+    "title": "Back-Tracking",
+    "category": "Algorithm",
+    "summary": "가능성이 없는 경로를 조기에 중단하며 탐색하는 기법",
+    "date": "2023-10-20",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/back-tracking.html"
+  },
+  {
+    "id": "post-081",
+    "slug": "bfs",
+    "title": "BFS (Breadth-First Search)",
+    "category": "Algorithm",
+    "summary": "가까운 노드부터 차례대로 탐색하는 너비 우선 탐색 방식",
+    "date": "2023-07-22",
+    "tags": [
+      "BFS",
+      "Graph",
+      "Shortest Path"
+    ],
+    "bodyFile": "body/algorithm/bfs.html"
+  },
+  {
+    "id": "post-082",
+    "slug": "binary-search",
+    "title": "Binary Search",
+    "category": "Algorithm",
+    "summary": "정렬된 리스트에서 탐색 범위를 절반씩 좁혀가는 탐색 방법",
+    "date": "2023-07-15",
+    "tags": [
+      "Binary Search",
+      "Algorithm",
+      "Search"
+    ],
+    "bodyFile": "body/algorithm/binary-search.html"
+  },
+  {
+    "id": "post-083",
+    "slug": "bit-masking",
+    "title": "Bit Masking",
+    "category": "Algorithm",
+    "summary": "정수의 비트를 이용해 여러 상태를 한 번에 표현하는 기법",
+    "date": "2023-09-24",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/bit-masking.html"
+  },
+  {
+    "id": "post-084",
+    "slug": "deque",
+    "title": "Deque",
+    "category": "Algorithm",
+    "summary": "디큐, 혹은 덱이라고 불리는 이 자료구조는 선출후입 구조였던 queue에서 전단 삽입, 후단 삭제 기능을 추가한 자료구조이다.",
+    "date": "2023-07-01",
+    "tags": [
+      "Deque",
+      "Data Structure",
+      "STL"
+    ],
+    "bodyFile": "body/algorithm/deque.html"
+  },
+  {
+    "id": "post-085",
+    "slug": "dfs",
+    "title": "DFS (Depth-First Search)",
+    "category": "Algorithm",
+    "summary": "한 경로를 끝까지 탐색한 뒤, 막히면 되돌아와 다른 경로를 탐색하는 방식",
+    "date": "2023-07-20",
+    "tags": [
+      "DFS",
+      "Graph",
+      "Traversal"
+    ],
+    "bodyFile": "body/algorithm/dfs.html"
+  },
+  {
+    "id": "post-086",
+    "slug": "dijkstra",
+    "title": "Dijkstra",
+    "category": "Algorithm",
+    "summary": "하나의 시작점으로부터 다른 모든 정점까지의 최단거리를 구하는 알고리즘",
+    "date": "2023-09-12",
+    "tags": [
+      "Dijkstra",
+      "Shortest Path",
+      "Graph"
+    ],
+    "bodyFile": "body/algorithm/dijkstra.html"
+  },
+  {
+    "id": "post-087",
+    "slug": "disjoint-set-union-find",
+    "title": "Disjoint Set &amp; Union Find",
+    "category": "Algorithm",
+    "summary": "서로소 집합 자료구조와 Union-Find 연산/최적화 정리",
+    "date": "2023-08-30",
+    "tags": [
+      "Disjoint Set",
+      "Union-Find",
+      "Data Structure"
+    ],
+    "bodyFile": "body/algorithm/disjoint-set-union-find.html"
+  },
+  {
+    "id": "post-088",
+    "slug": "dynamic-programming",
+    "title": "Dynamic Programming (DP)",
+    "category": "Algorithm",
+    "summary": "최적화 문제를 작은 문제로 나눠 해결하고, 계산 결과를 재사용하는 전략",
+    "date": "2023-08-01",
+    "tags": [
+      "Dynamic Programming",
+      "Algorithm",
+      "DP"
+    ],
+    "bodyFile": "body/algorithm/dynamic-programming.html"
+  },
+  {
+    "id": "post-089",
+    "slug": "floyd-warshall",
+    "title": "Floyd-Warshall",
+    "category": "Algorithm",
+    "summary": "그래프에서 모든 노드 간 최단 거리를 구하는 알고리즘",
+    "date": "2023-08-09",
+    "tags": [
+      "Floyd-Warshall",
+      "Graph",
+      "Dynamic Programming"
+    ],
+    "bodyFile": "body/algorithm/floyd-warshall.html"
+  },
+  {
+    "id": "post-090",
+    "slug": "greedy",
+    "title": "Greedy",
+    "category": "Algorithm",
+    "summary": "매번 선택에서 지금 가장 최적인 답을 근시안적으로 택하는 알고리즘",
+    "date": "2023-07-07",
+    "tags": [
+      "Greedy",
+      "Algorithm",
+      "Optimization"
+    ],
+    "bodyFile": "body/algorithm/greedy.html"
+  },
+  {
+    "id": "post-091",
+    "slug": "hash",
+    "title": "Hash",
+    "category": "Algorithm",
+    "summary": "키를 해시 함수로 인덱싱해 빠르게 조회/수정/삭제하는 자료구조",
+    "date": "2023-09-18",
+    "tags": [
+      "Hash",
+      "Data Structure",
+      "Hash Table"
+    ],
+    "bodyFile": "body/algorithm/hash.html"
+  },
+  {
+    "id": "post-092",
+    "slug": "minimal-spanning-tree",
+    "title": "Minimal Spanning Tree(최소 신장 트리)",
+    "category": "Algorithm",
+    "summary": "신장 트리의 개념과 MST를 구하는 Kruskal/Prim 알고리즘 정리",
+    "date": "2023-09-07",
+    "tags": [
+      "MST",
+      "Kruskal",
+      "Prim"
+    ],
+    "bodyFile": "body/algorithm/minimal-spanning-tree.html"
+  },
+  {
+    "id": "post-093",
+    "slug": "queue",
+    "title": "Queue",
+    "category": "Algorithm",
+    "summary": "큐는 먼저 들어온 것이 먼저 나가는 구조이다. (FIFO)",
+    "date": "2023-06-30",
+    "tags": [
+      "Queue",
+      "Data Structure",
+      "FIFO"
+    ],
+    "bodyFile": "body/algorithm/queue.html"
+  },
+  {
+    "id": "post-094",
+    "slug": "scc",
+    "title": "SCC (Strongly Connected Component)",
+    "category": "Algorithm",
+    "summary": "방향 그래프에서 서로 왕복 가능한 정점 집합",
+    "date": "2023-10-07",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/scc.html"
+  },
+  {
+    "id": "post-095",
+    "slug": "segment-tree",
+    "title": "Segment Tree",
+    "category": "Algorithm",
+    "summary": "구간 합/최대/최소 질의와 점 업데이트를 빠르게 수행하기 위한 자료구조",
+    "date": "2023-11-18",
+    "tags": [
+      "Segment Tree",
+      "Range Query",
+      "Data Structure"
+    ],
+    "bodyFile": "body/algorithm/segment-tree.html"
+  },
+  {
+    "id": "post-096",
+    "slug": "sieve-of-eratosthenes",
+    "title": "에라토스테네스의 체",
+    "category": "Algorithm",
+    "summary": "N 이하 소수를 빠르게 구하는 대표적인 전처리 알고리즘",
+    "date": "2023-10-26",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/sieve-of-eratosthenes.html"
+  },
+  {
+    "id": "post-097",
+    "slug": "sliding-window",
+    "title": "슬라이딩 윈도우",
+    "category": "Algorithm",
+    "summary": "연속 구간의 조건을 유지하며 좌우 포인터를 이동하는 패턴",
+    "date": "2023-09-30",
+    "tags": [
+      "Algorithm"
+    ],
+    "bodyFile": "body/algorithm/sliding-window.html"
+  },
+  {
+    "id": "post-098",
+    "slug": "sort",
+    "title": "Sort",
+    "category": "Algorithm",
+    "summary": "대표 정렬 알고리즘의 동작 방식과 복잡도 비교",
+    "date": "2023-07-10",
+    "tags": [
+      "Sort",
+      "Algorithm",
+      "Complexity"
+    ],
+    "bodyFile": "body/algorithm/sort.html"
+  },
+  {
+    "id": "post-099",
+    "slug": "stack",
+    "title": "Stack",
+    "category": "Algorithm",
+    "summary": "입력과 출력이 한 곳(방향)으로 제한되는 LIFO 자료구조",
+    "date": "2023-06-28",
+    "tags": [
+      "Stack",
+      "Data Structure",
+      "LIFO"
+    ],
+    "bodyFile": "body/algorithm/stack.html"
+  },
+  {
+    "id": "post-100",
+    "slug": "topological-sort",
+    "title": "위상 정렬(Topological Sort)",
+    "category": "Algorithm",
+    "summary": "방향 그래프에서 선후 관계를 위배하지 않게 정점을 나열하는 정렬",
+    "date": "2023-11-04",
+    "tags": [
+      "Topological Sort",
+      "Graph",
+      "DAG"
+    ],
+    "bodyFile": "body/algorithm/topological-sort.html"
+  },
+  {
+    "id": "post-101",
+    "slug": "two-pointer",
+    "title": "Two Pointer",
+    "category": "Algorithm",
+    "summary": "배열/문자열에서 두 개의 인덱스를 움직이며 조건을 만족시키는 탐색 기법",
+    "date": "2023-08-15",
+    "tags": [
+      "Two Pointer",
+      "Algorithm",
+      "Sliding Window"
+    ],
+    "bodyFile": "body/algorithm/two-pointer.html"
+  },
+  {
+    "id": "post-102",
+    "slug": "eager-vs-lazy-loading",
+    "title": "즉시 로딩(EAGER) vs 지연로딩(LAZY)",
+    "category": "Backend",
+    "summary": "EAGER는 조회할 때 바로, LAZY는 실제 사용할 때 가져온다.",
+    "date": "2023-09-30",
+    "tags": [
+      "JPA",
+      "Hibernate",
+      "EAGER",
+      "LAZY"
+    ],
+    "bodyFile": "body/backend/eager-vs-lazy-loading.html"
+  },
+  {
+    "id": "post-103",
+    "slug": "spring-aop",
+    "title": "[Spring] AOP(Aspect Oriented Programming)",
+    "category": "Backend",
+    "summary": "핵심 로직과 공통 관심사를 분리해, 중복 코드를 줄이고 유지보수를 쉽게 만드는 AOP를 정리합니다.",
+    "date": "2023-10-18",
+    "tags": [
+      "Spring",
+      "AOP",
+      "Aspect",
+      "Proxy"
+    ],
+    "bodyFile": "body/backend/spring-aop.html"
+  },
+  {
+    "id": "post-104",
+    "slug": "spring-bean",
+    "title": "[Spring] Spring Bean",
+    "category": "Backend",
+    "summary": "Spring Bean은 Spring 컨테이너가 관리하는 객체를 의미한다.",
+    "date": "2023-09-19",
+    "tags": [
+      "Spring",
+      "Bean",
+      "DI",
+      "Scope"
+    ],
+    "bodyFile": "body/backend/spring-bean.html"
+  },
+  {
+    "id": "post-105",
+    "slug": "spring-container",
+    "title": "[Spring] Spring Container",
+    "category": "Backend",
+    "summary": "스프링 컨테이너는 객체(Bean)의 생성, 관리, 생명주기를 책임지는 핵심입니다.",
+    "date": "2023-09-20",
+    "tags": [
+      "Spring",
+      "DI",
+      "ApplicationContext"
+    ],
+    "bodyFile": "body/backend/spring-container.html"
+  },
+  {
+    "id": "post-106",
+    "slug": "spring-di",
+    "title": "[Spring] DI (Dependency Injection)",
+    "category": "Backend",
+    "summary": "객체 생성 책임을 컨테이너로 분리해 결합도를 낮추고, 테스트/확장성을 높이는 의존성 주입(DI)을 정리합니다.",
+    "date": "2023-09-23",
+    "tags": [
+      "Spring",
+      "DI",
+      "OOP",
+      "Testability"
+    ],
+    "bodyFile": "body/backend/spring-di.html"
+  },
+  {
+    "id": "post-107",
+    "slug": "spring-maven-gradle",
+    "title": "[Spring] Maven &amp; Gradle",
+    "category": "Backend",
+    "summary": "Maven과 Gradle은 Java 프로젝트에서 빌드 및 의존성 관리를 위해 사용하는 도구이다.",
+    "date": "2023-09-23",
+    "tags": [
+      "Spring",
+      "Maven",
+      "Gradle",
+      "Build"
+    ],
+    "bodyFile": "body/backend/spring-maven-gradle.html"
+  },
+  {
+    "id": "post-108",
+    "slug": "spring-mvc-dispatcherservlet",
+    "title": "[Spring] Spring MVC (DispatcherServlet)",
+    "category": "Backend",
+    "summary": "Spring MVC의 핵심인 DispatcherServlet이 요청을 받아 컨트롤러 실행, 뷰 선택, 응답 반환까지 이어지는 흐름을 정리합니다.",
+    "date": "2023-09-20",
+    "tags": [
+      "Spring",
+      "MVC",
+      "DispatcherServlet"
+    ],
+    "bodyFile": "body/backend/spring-mvc-dispatcherservlet.html"
+  },
+  {
+    "id": "post-109",
+    "slug": "spring-solid",
+    "title": "[Spring] SOLID",
+    "category": "Backend",
+    "summary": "Spring에서 SOLID 원칙을 어떻게 자연스럽게 적용할 수 있는지, DI·다형성·역할 분리 관점에서 정리합니다.",
+    "date": "2023-09-18",
+    "tags": [
+      "Spring",
+      "SOLID",
+      "OOPDesign"
+    ],
+    "bodyFile": "body/backend/spring-solid.html"
+  },
+  {
+    "id": "post-110",
+    "slug": "cache",
+    "title": "캐시(Cache)",
+    "category": "Database",
+    "summary": "캐시(Cache) 정리",
+    "date": "2024-08-01",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/cache.html"
+  },
+  {
+    "id": "post-111",
+    "slug": "connection-pool",
+    "title": "커넥션 풀(Connection Pool)",
+    "category": "Database",
+    "summary": "커넥션 풀(Connection Pool) 정리",
+    "date": "2024-05-29",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/connection-pool.html"
+  },
+  {
+    "id": "post-112",
+    "slug": "execution-plan",
+    "title": "실행 계획(Execution Plan)",
+    "category": "Database",
+    "summary": "실행 계획(Execution Plan) 정리",
+    "date": "2024-04-04",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/execution-plan.html"
+  },
+  {
+    "id": "post-113",
+    "slug": "index-basics",
+    "title": "인덱스(Index)",
+    "category": "Database",
+    "summary": "인덱스(Index) 정리",
+    "date": "2024-01-19",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/index-basics.html"
+  },
+  {
+    "id": "post-114",
+    "slug": "lock-basics",
+    "title": "락(Lock)",
+    "category": "Database",
+    "summary": "락(Lock) 정리",
+    "date": "2024-02-26",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/lock-basics.html"
+  },
+  {
+    "id": "post-115",
+    "slug": "mvcc",
+    "title": "MVCC",
+    "category": "Database",
+    "summary": "MVCC 정리",
+    "date": "2024-05-02",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/mvcc.html"
+  },
+  {
+    "id": "post-116",
+    "slug": "replication",
+    "title": "리플리케이션(Replication)",
+    "category": "Database",
+    "summary": "리플리케이션(Replication) 정리",
+    "date": "2024-07-11",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/replication.html"
+  },
+  {
+    "id": "post-117",
+    "slug": "sharding",
+    "title": "샤딩(Sharding)",
+    "category": "Database",
+    "summary": "샤딩(Sharding) 정리",
+    "date": "2024-06-21",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/sharding.html"
+  },
+  {
+    "id": "post-118",
+    "slug": "sql-tuning",
+    "title": "SQL 튜닝(SQL Tuning)",
+    "category": "Database",
+    "summary": "SQL 튜닝(SQL Tuning) 정리",
+    "date": "2024-03-14",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/sql-tuning.html"
+  },
+  {
+    "id": "post-119",
+    "slug": "transaction-basics",
+    "title": "트랜잭션(Transaction)",
+    "category": "Database",
+    "summary": "트랜잭션(Transaction) 정리",
+    "date": "2024-02-07",
+    "tags": [
+      "Database"
+    ],
+    "bodyFile": "body/database/transaction-basics.html"
+  },
+  {
+    "id": "post-120",
+    "slug": "pintersemi-nested-comments",
+    "title": "PinterSemi 프로젝트 대댓글 기능",
+    "category": "Dev",
+    "summary": "게시글 댓글을 전부 가져와 프론트에서만 DFS로 묶으면 댓글이 많아질수록 비용이 커진다는 문제를, DB 계층 조회·정렬과\r\n          parentCommentSeq로 나누어 해결한 기록입니다.",
+    "date": "2024-10-03",
+    "tags": [
+      "PinterSemi",
+      "MySQL",
+      "SpringjQuery"
+    ],
+    "bodyFile": "body/dev/pintersemi-nested-comments.html"
+  },
+  {
+    "id": "post-121",
+    "slug": "abstract-factory-pattern",
+    "title": "Abstract Factory 패턴",
+    "category": "System Design",
+    "summary": "Abstract Factory 패턴 정리",
+    "date": "2024-02-28",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/abstract-factory-pattern.html"
+  },
+  {
+    "id": "post-122",
+    "slug": "adapter-pattern",
+    "title": "Adapter 패턴",
+    "category": "System Design",
+    "summary": "Adapter 패턴 정리",
+    "date": "2024-04-03",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/adapter-pattern.html"
+  },
+  {
+    "id": "post-123",
+    "slug": "bridge-pattern",
+    "title": "Bridge 패턴",
+    "category": "System Design",
+    "summary": "Bridge 패턴 정리",
+    "date": "2024-07-18",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/bridge-pattern.html"
+  },
+  {
+    "id": "post-124",
+    "slug": "builder-pattern",
+    "title": "Builder 패턴",
+    "category": "System Design",
+    "summary": "⭐ 필수 속성과 선택적 속성을 분리하여 객체를 유연하게 생성할 수 있도록 하는 패턴입니다.",
+    "date": "2024-05-12",
+    "tags": [
+      "Design Pattern",
+      "Builder",
+      "Java"
+    ],
+    "bodyFile": "body/system-design/builder-pattern.html"
+  },
+  {
+    "id": "post-125",
+    "slug": "chain-of-responsibility-pattern",
+    "title": "Chain of Responsibility 패턴",
+    "category": "System Design",
+    "summary": "Chain of Responsibility 패턴 정리",
+    "date": "2024-11-21",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/chain-of-responsibility-pattern.html"
+  },
+  {
+    "id": "post-126",
+    "slug": "command-pattern",
+    "title": "Command 패턴",
+    "category": "System Design",
+    "summary": "Command 패턴 정리",
+    "date": "2024-09-19",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/command-pattern.html"
+  },
+  {
+    "id": "post-127",
+    "slug": "composite-pattern",
+    "title": "Composite 패턴",
+    "category": "System Design",
+    "summary": "Composite 패턴 정리",
+    "date": "2024-06-27",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/composite-pattern.html"
+  },
+  {
+    "id": "post-128",
+    "slug": "decorator-pattern",
+    "title": "Decorator 패턴",
+    "category": "System Design",
+    "summary": "Decorator 패턴 정리",
+    "date": "2024-04-24",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/decorator-pattern.html"
+  },
+  {
+    "id": "post-129",
+    "slug": "facade-pattern",
+    "title": "Facade 패턴",
+    "category": "System Design",
+    "summary": "Facade 패턴 정리",
+    "date": "2024-06-05",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/facade-pattern.html"
+  },
+  {
+    "id": "post-130",
+    "slug": "factory-method-pattern",
+    "title": "Factory Method 패턴",
+    "category": "System Design",
+    "summary": "Factory Method 패턴 정리",
+    "date": "2024-02-06",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/factory-method-pattern.html"
+  },
+  {
+    "id": "post-131",
+    "slug": "observer-pattern",
+    "title": "Observer 패턴",
+    "category": "System Design",
+    "summary": "Observer 패턴 정리",
+    "date": "2024-08-29",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/observer-pattern.html"
+  },
+  {
+    "id": "post-132",
+    "slug": "prototype-pattern",
+    "title": "Prototype 패턴",
+    "category": "System Design",
+    "summary": "Prototype 패턴 정리",
+    "date": "2024-03-15",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/prototype-pattern.html"
+  },
+  {
+    "id": "post-133",
+    "slug": "proxy-pattern",
+    "title": "Proxy 패턴",
+    "category": "System Design",
+    "summary": "Proxy 패턴 정리",
+    "date": "2024-05-16",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/proxy-pattern.html"
+  },
+  {
+    "id": "post-134",
+    "slug": "singleton-pattern",
+    "title": "Singleton 패턴",
+    "category": "System Design",
+    "summary": "Singleton 패턴 정리",
+    "date": "2024-01-17",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/singleton-pattern.html"
+  },
+  {
+    "id": "post-135",
+    "slug": "state-pattern",
+    "title": "State 패턴",
+    "category": "System Design",
+    "summary": "State 패턴 정리",
+    "date": "2024-10-10",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/state-pattern.html"
+  },
+  {
+    "id": "post-136",
+    "slug": "strategy-pattern",
+    "title": "Strategy 패턴",
+    "category": "System Design",
+    "summary": "Strategy 패턴 정리",
+    "date": "2024-08-08",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/strategy-pattern.html"
+  },
+  {
+    "id": "post-137",
+    "slug": "template-method-pattern",
+    "title": "Template Method 패턴",
+    "category": "System Design",
+    "summary": "Template Method 패턴 정리",
+    "date": "2024-10-31",
+    "tags": [
+      "System Design"
+    ],
+    "bodyFile": "body/system-design/template-method-pattern.html"
   }
 ]

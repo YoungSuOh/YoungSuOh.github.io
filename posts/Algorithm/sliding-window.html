@@ -3,19 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="슬라이딩 윈도우의 개념과 구현 패턴을 정리합니다." />
+    <meta name="description" content="연속 구간의 조건을 유지하며 좌우 포인터를 이동하는 패턴" />
     <title>슬라이딩 윈도우 · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
   <body>
-    <header class="site-header"><div class="container header-inner"><a class="brand" href="../../index.html">YoungSuOh Dev Log</a></div></header>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2023-09-30 · Algorithm</p>
         <h1 class="article-title">슬라이딩 윈도우</h1>
         <p class="article-lead muted">연속 구간의 조건을 유지하며 좌우 포인터를 이동하는 패턴</p>
+        <div class="tags article-tags"><span class="tag">Algorithm</span></div>
         <div class="article-body post-body">
-          <p>슬라이딩 윈도우는 연속 부분 배열/부분 문자열 문제를 <code>O(N)</code>에 해결할 때 자주 사용한다.</p>
+<p>슬라이딩 윈도우는 연속 부분 배열/부분 문자열 문제를 <code>O(N)</code>에 해결할 때 자주 사용한다.</p>
           <h3>동작 원리</h3>
           <ul>
             <li>오른쪽 포인터를 이동하며 윈도우 확장</li>
@@ -38,8 +51,16 @@ for (int right = 0; right &lt; nums.length; right++) {
             <li>고정 길이 K 구간의 최대 합</li>
           </ul>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,217 @@
+<h3>1️⃣ 버블 정렬 (Bubble Sort)</h3>
+          <blockquote>
+            <p>서로 인접한 두 원소를 비교해서 더 큰 값을 뒤로 계속 스와핑하는 방식</p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/1.gif" alt="버블 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li><strong>O(n²)</strong></li>
+          </ul>
+          <p>✅ 장점</p>
+          <ul>
+            <li>메모리 교환(Swap)이 적음</li>
+            <li>구현이 단순</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li>안정 정렬이 아님 (같은 값의 순서가 바뀔 수 있음)</li>
+          </ul>
+
+          <h3>2️⃣ 선택 정렬 (Selection Sort)</h3>
+          <blockquote>
+            <p>선택된 값과 나머지 데이터 중에 비교하여 알맞은 자리를 찾는 알고리즘. 안정성은 보장되지 않음</p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/2.gif" alt="선택 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li><strong>O(n²)</strong></li>
+          </ul>
+          <p>✅ 장점</p>
+          <ul>
+            <li>메모리 교환(Swap)이 적음</li>
+            <li>구현이 단순</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li>안정 정렬이 아님 (같은 값의 순서가 바뀔 수 있음)</li>
+          </ul>
+
+          <h3>3️⃣ 삽입 정렬(Insertion Sort)</h3>
+          <blockquote>
+            <p>두 번째 원소부터 시작해서, 앞의 정렬된 부분과 비교하면서 자기 위치를 삽입</p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/3.gif" alt="삽입 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li><strong>최악, 평균 : O(n²)</strong></li>
+            <li>최선 (이미 정렬된 경우) : <strong>O(n)</strong></li>
+          </ul>
+          <ul>
+            <li>부분 정렬된 배열에 매우 빠름</li>
+          </ul>
+          <p>✅ 장점</p>
+          <ul>
+            <li>안정 정렬</li>
+            <li>구현 간단</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li>큰 입력에 비효율적</li>
+          </ul>
+
+          <h3>4️⃣ 병합 정렬(Merge Sort)</h3>
+          <blockquote>
+            <p>
+              둘 이상의 부분 집합으로 나누고, 각 부분 집합을 정렬한 다음 부분 집합들을 다시 정렬된 형태로 합치는 방식.<br />
+              → <strong>분할 정복(Divide &amp; Conquer)</strong> 전략 사용
+            </p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/4.gif" alt="병합 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li>항상 <strong>O(n log n)</strong></li>
+          </ul>
+          <p>✅ 장점</p>
+          <ul>
+            <li><strong>시간 복잡도 보장</strong></li>
+            <li>큰 데이터 처리에 효율적</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li><strong>안정 정렬</strong></li>
+            <li><strong>추가 메모리 O(n)</strong> 사용 (배열을 복사함)</li>
+          </ul>
+
+          <h3>5️⃣ 힙 정렬</h3>
+          <blockquote>
+            <p>
+              이진 탐색 트리 기반으로 루트 노드(최댓값 또는 최솟값)를 꺼내 정렬<br />
+              → <code>heapify</code> 연산으로 정렬 상태 유지
+            </p>
+          </blockquote>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li>항상 <strong>O(n log n)</strong></li>
+          </ul>
+          <p>✅ 장점</p>
+          <ul>
+            <li>추가 공간 거의 없음 (in-place)</li>
+            <li>시간 복잡도 보장됨</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li><strong>안정 정렬 아님</strong></li>
+            <li>실제 성능은 퀵 정렬보다 느림 (캐시 비효율성)</li>
+          </ul>
+
+          <h3>6️⃣ 퀵 정렬</h3>
+          <blockquote>
+            <p>
+              하나의 피벗(pivot)을 기준으로 → 작은 건 왼쪽, 큰 건 오른쪽으로 분할<br />
+              → 각 파티션에 대해 재귀 호출<br />
+              → 병합 과정 없음 (자리 바꾸면서 정렬됨)
+            </p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/5.gif" alt="퀵 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li>평균: <strong>O(n log n)</strong></li>
+            <li>최악: <strong>O(n²)</strong> (정렬된 배열에선 성능 저하)</li>
+            <li>최악 방지를 위해 랜덤 피벗 or 삼중 피벗 전략 사용 가능</li>
+          </ul>
+
+          <p>✅ 장점</p>
+          <ul>
+            <li>추가 메모리 거의 없음 (in-place)</li>
+            <li>일반적으로 매우 빠름</li>
+            <li>정렬 라이브러리에서 널리 사용됨</li>
+          </ul>
+          <p>❌ 단점</p>
+          <ul>
+            <li><strong>안정 정렬 아님</strong></li>
+            <li>최악 시간 복잡도 있음</li>
+          </ul>
+
+          <p>🤔 퀵 정렬이 평균적으로 빠른 이유?</p>
+          <ol>
+            <li>
+              분할 정복 방식의 효율성
+              <ol>
+                <li>각 단계에서 전체 데이터를 순회하긴 하지만, 분할이 <strong>균형 있게 잘 된다면 log n 깊이만 필요</strong></li>
+              </ol>
+            </li>
+            <li>
+              In-place 정렬
+              <ol>
+                <li>병합 정렬처럼 배열을 복사하지 않음</li>
+                <li>포인터와 스왑만으로 정렬 → <strong>캐시 친화적</strong>, 메모리 접근 효율도 높음</li>
+              </ol>
+            </li>
+          </ol>
+
+          <p>❌ 퀵 정렬이 최악이 되는 조건</p>
+          <p>📈 최악의 시간 복잡도 : O(n²)</p>
+          <ol>
+            <li>피벗이 항상 최솟값이나 최댓값일 때</li>
+            <li>모든 원소가 같을 때 → 스왑만 계속 일어나고 정렬은 느림</li>
+          </ol>
+
+          <h3>7️⃣ 기수 정렬(Radix Sort)</h3>
+          <blockquote>
+            <p>비교 기반 정렬이 아닌, 낮은 자리수부터 비교해가며 정렬하는 알고리즘이다.</p>
+          </blockquote>
+
+          <figure class="screenshot-item">
+            <img src="../../photo/posts/Algorithm/Sort/6.gif" alt="기수 정렬 동작 GIF" loading="lazy" />
+          </figure>
+
+          <p>📈 시간 복잡도</p>
+          <ul>
+            <li>
+              <strong>O(d × (n + k))</strong>
+              <ul>
+                <li><code>n</code>: 정렬할 항목 수</li>
+                <li><code>d</code>: 자릿수 (숫자의 최대 길이)</li>
+                <li><code>k</code>: 자릿수의 최대값 (보통 0~9라서 10)</li>
+              </ul>
+            </li>
+          </ul>
+
+          <blockquote>
+            <p>자릿수가 작고, 숫자 범위가 작을수록 성능이 아주 뛰어나</p>
+          </blockquote>
+
+          <p>✅ 장점</p>
+          <ul>
+            <li>비교 정렬보다 빠를 수 있음 (특히 자릿수가 작고 데이터가 많을 때)</li>
+            <li>O(n log n)보다 빠르게 동작할 수 있음 → <strong>선형 시간 정렬이 가능</strong></li>
+            <li>안정 정렬이므로 키 외의 데이터 순서 유지 가능</li>
+          </ul>
+
+          <p>❌ 단점</p>
+          <ul>
+            <li><strong>일반적인 상황에서는 사용 어려움</strong> (ex. 자릿수 제어 안 되는 실수, 음수, 문자열 등)</li>
+            <li>Counting Sort 기반이라 <strong>추가 메모리 O(n + k)</strong> 필요</li>
+            <li>데이터 범위가 크거나 자릿수가 길면 오히려 느림</li>
+          </ul>

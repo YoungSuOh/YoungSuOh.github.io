@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="이분 탐색(Binary Search)의 조건과 반복/재귀 구현 방법을 정리합니다." />
+    <meta name="description" content="정렬된 리스트에서 탐색 범위를 절반씩 좁혀가는 탐색 방법" />
     <title>Binary Search · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -26,14 +26,9 @@
         <p class="article-meta">2023-07-15 · Algorithm</p>
         <h1 class="article-title">Binary Search</h1>
         <p class="article-lead muted">정렬된 리스트에서 탐색 범위를 절반씩 좁혀가는 탐색 방법</p>
-        <div class="tags article-tags">
-          <span class="tag">Binary Search</span>
-          <span class="tag">Algorithm</span>
-          <span class="tag">Search</span>
-        </div>
-
+        <div class="tags article-tags"><span class="tag">Binary Search</span><span class="tag">Algorithm</span><span class="tag">Search</span></div>
         <div class="article-body post-body">
-          <p>이분 탐색은 정렬되어 있는 리스트에서 탐색 범위를 전반씩 좁혀가며 데이터를 탐색하는 탐색 방법이다.</p>
+<p>이분 탐색은 정렬되어 있는 리스트에서 탐색 범위를 전반씩 좁혀가며 데이터를 탐색하는 탐색 방법이다.</p>
 
           <p><strong>조건 2가지</strong></p>
           <ol>
@@ -82,7 +77,6 @@
         return BSearch(arr, target, mid+1, high);
 }</code></pre>
         </div>
-
         <p class="article-back">
           <a class="text-link" href="../../index.html#blog">← 목록으로</a>
         </p>

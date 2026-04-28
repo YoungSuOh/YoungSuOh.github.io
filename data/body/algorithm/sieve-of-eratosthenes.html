@@ -1,0 +1,24 @@
+<p>에라토스테네스의 체는 소수가 아닌 수를 배수 단위로 지워가며 소수를 찾는 방법이다.</p>
+          <h3>원리</h3>
+          <ul>
+            <li>2부터 시작해 아직 지워지지 않은 수를 소수로 확정</li>
+            <li>해당 수의 배수를 모두 제거</li>
+            <li>이를 <code>i * i &lt;= N</code>까지 반복</li>
+          </ul>
+          <h3>복잡도</h3>
+          <ul>
+            <li>시간: 대략 <code>O(N log log N)</code></li>
+            <li>공간: <code>O(N)</code></li>
+          </ul>
+          <h3>Java 예제</h3>
+          <pre><code class="language-java">int n = 100;
+boolean[] isPrime = new boolean[n + 1];
+Arrays.fill(isPrime, true);
+isPrime[0] = isPrime[1] = false;
+
+for (int i = 2; i * i &lt;= n; i++) {
+    if (!isPrime[i]) continue;
+    for (int j = i * i; j &lt;= n; j += i) {
+        isPrime[j] = false;
+    }
+}</code></pre>

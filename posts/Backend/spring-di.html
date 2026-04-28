@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Spring DI(Dependency Injection)의 필요성, 주입 방식(생성자/필드/세터), 장단점을 예시 코드와 함께 정리합니다."
-    />
+    <meta name="description" content="객체 생성 책임을 컨테이너로 분리해 결합도를 낮추고, 테스트/확장성을 높이는 의존성 주입(DI)을 정리합니다." />
     <title>[Spring] DI (Dependency Injection) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -28,15 +25,10 @@
       <article class="card article-shell">
         <p class="article-meta">2023-09-23 · Backend</p>
         <h1 class="article-title">[Spring] DI (Dependency Injection)</h1>
-        <p class="article-lead muted">
-          객체 생성 책임을 컨테이너로 분리해 결합도를 낮추고, 테스트/확장성을 높이는 의존성 주입(DI)을 정리합니다.
-        </p>
-        <div class="tags article-tags">
-          <span class="tag">Spring</span><span class="tag">DI</span><span class="tag">OOP</span><span class="tag">Testability</span>
-        </div>
-
+        <p class="article-lead muted">객체 생성 책임을 컨테이너로 분리해 결합도를 낮추고, 테스트/확장성을 높이는 의존성 주입(DI)을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Spring</span><span class="tag">DI</span><span class="tag">OOP</span><span class="tag">Testability</span></div>
         <div class="article-body post-body">
-          <h2>DI 란?</h2>
+<h2>DI 란?</h2>
           <ul>
             <li>객체 간 의존 관계를 개발자가 직접 묶는 것이 아니라, <strong>외부 컨테이너(Spring)가 주입</strong>하는 방식</li>
           </ul>
@@ -148,7 +140,6 @@ public class OrderService {
             <li>setter 노출로 객체 상태 변경 가능성이 증가</li>
           </ol>
         </div>
-
         <p class="article-back">
           <a class="text-link" href="../../index.html#blog">← 목록으로</a>
         </p>
@@ -162,4 +153,3 @@ public class OrderService {
     </footer>
   </body>
 </html>
-

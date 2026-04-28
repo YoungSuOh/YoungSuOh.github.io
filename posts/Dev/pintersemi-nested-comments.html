@@ -3,10 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="PinterSemi: 대댓글 self-FK, MySQL WITH RECURSIVE, 정렬로 DB 역할 분담 후 프론트에서 트리 렌더링까지 정리합니다."
-    />
+    <meta name="description" content="게시글 댓글을 전부 가져와 프론트에서만 DFS로 묶으면 댓글이 많아질수록 비용이 커진다는 문제를, DB 계층 조회·정렬과
+          parentCommentSeq로 나누어 해결한 기록입니다." />
     <title>PinterSemi 프로젝트 대댓글 기능 · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -28,17 +26,11 @@
       <article class="card article-shell">
         <p class="article-meta">2024-10-03 · Dev</p>
         <h1 class="article-title">PinterSemi 프로젝트 대댓글 기능</h1>
-        <p class="article-lead muted">
-          게시글 댓글을 전부 가져와 프론트에서만 DFS로 묶으면 댓글이 많아질수록 비용이 커진다는 문제를, DB 계층 조회·정렬과
-          <code>parentCommentSeq</code>로 나누어 해결한 기록입니다.
-        </p>
-        <div class="tags article-tags">
-          <span class="tag">PinterSemi</span><span class="tag">MySQL</span><span class="tag">Spring</span
-          ><span class="tag">jQuery</span>
-        </div>
-
+        <p class="article-lead muted">게시글 댓글을 전부 가져와 프론트에서만 DFS로 묶으면 댓글이 많아질수록 비용이 커진다는 문제를, DB 계층 조회·정렬과
+          parentCommentSeq로 나누어 해결한 기록입니다.</p>
+        <div class="tags article-tags"><span class="tag">PinterSemi</span><span class="tag">MySQL</span><span class="tag">SpringjQuery</span></div>
         <div class="article-body post-body">
-          <h2>⚠️ 문제점</h2>
+<h2>⚠️ 문제점</h2>
           <ul>
             <li>
               게시글의 모든 댓글을 가져와 렌더링만 프론트에서 처리하면, 부모·자식 관계를 매번 탐색하는 방식에 따라
@@ -271,7 +263,6 @@ $.ajax({
             <a href="https://github.com/YoungSuOh/PinterSemi">https://github.com/YoungSuOh/PinterSemi</a>
           </p>
         </div>
-
         <p class="article-back">
           <a class="text-link" href="../../index.html#blog">← 목록으로</a>
         </p>

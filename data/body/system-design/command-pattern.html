@@ -1,0 +1,61 @@
+<h3>한 줄 정의</h3>
+          <p>요청을 객체로 캡슐화해 실행자(Receiver)와 호출자(Invoker)를 분리하는 패턴.</p>
+          <h3>왜 쓰는가?</h3>
+          <ul>
+            <li>요청 큐잉, 재시도, 로깅, undo/redo 같은 부가 기능을 붙이기 좋다.</li>
+            <li>호출자 코드를 변경하지 않고 새로운 요청을 추가할 수 있다.</li>
+          </ul>
+          <h3>Java 예제</h3>
+          <pre><code class="language-java">interface Command {
+    void execute();
+}
+
+class PaymentService {
+    void pay(long userId, int amount) {
+        System.out.println("pay " + amount + " for user " + userId);
+    }
+}
+
+class PayCommand implements Command {
+    private final PaymentService service;
+    private final long userId;
+    private final int amount;
+
+    PayCommand(PaymentService service, long userId, int amount) {
+        this.service = service;
+        this.userId = userId;
+        this.amount = amount;
+    }
+
+    public void execute() {
+        service.pay(userId, amount);
+    }
+}
+
+class CommandInvoker {
+    void run(Command command) {
+        command.execute();
+    }
+}</code></pre>
+          <h3>장점 / 단점</h3>
+          <ul>
+            <li>장점: 요청 처리 파이프라인 확장 용이, 실행 이력 관리 쉬움</li>
+            <li>단점: 작은 요청에도 클래스가 늘어나는 경향</li>
+          </ul>
+
+          <h3>패턴 다이어그램</h3>
+          <figure class="screenshot-item">
+            <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Command diagram">
+              <rect x="30" y="80" width="130" height="55" rx="10" fill="#eef6ff" stroke="#3b82f6" />
+              <text x="95" y="113" text-anchor="middle" font-size="13" fill="#1e3a8a">Client</text>
+              <rect x="210" y="80" width="130" height="55" rx="10" fill="#f5f3ff" stroke="#8b5cf6" />
+              <text x="275" y="113" text-anchor="middle" font-size="13" fill="#4c1d95">Invoker</text>
+              <rect x="390" y="80" width="130" height="55" rx="10" fill="#ecfeff" stroke="#06b6d4" />
+              <text x="455" y="113" text-anchor="middle" font-size="13" fill="#155e75">Command</text>
+              <rect x="570" y="80" width="150" height="55" rx="10" fill="#fff7ed" stroke="#f97316" />
+              <text x="645" y="113" text-anchor="middle" font-size="13" fill="#9a3412">Receiver</text>
+              <line x1="160" y1="108" x2="210" y2="108" stroke="#2563eb" stroke-width="3" />
+              <line x1="340" y1="108" x2="390" y2="108" stroke="#7c3aed" stroke-width="3" />
+              <line x1="520" y1="108" x2="570" y2="108" stroke="#0891b2" stroke-width="3" />
+            </svg>
+          </figure>

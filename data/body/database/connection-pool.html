@@ -1,0 +1,17 @@
+<p>커넥션 풀은 DB 연결을 매 요청마다 새로 만들지 않고 재사용해 지연과 리소스 소모를 줄인다.</p>
+          <h3>핵심 설정</h3>
+          <ul>
+            <li><code>maximumPoolSize</code>: 동시에 빌릴 수 있는 최대 커넥션 수</li>
+            <li><code>connectionTimeout</code>: 커넥션 대기 허용 시간</li>
+            <li><code>idleTimeout</code> / <code>maxLifetime</code>: 유휴/수명 관리</li>
+          </ul>
+          <h3>실무 튜닝 포인트</h3>
+          <ul>
+            <li>DB <code>max_connections</code> 대비 애플리케이션 총 풀 크기 합을 먼저 계산</li>
+            <li>무조건 크게 잡기보다 실제 동시성 부하 테스트로 결정</li>
+            <li>풀 고갈(Timeout) 발생 시 쿼리 지연 구간부터 분석</li>
+          </ul>
+          <pre><code class="language-properties">spring.datasource.hikari.maximum-pool-size=30
+spring.datasource.hikari.connection-timeout=3000
+spring.datasource.hikari.idle-timeout=600000
+spring.datasource.hikari.max-lifetime=1800000</code></pre>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="실행 계획 해석 방법과 병목 진단 포인트를 정리합니다." />
+    <meta name="description" content="실행 계획(Execution Plan) 정리" />
     <title>실행 계획(Execution Plan) · YoungSuOh Dev Log</title>
     <link rel="stylesheet" href="../../styles.css" />
   </head>
@@ -20,12 +20,15 @@
         </nav>
       </div>
     </header>
+
     <main class="container article-page">
       <article class="card article-shell">
         <p class="article-meta">2024-04-04 · Database</p>
         <h1 class="article-title">실행 계획(Execution Plan)</h1>
+        <p class="article-lead muted">실행 계획(Execution Plan) 정리</p>
+        <div class="tags article-tags"><span class="tag">Database</span></div>
         <div class="article-body post-body">
-          <p>실행 계획은 옵티마이저가 쿼리를 실제로 수행하는 경로를 보여준다. 튜닝의 시작점이다.</p>
+<p>실행 계획은 옵티마이저가 쿼리를 실제로 수행하는 경로를 보여준다. 튜닝의 시작점이다.</p>
           <h3>먼저 보는 항목</h3>
           <ul>
             <li>Access Type: ALL, range, ref, eq_ref</li>
@@ -47,8 +50,16 @@ WHERE o.status = 'PAID'
 ORDER BY o.created_at DESC
 LIMIT 50;</code></pre>
         </div>
-        <p class="article-back"><a class="text-link" href="../../index.html#blog">← 목록으로</a></p>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
       </article>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
   </body>
 </html>
