@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Notion API로 100개 이상의 학습 노트를 GitHub Pages 블로그에 자동 임포트한 과정을 정리합니다. Page ID 추출, 블록 타입별 HTML 변환, 이미지 만료 문제 해결, 배치 처리까지 파이프라인 전 단계를 다룹니다." />
+    <title>Notion → GitHub Blog 자동 임포트 파이프라인 구축 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-04-20 · Dev</p>
+        <h1 class="article-title">Notion → GitHub Blog 자동 임포트 파이프라인 구축</h1>
+        <p class="article-lead muted">Notion API로 100개 이상의 학습 노트를 GitHub Pages 블로그에 자동 임포트한 과정을 정리합니다. Page ID 추출, 블록 타입별 HTML 변환, 이미지 만료 문제 해결, 배치 처리까지 파이프라인 전 단계를 다룹니다.</p>
+        <div class="tags article-tags"><span class="tag">Notion</span><span class="tag">Automation</span><span class="tag">GitHub Pages</span><span class="tag">Node.js</span><span class="tag">Dev</span></div>
+        <div class="article-body post-body">
+<h2>1. 배경</h2>
+<p>노션에 정리해둔 네이버 클라우드 부트캠프 학습 노트(OOP, DB, Front-End, 서버, 클라우드, 리눅스, TDD, 프로젝트 등)를 GitHub Pages 블로그에 옮기고 싶었다. 문제는 두 가지였다.</p>
+<ul>
+  <li>노션 이미지 URL은 S3 서명 URL이라 <strong>약 1시간 후 만료</strong>된다 → 직접 복붙하면 이미지가 깨진다.</li>
+  <li>페이지가 100개를 넘어서 수동 작업은 현실적으로 불가능하다.</li>
+</ul>
+<p>그래서 Notion API를 활용해 <strong>완전 자동화 임포트 파이프라인</strong>을 구축했다.</p>
+
+<h2>2. 전체 파이프라인 흐름</h2>
+<pre><code>notion-batch.json (URL 목록)
+        ↓
+① Page ID 추출
+        ↓
+② Notion API — 페이지 메타데이터 fetch
+        ↓
+③ Notion API — 블록 전체 fetch (페이지네이션)
+        ↓
+④ 블록 타입별 HTML 변환
+        ↓
+⑤ image 블록 → 로컬 다운로드
+        ↓
+⑥ data/body/naver-cloud-camp/&lt;slug&gt;.html 저장
+        ↓
+⑦ data/posts.json 메타데이터 등록
+        ↓
+⑧ npm run build → posts/Naver-Cloud-Camp/&lt;slug&gt;.html 생성
+</code></pre>
+
+<h3>① Page ID 추출</h3>
+<p>Notion URL에는 두 가지 형태가 있다.</p>
+<pre><code>https://www.notion.so/JDBC-6931fcb8fc204cdeba85b221617661d8   ← 제목 포함
+https://www.notion.so/6931fcb8fc204cdeba85b221617661d8        ← UUID만
+</code></pre>
+<p>두 경우 모두 URL 뒤쪽 32자리 hex가 Page ID다. 정규식으로 추출한 뒤 UUID 형식(8-4-4-4-12)으로 변환해 API에 넘긴다.</p>
+<pre><code>const m = url.match(/([a-f0-9]{32})(?:[?#]|$)/i);
+// "6931fcb8fc204cdeba85b221617661d8"
+// → "6931fcb8-fc20-4cde-ba85-b221617661d8"
+</code></pre>
+
+<h3>② 페이지 메타데이터 fetch</h3>
+<p><code>GET /v1/pages/{page_id}</code>로 제목과 생성 날짜를 가져온다. 노션은 페이지 제목을 <code>properties.title</code> 배열로 반환하므로 rich text를 이어붙여 문자열로 만든다.</p>
+<pre><code>GET https://api.notion.com/v1/pages/6931fcb8-fc20-4cde-ba85-b221617661d8
+Notion-Version: 2022-06-28
+Authorization: Bearer {API_KEY}
+</code></pre>
+
+<h3>③ 블록 fetch — 페이지네이션 처리</h3>
+<p>Notion API는 한 번에 최대 100개 블록만 반환한다. 응답의 <code>has_more: true</code>이면 <code>next_cursor</code>를 다음 요청의 <code>start_cursor</code>로 넘겨 반복 호출한다. Rate Limit(3 req/s)을 피하기 위해 요청 사이에 350ms 딜레이를 추가했다.</p>
+<pre><code>do {
+  const res = await notionGet(
+    `blocks/${blockId}/children?page_size=100${cursor ? `&start_cursor=${cursor}` : ""}`
+  );
+  blocks.push(...res.results);
+  cursor = res.has_more ? res.next_cursor : undefined;
+  if (cursor) await sleep(350);
+} while (cursor);
+</code></pre>
+
+<h3>④ 블록 타입별 HTML 변환</h3>
+<p>Notion 블록은 타입별로 다른 구조를 가진다. 핵심은 <strong>리스트 그룹화</strong>와 <strong>리치텍스트 변환</strong> 두 가지다.</p>
+
+<h4>리스트 자동 그룹화</h4>
+<p>Notion은 <code>bulleted_list_item</code>을 독립 블록으로 반환하지만 HTML은 <code>&lt;ul&gt;</code>로 묶어야 한다. 연속된 같은 타입 블록을 만나면 하나의 리스트로 합친다.</p>
+<pre><code>if (type === "bulleted_list_item") {
+  out.push("&lt;ul&gt;");
+  while (i &lt; blocks.length && blocks[i].type === "bulleted_list_item") {
+    out.push(`  &lt;li&gt;${rt(blocks[i].bulleted_list_item.rich_text)}&lt;/li&gt;`);
+    i++;
+  }
+  out.push("&lt;/ul&gt;");
+  continue;  // i를 이미 증가시켰으므로 continue
+}
+</code></pre>
+
+<h4>리치텍스트 변환</h4>
+<p>Notion의 텍스트는 <code>rich_text[]</code> 배열로 구성되며, 각 항목에 <code>annotations</code>(bold, italic, code 등)과 <code>href</code>(링크)가 붙는다.</p>
+<pre><code>function rt(richTexts) {
+  return richTexts.map((r) =&gt; {
+    let t = r.plain_text
+      .replace(/&amp;/g, "&amp;amp;")
+      .replace(/&lt;/g, "&amp;lt;")
+      .replace(/&gt;/g, "&amp;gt;");
+    if (r.href)               t = `&lt;a href="${r.href}"&gt;${t}&lt;/a&gt;`;
+    if (r.annotations.code)   t = `&lt;code&gt;${t}&lt;/code&gt;`;
+    if (r.annotations.bold)   t = `&lt;strong&gt;${t}&lt;/strong&gt;`;
+    if (r.annotations.italic) t = `&lt;em&gt;${t}&lt;/em&gt;`;
+    return t;
+  }).join("");
+}
+</code></pre>
+
+<h4>지원 블록 타입 전체 목록</h4>
+<table>
+  <thead>
+    <tr><th>Notion 블록</th><th>변환 결과</th><th>비고</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>paragraph</td><td><code>&lt;p&gt;</code></td><td>빈 단락은 생략</td></tr>
+    <tr><td>heading_1 / 2 / 3</td><td><code>&lt;h2&gt;</code> / <code>&lt;h3&gt;</code> / <code>&lt;h4&gt;</code></td><td>블로그 h1은 제목용으로 예약</td></tr>
+    <tr><td>bulleted_list_item</td><td><code>&lt;ul&gt;&lt;li&gt;</code></td><td>연속 항목 자동 그룹화</td></tr>
+    <tr><td>numbered_list_item</td><td><code>&lt;ol&gt;&lt;li&gt;</code></td><td>연속 항목 자동 그룹화</td></tr>
+    <tr><td>code</td><td><code>&lt;pre&gt;&lt;code class="language-*"&gt;</code></td><td>언어 정보 포함</td></tr>
+    <tr><td>quote</td><td><code>&lt;blockquote&gt;</code></td><td></td></tr>
+    <tr><td>callout</td><td><code>&lt;blockquote&gt;</code></td><td>이모지 아이콘 앞에 붙임</td></tr>
+    <tr><td>divider</td><td><code>&lt;hr&gt;</code></td><td></td></tr>
+    <tr><td>image</td><td><code>&lt;figure&gt;&lt;img&gt;</code></td><td>로컬 다운로드 후 경로 교체</td></tr>
+    <tr><td>table</td><td><code>&lt;table&gt;</code></td><td>헤더 행 자동 인식 → &lt;th&gt;</td></tr>
+    <tr><td>toggle</td><td><code>&lt;details&gt;&lt;summary&gt;</code></td><td>중첩 블록 재귀 처리</td></tr>
+    <tr><td>child_page</td><td><code>&lt;a href="..."&gt;</code></td><td>노션 원본 링크로 변환</td></tr>
+    <tr><td>bookmark / link_preview</td><td><code>&lt;a&gt;</code></td><td></td></tr>
+  </tbody>
+</table>
+
+<h3>⑤ 이미지 자동 다운로드</h3>
+<p>Notion 이미지 URL은 <strong>AWS S3 서명 URL</strong>이라 약 1시간 후 만료된다. 따라서 임포트 시점에 즉시 다운로드해 블로그 저장소에 보관해야 한다.</p>
+<pre><code>photo/
+  posts/
+    Naver-Cloud-Camp/
+      ncc-jdbc/
+        img_001.png
+        img_002.png
+      ncc-redis/
+        img_001.png
+</code></pre>
+<p>다운로드 후 HTML에는 생성될 포스트 파일 기준 상대 경로를 삽입한다.</p>
+<pre><code>&lt;!-- posts/Naver-Cloud-Camp/ncc-jdbc.html 기준 --&gt;
+&lt;img src="../../photo/posts/Naver-Cloud-Camp/ncc-jdbc/img_001.png"&gt;
+</code></pre>
+<p>Notion 이미지 URL은 리다이렉트(302)가 포함된 경우가 있어 <code>Location</code> 헤더를 따라가도록 처리했다.</p>
+<pre><code>function get(u) {
+  const mod = u.startsWith("https") ? https : http;
+  mod.get(u, (res) =&gt; {
+    if (res.statusCode &gt;= 300 &amp;&amp; res.statusCode &lt; 400) {
+      return get(res.headers.location);  // 리다이렉트 추적
+    }
+    res.pipe(file);
+  });
+}
+</code></pre>
+
+<h3>⑥⑦ body 파일 저장 & posts.json 등록</h3>
+<p>변환된 HTML은 <code>data/body/naver-cloud-camp/&lt;slug&gt;.html</code>에 저장하고, <code>posts.json</code>에는 <code>bodyFile</code> 참조 형태로 등록한다. 이미 같은 slug가 있으면 덮어쓰고(재임포트), 없으면 맨 앞에 추가한다.</p>
+<pre><code>{
+  "id": "post-XXX",
+  "slug": "ncc-jdbc",
+  "title": "JDBC",
+  "category": "Naver Cloud Camp",
+  "summary": "JDBC — Naver Cloud Camp 정리 노트.",
+  "date": "2024-XX-XX",
+  "tags": ["DB", "Naver Cloud Camp"],
+  "bodyFile": "body/naver-cloud-camp/ncc-jdbc.html"
+}
+</code></pre>
+
+<h3>⑧ 빌드</h3>
+<p><code>npm run build</code>(<code>scripts/build.mjs</code>)가 <code>posts.json</code>을 읽어 각 entry마다 <code>posts/&lt;CategoryDir&gt;/&lt;slug&gt;.html</code>을 생성하고, 블로그 프론트에서 읽는 <code>site-data.js</code>를 갱신한다.</p>
+
+<h2>3. Notion Integration 설정</h2>
+<p>Notion API를 사용하려면 <strong>내부 통합(Internal Integration)</strong>을 만들어 API Key를 발급받고, 접근할 페이지에 해당 Integration을 연결해야 한다.</p>
+<ol>
+  <li><a href="https://www.notion.so/my-integrations" target="_blank" rel="noopener">notion.so/my-integrations</a> → 새 통합 만들기</li>
+  <li>이름 입력, <strong>내부 통합</strong> 선택 → API Key 복사 → <code>.env</code>에 저장</li>
+  <li>대상 페이지 → <code>···</code> → <strong>연결 추가</strong> → Integration 선택</li>
+</ol>
+<blockquote><strong>주의</strong> — 최상위 페이지에 한 번만 연결하면 하위 페이지 전체에 접근 가능. API Key는 반드시 <code>.gitignore</code>에 추가.</blockquote>
+
+<h2>4. 실행 방법</h2>
+<h3>단일 페이지</h3>
+<pre><code>node scripts/notion-import.mjs https://www.notion.so/... \
+  --tag "DB" --slug ncc-jdbc --build
+</code></pre>
+
+<h3>배치 처리</h3>
+<pre><code>node scripts/notion-import.mjs --batch scripts/notion-batch.json --build
+</code></pre>
+
+<h3>notion-batch.json 구조</h3>
+<pre><code>{
+  "category": "Naver Cloud Camp",
+  "posts": [
+    { "url": "https://www.notion.so/JDBC-...", "slug": "ncc-jdbc",    "tag": "DB" },
+    { "url": "https://www.notion.so/MyBatis-...", "slug": "ncc-mybatis", "tag": "DB" }
+  ]
+}
+</code></pre>
+
+<h2>5. 최종 결과</h2>
+<table>
+  <thead>
+    <tr><th>항목</th><th>수량</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Notion 임포트 성공</td><td>103개</td></tr>
+    <tr><td>posts.json 최종 등록 수</td><td>177개+</td></tr>
+    <tr><td>이미지 자동 다운로드</td><td>각 페이지별 자동 처리</td></tr>
+  </tbody>
+</table>
+
+<h2>6. 앞으로 새 노션 글 추가할 때</h2>
+<pre><code># notion-batch.json에 항목 추가 후
+node scripts/notion-import.mjs --batch scripts/notion-batch.json --build
+
+# 단일 페이지 즉시 추가
+node scripts/notion-import.mjs https://www.notion.so/... --tag "태그명" --slug 원하는-slug --build
+</code></pre>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

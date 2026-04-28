@@ -48,10 +48,25 @@ window.BLOG_DATA = {
     "System Design",
     "Algorithm",
     "Computer Science",
-    "Claude",
-    "Naver Cloud Camp"
+    "Naver Cloud Camp",
+    "Claude"
   ],
   "posts": [
+    {
+      "id": "post-241",
+      "title": "Notion → GitHub Blog 자동 임포트 파이프라인 구축",
+      "category": "Dev",
+      "summary": "Notion API로 100개 이상의 학습 노트를 GitHub Pages 블로그에 자동 임포트한 과정을 정리합니다. Page ID 추출, 블록 타입별 HTML 변환, 이미지 만료 문제 해결, 배치 처리까지 파이프라인 전 단계를 다룹니다.",
+      "date": "2026-04-20",
+      "tags": [
+        "Notion",
+        "Automation",
+        "GitHub Pages",
+        "Node.js",
+        "Dev"
+      ],
+      "link": "posts/Dev/notion-to-blog-automation.html"
+    },
     {
       "id": "post-240",
       "title": "NCP Disk 마운트",
