@@ -61,6 +61,7 @@ function buildPostPage(post, siteTitle, rootPrefix) {
     <meta name="description" content="${summary}" />
     <title>${title} · ${escapeHtml(siteTitle)}</title>
     <link rel="stylesheet" href="${rp}styles.css" />
+    <script src="${rp}script.js" defer></script>
   </head>
   <body>
     <header class="site-header">

@@ -748,6 +748,12 @@ h1 {
   height: auto;
   border-radius: 10px;
   border: 1px solid var(--line);
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+
+.post-body figure img:hover {
+  opacity: 0.85;
 }
 
 .post-body table {

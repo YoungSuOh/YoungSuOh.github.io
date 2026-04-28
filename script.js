@@ -269,11 +269,13 @@
     document.body.style.overflow = "hidden";
   }
 
-  // 프로젝트 페이지 스크린샷 확대 보기
+  // 프로젝트 스크린샷 + 블로그 포스트 본문 이미지 확대 보기
   document.addEventListener("click", (e) => {
     const target = e.target;
     if (!(target instanceof HTMLElement)) return;
-    const img = target.closest(".screenshot-item img");
+    const img =
+      target.closest(".screenshot-item img") ||
+      target.closest(".post-body img");
     if (!(img instanceof HTMLImageElement)) return;
     e.preventDefault();
     openLightbox(img);
