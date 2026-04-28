@@ -1,0 +1,2266 @@
+<blockquote>전 세계에서 가장 많이 사용되는 javascript 라이브러리다.</blockquote>
+<ul>
+  <li>HTML 요소 제어</li>
+  <li>손쉬운 이벤트 철리</li>
+  <li>요소의 탐색과 생성</li>
+  <li>Ajax 통신처리
+<ul>
+  <li>페이지 이동이 없는 비동기 데이터 통신</li>
+</ul></li>
+</ul>
+<h3>특징</h3>
+<ol>
+  <li>크로스 브라우징
+<ol>
+  <li>한 번의 코딩으로 거의 모든 브라우저에게 적용된다.</li>
+</ol></li>
+  <li>간결한 문법
+<ol>
+  <li>HTML 태그를 제어하거나 이벤트를 처리하는 부분 등 javascript의 전반에 걸쳐서 구문이 짧아지기 때문에 개발 효율성이 높아진다</li>
+</ol></li>
+  <li>익숙한 구문
+<ol>
+  <li>CSS에서 사용하던 속성과 값을 그대로 javascript 구문에 적용할 수 있어서 document 내장 객체가 제공하는 기능을 쉽게 사용 가능</li>
+</ol></li>
+  <li>다양한 플러그인
+<ol>
+  <li>jQuery를 기반으로 하는 수 많은 플러그인들이 무료로 배포되고 있기 때문에, 갤러리, 메뉴 등의 구현에 대한 작업이 많이 단축된다.</li>
+</ol></li>
+  <li>마무리는 무조건 <code>;</code> 로 해줘야 한다.</li>
+</ol>
+<h3>jQuery 참조하기</h3>
+<p>① js 파일을 다운 받아서 사용
+&lt;script type="text/javascript" src="js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;</p>
+<p>
+② <a href="http://code.jquery.xn--com-yh0o/" target="_blank" rel="noopener">http://code.jquery.com의</a> CDN 서��스를 사용
+&lt;script type="text/javascript" src="<a href="http://code.jquery.com/jquery-3.7.1.min.js" target="_blank" rel="noopener">http://code.jquery.com/jquery-3.7.1.min.js</a>"&gt;&lt;/script&gt;</p>
+<p>
+③ <a href="http://code.jquery.xn--com-yh0o/" target="_blank" rel="noopener">http://code.jquery.com의</a> CDN 서비스를 버전 명시 없이 사용
+&lt;script type="text/javascript" src="<a href="http://code.jquery.com/jquery.min.js" target="_blank" rel="noopener">http://code.jquery.com/jquery.min.js</a>"&gt;&lt;/script&gt;</p>
+<ul>
+  <li>CDN이란?
+<ul>
+  <li>지리,물리적으로 떨어져 있는 사용자에게 컨텐츠를 더 빠르게 제공할 수 있는 기술</li>
+  <li>느린 응답속도 / 다운로딩 타임 을 극복하기 위한 기술</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>CDN을 사용함으로써 서버의 트래픽 부하 및 비용을 줄이고 사용자에게 빠른 서비스 제공도 가능하다. 장애 확률도 낮춰 줄 수 있다.</li>
+</ul></li>
+</ul>
+<h3><code>jQuery()</code> 함수 사용</h3>
+<ul>
+  <li>Javascript는 window 객체의 addEventListener() 함수와 attachEvent() 함수를 사용하여
+<code>onload</code> 이벤트를 처리해야 한다.</li>
+  <li>이때 크로스 브라우징 처리를 하기 위해 if문으로 브라우저를 구별하는
+분기문을 작성해야만 한다.</li>
+  <li>jQuery는 이러한 번거로움을 jQuery() 함수 하나로 해결할 수 있게 해준다.</li>
+  <li>안에 id값 집어넣는 경우
+<pre><code class="language-javascript">var element = jQuery('#myElement');  // id가 'myElement'인 요소 선택</code></pre>
+<ul>
+  <li><code>document.querySelector</code>나 <code>document.getElementById</code> 역할</li>
+</ul></li>
+  <li>안에 함수를 집어넣는 경우
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="hello"&gt;&lt;/h1&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    function hello($){
+        var h1 = jQuery('#hello')   // =&gt; var h1 = document.getElementById('hello')
+        h1.html('Hello jQuery')  // =&gt; h1.innerHTML = 'Hello jQuery'
+        h1.text('Hello jQuery')  // =&gt; h1.innerText = 'Hello jQuery'
+    }
+    jQuery(hello)
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>onload</code> 처리됨</li>
+</ul></li>
+</ul>
+<h3>$ 객체의 사용</h3>
+<ol>
+  <li>jQuery() 함수로부터 전달되는 파라미터 받기
+<ol>
+  <li><code>$</code> 는 jQuery의 모든 기능을 담고 있는 객체이자 함수이다.</li>
+  <li>형식
+<pre><code class="language-javascript">function ex($) { 
+$ 객체 사용
+}
+jQuery(ex);</code></pre></li>
+  <li>예시 코드
+<ol>
+  <li>객체 담기
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 id="hello"&gt;&lt;/h1&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  jQuery(function ($/*java의 오브젝트처럼 받아줌*/){ // 익명함수
+    var h1 = $('#hello')   // =&gt; var h1 = document.getElementById('hello')
+    h1.html('Hello jQuery')  // =&gt; h1.innerHTML = 'Hello jQuery'
+    h1.text('Hello jQuery')  // =&gt; h1.innerText = 'Hello jQuery
+  })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li>함수 담기
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="hello"&gt;&lt;/h1&gt;
+    &lt;p id="text"&gt;안녕하세요 제이쿼리!!&lt;/p&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        var h1 = $('#hello')
+
+        h1.css('color', 'red')
+        h1.html('Hello jQuery')
+        h1.text('Hello jQuery')  // =&gt; h1 태그에 값을 넣는다.
+
+        alert($('#text').text()) // h1 태그에 값을 꺼내온다.
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ol></li>
+</ol></li>
+</ol>
+<h3>HTML 요소 획득하기</h3>
+<pre><code class="language-javascript">var h1 = document.getElementById("hello");
+=&gt; var h1 = $("#hello")
+
+예) var mytag = $("h1");      // h1 태그 객체 획득하기
+예) var mytag = $(".hello");   // "hello" 라는 class 속성값을 갖는 요소의 객체 획득하기
+예) var mytag = $("#hello");   // "hello" 라는 id 속성값을 갖는 요소의 객체 획득하기</code></pre>
+<h3>innerHTML &amp; innerText의 간결화</h3>
+<pre><code class="language-javascript">var h1 = $('#hello')   // =&gt; var h1 = document.getElementById('hello')
+h1.html('Hello jQuery')  // =&gt; h1.innerHTML = 'Hello jQuery'
+h1.text('Hello jQuery')  // =&gt; h1.innerText = 'Hello jQuery</code></pre>
+<h3>jQuery 이벤트 정의하는 방법</h3>
+<ul>
+  <li>형식
+<pre><code class="language-javascript">$(function() {
+   $("셀렉터").이벤트이름(function() {
+      ... 처리 내용 ...
+   });
+});</code></pre></li>
+</ul>
+<details>
+  <summary>실습</summary>
+<ul>
+  <li>html
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    @import "../css/event.css";
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;회원가입&lt;/h1&gt;
+  &lt;form name="form1" id="join"&gt;
+      &lt;div id="input"&gt;
+        &lt;h3&gt;아이디&lt;/h3&gt;
+        &lt;input type="text" name="userId"&gt;
+
+        &lt;h3&gt;비밀번호&lt;/h3&gt;
+        &lt;input type="password" name="userpwd"&gt;
+
+        &lt;h3&gt;성별&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="남자"&gt;남자&lt;/label&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="여자"&gt;여자&lt;/label&gt;
+
+        &lt;h3&gt;이메일&lt;/h3&gt;
+        &lt;input type="email" name="useremail"&gt;
+
+        &lt;h3&gt;URL&lt;/h3&gt;
+        &lt;input type="url" name="URL"&gt;
+
+        &lt;h3&gt;핸드폰&lt;/h3&gt;
+        &lt;input type="tel" name="phone"&gt;
+
+        &lt;h3&gt;취미&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="축구"&gt;축구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="농구"&gt;농구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="야구"&gt;야구&lt;/label&gt;
+
+        &lt;h3&gt;직업&lt;/h3&gt;
+        &lt;select name="job"&gt;
+            &lt;option&gt;--------선택하세요--------&lt;/option&gt;
+            &lt;option value="프로그래머"&gt;프로그래머&lt;/option&gt;
+            &lt;option value="퍼블리셔"&gt;퍼블리셔&lt;/option&gt;
+            &lt;option value="디자이너"&gt;디자이너&lt;/option&gt;
+            &lt;option value="기획"&gt;기획&lt;/option&gt;
+        &lt;/select&gt;
+
+
+        &lt;input type="submit" value="회원가입" class="myButton"&gt;
+        &lt;input type="reset" value="초기화"  class="myButton"&gt;
+
+      &lt;/div&gt;
+  &lt;/form&gt;
+&lt;!--&lt;script src="../js/member.js"&gt;&lt;/script&gt;  이렇게 되면 jQuery가 못들어감--&gt;
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script src="../js/member.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;!--
+jQuery 이벤트 정의하는 방법
+
+$(function() {
+   $("셀렉터").이벤트이름(function() {
+      ... 처리 내용 ...
+   });
+});
+ --&gt;</code></pre>
+<ul>
+  <li>순차적으로 컴파일을 진행하기 때문에 jQuery를 사용하기 위해서는 제일 위에다가 jquery를 선언해줘야 한다.</li>
+</ul></li>
+  <li>css
+<pre><code class="language-javascript">* {
+    padding: 0;
+    margin: 10px;
+}
+#input, #result {
+    border: 5px solid #D5D5D5;
+    text-align: center;
+    width: auto;
+    font-weight: bold;
+}
+#input {
+    background: #eef;
+    padding: 5px;
+}
+#input:after {
+    content: '';
+    display: block;
+    float: none;
+    clear: both;
+}
+#input &gt; input, #input &gt; select, #input &gt; div, #input &gt; button, #input &gt; div &gt; button {
+    width: 99%;
+    text-align: center;
+    display: block;
+    font-size: 17px;
+    color: #222;
+    background: #eef;
+    border: 3px solid #d3d3d3;
+    margin: 5px auto;
+    padding: 5px 0;
+}
+#input &gt; h3 {
+    text-align: left;
+    margin: 0;
+    padding: 10px 0 0 0;
+}
+#input &gt; h3:before {
+    content: '';
+    display: block;
+    float: none;
+    clear: both;
+}
+#input &gt; label {
+    margin: 0;
+    padding: 0;
+    display: block;
+    float: left;
+    padding-bottom: 10px;
+}
+#input &gt; label &gt; input {
+    width: auto !important;
+    display: inline;
+}
+#input .myButton {
+    box-shadow: inset 0px 1px 0px 0px #54a3f7; /* inset : 박스 안쪽의 그림자 */
+    background: linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+    /* background-color: #007dc1; */
+    border-radius: 3px;
+    border: 1px solid #124d77;
+    display: inline-block;
+    color: #ffffff;
+    font-family: arial;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #154682;
+}
+#input .myButton:hover {
+    background: linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+    background-color: #0061a7;
+}
+#input .myButton:active {
+    position: relative;
+    top: 1px;
+}
+
+h2 {
+    padding-top: 10px;
+}
+#result {
+    padding: 50px;
+    font-size: 17px;
+    color: #500;
+    background: #5AAEFF;
+}</code></pre></li>
+  <li>js
+<pre><code class="language-javascript">$(function (){
+    $('#join').submit(function(){  // id join에서 submit을 할 경우
+        let user_id = $('input[name="userId"]').val();  // text 속성 쓰면 안됨
+        /*if(!user_id)*/
+        if(user_id==''){            // 유효성 검사
+            alert("Please enter valid user id");
+            $('input[name="userId"]').focus();
+            return false;
+        }
+        let user_pwd = $('input[name="userpwd"]').val();  // text 속성 쓰면 안됨
+        /*if(!user_id)*/
+        if(user_pwd==''){            // 유효성 검사
+            alert("Please enter valid user password");
+            $('input[name="userpwd"]').focus();
+            return false;
+        }
+
+        if(!$('input[name="gender"]').is(':checked')){ // 선택을 했다면 true, 선택을 안했다면 false이다.
+            alert("Please select gender");
+
+            // 남자를 무조건 선택 -&gt; name타고 들어감
+            // radio는 배열로 받는다. gender[0] : 남자 / gender[1] : 여자
+           // document.form1.gender[0].checked = true; // 이건 javascript
+
+            // $('input[name="gender"]').attr('checked', true);  // jquery, 어쩔 때는 attr 대신 prop 써줘야 함
+            $('input[name="gender"]:eq(0)').attr('checked', true);  // 남
+
+            return false;
+        }
+
+        let user_email = $('input[name="useremail"]').val();
+        if(user_email==''){            // 유효성 검사
+            alert("Please enter valid user_email");
+            $('input[name="user_email"]').focus();
+            return false;
+        }
+
+        let url = $('input[name="URL"]').val();
+        if(url==''){            // 유효성 검사
+            alert("Please enter valid URL");
+            $('input[name="URL"]').focus();
+            return false;
+        }
+
+
+        let user_phone = $('input[name="phone"]').val();
+        if(user_phone==''){            // 유효성 검사
+            alert("Please enter valid phone number");
+            $('input[name="phone"]').focus();
+            return false;
+        }
+
+        if(!$('input[name="hobby"]').is(':checked')){
+            alert("Please enter valid hobby");
+            $('input[name="hobby"] &gt; option:selected').attr('checked', true);
+        }
+
+        if($('select[name="job"] &gt; option:selected').index()==0){
+            alert("Please select job");
+            $('select[name="job"] &gt; option:eq(1)').attr('selected', true);
+
+            return false;
+        }
+
+        // 입력한 내용을 화면에 출력
+        let gender = $('input[name="gender"]:checked').val();
+        let hobby = $('input[name="hobby"]:checked');  // 한개가 아니라 여러개 선택 -&gt; hobby는 변수가 아니라 배열
+        let hobby_value = '';
+
+        hobby.each(function(){
+            hobby_value += $(this).val();
+        });
+
+        let job = $('select[name="job"] &gt; option:selected').val();
+
+        let result = `
+            &lt;ul&gt;
+                &lt;li&gt;아이디 :  ${user_id} &lt;/li&gt;
+                &lt;li&gt;비밀번호 :  ${user_pwd} &lt;/li&gt;
+                &lt;li&gt;이메일 :  ${user_email} &lt;/li&gt;
+                &lt;li&gt;url :  ${url} &lt;/li&gt;
+                &lt;li&gt;핸드폰 :  ${user_phone} &lt;/li&gt;
+                &lt;li&gt;성별 :  ${gender} &lt;/li&gt;
+                &lt;li&gt;취미 :  ${hobby_value} &lt;/li&gt;
+                &lt;li&gt;직업 :  ${job} &lt;/li&gt;
+            &lt;/ul&gt;
+        `;
+        $('body').html(result);
+
+        return false; // 다른 페이지에 못가게 막음
+    });
+});</code></pre></li>
+</ul>
+</details>
+<h3>그 외 정보들</h3>
+<p>📄 <a href="https://www.notion.so/7ea4986f806e4e2b99f333f9e3ee39a1" target="_blank" rel="noopener">jQuery Event</a></p>
+<div class="block-children">
+<h3>jQuery 이벤트 정의하는 방법</h3>
+<ul>
+  <li>형식
+<pre><code class="language-javascript">$(function() {
+   $("셀렉터").이벤트이름(function() {
+      ... 처리 내용 ...
+   });
+});</code></pre></li>
+</ul>
+<details>
+  <summary>실습</summary>
+<ul>
+  <li>html
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    @import "../css/event.css";
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;회원가입&lt;/h1&gt;
+  &lt;form name="form1" id="join"&gt;
+      &lt;div id="input"&gt;
+        &lt;h3&gt;아이디&lt;/h3&gt;
+        &lt;input type="text" name="userId"&gt;
+
+        &lt;h3&gt;비밀번호&lt;/h3&gt;
+        &lt;input type="password" name="userpwd"&gt;
+
+        &lt;h3&gt;성별&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="남자"&gt;남자&lt;/label&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="여자"&gt;여자&lt;/label&gt;
+
+        &lt;h3&gt;이메일&lt;/h3&gt;
+        &lt;input type="email" name="useremail"&gt;
+
+        &lt;h3&gt;URL&lt;/h3&gt;
+        &lt;input type="url" name="URL"&gt;
+
+        &lt;h3&gt;핸드폰&lt;/h3&gt;
+        &lt;input type="tel" name="phone"&gt;
+
+        &lt;h3&gt;취미&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="축구"&gt;축구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="농구"&gt;농구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="야구"&gt;야구&lt;/label&gt;
+
+        &lt;h3&gt;직업&lt;/h3&gt;
+        &lt;select name="job"&gt;
+            &lt;option&gt;--------선택하세요--------&lt;/option&gt;
+            &lt;option value="프로그래머"&gt;프로그래머&lt;/option&gt;
+            &lt;option value="퍼블리셔"&gt;퍼블리셔&lt;/option&gt;
+            &lt;option value="디자이너"&gt;디자이너&lt;/option&gt;
+            &lt;option value="기획"&gt;기획&lt;/option&gt;
+        &lt;/select&gt;
+
+
+        &lt;input type="submit" value="회원가입" class="myButton"&gt;
+        &lt;input type="reset" value="초기화"  class="myButton"&gt;
+
+      &lt;/div&gt;
+  &lt;/form&gt;
+&lt;!--&lt;script src="../js/member.js"&gt;&lt;/script&gt;  이렇게 되면 jQuery가 못들어감--&gt;
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script src="../js/member.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;!--
+jQuery 이벤트 정의하는 방법
+
+$(function() {
+   $("셀렉터").이벤트이름(function() {
+      ... 처리 내용 ...
+   });
+});
+ --&gt;</code></pre>
+<ul>
+  <li>순차적으로 컴파일을 진행하기 때문에 jQuery를 사용하기 위해서는 제일 위에다가 jquery를 선언해줘야 한다.</li>
+</ul></li>
+  <li>css
+<pre><code class="language-javascript">* {
+    padding: 0;
+    margin: 10px;
+}
+#input, #result {
+    border: 5px solid #D5D5D5;
+    text-align: center;
+    width: auto;
+    font-weight: bold;
+}
+#input {
+    background: #eef;
+    padding: 5px;
+}
+#input:after {
+    content: '';
+    display: block;
+    float: none;
+    clear: both;
+}
+#input &gt; input, #input &gt; select, #input &gt; div, #input &gt; button, #input &gt; div &gt; button {
+    width: 99%;
+    text-align: center;
+    display: block;
+    font-size: 17px;
+    color: #222;
+    background: #eef;
+    border: 3px solid #d3d3d3;
+    margin: 5px auto;
+    padding: 5px 0;
+}
+#input &gt; h3 {
+    text-align: left;
+    margin: 0;
+    padding: 10px 0 0 0;
+}
+#input &gt; h3:before {
+    content: '';
+    display: block;
+    float: none;
+    clear: both;
+}
+#input &gt; label {
+    margin: 0;
+    padding: 0;
+    display: block;
+    float: left;
+    padding-bottom: 10px;
+}
+#input &gt; label &gt; input {
+    width: auto !important;
+    display: inline;
+}
+#input .myButton {
+    box-shadow: inset 0px 1px 0px 0px #54a3f7; /* inset : 박스 안쪽의 그림자 */
+    background: linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
+    /* background-color: #007dc1; */
+    border-radius: 3px;
+    border: 1px solid #124d77;
+    display: inline-block;
+    color: #ffffff;
+    font-family: arial;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #154682;
+}
+#input .myButton:hover {
+    background: linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
+    background-color: #0061a7;
+}
+#input .myButton:active {
+    position: relative;
+    top: 1px;
+}
+
+h2 {
+    padding-top: 10px;
+}
+#result {
+    padding: 50px;
+    font-size: 17px;
+    color: #500;
+    background: #5AAEFF;
+}</code></pre></li>
+  <li>js
+<pre><code class="language-javascript">$(function (){
+    $('#join').submit(function(){  // id join에서 submit을 할 경우
+        let user_id = $('input[name="userId"]').val();  // text 속성 쓰면 안됨
+        /*if(!user_id)*/
+        if(user_id==''){            // 유효성 검사
+            alert("Please enter valid user id");
+            $('input[name="userId"]').focus();
+            return false;
+        }
+        let user_pwd = $('input[name="userpwd"]').val();  // text 속성 쓰면 안됨
+        /*if(!user_id)*/
+        if(user_pwd==''){            // 유효성 검사
+            alert("Please enter valid user password");
+            $('input[name="userpwd"]').focus();
+            return false;
+        }
+
+        if(!$('input[name="gender"]').is(':checked')){ // 선택을 했다면 true, 선택을 안했다면 false이다.
+            alert("Please select gender");
+
+            // 남자를 무조건 선택 -&gt; name타고 들어감
+            // radio는 배열로 받는다. gender[0] : 남자 / gender[1] : 여자
+           // document.form1.gender[0].checked = true; // 이건 javascript
+
+            // $('input[name="gender"]').attr('checked', true);  // jquery, 어쩔 때는 attr 대신 prop 써줘야 함
+            $('input[name="gender"]:eq(0)').attr('checked', true);  // 남
+
+            return false;
+        }
+
+        let user_email = $('input[name="useremail"]').val();
+        if(user_email==''){            // 유효성 검사
+            alert("Please enter valid user_email");
+            $('input[name="user_email"]').focus();
+            return false;
+        }
+
+        let url = $('input[name="URL"]').val();
+        if(url==''){            // 유효성 검사
+            alert("Please enter valid URL");
+            $('input[name="URL"]').focus();
+            return false;
+        }
+
+
+        let user_phone = $('input[name="phone"]').val();
+        if(user_phone==''){            // 유효성 검사
+            alert("Please enter valid phone number");
+            $('input[name="phone"]').focus();
+            return false;
+        }
+
+        if(!$('input[name="hobby"]').is(':checked')){
+            alert("Please enter valid hobby");
+            $('input[name="hobby"] &gt; option:selected').attr('checked', true);
+        }
+
+        if($('select[name="job"] &gt; option:selected').index()==0){
+            alert("Please select job");
+            $('select[name="job"] &gt; option:eq(1)').attr('selected', true);
+
+            return false;
+        }
+
+        // 입력한 내용을 화면에 출력
+        let gender = $('input[name="gender"]:checked').val();
+        let hobby = $('input[name="hobby"]:checked');  // 한개가 아니라 여러개 선택 -&gt; hobby는 변수가 아니라 배열
+        let hobby_value = '';
+
+        hobby.each(function(){
+            hobby_value += $(this).val();
+        });
+
+        let job = $('select[name="job"] &gt; option:selected').val();
+
+        let result = `
+            &lt;ul&gt;
+                &lt;li&gt;아이디 :  ${user_id} &lt;/li&gt;
+                &lt;li&gt;비밀번호 :  ${user_pwd} &lt;/li&gt;
+                &lt;li&gt;이메일 :  ${user_email} &lt;/li&gt;
+                &lt;li&gt;url :  ${url} &lt;/li&gt;
+                &lt;li&gt;핸드폰 :  ${user_phone} &lt;/li&gt;
+                &lt;li&gt;성별 :  ${gender} &lt;/li&gt;
+                &lt;li&gt;취미 :  ${hobby_value} &lt;/li&gt;
+                &lt;li&gt;직업 :  ${job} &lt;/li&gt;
+            &lt;/ul&gt;
+        `;
+        $('body').html(result);
+
+        return false; // 다른 페이지에 못가게 막음
+    });
+});</code></pre></li>
+</ul>
+</details>
+<h4>실습 분석 - query 분석</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>아이디 받아오기
+<pre><code class="language-javascript">let user_id = $('input[name="userId"]').val();  // text 속성 쓰면 안됨
+        /*if(!user_id)*/
+        if(user_id==''){            // 유효성 검사
+            alert("Please enter valid user id");
+            $('input[name="userId"]').focus();
+            return false;
+        }</code></pre>
+<ul>
+  <li>user_id가 안 들어왔다면 검증 방법은 2가지이다.
+<ol>
+  <li><code>if(!user_id)</code></li>
+  <li><code>if(user_id=='')</code></li>
+</ol></li>
+  <li>틀렸을 경우 <code>.focus</code>를 통해 다시 입력 받을 준비가 되도록 커서가 이동함</li>
+  <li><code>return false</code>를 통해 입력이 잘못됐다면 다른 창으로 이동하지 못하도록 한다.</li>
+  <li>비밀번호도 똑같은 로직으로 진행한다.</li>
+</ul></li>
+  <li>gender 받아오기
+<pre><code class="language-javascript">if(!$('input[name="gender"]').is(':checked')){ // 선택을 했다면 true, 선택을 안했다면 false이다.
+            alert("Please select gender");
+
+            // 남자를 무조건 선택 -&gt; name타고 들어감
+            // radio는 배열로 받는다. gender[0] : 남자 / gender[1] : 여자
+           // document.form1.gender[0].checked = true; // 이건 javascript
+
+            // $('input[name="gender"]').attr('checked', true);  // jquery, 어쩔 때는 attr 대신 prop 써줘야 함
+            $('input[name="gender"]:eq(0)').attr('checked', true);  // 남
+
+            return false;
+        }</code></pre>
+<ul>
+  <li><code>is(':checked')</code> 를 통해 선택이 됐는지 안됐는지 검증을 한다
+<ul>
+  <li><code>is()</code> 함수의 반환 값은 <code>true</code> or <code>false</code> 이다.</li>
+</ul></li>
+  <li><code>radio</code> 타입은 배열이기 때문에 배열로 값을 지정을 해야 한다.</li>
+  <li><code>eq(0)</code> 를 통해 indexing이 가능하다</li>
+</ul></li>
+  <li>hobby 받아오기
+<pre><code class="language-javascript">if(!$('input[name="hobby"]').is(':checked')){
+            alert("Please enter valid hobby");
+            $('input[name="hobby"] &gt; option:selected').attr('checked', true);
+        }</code></pre>
+<ul>
+  <li>이것도 <code>checkbox</code> 타입으로 배열로 값을 받아와야 한다.</li>
+  <li><code>is(':checked')</code> 를 통해 선택이 됐는지 안됐는지 검증을 한다</li>
+</ul></li>
+  <li>job 받아오기
+<pre><code class="language-javascript"> if($('select[name="job"] &gt; option:selected').index()==0){
+            alert("Please select job");
+            $('select[name="job"] &gt; option:eq(1)').attr('selected', true);
+
+            return false;
+        }</code></pre>
+<ul>
+  <li>타입이 select 인 것 빼고는 딱히 특이사항은 없다.</li>
+</ul></li>
+  <li>입력했던 값들을 출력하기
+<ol>
+  <li>gender
+<ol>
+  <li>타입이 <code>radio</code> 이기 때문에 1개만 택할 수 있으므로 딱히 어려운 것은 없다.</li>
+  <li><code>let gender = $('input[name="gender"]:checked').val();</code></li>
+</ol></li>
+  <li>hobby
+<ol>
+  <li>타입이 <code>checkbox</code> 이기 때문에 여러 가지를 선택할 수 있다.</li>
+  <li><code>let hobby = $('input[name="hobby"]:checked');</code> → 값이  1개가 아니라 <code>val()로 받지 않음</code></li>
+  <li>다음과 같이 받고 hobby.each()를 통해 <code>hobby</code>에 포함된 체크박스들을 하나씩 순회(iterate)하면서, 각각의 체크박스에 대해 특정 작업을 수행한다.
+<pre><code class="language-javascript">hobby.each(function(){
+            hobby_value += $(this).val();
+        });</code></pre></li>
+</ol></li>
+  <li>job
+<ol>
+  <li><code>let job = $('select[name="job"] &gt; option:selected').val();</code>
+<ol>
+  <li>select인거 빼곤 딱히 특이사항 없는듯</li>
+</ol></li>
+</ol></li>
+  <li>html 형식으로 만들어서 출력
+<pre><code class="language-javascript">let result = `
+            &lt;ul&gt;
+                &lt;li&gt;아이디 :  ${user_id} &lt;/li&gt;
+                &lt;li&gt;비밀번호 :  ${user_pwd} &lt;/li&gt;
+                &lt;li&gt;이메일 :  ${user_email} &lt;/li&gt;
+                &lt;li&gt;url :  ${url} &lt;/li&gt;
+                &lt;li&gt;핸드폰 :  ${user_phone} &lt;/li&gt;
+                &lt;li&gt;성별 :  ${gender} &lt;/li&gt;
+                &lt;li&gt;취미 :  ${hobby_value} &lt;/li&gt;
+                &lt;li&gt;직업 :  ${job} &lt;/li&gt;
+            &lt;/ul&gt;
+        `;
+        $('body').html(result);
+</code></pre></li>
+</ol></li>
+</ol>
+<h3>Mouse Event</h3>
+<ul>
+  <li><code>mousedown</code> / <code>mouseup</code> /  <code>mouseenter</code> / <code>mouseleave</code></li>
+</ul>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;마우스 이벤트 확인하기&lt;/h1&gt;
+    &lt;div id="input"&gt;
+        Do it here :D
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#input').mousedown(function (){  // 마우스 클릭하면 발생
+            $('#result').html('Mouse Down Event')
+        })
+        $('#input').mouseup(function (){    // 마우스 클릭했다가 떼면 발생
+            $('#result').html('Mouse up Event')
+        })
+        $('#input').mouseenter(function (){  // 마우스 구역 들어가면 발생
+            $('#result').html('Mouse enter Event')
+        })
+        $('#input').mouseleave(function (){  // 마우스 벗어나면 발생
+            $('#result').html('Mouse leave Event')
+        })
+
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>click</code> / <code>dblclick</code>  : 클릭 &amp;  더블 클릭 이벤트</li>
+</ul>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;클릭 이벤트 확인하기&lt;/h1&gt;
+    &lt;div id="input"&gt;
+        Click or Double Click :)
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#input').click(function (){
+            $(result).html('Click Event')
+        });
+        $('#input').dblclick(function (){
+            $(result).html('Double Click Event')
+        });
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>hover를 이용하여 이벤트 처리하기 (function 2개)</li>
+</ul>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hover 이벤트 확인하기&lt;/h1&gt;
+    &lt;div id="input"&gt;
+        Mouse Over or Out
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+
+
+    &lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#input').hover(function (){
+            $('#result').html(`Mouse Enter Event (onMouseOver)`)
+        },function (){
+            $('#result').html(`Mouse Leave Event (onMouseOut)`)
+        });  // function 2개 -&gt; 마우스가 올라왔을 때, 내려갔을 때
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>keydown</code> / <code>keyup</code> : 키보드 이벤트</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_002.png" alt="img_002.png">
+</figure>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Key 이벤트 확인하기&lt;/h1&gt;  &lt;!--키보드에서 눌린 것--&gt;
+    &lt;div id="input"&gt;
+        &lt;input type="text"&gt;
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function () {
+        var down_count = 0;
+        var up_count = 0;
+
+        $('#input &gt; input[type="text"]').keydown(function (){
+            down_count++;
+            $("#result").html("down_count: "+down_count+" / up_count"+up_count)
+        })
+        $('#input &gt; input[type="text"]').keyup(function (){
+            up_count++
+            $("#result").html("down_count: "+down_count+" / up_count"+up_count)
+        })
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>키보드 꾸욱 누르고 있으면 <code>keydown</code>  1개</li>
+  <li>키보드 눌렀다가 떼는 순간 <code>keyup</code>  1개</li>
+</ul>
+<h3>JSON &amp; JSON 객체 배열 / e.which</h3>
+<blockquote><strong>JSON</strong> (JavaScript Object Notation)은 데이터를 구조화된 형식으로 저장하고 전송하기 위한 경량 데이터 교환 형식</blockquote>
+<pre><code class="language-javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Key 이벤트 확인하기&lt;/h1&gt;
+    &lt;div id="input"&gt;
+        &lt;input type="text"/&gt;
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+function getKeyName(keyCode){
+    // JSON 객체 배열
+    let keyMap = [
+        { code: 8, name: "backspace"},
+        { code: 9, name: "tab"},
+        { code: 13, name: "enter"},
+        { code: 16, name: "shift"},
+        { code: 18,name: "ctrl"},
+        { code: 19, name: "alt"},
+        { code: 20, name: "pausebreak"},
+        { code: 21, name: "capslock"},
+        { code: 25, name: "han/eng"},  // 결과 안나온다
+        { code: 27, name: "hanja"},
+        { code: 65, name: "A" }, // 수정
+        { code: 27, name: "esc" }, // 수정
+        { code: 97, name: "a" }
+    ];
+    for(let i=0;i&lt;keyMap.length;i++){
+        if(keyMap[i].code ==  keyCode){
+            return keyMap[i].name;
+        }
+    }
+
+}
+$(function (){
+    $('#input &gt; input[type="text"]').keydown(function (e){
+
+        $('#result').html(e.which+'번 키를 눌렀음 &amp;gt&amp;gt;' +getKeyName(e.which))
+    });
+
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>keyMap</code> 배열은 키 코드와 키 이름의 매핑을 담고 있는 객체 배열이다.</li>
+  <li><code>e.which</code>는 사용자가 누른 키의 코드값을 반환</li>
+</ul>
+<h3>focus / blur event</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_003.png" alt="img_003.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_004.png" alt="img_004.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;focus/blur 이벤트 확인하기&lt;/h1&gt;
+&lt;div id="input"&gt;
+    &lt;input type="text"/&gt;
+&lt;/div&gt;
+&lt;h2&gt;결과&lt;/h2&gt;
+&lt;div id="result"&gt;&lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#input &gt; input[type="text"]').focus()
+        $('#input &gt; input[type="text"]').focus(function (){
+           $('#result').html('포카스가 들어왔습니다.')
+        });
+        $('#input &gt; input[type="text"]').blur(function (){
+            $('#result').html('포카스가 나갔습니다.')
+        });
+
+    });
+
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>input box를 클릭하면 focus가 들어온 거고 밖을 클릭했을 때 blur가 실행이 된다,  그때 <code>function을</code> 정의를 해주면서 어떤 것을 할지를 정의해준다.</li>
+</ul>
+<h3>Change 이벤트 발생</h3>
+<blockquote>어떤 이벤트로 인해 변화되었을 때의 기능을 내부에 function을 통해 정의할 수 있다.</blockquote>
+<ul>
+  <li>초기 화면 </li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>이름 입력했을 때</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>코드</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Change 이벤트 확인하기&lt;/h1&gt;
+    &lt;div id="input"&gt;
+        &lt;h3&gt;이름&lt;/h3&gt;
+        &lt;input type="text" name="user_name"/&gt;
+
+        &lt;h3&gt;성별&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="남자"&gt;남자&lt;/label&gt;
+        &lt;label&gt;&lt;input type="radio" name="gender" value="여자"&gt;여자&lt;/label&gt;
+
+        &lt;h3&gt;취미&lt;/h3&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="축구"&gt;축구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="농구"&gt;농구&lt;/label&gt;
+        &lt;label&gt;&lt;input type="checkbox" name="hobby" value="야구"&gt;야구&lt;/label&gt;
+
+        &lt;h3&gt;직업&lt;/h3&gt;
+        &lt;select name="job"&gt;
+            &lt;option value="프로그래머"&gt;프로그래머&lt;/option&gt;
+            &lt;option value="퍼블리셔"&gt;퍼블리셔&lt;/option&gt;
+            &lt;option value="디자이너"&gt;디자이너&lt;/option&gt;
+            &lt;option value="기획"&gt;기획&lt;/option&gt;
+        &lt;/select&gt;
+
+    &lt;/div&gt;
+    &lt;h2&gt;결과&lt;/h2&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+       $('input[name="user_name"]').change(function (){  // DB에 과부화 와서 change 이벤트 잘 안씀
+           $('#result').text(`이름의 입력값이 변경되었습니다.`)
+       });
+
+        $('input[name="gender"]').change(function (e){  // DB에 과부화 와서 change 이벤트 잘 안씀
+            //$('#result').text(`성별의 입력값이 변경되었습니다.`)
+            $('#result').text(`성별 ${e.target.value}로 변경되었습니다.`)
+
+            console.log(e.target) // 태그 전체의 값을 가져옴
+
+            console.log(e.target.tagName) // 태그를 가져옴
+
+            console.log(e.target.value)  //  남자 또는 여자  =&gt; 가장 많이 씀
+
+        });
+
+        $('input[name="hobby"]').change(function (e){  // DB에 과부화 와서 change 이벤트 잘 안씀
+            $('#result').text(`취미 ${e.target.value}로 변경되었습니다`)
+        });
+
+        $('select[name="job"]').change(function (e){  // DB에 과부화 와서 change 이벤트 잘 안씀
+            $('#result').text(`직업 ${e.target.value}로 변경되었습니다`)
+        });
+
+    });
+
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>submit /  confirm / click event</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;회원가입&lt;/h1&gt;
+    &lt;form name="form1" action="form_ok.html"&gt;
+        &lt;div id="input"&gt;
+            &lt;h3&gt;당신의 이름은 무엇입니까?&lt;/h3&gt;
+            &lt;input type="text" name="user_name"/&gt;
+            &lt;input type="submit" value="저장하기" class="myButton"/&gt;  &lt;!--입력 상자의 데이터를 가지고 페이지 이동 -&gt;다른건 데이터 안들고감--&gt;
+            &lt;input type="reset" value="다시작성"  class="myButton"/&gt;
+        &lt;/div&gt;
+    &lt;/form&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function (){
+   $('form[name="form1"]').submit(function (){
+       if(!confirm('정말로 가입하시겠습니까?')){
+           return false;
+       }
+   })
+
+    $('input[type="reset"]').click(function (){
+        if(!confirm('정말로 취소하시겠습니까?')){
+            return false;  // 여기서 false가 되면 reset이 적용이 되지 않으므로 text가 그대로 남는다
+        }
+    })
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>confirm()</code> 에서 확인을 누르면 true, 취소를 누르면 false가 반환된다.</li>
+</ul>
+<h3><code>$(window)</code></h3>
+<blockquote>현재 브라우저 창(또는 뷰포트)를 가리킨다.</blockquote>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_007.png" alt="img_007.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    @import "../css/event.css";
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;창크기 조절 이벤트&lt;/h1&gt;
+&lt;div id="result"&gt;&lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function (){
+  $(window).resize(function (){
+    $('#result').html(`&lt;p&gt; ${$(window).width()} X ${$(window).height()}&lt;/p&gt;`)
+  });
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>.resize(function () {...})</code>는 창 크기가 변경될 때마다 호출되는 이벤트 핸들러이다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_008.png" alt="img_008.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/scroll.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="gradientStyle"&gt;
+        &lt;h1&gt;스크롤 이벤트&lt;/h1&gt;
+        &lt;div id="console"&gt;없지롱~~~~&lt;/div&gt;
+    &lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){Z
+        let cnt = 0;
+        $(window).scroll(function (){
+            cnt++;
+            $('#console').html(`스크롤이 ${cnt}번 이동되었습니다.`)
+
+            setTimeout(function (){
+                $('#console').html(`초기화되었음`)
+                cnt=0;
+            },3000);  // 3초동안
+        });
+    });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>$(</code><em><code>window</code></em><code>).scroll(function (){..}</code> 는 브라우저 창에서 스크롤할때마다 발생하는 이벤트 핸들러이다.</li>
+</ul>
+<h3>단독 개체 / 복수 개체 Event Handler</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_009.png" alt="img_009.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;this의 사용&lt;/h1&gt;
+&lt;div id="input"&gt;
+    &lt;h2&gt;단독 개체의 확인&lt;/h2&gt;
+    &lt;div id="singleButton"&gt;클릭하세요&lt;/div&gt;
+
+    &lt;h2&gt;복수 개체의 확인&lt;/h2&gt;
+    &lt;div&gt;
+        &lt;button class="multiButton"&gt;클릭하세요&lt;/button&gt;
+        &lt;button class="multiButton"&gt;클릭하세요&lt;/button&gt;
+        &lt;button class="multiButton"&gt;클릭하세요&lt;/button&gt;
+        &lt;button class="multiButton"&gt;클릭하세요&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $(function (){
+            $('#singleButton').click(function (){
+                if(!$(this).hasClass('selected')){
+                    $(this).addClass('selected');
+                    $(this).html("클릭되었습니다.");
+                } else {
+                    $(this).removeClass('selected');
+                    $(this).html("클릭하세요.");
+                }
+            });
+        });
+
+      $('.multiButton').click(function (){
+        let idx = $(this).index();
+        let result =  `${idx}번째 요소 선택`
+          $(this).html(result)
+      });
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>단일 버튼에서는 `hasClass()</li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/69a3cb7bac86493e928babe3513d42ce" target="_blank" rel="noopener">jQuery Animation</a></p>
+<div class="block-children">
+<h3>slideUp / slideDown, fadeIn / fadeOut, slideToggle / toggle</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button id="btn1"&gt;slideUp&lt;/button&gt;
+    &lt;button id="btn2"&gt;slideDown&lt;/button&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+
+    &lt;button id="btn3"&gt;fadeIn&lt;/button&gt;
+    &lt;button id="btn4"&gt;fadeOut&lt;/button&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;
+
+    &lt;button id="btn5"&gt;slide toggle&lt;/button&gt;
+    &lt;button id="btn6"&gt;toggle&lt;/button&gt;
+
+    &lt;p&gt;&lt;/p&gt;
+    &lt;img src="../images/1.jpg" alt="단체사진" width="400" height="300"&gt;  &lt;!--width height 없으면 슈루룩 사라짐+---&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#btn1').click(function (){
+           $('img').slideUp(500)  // 단위 1/1000
+        });
+
+        $('#btn2').click(function (){
+            $('img').slideDown(500)  // 단위 1/1000
+        });
+
+        $('#btn3').click(function (){
+            $('img').fadeIn(1000)  // 단위 1/1000
+        });
+
+        $('#btn4').click(function (){
+            $('img').fadeOut(500)  // 단위 1/1000
+        });
+
+        $('#btn5').click(function (){
+            $('img').slideToggle(500)  // 단위 1/1000
+        });
+
+        $('#btn6').click(function (){
+            $('img').toggle(500)  // 단위 1/1000
+        });
+
+
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>$(this)</h3>
+<ul>
+  <li>this는 자바스크립트이고, $(this)는 jQuery문법이다</li>
+  <li>this의 경우 해당 이벤트가 발생한 요소를 표시해주고, $(this)는 이벤트가 발생하면 <code>발생한 태그</code>를 <code>Object로 보여준</code> 다는 게 다른점이다.</li>
+  <li>this와 같은 데이터를 갖기 위해서는 <code>$(this)[0]</code> 를 사용하면 된다.
+<ul>
+  <li><code>this  === $(this)[0]</code></li>
+</ul></li>
+</ul>
+<pre><code class="language-html">console.log('this = '+this)
+console.log('this = '+$(this)[0])
+console.log('$(this) = '+$(this))</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>모든 애니메이션 관련 함수들은 시간값 외에 <code>두번째 파라미터로 함수를 지정</code>할 수 있다. 이 함수들에 애니메이션 처리가 종료된 후에 동작할 내용을 담는다</li>
+  <li><code>show(time [, function() {......}]);</code></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    #thumb {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      width: 100px;
+      float: left;
+    }
+    #thumb li {
+      padding: 5px 10px;
+    }
+    #thumb img {
+      width: 80px;
+      height: 80px;
+    }
+    #view {
+      padding: 5px 0;
+      width: 360px;
+      height: 270px;
+      float: left;
+    }
+    #view img {
+      width: 100%;
+      height: 100%;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;ul id="thumb"&gt;
+    &lt;li&gt;
+      &lt;a href="../images/1.jpg" class="item"&gt;&lt;img src="../images/1.jpg"&gt;&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="../images/2.jpg" class="item"&gt;&lt;img src="../images/2.jpg"&gt;&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li&gt;
+      &lt;a href="../images/3.jpg" class="item"&gt;&lt;img src="../images/3.jpg"&gt;&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div id="view"&gt;&lt;img src="../images/1.jpg"&gt;&lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  $(function (){
+    $('.item').click(function (){
+      let image = $(this).attr('href');
+
+      $('#view').hide(500,function (){
+        $('#view img').attr('src',image);
+        $(this).show(500)
+      })
+
+      return false;
+    });
+  });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>animate() 함수</h3>
+<ul>
+  <li>좀 더 다이나믹한 애니메이션을 구현할 수 있다.</li>
+  <li>animate() 함수는 수치값을 지정하는 CSS 속성들을 제어하여 애니메이션 효과를 만들어 낸다.</li>
+  <li>구조
+<ul>
+  <li><code>animate(properties [, duration][, easing][, complete])</code>
+<ol>
+  <li>properties
+<ol>
+  <li>움직임을 만들어 낼 수 있는 CSS 속성들. json 형식으로 기술된다.</li>
+</ol></li>
+  <li>duration
+<ol>
+  <li>애니메이션의 지속시간을 설정</li>
+</ol></li>
+  <li>easing
+<ol>
+  <li>움직임에 변화를 줄 수 있는 속성
+<ol>
+  <li>swing : 끝점에 가서 속도가 살짝 느려짐</li>
+  <li>linear: 균일한 속도 유지</li>
+</ol></li>
+</ol></li>
+  <li>complete
+<ol>
+  <li>움직임이 멈춘 후 실행될 속성</li>
+  <li>움직임이 완료된 다음 이 속성에 지정된 함수가 실행된다</li>
+</ol></li>
+</ol></li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    #box {
+      background: #98bf21;
+      border: 1px solid blue;
+      height: 100px;
+      width: 100px;
+      position: absolute; /* 부모 div 영역 밖으로 밀려 나간다 */
+      left: 0;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Animate&lt;/h1&gt;
+  &lt;button&gt;Reset&lt;/button&gt;
+  &lt;button&gt;Ani1&lt;/button&gt;
+  &lt;button&gt;Ani2&lt;/button&gt;
+  &lt;button&gt;Ani3&lt;/button&gt;
+  &lt;button&gt;Ani4&lt;/button&gt;
+  &lt;div id="animation-area" style="border:1px solid red;"&gt;
+    &lt;div id="box"&gt;hello&lt;/div&gt;
+  &lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  $(function (){
+    $('button:eq(0)').click(function (){
+      $('div#animation-area').html(`&lt;div id="box"&gt;&lt;/div&gt;`)
+    });
+    $('button:eq(1)').click(function (){
+      $('div#box').animate({  // css는 json 형식으로 표현
+        'left': '250px'
+      },1000,'swing',function (){  // 사후 뒷처리
+        alert('애니메이션 종료')
+      })
+    });
+    // 좌측으로부터 250px 이동하고, 너비와 높이를 150px에 하기
+    $('button:eq(2)').click(function (){
+      $('div#box').animate({  // json 형식의 css속성을 여러개 나열할 수 있다.
+        'left': '250px',
+        'width' : '150px',
+        'height' : '150px',
+      })  // css 속성을 제외한 나머지 파라미터들은 생략 가능.
+    // 좌측으로부터 50px 이동하고, 너비와 높이를 50px씩 크게 하기
+    });
+    $('button:eq(3)').click(function (){
+      $('div#box').animate({  // json 형식의 css속성을 여러개 나열할 수 있다.
+        'left': '+=50px',
+        'width' : '+=50px',
+        'height' : '+=50px',
+      })
+    });
+
+    // 애니메이션 연속 호출
+    $('button:eq(4)').click(function (){
+      var div = $('#box')
+
+      div.animate({height:'300px'},1000)
+      div.animate({width:'300px'},500)
+      div.animate({height:'100px'},800)
+      div.animate({width:'100px'},300)
+
+    });
+  });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/a9f0d6ab497d467195c6eedb020f2037" target="_blank" rel="noopener">jQuery attr & prop</a></p>
+<div class="block-children">
+<ul>
+  <li>jQuery 1.6버전 이전에는 attr() 만으로 가능하던 처리를 업데이트 이후 <code>attr()</code> 와 <code>prop()</code> 으로 나누어졌다.</li>
+</ul>
+<h3>attr() &amp; prop()</h3>
+<ul>
+  <li><code>attr()</code>와 <code>prop()</code>는 모두 HTML 요소의 속성(attribute)이나 속성(property)을 가져오거나 설정하는 데 사용된다.</li>
+  <li>하지만 중요한 차이점이 존재한다.</li>
+  <li>attribute
+<p>⭐ <strong>HTML에 작성된 속성값을 문자열로 받아온다.</strong></p>
+<ul>
+  <li><code>attr()</code>는 HTML 요소의 <strong>속성(attribute)</strong> 값을 가져오거나 설정하는 데 사용</li>
+  <li><strong>초기 값을 다룰 때 사용</strong></li>
+  <li> HTML 코드에 직접 작성된 값이다.</li>
+  <li>이 값은 DOM이 생성될 때 초기 값으로 설정된다.
+<pre><code class="language-html">&lt;input type="checkbox" id="myCheckbox" checked="checked"&gt;
+</code></pre>
+<ul>
+  <li>여기서 <code>checked="checked"</code>는 속성(attribute)이다.</li>
+</ul></li>
+</ul></li>
+  <li>property
+<ul>
+  <li>브라우저의 DOM 객체가 유지하는 <code>상태값</code></li>
+  <li><code>prop()</code>는 <strong>DOM 객체의 현재 상태를 다룰 때 주로 사용</strong></li>
+</ul></li>
+</ul>
+<h3>언제 <code>attr()</code>를 사용하고, 언제 <code>prop()</code>를 사용해야 할까?</h3>
+<ul>
+  <li><strong>초기 설정값 또는 HTML 코드에 명시된 속성을 다룰 때</strong>
+<ul>
+  <li><code>attr()</code>를 사용합니다. </li>
+  <li>예를 들어, <code>&lt;img&gt;</code> 태그의 <code>src</code> 속성 값, <code>&lt;a&gt;</code> 태그의 <code>href</code> 속성 값 등은 <code>attr()</code>로 다룹니다.</li>
+</ul></li>
+  <li><strong>DOM의 현재 상태를 다룰 때</strong>
+<ul>
+  <li><code>prop()</code>를 사용합니다. </li>
+  <li>예를 들어, 체크박스가 현재 체크되어 있는지 확인하거나, <code>&lt;input&gt;</code> 요소가 비활성화되어 있는지를 확인할 때 <code>prop()</code>를 사용합니다.</li>
+</ul></li>
+</ul>
+<h3>jQuery객체와 DOM 객체의 차이</h3>
+<ul>
+  <li>jQuery객체
+<ul>
+  <li>순수 DOM 객체로 바로 접근하는 것이 아니다</li>
+</ul>
+<pre><code class="language-html">var check = $('#myCheckbox'); // jQuery 객체
+console.log(typeof check); // "object"</code></pre></li>
+</ul>
+<ul>
+  <li>DOM 객체
+<ul>
+  <li>순수 DOM 객체는 브라우저의 기본 HTML 요소를 나타낸다.</li>
+  <li><code>getElementById</code>, <code>querySelector</code>와 같은 순수 자바스크립트 메서드로 접근</li>
+</ul>
+<pre><code class="language-html">var checkDom = document.getElementById('myCheckbox'); // DOM 객체
+console.log(typeof checkDom); // "object"</code></pre></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;&lt;a href="#"&gt;Link&lt;/a&gt; &lt;/p&gt;
+    &lt;input type="checkbox" name="" id="check" checked="checked"&gt;체크박스
+
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function (){
+    // 1. a 태그의 href 속성과 href 속성을 포함한 전체 URL을 출력
+    console.log(`attr = ${$('a').attr('href')}`)
+    console.log(`prop = ${$('a').prop('href')}`)
+
+    // 2. id가 'check'인 요소를 선택하고, 그 결과를 변수 check에 저장
+    let check = $('#check')
+    console.log(`check = ${check}`)
+
+    // 3. check 요소의 태그 이름(tagName)을 prop() 메서드로 가져와 출력
+    console.log(`check = ${check.prop('tagName')}`) // "INPUT"
+
+    // 4. check 요소의 태그 이름을 attr() 메서드로 가져오려 하지만, 이는 속성이 아니므로 undefined 출력
+    console.log(`check = ${check.attr('tagName')}`) // undefined
+
+    // 5. 체크박스가 체크되어 있는지를 prop()과 attr() 메서드로 각각 확인
+    console.log(`check = ${check.prop('checked')}`) // true
+    console.log(`check = ${check.attr('checked')}`) // "checked"
+
+    // 6. 순수 자바스크립트로 체크박스를 선택하고, getAttribute()로 checked 속성 값을 가져옴
+    let check2 = document.querySelector('#check')
+    console.log(`attr = ${check2.getAttribute('checked')}`) // "checked"
+
+    /*
+        .hasAttribute(name) —&gt; 속성의 존재 확인
+        .getAttribute(name) — 속성값을 가져온다
+        .setAttribute(name, value) — 속성값을 변경
+        .removeAttribute(name) — 속성값을 제거
+    */
+})
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><code>tagName</code> 은 <strong>DOM API</strong>에서 사용되는 속성이다.
+<pre><code class="language-html">var element = document.getElementById('myElement');
+console.log(element.tagName); // "DIV" 또는 다른 태그 이름
+	</code></pre></li>
+</ul>
+<h4>attr() 의 활용</h4>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;속성 제어&lt;/h1&gt;
+    &lt;p&gt;클릭하세요.&lt;/p&gt;
+    &lt;img src="../images/1.jpg" width="500" height="300" alt="카카오 단체 사진"/&gt;
+    &lt;div id="result"&gt;&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function (){
+    let index = 1;
+    $('img').click(function (){
+        index = (index%4) + 1;
+        $(this).attr('src',"../images/"+index+".jpg")
+    })
+})
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>html의 속성을 받아와서 변경을 해줌 → 이미지가 1~4로 클릭할때마다 변경됨</li>
+</ul>
+<h4>prop()</h4>
+<ul>
+  <li>attr를 사용하면 전체 선택 / 전체 해제가 잘된다.</li>
+  <li>하지만 전체 선택 후 부분적으로 해제하면 전체 선택 / 전체 해제가 제대로 안된다.</li>
+  <li>해결 방법
+<ul>
+  <li>attr()를 통해 문자열로 집어넣지 말고</li>
+  <li>prop()를 사용하여 값으로 넣어라</li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/event.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;전체 선택 기능 구현하기&lt;/h1&gt;
+&lt;form name="form1"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;취미&lt;/legend&gt;
+        &lt;p&gt;
+            &lt;input type="checkbox" id="all_check" value="Y"&gt;
+            &lt;label for="all_check"&gt;전체 선택/ 전체 해제&lt;/label&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+            &lt;input type="checkbox" id="hobby1" class="hobby_check" value="축구"&gt;
+            &lt;label for="hobby1"&gt;축구&lt;/label&gt;
+
+            &lt;input type="checkbox" id="hobby2" class="hobby_check" value="농구"&gt;
+            &lt;label for="hobby2"&gt;농구&lt;/label&gt;
+
+            &lt;input type="checkbox" id="hobby3" class="hobby_check" value="야구"&gt;
+            &lt;label for="hobby3"&gt;야구&lt;/label&gt;
+        &lt;/p&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $('#all_check').change(function (){
+        let isChk = $(this).is(':checked');
+        console.log(isChk);  // true or false
+
+        $('.hobby_check').prop('checked',isChk);
+    });
+
+    $('.hobby_check').change(function (){
+        if(!$(this).is(':checked')){
+            $('#all_check').prop('checked', false);
+        } else {
+            // 모든 .hobby_check 체크박스가 선택된 경우
+            if ($('.hobby_check:checked').length === $('.hobby_check').length) {
+                $('#all_check').prop('checked', true);
+            }
+        }
+    });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>load() 함수</h3>
+<ul>
+  <li><code>load()</code> 함수는 jQuery에서 제공하는 AJAX 메서드 중 하나이다.</li>
+  <li>사용법
+<pre><code class="language-html">$(selector).load(url, data, callback);</code></pre>
+<ul>
+  <li><strong><code>selector</code></strong>: jQuery 선택자, AJAX 요청을 통해 내용이 삽입될 대상 요소를 선택</li>
+  <li><strong><code>url</code></strong>: 서버에서 가져올 데이터의 URL</li>
+  <li><strong><code>data</code></strong> (옵션): 서버에 전송할 데이터</li>
+  <li><strong><code>callback</code></strong> (옵션): AJAX 요청이 완료된 후 호출되는 콜백 함수이다. 
+<ul>
+  <li>데이터가 로드된 후 특정 작업을 수행하려는 경우에 사용</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>
+</p>
+<h3>Append() 함수 - 중요 x</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;input type="button" value="추가"&gt;
+    &lt;input type="button" value="삭제"&gt;
+
+    &lt;ul&gt;&lt;/ul&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        let i=1;
+
+        $('input:eq(0)').click(function (){
+            let li1 = $('&lt;li&gt;').css('color','red').html(`추가 항목 ${i++}`)  // &lt;li&gt; 태그 생성
+            let li2 = $('&lt;li&gt;').css('color','green').html(`추가 항목 ${i++}`)  // &lt;li&gt; 태그 생성
+            let li3 = $('&lt;li&gt;').css('color','blue').html(`추가 항목 ${i++}`)  // &lt;li&gt; 태그 생성
+
+            $('ul').append(li1);
+            $('ul').append(li2);
+            $(li3).appendTo('ul');
+        })
+
+        $('input:eq(1)').click(function (){
+            $('ul').empty()
+        })
+    });
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>bind() 함수</h3>
+<ul>
+  <li>하나의 요소에 여러가지 이벤트를 제어할 수 있다.</li>
+  <li>형식
+<ul>
+  <li>단일
+<pre><code class="language-html">$("요소").bind("이벤트", function() {
+    ... 이벤트 처리 ...
+});
+</code></pre></li>
+  <li>다중
+<pre><code class="language-html">$("요소").bind({
+    "이벤트1" : function() { ... 이벤트 처리 ...},
+    "이벤트2" : function() { ... 이벤트 처리 ...},
+    "이벤트3" : function() { ... 이벤트 처리 ...}
+});</code></pre></li>
+</ul></li>
+</ul>
+<h3>on() 함수</h3>
+<ul>
+  <li>bind는 deprecate되고 on을 사용하라고 권장</li>
+  <li>형식
+<pre><code class="language-html">$(선택자).on( events [,selector] [,data], handler( eventObject ) )
+$(선택자).on(이벤트타입 [,자손선택자]  [,데이터], 핸들러())</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="demo2"&gt;
+    &lt;button&gt;add&lt;/button&gt;
+    &lt;ul&gt;
+        &lt;li&gt;test1&lt;/li&gt;
+        &lt;li&gt;test2&lt;/li&gt;
+        &lt;li&gt;test3&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function () {
+        $('#demo2 button').on('cloick', function () {
+            $('ul').append(`&lt;li&gt;test${i++}&lt;/li&gt;`)
+        })
+
+/*        $('#demo2 li').on('click', function (){  -&gt; on도 이렇게 쓰면 처리 안댐
+            alert($(this).text())
+        })*/
+
+        // $(조상).on('이벤트', 후손, function(){}); -&gt; 앞부분에 반드시 조상님이 와야함
+        $(document).on('click','li',function (){
+            alert($(this).text())
+        });
+
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+<h3>.val(””)와 .empty()의 차이</h3>
+<ul>
+  <li>val(””)
+<pre><code class="language-html">$('#user_name').val("")
+$('#comment').val("")</code></pre>
+<ul>
+  <li>입력 필드의 값을 빈 문자열로 설정</li>
+</ul></li>
+  <li>empty()
+<pre><code class="language-html">//초기화
+$('#user_name').empty()
+$('#comment').empty()</code></pre>
+<ul>
+  <li><code>empty()</code> 메서드는 요소의 자식 노드를 모두 제거</li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/25d9110ec4714b888e95a5883cd9fac7" target="_blank" rel="noopener">jQuery DOM</a></p>
+<div class="block-children">
+<ul>
+  <li>jQuery는 특정 HTML 요소에 대한 객체를 기준으로 그 주변 요소나 태그의 트리 구조를 탐색할 수 있다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>jQuery는 웹브라우저에 보여지는 HTML 태그 안에 HTML 요소를 생성하여 포함시키도록 하는 기능을 지원한다.</li>
+</ul>
+<ol>
+  <li>DOM (Document Object Model)
+<ol>
+  <li>DOM은 HTML과 XML 문서에 대한 구조적 정보를 제공하는 양식이다.</li>
+  <li>즉, DOM이 HTML과 XML 문서의 뼈대를 의미한다.</li>
+  <li>DOM은 문서구조나 외양 및 내용을 바꿀 수 있도록 프로그램에서 접근할 수있는 방법을
+제공하는 인터페이스를 말한다.</li>
+  <li>DOM은 <code>프로퍼티와 메소드를 가지는 객체</code>와 <code>노드의 트리형 구조</code>로 표현되는데,
+이 구조는 스크립트나 다른 언어에서 웹페이지에 접근할 때 필수적이다.</li>
+</ol></li>
+  <li>DOM의 구성요소
+① Element : (= HTML 태그) 하나의 태그 요소를 의미한다.
+② Attribute : (= HTML 태그 속성) 하나의 Element에 속해 있는 속성들을 의미한다.
+③ Node : 하나의 Element에서 시작되는 트리 구조, 
+         하나의 노드 안에는 여러개의 노드가 포함되어 있을 수 있다.
+</li>
+  <li>DOM 트리 구조</li>
+</ol>
+<ul>
+  <li>DOM 객체의 제어
+<ul>
+  <li><code>다이나믹한 대화형 웹페이지 제작</code>에서 <strong>DOM을 제어하는 것은 중요</strong>하다.</li>
+  <li>jQuery의 기능들도 모두 DOM을 제어했기 때문에 가능한 것이다.</li>
+  <li>jQuery가 제공하는 5개 함수를 통해, 하나의 요소를 기준으로 상대적으로 탐색할 수 있다. 
+<p>① next() : 현재 요소를 기준으로 다음 요소를 리턴 한다. </p>
+<p>② prev() : 현재 요소를 기준으로 이전 요소를 리턴 한다. </p>
+<p>③ parent() : 현재 요소를 기준으로 상위 요소를 리턴 한다. </p>
+<p>④ children() : 현재 요소를 기준으로 하위 요소를 배열로 리턴 한다. </p>
+<p>⑤ eq(n) : 현재 요소를 기준으로 하위 요소 중 n번째 요소를 선택한다. n은 0부터 시작한다.</p></li>
+</ul></li>
+  <li>조상과 자손의 검색
+<ol>
+  <li>직계 자손이나 항렬이 같은 친척 찾기
+<ol>
+  <li>next(), prev(), parent(), children(), eq(n) 함수들은 특정 요소와 인접해 있는 다른 요소들을
+탐색한다. 즉 이 함수들은 HTML 태그의 Node를 타고 다니는 것과 같은 효과를 갖는다.</li>
+</ol></li>
+  <li>가까운 조상 찾기
+<ol>
+  <li>parents() : HTML 요소가 인접해 있지 않더라도, 현재 객체 요소의 상위 태그 중에서
+파라미터로 전달된 셀렉터가 가리키는 가장 가까운 요소를 찾는다.</li>
+  <li>사용법$("CSS셀렉터").parents("CSS셀렉터");</li>
+</ol></li>
+  <li>가까운 자식 찾기
+<ol>
+  <li>find() : HTML 요소가 인접해 있지 않더라도, 현재 객체 요소의 하위 태그 중에서
+파라미터로 전달된 셀렉터가 가리키는 가장 가까운 요소를 검색한다.</li>
+  <li>사용법$("CSS셀렉터").find("CSS셀렉터");</li>
+</ol></li>
+</ol></li>
+</ul>
+<ul>
+  <li>실습 예시</li>
+</ul>
+<div class="block-children">
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+</div>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+</div>
+</div>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        table{
+            border-collapse: collapse;
+        }
+        td{
+            width: 50px;
+            height: 50px;
+            text-align: center;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;table border="1"&gt;
+        &lt;tr&gt;
+            &lt;td&gt;1번&lt;/td&gt;
+            &lt;td&gt;2번&lt;/td&gt;
+            &lt;td&gt;3번&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;4번&lt;/td&gt;
+            &lt;td&gt;5번&lt;/td&gt;
+            &lt;td&gt;6번&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;7번&lt;/td&gt;
+            &lt;td&gt;8번&lt;/td&gt;
+            &lt;td&gt;9번&lt;/td&gt;
+        &lt;/tr&gt;
+
+
+    &lt;/table&gt;
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('td:eq(0)').css('background','skyblue');
+
+        $('td:eq(4)').css('background','#ff0000');
+
+        $('td:eq(4)').next().css('background','purple');
+        $('td:eq(4)').prev().css('background','green');
+        $('td:eq(4)').parent().css('color','#ffffff');  // 부모는 tr -&gt; 해당 행이 다 하얀글씨
+        $('td:eq(4)').parent().next().css('color','#ff0000');  // 부모는 tr -&gt; 해당 행이 다 하얀글씨
+
+        $('td:eq(4)').parent().next().children().css('text-decoration','underline')
+        $('td:eq(4)').parent().next().children().eq(1).css('font-weight','bold')
+
+        // 다른 표현 방식
+        $('td').eq(8).css('background','yellow');
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>parent() / parents(”css셀렉터”) / closests(”css셀렉터”)</h3>
+<ol>
+  <li>parent()
+<ol>
+  <li>선택 요소의 바로 위 상위 요소를 선택한다</li>
+</ol>
+<pre><code class="language-html">&lt;div&gt;
+    &lt;p&gt;
+        &lt;span&gt;Text&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    $('span').parent(); // &lt;p&gt; 요소를 선택
+&lt;/script&gt;</code></pre></li>
+  <li>parents() 메서드
+<ol>
+  <li>선택한 요소의 모든 상위 요소들을 선택한다.</li>
+</ol>
+<pre><code class="language-html">&lt;div&gt;
+    &lt;p&gt;
+        &lt;span&gt;Text&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    $('span').parents(); // &lt;p&gt;와 &lt;div&gt; 요소를 모두 선택
+    $('span').parents('div'); // &lt;div&gt; 요소만 선택
+&lt;/script&gt;</code></pre></li>
+  <li>closest() 메서드
+<ol>
+  <li>자신을 포함한 상위 요소 중에서, 입력한 태그와 일치하는 첫번째 요소를 선택한다.</li>
+</ol>
+<pre><code class="language-html">&lt;div class="container"&gt;
+    &lt;p&gt;
+        &lt;span&gt;Text&lt;/span&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    $('span').closest('p'); // &lt;p&gt; 요소를 선택
+    $('span').closest('div'); // &lt;div&gt; 요소를 선택
+    $('span').closest('.container'); // &lt;div class="container"&gt; 요소를 선택
+&lt;/script&gt;
+</code></pre></li>
+</ol>
+<h3>find()</h3>
+<ul>
+  <li>선택한 요소의 모든 후손 요소들을 순회하면서 조건에 맞는 요소를 찾아 반환</li>
+  <li>즉, DOM 트리에서 선택한 요소의 하위에 있는 모든 후손 요소들을 탐색하여, 조건에 부합하는 첫 번째 요소만이 아니라 여러 개의 일치하는 요소들도 모두 선택할 수 있다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_002.png" alt="img_002.png">
+</figure>
+<pre><code class="language-html">&lt;div class="container"&gt;
+    &lt;div class="box"&gt;
+        &lt;p class="text"&gt;First paragraph&lt;/p&gt;
+        &lt;p class="text"&gt;Second paragraph&lt;/p&gt;
+        &lt;span class="text"&gt;A span element&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    $(function() {
+        // container 요소의 모든 후손 요소 중에서 .text 클래스를 가진 요소들을 찾는다.
+        let result = $('.container').find('.text');
+        console.log(result); // 3개의 요소 (&lt;p&gt;, &lt;p&gt;, &lt;span&gt;)가 선택됨
+    });
+&lt;/script&gt;
+</code></pre>
+<ul>
+  <li>jQuery의 객체 구조
+<ol>
+  <li><strong><code>ce.fn.init</code></strong><strong> : </strong>jQuery가 내부적으로 선택한 요소들을 저장하는 방식이다</li>
+</ol></li>
+</ul>
+<p>
+
+</p>
+</div>
+<p>📄 <a href="https://www.notion.so/8556964cba8544e8b24736e521765325" target="_blank" rel="noopener">jQuery ajax</a></p>
+<div class="block-children">
+<ul>
+  <li>AJAX(Asynchornous JavaScript and XML)는 웹 페이지가 <code>전체적으로 새로 고침하지 않고도</code> 비동지적으로 서버와 데이터를 교환할 수 있게 해주는 기술이다.</li>
+  <li>AJAX를 사용하면 웹페이지의 일부만 업데이트할 수 있다.</li>
+  <li>⭐ 반드시 고무줄처럼 돌아오게 된다.</li>
+</ul>
+<ul>
+  <li>형식
+<pre><code class="language-html">$.ajax({
+      url: "XML파일의 URL",
+      type: "get / post",
+      data: "파라미터 문자열 key=value&amp;key=value",
+      dataType: "xml",
+      success: function(data) {
+         ... 통신이 성공한 경우 실행되는 함수 ...
+      },
+      error: function(err){}  -- 404, 405, 500, 400
+   });</code></pre></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jquery/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;link rel="stylesheet" href="../css/common.css"&gt;
+    &lt;link rel="stylesheet" href="../css/reset.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 class="title"&gt;$.ajax() 함수를 사용한 텍스트 읽기&lt;/h1&gt;
+    &lt;div class="exec"&gt;
+        &lt;input type="button" id="mybtn" value="txt파일 가져오기"&gt;
+    &lt;/div&gt;
+    &lt;div class="console" id="result"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function(){
+    $('input#mybtn').click(function(){
+        // jQuery.ajax(); = $.ajax();
+        $.ajax({
+            type: 'get',                     // default : getZ  -  post
+            url: '../txt/text01.txt',                // 서버로 요청할 url : 'http://192.168.0.7:5500/Context명(project명)'
+            dataType: 'text',                // 서버로부터 받은 데이터 자료형 - 문자열-'text', XML-'xml', Json-'json'
+            success: function(data){         //200 - 성공, 404 - 주소 에러, 405 - 메서드 에러, 400 - 매개변수 오류, 500 - 서버 에러(프로그램 잘못 동작)
+                $('#result').html(data);
+            },
+            error: function(xhr, textStatus, errorThrown){
+                $('div').html(`&lt;div&gt; ${textStatus} (HTTP-${xhr.status}/${errorThrown})&lt;/div&gt;`);
+            }
+        });
+    });
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>$.get() / $.post()
+<pre><code class="language-html"> $.get("url", {파라미터 json}, function(data) {
+         ... XML 데이터의 처리 ...
+      }, ["xml"]);</code></pre></li>
+  <li>ajax.fail() / ajax.always() -&gt; <code>try catch의 finally문처럼 무조건 처리</code>
+<ul>
+  <li>ajax.fail()
+<pre><code class="language-html">ajax.fail(function() {
+   // 404, 500 에러 등이 발생한 경우 실행될 내용
+});</code></pre></li>
+  <li>ajax.always()
+<pre><code class="language-html">ajax.always(function() {
+   // 통신 성공, 실패 여부에 상관없이 무조건 마지막에 호출됨
+});</code></pre></li>
+  <li>실습 코드
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+    &lt;link rel="stylesheet" href="../css/common.css"&gt;
+    &lt;link rel="stylesheet" href="../css/reset.css"&gt;
+    &lt;style&gt;
+        #idDiv{
+            color: red;
+            font-size: 9pt;
+            font-weight: bold;
+            padding: 10px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1 class="title"&gt;아이디 중복검사&lt;/h1&gt;
+    &lt;div class="exec"&gt;
+        &lt;form&gt;
+        	&lt;input type="text" name="user_id"&gt;
+        	&lt;input type="button" id="checkId" value="중복검사"&gt;
+            &lt;div id="idDiv"&gt;&lt;/div&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+    &lt;div class="console"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function(){
+	$('#checkId').click(function (){
+        $('input[type="text"]').empty();
+
+       var user_id = $('input[name="user_id"]').val();
+       if(!user_id){
+           // alert("아이디를 입력하세요.") -&gt; 비추천 =&gt; idDiv를 넣자
+           $('#idDiv').text('아이디 입력')
+           $('input[name="user_id"]').focus()
+           return false;
+       }
+       $.get('../checkId/checkId.jsp',
+           '../checkId/checkId_JSTL.jsp',// 서버로 get방식으로 요청
+           {'user_id':'user_id'},    // user_id = hong
+       function (data){
+           console.log(data)
+           console.log($(data))
+
+           let result_text = $(data).find('result').text()  //result 태그를 찾아서 값을 가져와라 "true" or "false"
+
+           // 문자열 =&gt; boolean 변환, "true" -&gt; true
+           let result  = eval(result_text)
+
+           if(result){
+               $('.console').html(`&lt;span style="color: red; font-weight: bold;"&gt;이미 사용중인 아이디입니다.&lt;/span&gt;`)
+           }else{
+               $('.console').html(`&lt;span style="color: blue; font-weight: bold;"&gt;사용 가능한 아이디입니다.&lt;/span&gt;`)
+           }
+       })
+    });
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></li>
+</ul></li>
+</ul>
+</div>

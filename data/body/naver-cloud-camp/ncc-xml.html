@@ -1,0 +1,108 @@
+<ul>
+  <li>XML(Exensible Markup Language)은 데이터를 구조호하고 저장하기 위한 마크업 언어이다.</li>
+  <li>XML은 데이터의 계층 구조를 정의하고, 데이터와 메타데이터를 표현하는데 사용</li>
+  <li><code>결국에는 그냥 데이터라고 보면 된다!</code></li>
+</ul>
+<ul>
+  <li>XML 형식
+<pre><code class="language-xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;  &lt;!-- XML 선언 --&gt;
+&lt;school&gt;
+    &lt;subject&gt;
+        &lt;title&gt;Javascript+jQuery+Ajax&lt;/title&gt;
+        &lt;time&gt;매주 월/수/금 오후 7시00분~10시00분&lt;/time&gt;
+        &lt;teacher&gt;홍길동&lt;/teacher&gt;
+    &lt;/subject&gt;
+&lt;/school&gt;
+</code></pre></li>
+  <li>JSON 형식
+<pre><code class="language-xml">{
+    "school": {
+        "subject": {
+            "title": "Javascript+jQuery+Ajax",
+            "time": "매주 월/수/금 오후 7시00분~10시00분",
+            "teacher": "홍길동"
+        }
+    }
+}</code></pre></li>
+</ul>
+<ul>
+  <li>JSON과 XML의 차이점
+<table>
+  <tr><td>JSON</td><td>XML</td></tr>
+  <tr><td>JSON은 더 간결하고 읽기 쉬운 형식을 가지고 있다ㅏ.</td><td>XML은 태그와 속성으로 데이터를 표현하므로, 비교적 더 많은 문서 구조와 메타데이터를 포함할 수 있다</td></tr>
+  <tr><td>JSON은 XML보다 데이터 용량이 작을 수 있다.</td><td>XML은 태그를 많이 포함하므로 데이터의 양이 많아질 수 있다.</td></tr>
+</table></li>
+</ul>
+<ol>
+  <li>data
+<ol>
+  <li>ajax 요청으로 반환된 데이터이다.</li>
+  <li>문자열 또는 XML 등의 형식이다.</li>
+  <li>데이터를 꺼내려면 DOM 또는 JavaScript를 사용해야 한다.</li>
+</ol></li>
+  <li>$(data)
+<ol>
+  <li>jQuery 함수 $()를 사용하여 데이터를 jQuery 객체로 변환하는 것이다.</li>
+  <li>ajax로 가져온 데이터를 jQuery 객체로 변환하여 jQuery 함수를 사용할 수 있게 한다.</li>
+</ol></li>
+</ol>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;link rel="stylesheet" href="../css/common.css"&gt;
+    &lt;link rel="stylesheet" href="../css/reset.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 class="title"&gt;$.ajax() 함수를 사용한 XML 데이터 읽기 (1)&lt;/h1&gt;
+    &lt;div class="exec"&gt;
+        &lt;input type="button" id="mybtn" value="txt파일 가져오기"&gt;
+    &lt;/div&gt;
+    &lt;div class="console" id="result"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function(){
+    $('input#mybtn').click(function(){
+        $.ajax({
+            type: 'get',
+            url: '../xml/xml01.xml',
+            dataType: 'xml',
+            success: function(data){  // ajax가 성공하면 호출
+                console.log(data);
+                console.log($(data));                
+               
+                let title = $(data).find('title').text();
+                let time = $(data).find('time').text();
+                let teacher = $(data).find('teacher').text();
+                
+                let div = $('&lt;div/&gt;');
+                let p1 = $('&lt;p/&gt;').append(title);
+                let p2 = $('&lt;p/&gt;').append(time);
+                let p3 = $('&lt;p/&gt;').append(teacher);
+                div.append(p1).append(p2).append(p3);
+                
+                $('#result').append(div);
+                
+            },
+            error: function(e){  // ajax 요청이 실패하면 호출된다.
+                console.log(`${e.status} ${e.statusText}`);
+            }
+        });
+    });
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li>success 후 data와 $(data)의 값
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-xml/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><code>data</code>는 원시 XML 데이터이고, <code>$(data)</code>는 jQuery 객체로 변환된 XML 데이터이다.</li>
+</ul></li>
+  <li>$(data)를 통해 jQuery 객체로 변환하고, find()를 통해 해당 객체의 key를 찾아 value를 저장한다.</li>
+</ul>

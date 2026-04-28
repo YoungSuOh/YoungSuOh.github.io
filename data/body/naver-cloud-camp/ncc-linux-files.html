@@ -1,0 +1,177 @@
+<h3>리눅스 파일 시스템</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_001.png" alt="img_001.png">
+</figure>
+<p>1) <strong>파일 이름</strong></p>
+<ul>
+  <li>파일을 식별하기 위한 이름.</li>
+  <li>동일한 디렉터리 안에서는 파일 이름이 중복될 수 없음.</li>
+  <li>대소문자를 구분함 (<code>File</code>과 <code>file</code>은 다름).</li>
+</ul>
+<p>2) <strong>파일 데이터</strong></p>
+<ul>
+  <li>파일이 실제로 저장하고 있는 내용.</li>
+  <li>텍스트, 바이너리, 이미지 등의 데이터.</li>
+</ul>
+<p>3) <strong>메타데이터</strong></p>
+<ul>
+  <li>파일 자체에 대한 정보를 저장.</li>
+  <li><strong>파일의 속성</strong>을 포함하며, 이를 확인하려면 <code>ls -l</code> 명령어를 사용.
+<ul>
+  <li>예: 파일 크기, 권한, 소유자, 그룹, 생성/수정/접근 시간.</li>
+</ul></li>
+</ul>
+<p>4) <strong>아이노드(inode)</strong></p>
+<ul>
+  <li>파일의 메타데이터와 데이터가 저장된 위치 정보를 관리.</li>
+  <li>아이노드 번호는 파일 시스템에서 파일을 고유하게 식별.</li>
+</ul>
+<h4>메타데이터 vs I-node</h4>
+<ul>
+  <li>메타데이터
+<ul>
+  <li>메타데이터는 <strong>파일 자체에 대한 정보</strong>를 말하며, 파일 내용과는 별개로 파일의 속성, 상태, 위치 등을 저장</li>
+  <li>주요 요소
+<ul>
+  <li><code>ls -l</code> 명령어를 실행하면 아래와 같은 정보가 나오는데, 이것이 메타데이터의 일부다.
+<pre><code class="language-java">-rwxr-xr-- 1 user group 12345 Nov 25 12:00 file.txt</code></pre>
+<ul>
+  <li><strong>파일 권한</strong>: 파일에 대한 읽기, 쓰기, 실행 권한 (<code>rwxr-xr--</code>).</li>
+  <li><strong>링크 수</strong>: 하드 링크의 개수 (<code>1</code>).</li>
+  <li><strong>소유자와 그룹</strong>: 파일의 소유 사용자와 소유 그룹 (<code>user</code>, <code>group</code>).</li>
+  <li><strong>파일 크기</strong>: 파일의 크기(바이트 단위, <code>12345</code>).</li>
+  <li><strong>수정 시간</strong>: 마지막으로 수정된 날짜와 시간 (<code>Nov 25 12:00</code>).</li>
+  <li><strong>파일 이름</strong>: <code>file.txt</code>.</li>
+</ul></li>
+  <li>메타데이터의 역할
+<ul>
+  <li>파일의 <strong>속성</strong>을 정의하여 파일에 대한 관리와 접근을 가능하게 함.</li>
+  <li>예를 들어, 권한을 통해 누가 이 파일을 읽거나 쓸 수 있는지 제어.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>아이노드
+<ul>
+  <li>아이노드는 파일에 대한 <strong>구조적 정보</strong>를 포함하지만, 파일 이름은 포함하지 않아. 다음과 같은 항목이 아이노드에 포함됨
+<ul>
+  <li><strong>파일 크기</strong></li>
+  <li><strong>파일 유형</strong> (일반 파일, 디렉터리, 심볼릭 링크 등)</li>
+  <li><strong>파일 권한 및 소유자 정보</strong></li>
+  <li><strong>파일의 데이터 블록 위치 정보</strong></li>
+  <li><strong>링크 수</strong></li>
+  <li><strong>파일 생성, 수정, 접근 시간</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<blockquote><strong>💡 </strong></blockquote>
+<div class="block-children">
+<h4><strong>간단한 비유</strong></h4>
+<p>파일 시스템을 <strong>도서관</strong>이라고 생각하면:</p>
+<ul>
+  <li><strong>아이노드</strong>: 책의 고유 번호 (책의 위치와 상세 정보를 담고 있음).</li>
+  <li><strong>메타데이터</strong>: 책 표지에 적힌 제목, 저자, 출판일 등의 정보.</li>
+  <li><strong>파일 이름</strong>: 책이 서가에 정리되어 있는 레이블.</li>
+</ul>
+</div>
+<h4>리눅스 파일 유형
+</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_002.png" alt="img_002.png">
+</figure>
+<table>
+  <tr><th>유형</th><th>기호</th><th>설명</th></tr>
+  <tr><td>일반 파일</td><td><code>-</code></td><td>텍스트 파일, 바이너리 파일 등.</td></tr>
+  <tr><td>디렉터리</td><td><code>d</code></td><td>다른 파일과 디렉터리를 포함하는 폴더.</td></tr>
+  <tr><td>심볼릭 링크</td><td><code>l</code></td><td>다른 파일을 참조하는 링크 파일. (하드 링크랑 별개로 단순히 경로를 redirect)</td></tr>
+  <tr><td>장치 파일 (블록)</td><td><code>b</code></td><td>블록 장치(예: 하드디스크).</td></tr>
+  <tr><td>장치 파일 (문자)</td><td><code>c</code></td><td>문자 장치(예: 터미널, 키보드).</td></tr>
+  <tr><td>소켓</td><td><code>s</code></td><td>프로세스 간 통신을 위한 소켓 파일.</td></tr>
+  <tr><td>FIFO/파이프</td><td><code>p</code></td><td>프로세스 간 데이터를 전달하기 위한 파일.</td></tr>
+</table>
+<h4>파일 시스템 구조와 경로</h4>
+<p>
+리눅스 파일 시스템은 <strong>트리 구조</strong>로 구성되어 있으며, 파일의 위치는 <strong>절대 경로</strong>와 <strong>상대 경로</strong>로 접근할 수 있다.</p>
+<ul>
+  <li><strong>절대 경로</strong>: <code>/</code>부터 시작하는 경로. (<code>/</code> 가 루트 경로)
+<ul>
+  <li>예: <code>/home/user/file.txt</code></li>
+</ul></li>
+  <li><strong>상대 경로</strong>: 현재 디렉터리를 기준으로 한 경로.
+<ul>
+  <li>예: <code>../file.txt</code> (상위 디렉터리의 파일).</li>
+</ul></li>
+</ul>
+<ul>
+  <li>일반 파일 (ASCII 파일 &amp; 바이너리  파일)
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h3>리눅스 디렉토리 계층</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_003.png" alt="img_003.png">
+</figure>
+<h4><strong>주요 디렉터리</strong></h4>
+<ul>
+  <li><strong><code>/bin</code></strong>
+<ul>
+  <li>시스템의 기본적인 실행 파일(명령어)들이 위치합니다.</li>
+  <li>예: <code>ls</code>, <code>cp</code>, <code>mv</code> 같은 필수 명령어.</li>
+</ul></li>
+  <li><strong><code>/etc</code></strong>
+<ul>
+  <li>시스템 설정 파일들이 저장됩니다.</li>
+  <li>예: 네트워크, 사용자 계정, 서비스 설정 파일.</li>
+</ul></li>
+  <li><strong><code>/usr</code></strong>
+<ul>
+  <li>사용자가 설치한 프로그램과 라이브러리가 저장됩니다.</li>
+  <li>하위 디렉터리로 <code>bin</code>, <code>lib</code> 등이 포함되어 있으며, 각종 실행 파일과 라이브러리가 여기 저장됩니다.</li>
+</ul></li>
+  <li><strong><code>/home</code></strong>
+<ul>
+  <li><strong>사용자별 데이터와 파일이 저장되는 디렉터리</strong>입니다.</li>
+  <li>예: 각 사용자의 개인 디렉터리 (<code>user1</code>, <code>user2</code> 등).</li>
+</ul></li>
+  <li><strong><code>/boot</code></strong>
+<ul>
+  <li>부팅과 관련된 파일이 저장됩니다.</li>
+  <li>예: 커널 이미지 파일, 부트 로더 설정 파일.</li>
+</ul></li>
+  <li><strong><code>/dev</code></strong>
+<ul>
+  <li>하드웨어 장치 및 기타 디바이스 파일이 저장됩니다.</li>
+  <li>예: <code>sda</code>(디스크), <code>tty</code>(터미널).</li>
+</ul></li>
+</ul>
+<h4>파일 링크 - 하드 링크</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>⭐ 파일은 하드 링크의 갯수가 0이 됐을 때 삭제된다.</li>
+</ul>
+<h4>파일 링크 - 심볼릭 링크</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-linux-files/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>하드 링크 vs 심볼릭 링크
+<table>
+  <tr><th>구분</th><th>하드 링크</th><th>심볼릭 링크</th></tr>
+  <tr><td>정의</td><td>대상 파일에 대한 복제</td><td>대상 파일에 대한 <strong>참조(Shortcut)</strong></td></tr>
+  <tr><td>저장 방식</td><td>원본 파일의 아이노드(inode)를 공유</td><td>원본 파일 경로를 저장</td></tr>
+  <tr><td>파일 시스템 제약</td><td>같은 파일 시스템 내에서만 생성 가능</td><td>서로 다른 파일 시스템에서도 생성 가능</td></tr>
+  <tr><td>원본 삭제 시 영향</td><td>원본 파일 삭제해도 데이터 유지</td><td>원본 파일 삭제 시 링크가 <strong>깨짐</strong></td></tr>
+  <tr><td>디렉터리 링크 가능</td><td>디렉터리 링크 불가능</td><td>디렉터리를 링크 가능 (<code>ln -s</code>)
+
+</td></tr>
+  <tr><td><strong>아이노드 공유</strong></td><td>같은 아이노드를 공유</td><td>공유하지 않음 (독립된 아이노드 할당)</td></tr>
+  <tr><td>크기</td><td>크기는 원본과 동일</td><td>링크 파일 크기는 원본 경로 길이에 따라 결정</td></tr>
+  <tr><td>속도</td><td>원본과 동일한 속도</td><td>원본 파일을 참조하므로 <strong>느릴 수 있음</strong></td></tr>
+  <tr><td>링크 수 제한</td><td>파일 시스템의 링크 수 제한 적용</td><td>링크 수 제한 없음</td></tr>
+  <tr><td>관리 편리성</td><td>원본 파일 이동해도 링크는 유지</td><td>원본 파일 이동 시 링크 경로가 깨질 수 있음</td></tr>
+</table></li>
+</ul>

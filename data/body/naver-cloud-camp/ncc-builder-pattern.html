@@ -1,0 +1,139 @@
+<p>⭐ <strong>필수 속성과 선택적 속성을 분리하여</strong> 객체를 유연하게 생성할 수 있도록 하는 것입니다</p>
+<p>
+빌더 패턴(Builder Pattern)은 객체 생성 패턴 중 하나로, <code>객체의 생성 과정</code>과 <code>표현 방법을 분리</code>하여 복<strong>잡한 객체를 단계적으로 생성할 수 있게 해주는 디자인 패턴</strong>입니다. </p>
+<p><strong>주로 생성자나 </strong><strong><code>setter</code></strong><strong>를 사용해 객체의 속성을 설정하는 방식이 직관적이지 않거나, 너무 많은 파라미터로 인해 코드가 복잡해질 때 유용하게 쓰입니다.</strong></p>
+<h3>빌더 패턴의 기본 개념</h3>
+<p>빌더 패턴은 객체 생성 시 필요한 <strong>다양한 속성을 한 단계씩 설정해가며 최종 객체를 생성하는 방식</strong>입니다. </p>
+<p>생성하려는 객체의 클래스와 별도의 빌더 클래스를 만들어 사용자가 빌더 객체에 필요한 속성을 설정하면, 빌더가 이를 모아 최종적으로 객체를 생성합니다.</p>
+<h3>빌더 패턴 사용 구조</h3>
+<pre><code class="language-javascript">public class Person {
+    private final String name;
+    private final int age;
+    private final String address;
+
+    private Person(Builder builder) {
+        this.name = builder.name;
+        this.age = builder.age;
+        this.address = builder.address;
+    }
+
+    public static class Builder {
+        private String name;
+        private int age;
+        private String address;
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setAge(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public Builder setAddress(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public Person build() {
+            return new Person(this);
+        }
+    }
+}
+</code></pre>
+<ul>
+  <li>위의 예시에서, <code>Person</code> 객체는 <code>Builder</code> 클래스를 통해 생성됩니다.</li>
+  <li><code>Builder</code> 클래스는 필드별 <code>setter</code> 메서드를 제공하고, 각 메서드는 <code>Builder</code> 객체를 반환하여 메서드 체이닝이 가능합니다. </li>
+  <li>최종적으로 <code>build()</code> 메서드를 호출하면 <code>Person</code> 객체가 반환됩니다.</li>
+  <li> 빌더 패턴을 사용하면 필수 필드와 선택적 필드를 명확하게 구분할 수 있고, 객체 생성 시 코드 가독성도 높아진다.
+<pre><code class="language-javascript">public class Person {
+    private final String name;
+    private final int age;
+    private final String address;
+
+    // private 생성자 - Builder를 통해서만 생성 가능
+    private Person(Builder builder) {
+        this.name = builder.name;
+        this.age = builder.age;
+        this.address = builder.address;
+    }
+
+    // Getter 메서드
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    // Builder 클래스 정의
+    public static class Builder {
+        private String name;  // 필수
+        private int age;      // 선택적 필드
+        private String address; // 선택적 필드
+
+        // 필수 필드를 생성자처럼 지정 가능하게 설정
+        public Builder(String name) {
+            this.name = name;
+        }
+
+        // 각 필드를 설정할 메서드 (메서드 체이닝 방식)
+        public Builder age(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public Builder address(String address) {
+            this.address = address;
+            return this;
+        }
+
+        // build() 메서드를 통해 최종 객체 생성
+        public Person build() {
+            return new Person(this);
+        }
+    }
+
+    // toString()을 오버라이드하여 출력 확인 가능
+    @Override
+    public String toString() {
+        return "Person{name='" + name + "', age=" + age + ", address='" + address + "'}";
+    }
+}</code></pre>
+<ul>
+  <li>main</li>
+</ul>
+<pre><code class="language-javascript">public class Main {
+    public static void main(String[] args) {
+        // 빌더 패턴을 사용해 Person 객체 생성
+        Person person = new Person.Builder("John Doe")  // 필수 필드
+                .age(25)                                // 선택 필드
+                .address("123 Main St")                 // 선택 필드
+                .build();                               // 최종 객체 생성
+
+        // 생성된 객체 출력
+        System.out.println(person);
+    }
+}
+출력 결과</code></pre></li>
+</ul>
+<h4>빌더 패턴의 장점</h4>
+<ol>
+  <li><strong>가독성</strong>: 생성자나 <code>setter</code> 메서드를 사용해 객체를 생성할 때보다 더 직관적이고 읽기 쉽게 작성할 수 있습니다.</li>
+  <li><strong>불변 객체 생성 가능</strong>: 빌더 패턴은 객체 생성 시 모든 필드를 설정하고 이후 변경하지 않으므로, 불변 객체를 생성하기에 적합합니다.</li>
+  <li><strong>유연성</strong>: 필수 파라미터와 선택적 파라미터를 분리할 수 있어, 필요한 필드만 선택적으로 설정할 수 있습니다.</li>
+  <li><strong>복잡한 객체 생성 용이</strong>: 생성 시에 필드가 많은 복잡한 객체를 다루기에 적합하며, 객체 생성 절차를 단계별로 진행할 수 있어 유연하게 사용할 수 있습니다.</li>
+</ol>
+<h4>빌더 패턴의 단점</h4>
+<ol>
+  <li><strong>클래스가 복잡해짐</strong>: 빌더 패턴을 위해 별도의 빌더 클래스를 작성해야 하므로 코드가 다소 길어지고, 초기 설정이 복잡해질 수 있습니다.</li>
+  <li><strong>자원이 더 많이 소모됨</strong>: 빌더 클래스가 별도로 추가되면서 메모리 사용량이 증가할 수 있으며, 객체를 여러 번 생성해야 할 경우에는 오히려 성능에 영향을 줄 수 있습니다.</li>
+  <li><strong>유지보수성</strong>: 빌더 패턴을 적용한 객체는 구조가 복잡해져 유지보수가 어려울 수 있습니다.</li>
+</ol>

@@ -1,0 +1,112 @@
+<h3>Dockerfile 수정 및 </h3>
+<ul>
+  <li>Dockerfile</li>
+</ul>
+<pre><code class="language-java"># OpenJDK 11 이미지 가져오기
+FROM openjdk:11
+
+# 애플리케이션 JAR 파일을 컨테이너의 /app 디렉터리에 복사
+# 예시에서는 빌드된 JAR 파일이 target/ 디렉터리에 있다고 가정
+COPY ./target/yourapp.jar /app/app.jar
+
+# 컨테이너가 실행될 때 JAR 파일을 실행하도록 설정
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+# 애플리케이션이 사용하는 포트를 노출 (예: 8080)
+EXPOSE 8080</code></pre>
+<ul>
+  <li>nginx.conf</li>
+</ul>
+<pre><code class="language-java">server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri /index.html;
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/www.springreact.store/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/www.springreact.store/privkey.pem;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+}</code></pre>
+<h3>SSL 인증서 준비</h3>
+<ul>
+  <li>설치</li>
+</ul>
+<pre><code class="language-java">sudo apt update
+sudo apt install certbot
+</code></pre>
+<ul>
+  <li>인증서 발급</li>
+</ul>
+<pre><code class="language-java">sudo certbot certonly --standalone -d yourdomain.com
+</code></pre>
+<ul>
+  <li>인증서 발급 확인</li>
+</ul>
+<pre><code class="language-java">ls -l /etc/letsencrypt/live/www.dr-rate.shop/</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-spring-https/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><strong>tomcat에서 HTTPS를 사용하기 위해 SSL 인증서를 PKCS12 형식의 keystore 파일로 변환</strong>하는 과정
+<pre><code class="language-java">openssl pkcs12 -export \
+  -in /etc/letsencrypt/live/www.dr-rate.shop-0001/fullchain.pem \
+  -inkey /etc/letsencrypt/live/www.dr-rate.shop-0001/privkey.pem \
+  -out keystore.pfx \
+  -name "springbooy-ssl"</code></pre>
+<ul>
+  <li>Tomcat은 SSL/TLS를 지원하기 위해 keystore 파일을 필요로 하며, 이 명령은 Let’s Encrypt 인증서를 사용해 keystore 파일을 생성하는 작업을 수행</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-spring-https/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>톰켓 컨테이너 생성
+<pre><code class="language-java">docker run -d --name tomcat   -p 80:8080 -p 443:443   tomcat:9</code></pre></li>
+</ul>
+<ul>
+  <li>HTTPS 설정 시 Tomcat이 keystore 파일에 접근할 수 있어야 합니다.</li>
+  <li>컨테이너 내부의 <code>conf</code> 디렉터리는 Tomcat 설정 파일(<code>server.xml</code>)과 함께 keystore 파일을 저장하기 적합한 위치입니다.</li>
+</ul>
+<pre><code class="language-java">docker cp keystore.pfx tomcat:/usr/local/tomcat/conf/keystore.pfx</code></pre>
+<h3>Tomcat 설정</h3>
+<pre><code class="language-javascript">docker exec -it tomcat bash</code></pre>
+<ul>
+  <li>톰켓 기본 설정 진행
+<ul>
+  <li><a href="https://www.notion.so/NCP-1264cd810d9c8070844efa8e73a411bb#1264cd810d9c80b1b7dbded5f10ac7ba" target="_blank" rel="noopener">https://www.notion.so/NCP-1264cd810d9c8070844efa8e73a411bb?pvs=4#1264cd810d9c80b1b7dbded5f10ac7ba</a></li>
+</ul></li>
+</ul>
+<ul>
+  <li>경로
+<ul>
+  <li>vi /usr/local/tomcat/conf/server.xml</li>
+</ul></li>
+</ul>
+<pre><code class="language-java">&lt;Connector port="80" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="443"
+               maxParameterCount="1000"
+               /&gt;
+
+========================================================================
+
+&lt;Connector port="443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true"
+               maxParameterCount="1000"
+               ProxyName="www.dr-rate.shop" ProxyPort="443"&gt;
+        &lt;SSLHostConfig&gt;
+            &lt;Certificate certificateKeystoreFile="conf/keystore.pfx"
+                         certificateKeystorePassword="111" type="RSA" /&gt;
+        &lt;/SSLHostConfig&gt;
+    &lt;/Connector&gt;</code></pre>
+<h3>복제</h3>
+<pre><code class="language-javascript">docker cp c4d01eb850fe:/usr/local/tomcat/conf/server.xml ./server.xml</code></pre>
+<pre><code class="language-javascript">docker cp ./server.xml c4d01eb850fe:/usr/local/tomcat/conf/server.xml</code></pre>

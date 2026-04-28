@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lab 13 Snapshot을 통한 mount — Naver Cloud Camp 정리 노트." />
+    <title>Lab 13 Snapshot을 통한 mount · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-06 · Naver Cloud Camp</p>
+        <h1 class="article-title">Lab 13 Snapshot을 통한 mount</h1>
+        <p class="article-lead muted">Lab 13 Snapshot을 통한 mount — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP Lab</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>web002 서버의 OS 영역을  스냅샷으로 생성하여 web001 서버에 마운트</li>
+</ol>
+<ul>
+  <li>Server&gt;Storage에서 web002의 기본 스토리지를 선택하고 상단의 스토리지 설정 &gt;스냅샷 생성을선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>스냅샷 이름은 <code>web002-os-snap</code>을 입력</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>Server &gt;Snapshot에서 <code>web002-os-snap</code>을 선택한 후 상단의 스토리지 생성을 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_003.png" alt="img_003.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>스토리지 생성이 완료되면 상단의 ‘스토리지 설정’ 클릭
+<ul>
+  <li>‘서버에 연결’ 클릭하여 적용 서버로 web001 선택</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_005.png" alt="img_005.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>스토리지 생성 후 web001 서버에서 마운트 진행
+<pre><code class="language-javascript">mkdir /disk2
+mount /dev/vde1 /disk2</code></pre>
+<ul>
+  <li>(추가블록스토리지장치파일경로가다를경우에는각자의디스크장치파일로진행)</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_008.png" alt="img_008.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab13-snapshot/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li>mount -완-</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

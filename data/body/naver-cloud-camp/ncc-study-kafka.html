@@ -1,0 +1,89 @@
+<h3>Kafka란?</h3>
+<p>
+카프카(Apache Kafka)는 <strong>분산 메시징 시스템</strong>으로, 대규모 데이터 스트림을 처리하고 실시간으로 데이터를 전달하는 데 사용되는 오픈소스 플랫폼이야. 주로 로그 수집, 이벤트 스트리밍, 실시간 데이터 처리 등에서 활용된다.</p>
+<p>pub-sub 모델의 메세지 큐 형태로 동작하며 분산환경에  특화되어 있다. </p>
+<h3>등장 배경</h3>
+<p>다음은 카프카 개발 전 링크드인의 데이터 처리 시스템이다.</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_001.png" alt="img_001.png">
+</figure>
+<h3>카프카 설치</h3>
+<ul>
+  <li><a href="https://kafka.apache.org/downloads" target="_blank" rel="noopener">https://kafka.apache.org/downloads</a></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>아무 폴더에 압축 풀기</li>
+  <li>⭐ 이때 폴더 이름이 <code>kafka_2.13-3.9.0</code> 이렇게 나오는데 경로가 너무 길다고 억까를 시전한다.
+<ul>
+  <li><code>kafka</code> 로  폴더명을 바꿔주도록 하자</li>
+</ul></li>
+</ul>
+<h3>Kafka  실행</h3>
+<ul>
+  <li>kafka 경로로 가서 다음의 명령어 실행</li>
+  <li>먼저 zookeeper부터 실행을 해줘야 한다.</li>
+</ul>
+<ol>
+  <li>Zookeeper 실행
+<pre><code class="language-javascript">bin\windows\zookeeper-server-start.bat config\zookeeper.properties</code></pre></li>
+  <li>Kafka 실행
+<pre><code class="language-javascript">bin\windows\kafka-server-start.bat config\server.properties</code></pre></li>
+</ol>
+<ul>
+  <li>정상적으로 실행된 모습</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_004.png" alt="img_004.png">
+</figure>
+<h3><strong>Kafka Topic 생성하기</strong></h3>
+<pre><code class="language-javascript"># kafka topic 생성하기
+# bin\windows\kafka-topics.bat --create --bootstrap-server 카프카 접속주소:카프카 포트 --topic 카프카 토픽이름
+
+ex)
+bin\windows\kafka-topics.bat --create --bootstrap-server localhost:9092 --topic test-topic
+
+
+
+# kafka topic 생성확인
+# bin\windows\kafka-topics.bat --list --bootstrap-server 카프카 접속주소:카프카 포트
+
+ex)
+bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_005.png" alt="img_005.png">
+</figure>
+<h3>생성된  Topic에 Message 보내기(Producer)</h3>
+<p>Topic을 만든 Powershell에서 진행해도 무방합니다.</p>
+<pre><code class="language-javascript"># Producer 생성 예시 
+# bin\windows\kafka-console-producer.bat --broker-list 카프카 접속주소:카프카 포트 --topic 카프카 토픽이름
+
+ex)
+bin\windows\kafka-console-producer.bat --broker-list localhost:9092 --topic test-topic</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>producer가 되면 &gt; 가 생긴다. 메세지를 입력하면 토픽으로 전송된다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_007.png" alt="img_007.png">
+</figure>
+<h3>Topic에서 Message 가져오기(Consumer)</h3>
+<pre><code class="language-javascript"># Consumer 생성 예시
+# bin\windows\kafka-console-consumer.bat --bootstrap-server 카프카 접속주소:카프카 포트 --topic 카프카 토픽이름
+
+ex)
+bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test-topic
+bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test-topic --from-beginning</code></pre>
+<ul>
+  <li>실행 결과</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-kafka/img_008.png" alt="img_008.png">
+</figure>

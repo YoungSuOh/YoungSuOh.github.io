@@ -1,0 +1,3526 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="자바 — Naver Cloud Camp 정리 노트." />
+    <title>자바 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-07-03 · Naver Cloud Camp</p>
+        <h1 class="article-title">자바</h1>
+        <p class="article-lead muted">자바 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">OOP</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<ul>
+  <li>JDK? → 자바의 컴파일러</li>
+  <li>자바는 OOP이다 → 클래스로 이뤄짐 ⇒ 제약이 생겨서 생긴 것이 python</li>
+</ul>
+<ul>
+  <li>객체 지향 언어 - OOP
+<ul>
+  <li>모의 실험 목적으로 사용</li>
+  <li>실제 사물의 속성(데이터)과 기능(메소드)을 정의하여 가상세계를 구현</li>
+  <li>모의실험을 통해 많은 시간과 노력을 절감</li>
+  <li>객체지향이론은 캡술화, 상속, 추상화 개념</li>
+  <li>코드의 재사용이 높고, 유지보수가 용이</li>
+</ul></li>
+</ul>
+<p>📄 <a href="https://www.notion.so/1713798082b243a3ae5dbeecd965f9f8" target="_blank" rel="noopener">자바의 Static</a></p>
+<div class="block-children">
+<ul>
+  <li>JVM에 의해서 실행되자마자 생성</li>
+  <li>static은 이미 실행하면 메모리에 올라가 있는 시음식 → 객체 생성 안해도 됨
+<pre><code class="language-c++">public class Method01 {
+    public static void main(String[] args) {
+        // static이라 이미 메모리에 올라가 있는 시음식 / 객체 생성 안해도 됨
+        Method01.display();
+
+        Method01 method01 = new Method01();
+        method01.output();
+    }
+
+    public static void display(){
+        System.out.println("static method");
+    }
+    public void output(){
+        System.out.println("non-static method");
+    }
+}</code></pre></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/b3cd3c75c12a4f6b9ec66a56eb03056d" target="_blank" rel="noopener">String</a></p>
+<div class="block-children">
+<ul>
+  <li>상수 (절대 변하지 않는 값) → 계산하는 능력을 가지고 있음
+<ul>
+  <li>숫자 상수 : 25</li>
+  <li>문자 상수 : ‘A’, ‘C’</li>
+</ul></li>
+  <li>문자열 (address)
+<p>ex) 5+3 = 8 / ‘5’+3 = 56 / “5”+3 = “53”</p></li>
+  <li>연산을 하고 싶다 → StringBuffer / StringBuilder</li>
+</ul>
+<pre><code class="language-c++">public class StringMain {
+    public StringMain(){
+        String aa = "apple";  // 이러면 aa에게 "apple"의 주소를 줌
+        String bb = "apple";
+
+        if(aa==bb) System.out.println("aa와 bb의 참조값은 같다");
+        else System.out.println("aa와 bb의 참조값은 다르다");
+
+        if(aa.equals(bb)) System.out.println("aa와 bb의 문자열은 같다");
+        else System.out.println("aa와 bb의 문자열은 다르다");
+
+        String cc = new String("apple");  // new 했을때는 할때마다 메모리에 잡음
+        String dd = new String("apple");
+
+
+        if(cc==dd) System.out.println("cc와 dd의 참조값은 같다");
+        else System.out.println("cc와 dd의 참조값은 다르다");
+
+        if(cc.equals(dd)) System.out.println("cc와 dd의 문자열은 같다");
+        else System.out.println("cc와 dd의 문자열은 다르다");
+        System.out.println();
+
+        /*
+        "오늘 날짜는 "
+        "오늘 날짜는 2023"
+        "오늘 날짜는 202312"
+        e ---&gt; "오늘 날짜는 202312229"
+
+        메모리가 꽉차서 더 생성이 안된다.
+        -&gt; JVM에 의해서 휴��통(Garbage Collector)으로 보낸다.
+        -&gt; JVM에 의해서 휴지통(Garbage Collector)으로 보내는 동안은 컴퓨터는 작동을 멈춘다.
+         */
+
+        String e = "오늘 날짜는 202312229";
+        System.out.println("문자열 크기 = "+e.length());
+        /*
+        * 배열.length는 () 없음
+        *
+        * */
+
+        System.out.println("5번째 위치의 문자 = "+e.charAt(5));
+
+        System.out.println("부분 문자열 추출 = "+e.substring(7));  // 7번부터 끝까지
+        System.out.println("부분 문자열 추출 = "+e.substring(7,11));  // 7번부터 11번 '이전까지' -&gt; 7~10 idx 가져옴
+
+        // 대소문자 -&gt; 둘다 존재하면 대소 비교하기 참 힘듬
+        System.out.println("대문자 변경 = "+"Hello".toUpperCase());
+        System.out.println("소문자 변경 = "+"Hello".toLowerCase());
+
+
+        // indexOf : 내가 찾고자 하는 글자가 있는지 없는지 찾을때 많이 쓰임
+        System.out.println("문자열 검색 = "+e.indexOf("짜"));
+        System.out.println("문자열 검색 = "+e.indexOf("날짜"));  // 시작 idx인 '날'의 idx 반환
+        System.out.println("문자열 검색 = "+e.indexOf("개바부"));  // 없으면 -1 반환
+
+        System.out.println("문자열 치환 = "+e.replace("날짜","일자"));
+    }
+
+
+    public static void main(String[] args) {
+        new StringMain(); // 객체 생성은 돼서 메모리 공간은 차지되지만 호출할 방법이 있어서 사용 못함
+
+
+    }
+}</code></pre>
+<ul>
+  <li>aa에게 “apple”의 주소를 줌 (<code>aa</code>는 stack, <code>“apple”</code>은 heap 영역에 생성)</li>
+  <li><code>aa</code>와 <code>bb</code>는 같은 heap 공간의 <code>“apple”</code>이 있는 주소값을 참조하지만 둘은 엄연히 다른 stack 공간에 할당되어 있다. </li>
+  <li><code>new()</code> 키워드를 통해 String을 생성했을 때, <code>cc</code>와 <code>dd</code>는 다른 heap 공간의 문자열을 참조하게 된다.
+<ul>
+  <li>String의 equals 메서드를 통해 문자열 비교는 가능하다.</li>
+</ul></li>
+</ul>
+<h4>StringBuilder &amp; StringBuffer</h4>
+<p>: 둘 다 append를 통해 뒤로 String을 저장하고, delete 과정을 통해 추출한다.</p>
+<ul>
+  <li>StringBuilder
+<ul>
+  <li><code>StringBuilder</code>를 사용하는 주된 이유는 문자열을 조작할 때 성능을 향상시키기 위해서이다.</li>
+  <li><code>String</code> 객체는 불변(immutable)이라서 문자열을 변경할 때마다 새로운 <code>String</code> 객체가 생성된다. → 메모리와 CPU 리소스 소모 多</li>
+  <li><code>StringBuilder</code>는 가변(mutable) 객체로 문자열을 조작할 때 새로운 객체를 생성하지 않고 내부 버퍼를 수정하기 때문에 성능이 훨씬 더 좋다.</li>
+  <li>예시
+<ul>
+  <li><code>“25”</code> + <code>“36”</code> 을 하려는데 각각 String 타입으로 만들면 “25”, “36”, “2535” 3개가 만들어지는데</li>
+  <li>String Builder를 사용하면 편집이 가능하기 때문에 <code>“25”</code>에 뒤에 <code>“36”</code>을 붙여서 편집하여 <code>“2536”</code> 하나가 완성이 된다.</li>
+</ul></li>
+  <li>주요 용도
+<ul>
+  <li>문자열을 빈번하게 추가, 변경, 삭제하는 경우
+<ul>
+  <li>ex) 반복문 내에서 문자열을 연결해야 하는 상황</li>
+</ul></li>
+</ul></li>
+  <li>예제
+<pre><code class="language-c++">public class StringBuilderExample {
+    public static void main(String[] args) {
+        // StringBuilder 생성
+        StringBuilder sb = new StringBuilder();
+
+        // 문자열 추가
+        sb.append("Hello");
+        sb.append(" ");
+        sb.append("World!");
+
+        // 현재 상태 출력
+        System.out.println(sb.toString()); // 출력: Hello World!
+
+        // 특정 인덱스에 문자열 삽입
+        sb.insert(6, "Java "); 
+        System.out.println(sb.toString()); // 출력: Hello Java World!
+
+        // 문자열 수정
+        sb.replace(6, 10, "C++");
+        System.out.println(sb.toString()); // 출력: Hello C++ World!
+
+        // 문자열 삭제
+        sb.delete(5, 9);
+        System.out.println(sb.toString()); // 출력: Hello World!
+
+        // StringBuilder의 길이와 용량 확인
+        System.out.println("Length: " + sb.length()); // 출력: Length: 11
+        System.out.println("Capacity: " + sb.capacity()); // 기본 용량은 16에서 시작하여 필요에 따라 증가
+
+        // 문자열을 거꾸로
+        sb.reverse();
+        System.out.println(sb.toString()); // 출력: !dlroW olleH
+    }
+}
+</code></pre>
+<p>
+
+</p></li>
+</ul></li>
+  <li>StringBuffer
+<ul>
+  <li>다음 예시는 구구단을 출력하는 내용인데, 단순히 String만 사용하면 여러 문자열을 계속 생성을 해야되는 문제가 발생한다.</li>
+</ul>
+<pre><code class="language-c++">public class StringBufferMain {
+    private Scanner scanner = new Scanner(System.in);
+    private int dan;
+
+    public StringBufferMain(){
+        System.out.print("원하는 단을 입력 : ");
+        dan = scanner.nextInt();
+    }
+
+    public static void main(String[] args) {
+        StringBufferMain stringBufferMain = new StringBufferMain();
+        stringBufferMain.output();
+    }
+
+
+    /*
+    * Buffer -&gt; 2 x 1 = 22 x 2 = 4 ..... 계속 뒤에 추가됨.
+    * */
+    public void output(){
+        StringBuffer stringBuffer = new StringBuffer();
+        for(int i=1;i&lt;10;i++){
+            stringBuffer.append(dan);
+            stringBuffer.append(" x ");
+            stringBuffer.append(i);
+            stringBuffer.append(" = ");
+            stringBuffer.append(i*dan);
+
+            System.out.println(stringBuffer);
+
+/*          2 x 1 = 2
+            2 x 1 = 22 x 2 = 4
+            2 x 1 = 22 x 2 = 42 x 3 = 6
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 8
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 82 x 5 = 10
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 82 x 5 = 102 x 6 = 12
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 82 x 5 = 102 x 6 = 122 x 7 = 14
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 82 x 5 = 102 x 6 = 122 x 7 = 142 x 8 = 16
+            2 x 1 = 22 x 2 = 42 x 3 = 62 x 4 = 82 x 5 = 102 x 6 = 122 x 7 = 142 x 8 = 162 x 9 = 18*/
+
+            // 기존에 있는 내용을 삭제
+            stringBuffer.delete(0,stringBuffer.length());
+ /*           원하는 단을 입력 : 2
+            2 x 1 = 2
+            2 x 2 = 4
+            2 x 3 = 6
+            2 x 4 = 8
+            2 x 5 = 10
+            2 x 6 = 12
+            2 x 7 = 14
+            2 x 8 = 16
+            2 x 9 = 18*/
+        }
+    }
+
+
+}</code></pre>
+<p>
+
+
+</p></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/350595be396e4ead894312a028448a21" target="_blank" rel="noopener">Final</a></p>
+<div class="block-children">
+<ul>
+  <li>final
+<ul>
+  <li>상수화 : 값을 변경하지 못하게 끔 한다</li>
+  <li><strong>final 변수는 값을 변경할 수 없다. 따라서 초기 값이 주어져야 한다.</strong></li>
+  <li>final 변수는 대문자로만 기술한다.</li>
+  <li>⭐ <strong>final 메서드는 override할 수 없다 → 부모가 절대 안 물려주는 메서드</strong></li>
+  <li>final 클래스는 자식 클래스를 가질 수 없다. → 상속이 안된다.</li>
+  <li>static final 필드는 static 구역에서 초기 값을 주어야 한다.
+<pre><code class="language-java">    public static final String FRUIT4;  // static은 생성자로 초기화 x
+    static {
+        FRUIT4="기린";  // static 구역에서 초기화를 시켜줘야 한다.
+    }</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>예시 코드
+<pre><code class="language-java">/*
+* final (상수화: 값을 변경하지 못하게끔 한다)
+* 1. final 변수는 값을 변경할 수 없다. 따라서 초기값이 주어져야 한다.
+* 2. final 변수는 대문자로만 기술
+* 3. final 메서드는 override할 수 없다. 부모가 절대 안물려주는 메서드
+* 4. final 클래스는 자식 클래스를 가질 수 없다 -&gt; 상속이 안된다.
+* 5. static final 필드는 static 구역에서 초기값을 주어야 한다.
+* */
+
+class Final{
+    public final String FRUIT = "사과";  // 상수화
+    public static final String FRUIT2 = "딸기"; // 진또 상수화 -&gt; public static final
+    public final String FRUIT3;
+    public static final String FRUIT4;  // static은 생성자로 초기화 x
+
+/*    public static final int RED=0;
+    public static final int BLUE=1;
+    public static final int GREEN=2;*/
+
+
+    static {
+        FRUIT4="기린";  // static 구역에서 초기화를 시켜줘야 한다.
+    }
+
+    public Final(){
+        this.FRUIT3="참외";
+        /*this.FRUIT4="기린";  // 초기화 안 일어남*/
+    }
+
+}
+
+public class FinalMain {
+    public static void main(String[] args) {
+        final int AGE = 25; /*AGE = 21; // error -&gt; final이라서*/
+        System.out.println("AGE : "+AGE);
+
+        final String NAME; NAME="홍길동"; // 초기값 처음에 안줘도 자바는 한번의 기회를 더줌
+        System.out.println("NAME : "+NAME);
+        System.out.println("FRUIT : "+ new Final().FRUIT);
+        System.out.println("FRUIT : "+ Final.FRUIT2);
+        System.out.println("FRUIT : "+ new Final().FRUIT3);
+
+        System.out.println("빨강 : "+COLOR.RED);
+        System.out.println("빨강 : "+COLOR.RED.ordinal());
+        System.out.println();
+
+        for(COLOR data:COLOR.values()){
+            System.out.println(data.ordinal()+" : "+data);
+        }
+    }
+}</code></pre></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/28d433a37336431a91d85bc29ffed891" target="_blank" rel="noopener">클래스</a></p>
+<div class="block-children">
+<ul>
+  <li>*.java → compile → *.class</li>
+  <li>자바의 컴파일러는 파일당 하나의 public 클래스를 허용한다</li>
+  <li>클래스 레벨에서는 private 또는 protected 접근 제어자를 사용할 수 없다. (public, default는 가능)</li>
+  <li></li>
+</ul>
+<details>
+  <summary>생성자</summary>
+<ul>
+  <li>this : 자기 자신의 클래스 레퍼런스 정보를 가지고 있음</li>
+  <li>void를 쓰면 안됨</li>
+  <li>다른 생성자끼리는 overload된 생성자 호출 가능 (<code>this()</code>)
+<ul>
+  <li>하지만 반드시 첫번째 줄에서 호출해야 됨 → 다른 생성자 2번 호출할 수 없다</li>
+</ul></li>
+</ul>
+<pre><code class="language-c++">public class Constructor01 {
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+
+    public Constructor01(){
+        System.out.println("기본 생성자");
+        System.out.println("this = "+this);
+        System.out.println();
+    }
+    public Constructor01(int age){
+        this(); // 다른 생성자끼리는 overload된 생성자 호출 가능. 하지만!!! 반드시 첫번째 줄에서 호출해야 함
+        System.out.println("나이 생성자");
+        System.out.println();
+        this.age=age;
+        /*this();   =&gt; 이거 첫번째 줄 아니라 에러 */
+    }
+    public Constructor01(String name, int age){
+        this(age);  // 나이 생성자 호출
+        this.name=name;
+        this.age=age;
+    }
+
+    public static void main(String[] args) {
+        Constructor01 constructor01 = new Constructor01();
+        System.out.println("constructor01 = "+constructor01);
+        System.out.println();
+
+        Constructor01 constructor02 = new Constructor01("홍길동",27);
+        System.out.println("이름 : "+constructor02.name+" 나이: "+constructor02.age);  // 클래스 내부에서는 private 필드 접근 가능
+        System.out.println("이름 : "+constructor02.getName()+" 나이: "+constructor02.getAge()); // getter 함수 호출로도 가능
+    }
+
+}
+</code></pre>
+</details>
+<details>
+  <summary>Enum</summary>
+<ul>
+  <li><code>클래스처럼 보이게 하는 상수</code></li>
+  <li>서로 관련있는 상수들끼리 모아 상수들을 대표할 수 있는 이름으로 타입을 정의하는 것</li>
+  <li>enum 상수들은 묵시적으로 static final status 형으로 선언된다.</li>
+  <li>예시
+<ul>
+  <li>DevType.java
+<pre><code class="language-c++">public enum DevType {
+
+	MOBILE, WEB, SERVER // 0 1 2로 인
+}</code></pre></li>
+  <li>Developer.java
+<pre><code class="language-c++">public class Developer {
+	
+	public String name;
+	public int career;
+	public DevType type;
+	
+}</code></pre></li>
+  <li>클래스 내부에서 enum 클래스 선언
+<pre><code class="language-c++">public class Developer {
+	
+	public String name;
+	public int career;
+	public enum DevType {
+
+		MOBILE, WEB, SERVER
+	}
+
+}</code></pre></li>
+  <li>사용해보기
+<pre><code class="language-c++">public class Developer {
+	public String name;
+	public int career;
+	public DevType type;
+
+	public static void main(String[] args) {
+		Developer developer = new Developer();
+		developer.name = "홍길동";
+		developer.career = 3;
+		developer.type = DevType.WEB;
+		System.out.println("개발자 이름 : " + developer.name);
+		System.out.println("개발자 경력 : " + developer.career);
+		System.out.println("직무파트 : " + developer.type);
+	}
+}
+
+enum DevType {
+	MOBILE, WEB, SERVER
+}</code></pre></li>
+  <li>특징
+<ul>
+  <li>열거형으로 선언된 순서에 따라 0 부터 인덱스 값을 가진다. 순차적으로 증가된다</li>
+  <li>enum 열거형으로 지정된 상수들은 <strong>모두 대문자로 선언</strong></li>
+  <li>마지막에 열거형 변수들을 선언한 후 세미콜론(;)은 찍지 않는다.</li>
+</ul></li>
+</ul></li>
+</ul>
+</details>
+</div>
+<p>📄 <a href="https://www.notion.so/51e24aa55ad74229839d6ab8e6b1ca6e" target="_blank" rel="noopener">추상 클래스 (Abstract)</a></p>
+<div class="block-children">
+<ul>
+  <li>추상 클래스 ( <code>만능 리모컨</code> )
+<ul>
+  <li>sub class(자식 클래스) 제어</li>
+  <li>자식한테 억압을 해주는 것 → ?? 뭔소리지..
+<ul>
+  <li>부모는 내 밑에 자식이 얼마나 있는지 모름 → 따라서 제어가 안됨</li>
+  <li>따라서 abstract를 써줌으로써 자식한테 반드시 override를 해줘야 한다는 제어(억압)를 할 수 있다.</li>
+</ul></li>
+  <li>이를 통해 통일성을 높일 수 있다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>추상 메서드
+<ul>
+  <li>메서드에 body { }가없는 메서드를 <code>추상 메서드</code> 라고 한다.</li>
+  <li>abstract 키워드가 들어가야 함.</li>
+  <li>추상메소드가 있는 클래스는 반드시 추상클래스이어야 한다.</li>
+  <li>추상메소드가 없는 추상클래스를 <code>의미상의 추상클래스</code>라고 한다
+<ul>
+  <li>의미상의 추상클래스의 메소드는 모두 <code>빈body</code>로 되어 있다. </li>
+</ul></li>
+  <li>추상클래스는 자신의 클래스로 메모리 생성을 할 수 없다
+<ul>
+  <li>생성 방법
+<ol>
+  <li>Sub Class를 이용 (반드시 Sub Class가 추상메소드를 Override 해야 한다)</li>
+  <li>메소드를 이용 (추후 nested class에서 다뤄볼 예정)</li>
+</ol></li>
+</ul></li>
+  <li>추상메소드는 반드시 Sub Class에서 Override 꼭 해 주어야 한다. Override를 안하면 Sub Class 마저도 abstract 가 되어야 한다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>POJO 형식 : 가장 기본적인 형식
+<pre><code class="language-c++">public class AbstractTest {  // Pojo 형식 (Plain Old Java Object) : 가장 기본적인 형식
+    private String name;
+
+    public AbstractTest() {
+    }
+
+
+    public AbstractTest(String name) {
+        super();
+        this.name = name;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}</code></pre></li>
+</ul>
+<ul>
+  <li>추상메서드 없는 추상 클래스 → <code>의미상의 추상 클래스</code>
+<pre><code class="language-c++">public abstract class AbstractTest {  // 추상메소드 없는 추상 클래스 -&gt; 의미상의 추상 클래스
+    private String name;
+
+    public AbstractTest() {
+    }
+
+
+    public AbstractTest(String name) {
+        super();  
+        this.name = name;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}</code></pre></li>
+</ul>
+<ul>
+  <li>추상 클래스
+<pre><code class="language-c++">public abstract class AbstractTest {  // 추상 메소드가 있기 때문에 추상 클래스로 선언을 해줘야 함.
+    protected String name;  // 보호된 객체 -&gt; 자식이 쓸꺼라 잘 보
+    int a = 1;
+
+    public AbstractTest() {
+    }
+
+
+    public AbstractTest(String name) {
+        super();
+        this.name = name;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void disp(){
+        System.out.println("부모");
+    }
+
+    public abstract void setName(String name); //  body가 없고 세미콜론(;)으로 마무리됨 -&gt; 추상 메소드 =&gt; abstract 키워드를 넣음을 통해 추상 메소드를 완성
+
+    public final void xyz(){}  // 자식들한테 죽어도 상속하기 싫음 -&gt; final 키워드!
+}</code></pre>
+<ul>
+  <li><code>public AbstractTest(String name)</code> 에서 <code>super()</code> 를 호출하면 <code>AbstractTest()</code> 가 호출된다. </li>
+  <li>뭐지?? 부모도 없는 추상클래스에 <code>super()</code> 를 호출하는 것도 이상하고, <code>this()</code> 를 호출한 것도 아닌데 자신의 기본 생성자가 호출되는게 이상하다..</li>
+  <li>모든 클래스는 <code>extends Object</code> 가 되어 있다. 생략이 되어 있을 뿐..</li>
+  <li>따라서 Object 클래스의 생성자가 호출 되어야 한다. 하지만!! 메서드는 자식 우선권이 있기 때문에 자식인 AbstactTest 클래스의 메서드가 호출이 되기 때문에 이와 같은 현상이 발생한다.</li>
+  <li>추상 클래스에서 자식한테 상속하기 싫은 메서드가 있다면 <code>final</code> 키워드를 붙여주면 된다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>추상 클래스 AbstractTest를 상속받은 AbstractMain
+<pre><code class="language-c++">public class AbstractMain extends AbstractTest{
+    int a = 2;
+    public static void main(String[] args) {
+/*        AbstractTest abstractTest = new AbstractTest();
+        abstractTest.setName("홍길동");*/
+
+        // 추상 메소드로 바꿔놓은 이후
+        /*AbstractTest abstractTest = new AbstractTest();*/  // 추상 클래스로 선언한 이후로는 절대 인스턴스를 만들 수 없다!!
+        /* 해결 방법
+        *
+        * 1. 자식 클래스로 만든다. =&gt; 부모의 '추상 메소드'를 override를 해줘야 한다. 아니면 error 뜸
+        * */
+        AbstractTest abstractTest = new AbstractMain();  // 부모가 자식 클래스 참조 가능
+        abstractTest.setName("홍길동");
+        System.out.println("이름 : "+abstractTest.getName());
+
+
+        abstractTest.disp();  // 자식 우선
+
+        System.out.println("a의 값 : "+abstractTest.a);  // 자식(부모) 구조의 객체에서 AbstractTest abstractTest를 통해 부모 영역에 포인팅 하기에 변수는 부모 변수 출력
+
+
+
+    }
+
+    @Override   // override를 하고 기능 구현을 진행해도 되고 아니면 다시 자식한테 짬때려도 됨 ㅋㅋ , 어노테이션 안붙여도 자동으로 override해줌
+    public void setName(String name){
+        this.name = name; // 나한테
+    }
+    public void disp(){
+        System.out.println("자식");
+    }
+
+    /*public void xyz(){}*/  // 부모에 xyz() 메서드가 final이라 죽어도 물려주기 싫기에 자식에 선언하면 error 발생!
+}</code></pre>
+<ol>
+  <li>추상 메서드는 <code>new</code> 키워드를 통해 생성할 수 없다 → 인스턴스로 만들 수 없다</li>
+  <li>부모의 추상 메서드를 override를 했을 때, 구현을 진행해도 되고, 추상 클래스 형태로 유지하여 자식에게 또 짬때려도 된다.</li>
+</ol>
+<ul>
+  <li>해결 방법 1 :  자식 클래스를 만든다
+<ul>
+  <li>자식 클래스로 만든다 → 부모의 <code>추상 메서드</code> 를 override 해줘야 한다.
+<ul>
+  <li>아니면 error가 뜬다.</li>
+</ul></li>
+  <li>override를 해주면 부모에도 <code>disp() 함수</code> , 자식에도 <code>disp() 함수</code> 가 존재한다.
+<ul>
+  <li>하지만 메서드는 자식 우선권이 있기 때문에 자식의 <code>disp() 함수</code> 가 호출된다.</li>
+</ul></li>
+  <li>하지만 <code>System.</code><em><code>out</code></em><code>.println("a의 값 : "+abstractTest.a);</code> 에서는 부모의 변수가 출력이 된다. 
+<ul>
+  <li>result → a의 값 : 1</li>
+</ul></li>
+  <li>정리: 상속을 받으면 메서드의 우선권은 자식에게(<code>만능 리모컨</code>), 변수는 각자의 변수가 호출이 된다.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/0b642d556b2548cba0cfb95a9d2d0987" target="_blank" rel="noopener">Collection</a></p>
+<div class="block-children">
+<h3>Interface Collection&lt;E&gt; </h3>
+<p>collection은 interface이다. 고로 안에 있는 메서드들은 모두 추상 메서드이다.</p>
+<p>객체를 담아주는 저장 창고</p>
+<p>객체 타입에 상관없이 저장 가능</p>
+<p>크기 조절 가능 → 이것 때문에 배열 대신 사용한다</p>
+<p>⚠️ 기본 자료형으로 담기 불가능 → Collection&lt;int&gt; (x)</p>
+<p>⇒ Wrapper 클래스 형식으로 담아야 함 → Collection&lt;Integer&gt;</p>
+<ul>
+  <li>예시 코드
+<pre><code class="language-c++">public class CollectionMain {
+
+    @SuppressWarnings("all") // 윽박 지르는거임 -&gt; 겁내기 말고 값을 담아
+    public static void main(String[] args) {
+        /*  1.  Collections collections = new Collection();  // 추상 클래스와 인터페이스는 new 가 불가능하다.*/
+
+
+        Collection collection =new ArrayList();
+        collection.add("호랑이");
+        collection.add("호랑이"); // 중복 허용
+        collection.add("사자");
+        collection.add(25);
+        collection.add(47.5);  // 노란줄 : 결과는 잘 나오지만 불안하다. 왜냐하면 collection 안에 뭐가 들어갈지 무서움
+                               // 따라서 제네릭이 필요하다. 아니면 윽박 질러야 함(@SuppressWarnings)
+
+        // collection은 get이 없음 -&gt; iterator를 통해 순회
+        // iterator는 interface -&gt; new가 안됨
+        Iterator iter = collection.iterator(); // 따라서 메서드를 이용 (3번)
+/*        iter.hasNext() - 현재 위치에 항목이 있으면 true / 없으면 false*/
+  /*      iter.next() - 현재 위치의 항목을 꺼내서 버퍼에 기억시키고, 다음 항목으로 이동한다. */
+        while(iter.hasNext()){
+            System.out.println(iter.next()+" ");
+        }
+    }
+
+}</code></pre>
+<ol>
+  <li><code>Collections collections = new Collection()</code> → 인터페이스라 new가 불가능하다</li>
+  <li>add 메서드를 통해 요소를 삽입, 중복 허용</li>
+  <li>collection은 index로 요소를 접근을 하는 <code>get()</code> 메서드가 없다.
+<ol>
+  <li>따라서 iterator를 통해 접근을 해야 한다.
+<ol>
+  <li><code>Iterator iter = collection.iterator();</code>
+<ol>
+  <li>Iterator 역시 interface이므로 new 할 수 없고 메서드를 통해 생성한다.</li>
+</ol></li>
+  <li><code>iter.hasNext()</code> : 현재 위치에 항목이 있으면 <code>true</code>, 아니면 <code>false</code></li>
+  <li><code>iter.next()</code> : 현재의 위치의 항목을 꺼내서 버퍼에 기억시키고, 다음 항목으로 이동한다.</li>
+</ol></li>
+</ol></li>
+</ol></li>
+  <li>Collection Sort
+<ol>
+  <li>Arrays.sort
+<pre><code class="language-c++">public class ComparableSort {
+    public static void main(String[] args) {
+        String [] arr = {"orange", "apple", "banana", "pear", "peach", "applemango"};
+
+        System.out.println("정렬 전 = ");
+        for(String data : arr){
+            System.out.print(data+" ");
+        }
+        System.out.println();
+        Arrays.sort(arr);
+        
+         System.out.println("정렬 후 = ");
+        for(String data : arr){
+            System.out.print(data+" ");
+        }
+        System.out.println();
+
+}</code></pre></li>
+  <li>Comparable
+<ol>
+  <li>기본 정렬 기준을 구현하는데 사용(default 오름차순)
+<pre><code class="language-c++">public class ComparableSort {
+    public static void main(String[] args) {
+        String [] arr = {"orange", "apple", "banana", "pear", "peach", "applemango"};
+         // 객체 비교
+        ArrayList&lt;PersonDto&gt; arrayList = new ArrayList&lt;PersonDto&gt;();
+
+        arrayList.add(/*aa*/new PersonDto("홍길동",25));
+        arrayList.add(/*bb*/new PersonDto("프로도",40));
+        arrayList.add(/*cc*/new PersonDto("라이언",30));
+
+        // 기준을 누구로 sort할 것인지 -&gt; 1. PersonDto에 Comparable interface implements 시킴
+        Collections.sort(arrayList);
+
+        System.out.println("정렬 후 = ");
+        for(PersonDto p: arrayList){
+            System.out.println(p);
+        }
+  } </code></pre>
+<ol>
+  <li><code>PersonDto</code>
+<pre><code class="language-c++">public class PersonDto /*extends Object가 생략됨*/implements Comparable&lt;PersonDto&gt;{
+    private String name;
+    private int age;
+
+    public PersonDto() {
+    }
+
+    public PersonDto(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+..//
+    // 주석처리 하면서 학습 요망
+    @Override
+    public String toString(){
+        return "이름 = "+name+" 나이 = "+age;
+    }
+
+
+    // Comparable interface overrride
+     @Override  // 어떤 걸로 정렬할지 기준을 정함
+    public int compareTo(PersonDto personDto) {
+        // 나이로 오름차순
+        if(this.age&lt;personDto.age) return -1;
+        else if(this.age&gt;personDto.age) return 1;
+        else return 0;
+
+        // 나이로 내림차순
+        if(this.age&gt;personDto.age) return -1;
+        else if(this.age&lt;personDto.age) return 1;
+        else return 0;
+
+        // 이름으로 오름차순 -&gt; 문자열은 크다 작다 비교불가
+        // 문자열은 자체적으로 compareTo 메서드가 있다.
+        return this.name.compareTo(personDto.name);  // -1, 1, 0 이 알아서 나옴
+
+        // 이름으로 내림차순
+        return this.name.compareTo(personDto.name)*-1;
+
+    }
+}</code></pre>
+<ol>
+  <li>비교대상자가 더 크면(&lt;) -1, 같다면(==) 0, 작으면(&gt;) 1을 반환시켜줍니다</li>
+  <li>만약 default 정렬에서 바꾸고 싶으면 Comparable Interface를 implements 해주고, <code>compareTo</code> 를 override 해줘서 자신의 입맞에 맞춰서 정렬 기준을 잡아주면 된다.</li>
+</ol></li>
+</ol></li>
+</ol></li>
+  <li>Comparator
+<pre><code class="language-c++">public class ComparableSort {
+    public static void main(String[] args) {
+        String [] arr = {"orange", "apple", "banana", "pear", "peach", "applemango"};
+         // 객체 비교
+        ArrayList&lt;PersonDto&gt; arrayList = new ArrayList&lt;PersonDto&gt;();
+
+        arrayList.add(/*aa*/new PersonDto("홍길동",25));
+        arrayList.add(/*bb*/new PersonDto("프로도",40));
+        arrayList.add(/*cc*/new PersonDto("라이언",30));
+         /*
+        * 정렬 일시적으로 설정 하기 Comparator
+        * */
+        System.out.println("정렬 후 - 이름으로 내림차순 ");
+        Comparator &lt;PersonDto&gt; comparator = new Comparator&lt;PersonDto&gt;() { // 흑기사 대동
+            @Override
+            public int compare(PersonDto p1, PersonDto p2) {
+                return p1.getName().compareTo(p2.getName())*-1;  // 내림차순
+            }
+        };
+        Collections.sort(arrayList,comparator);  // comparator로 sort 시켜라
+        for(PersonDto p: arrayList){
+            System.out.println(p);
+        }
+    }
+}</code></pre>
+<ul>
+  <li>정렬을 일시적으로 설정할 때 위와 같이 사용한다.</li>
+</ul></li>
+</ol></li>
+</ul>
+<h3>DataStructure</h3>
+<details>
+  <summary>Set(집합) : Interface</summary>
+<ul>
+  <li>중복 허용 x, 순서 x, HashSet을 주로 쓰는 자료구조</li>
+</ul>
+<pre><code class="language-java">public class SetMain {
+    public static void main(String[] args) {
+        // Set&lt;&gt; set = new Set();  // Set은 interface이기 때문에 new가 안된다
+        Set&lt;String&gt; set = new HashSet();  // 따라서 Hashset을 써준다.
+
+        set.add("호랑이");
+        set.add("호랑이");  // 중복 허용 x, 순서 x
+        set.add("사자");
+        set.add("코끼리");
+        set.add("기린");
+
+        Iterator&lt;String&gt; it = set.iterator();  // 3번 방법인 interface 메서드를 통해 생성된거다.
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
+    }
+}</code></pre>
+</details>
+<details>
+  <summary>Map : Interface</summary>
+<ul>
+  <li>&lt;Key, Value&gt; 형태로 data 삽입</li>
+  <li>key와 value 중복은 허용하지만  key 하나당 value 하나이므로 덮어써버림 </li>
+</ul>
+<pre><code class="language-java">public class MapMain {
+    public static void main(String[] args) {
+        // Map&lt;String,String&gt;map = new map();  // interface이므로 new가 안된다.
+        Map&lt;String,String&gt;map = new HashMap&lt;&gt;();
+
+        map.put("book101","백설공주");
+        map.put("book101","엄지공주");  // key 중복 허용 -&gt; 엄지공주가 덮어 버림
+        map.put("book201","인어공주");
+        map.put("book100","인어공주");  // value 중복 허용
+        map.put("book102","덕혜옹주");
+
+        System.out.println(map.get("book101"));
+        System.out.println(map.get("book201"));
+        System.out.println(map.get("book100"));
+        System.out.println(map.get("book102"));
+        System.out.println(map.get("book1214214124214"));  // 없는 키 -&gt; null
+        System.out.println("--------------------------");
+
+        for(Map.Entry&lt;String,String&gt; data :map.entrySet()){  // map for-each문으로 순회
+            System.out.println(data);
+            String key = data.getKey();
+            String value = data.getValue();
+            System.out.println("key : "+key+", value : "+value);
+        }
+    }
+}</code></pre>
+</details>
+<details>
+  <summary>Stack</summary>
+<ul>
+  <li>LIFO</li>
+</ul>
+<pre><code class="language-java">public class StackMain {
+    public static void main(String[] args) {
+        String[] groupA = {"우즈베키스탄", "쿠웨이트", "사우디", "대한민국"};
+
+        Stack&lt;String&gt;stack = new Stack&lt;&gt;();
+        for(int i=0;i&lt;groupA.length;i++) stack.push(groupA[i]);
+
+        while(!stack.isEmpty()){
+            System.out.println(stack.pop());
+        }
+
+    }
+}
+</code></pre>
+</details>
+<details>
+  <summary>Vector</summary>
+<ul>
+  <li>Collection의 일종, 메모리를 많이 잡아먹음</li>
+  <li>기본 용량 10, 메모리 용량 초과하면 알아서 10씩 더 할당</li>
+  <li>중복 허용</li>
+</ul>
+<pre><code class="language-java">public class VectorMain {  // Collection의 일종, 메모리를 많이 크게 잡음
+    public static void main(String[] args) {
+        Vector&lt;String&gt; vector = new Vector&lt;&gt;();
+        System.out.println("벡터의 크기 : "+vector.size());
+        System.out.println("벡터의 용량 : "+vector.capacity());  // 기본 용량, 10 -&gt; 항목이 들어갈 공간이 없으면 10개씩 자동으로 증가
+
+        System.out.println("항목 추가");
+        for(int i=1;i&lt;=10;i++){
+            vector.add(i+"");  // +""을 왜 했을까용?? -&gt; 제네릭을 String 형으로 선언을 했기 때문
+            System.out.print(vector.get(i-1)+" ");
+        }
+        System.out.println();
+
+        System.out.println("항목 1개 추가");
+        vector.addElement(5+""); // 중복 허용
+        for(int i=0;i&lt;vector.size();i++){
+            System.out.print(vector.get(i)+" ");
+        }
+        System.out.println();
+        System.out.println("벡터의 크기 : "+vector.size());
+        System.out.println("벡터의 용량 : "+vector.capacity());  // 항목이 들어갈 공간이 10개가 꽉찼으므로 이후에 add를 진행하면 10씩 공간을 또 늘림
+
+        System.out.println("항목 5를 삭제");
+        vector.remove(5);
+
+
+        System.out.println(vector); // [1, 2, 3, 4, 5, 7, 8, 9, 10, 5] -&gt; index 5를 지움 =&gt; 항목 6이 지워짐
+        System.out.println();
+        System.out.println("벡터의 크기 : "+vector.size());
+        System.out.println("벡터의 용량 : "+vector.capacity());
+
+
+        System.out.println("항목 5를 삭제");
+        vector.remove(5+"");
+
+
+        System.out.println(vector); // [1, 2, 3, 4, 7, 8, 9, 10, 5] -&gt; 중복되어 있으면 앞에 있는 5를 삭제
+        System.out.println();
+        System.out.println("벡터의 크기 : "+vector.size());
+        System.out.println("벡터의 용량 : "+vector.capacity());
+
+        Iterator&lt;String&gt;iter = vector.iterator();
+        while(iter.hasNext()){
+            System.out.print(iter.next()+" ");
+        }
+    }
+}</code></pre>
+</details>
+<details>
+  <summary>LinkedList :  Queue 자료구조를 대체하는 듯</summary>
+<ul>
+  <li>검색 속도 느림</li>
+  <li>FIFO</li>
+</ul>
+<pre><code class="language-java">public class LinkedListMain {
+    public static void main(String[] args) {
+        String[] item = {"소나타", "렉스톤", "재규어"};
+
+        LinkedList&lt;String&gt; linkedList = new LinkedList&lt;&gt;();
+
+        for(String n:item){
+            linkedList.offer(n); // 요소 추가
+        }
+
+        System.out.println("linkedList의 크기 : "+linkedList.size());
+        String data = "";
+
+        while((data=linkedList.poll())!=null){
+            System.out.println(data+"삭제!");
+            System.out.println("linkedList의 크기 : "+linkedList.size());
+        }
+    }
+}</code></pre>
+</details>
+</div>
+<p>📄 <a href="https://www.notion.so/4954a2f7785d4e3193e4fa03d7f7f0ff" target="_blank" rel="noopener">제네릭 (Generic)</a></p>
+<div class="block-children">
+<ul>
+  <li>동적으로 타입을 결정하지 않고 <code>Compile 시 타입이 설정</code>되므로 보다 안전한 프로그래밍이 가능하다.</li>
+  <li>실행 중에 타입 충돌 문제를 방지할 수 있다. → ClassCastException 방지 가능</li>
+  <li>&lt;T&gt; &lt;E&gt; &lt;K&gt; &lt;V&gt; 4개의 문자로 표시한다.</li>
+</ul>
+<details>
+  <summary>사용 예시</summary>
+<ul>
+  <li>T : 주로 일반적인 타입을 나타낼 때 사용 (예제 : String)
+<pre><code class="language-java">public class Box&lt;T&gt; {
+    private T item;
+
+    public void setItem(T item) {
+        this.item = item;
+    }
+
+    public T getItem() {
+        return item;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Box&lt;String&gt; stringBox = new Box&lt;&gt;();
+        stringBox.setItem("Hello");
+        System.out.println(stringBox.getItem()); // 출력: Hello
+
+        Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();
+        integerBox.setItem(123);
+        System.out.println(integerBox.getItem()); // 출력: 123
+    }
+}</code></pre></li>
+  <li>E : 주로 컬렉션(Collection)의 요소를 나타낼 때 사용
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+public class MyList&lt;E&gt; {
+    private List&lt;E&gt; elements = new ArrayList&lt;&gt;();
+
+    public void add(E element) {
+        elements.add(element);
+    }
+
+    public E get(int index) {
+        return elements.get(index);
+    }
+
+    public int size() {
+        return elements.size();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyList&lt;String&gt; stringList = new MyList&lt;&gt;();
+        stringList.add("Apple");
+        stringList.add("Banana");
+        System.out.println(stringList.get(0)); // 출력: Apple
+        System.out.println(stringList.size()); // 출력: 2
+
+        MyList&lt;Integer&gt; integerList = new MyList&lt;&gt;();
+        integerList.add(1);
+        integerList.add(2);
+        System.out.println(integerList.get(0)); // 출력: 1
+        System.out.println(integerList.size()); // 출력: 2
+    }
+}
+</code></pre></li>
+  <li>&lt;K, V&gt; :  Key, Value
+<pre><code class="language-java">import java.util.HashMap;
+import java.util.Map;
+
+public class MyMap&lt;K, V&gt; {
+    private Map&lt;K, V&gt; map = new HashMap&lt;&gt;();
+
+    public void put(K key, V value) {
+        map.put(key, value);
+    }
+
+    public V get(K key) {
+        return map.get(key);
+    }
+
+    public int size() {
+        return map.size();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyMap&lt;String, Integer&gt; stringIntegerMap = new MyMap&lt;&gt;();
+        stringIntegerMap.put("One", 1);
+        stringIntegerMap.put("Two", 2);
+        System.out.println(stringIntegerMap.get("One")); // 출력: 1
+        System.out.println(stringIntegerMap.size()); // 출력: 2
+
+        MyMap&lt;Integer, String&gt; integerStringMap = new MyMap&lt;&gt;();
+        integerStringMap.put(1, "One");
+        integerStringMap.put(2, "Two");
+        System.out.println(integerStringMap.get(1)); // 출력: One
+        System.out.println(integerStringMap.size()); // 출력: 2
+    }
+}
+</code></pre></li>
+</ul>
+</details>
+<ul>
+  <li>예시 코드
+<ul>
+  <li><code>GenericMain</code>
+<pre><code class="language-java">public class GenericMain&lt;T&gt; {  // T -&gt; 아 제네릭 걸려 있구나
+    private T a;
+    public void setA(T a){  // 아 아직 자료형 결정이 안됐구나
+        this.a=a;
+    }
+    public T getA(){
+        return a;
+    }
+
+    public static void main(String[] args) {
+        GenericMain&lt;String&gt;aa = new GenericMain&lt;&gt;();  // String 타입으로 결정!
+        aa.setA("홍길동");
+        System.out.println("이름 = "+aa.getA());
+
+        /*aa.setA(25); -&gt; Generic을 String으로 결정했기에 에러가 발생한다.*/
+
+
+        /*GenericMain&lt;int&gt;bb = new GenericMain&lt;&gt;();  // 기본 자료형으로 Generic이 못받음 -&gt; error*/
+
+
+        GenericMain&lt;Integer&gt;cc = new GenericMain&lt;&gt;();  // String 타입으로 결정!
+        cc.setA(25);
+        System.out.println("이름 = "+cc.getA());
+    }
+}</code></pre></li>
+  <li><code>GenericMain2</code>
+<pre><code class="language-java">public class GenericMain2 &lt;T&gt; {
+    private T a;
+
+    public GenericMain2(T a) { // 이에 맞는 생성자를 만듬
+        this.a = a;
+    }
+
+    public void setA(T a){
+        this.a=a;
+    }
+    public T getA(){
+        return a;
+    }
+
+
+    public static void main(String[] args) {
+        //GenericMain2&lt;?&gt; aa = new GenericMain2&lt;String&gt;();  // Generic을 걸어놨는데 String 타입으로 설정했는데, 내부적으론 Object화 시킨다.
+        //aa.setA("홍길동");  // 에러 발생! -&gt; 반드시 데이터는 setter가 아니라 생성자를 통해서만 넣어야 한다.
+        /*java: incompatible types: java.lang.String cannot be converted to capture#1 of ?*/
+
+
+        GenericMain2&lt;?&gt; aa = new GenericMain2&lt;String&gt;("홍길동");  // 1. 생성자를 통해서 넣음
+        /*String name = aa.getA();  // error -&gt; aa.getA()는 Object로 들어오기 때문*/
+        String name = (String) aa.getA();  // String으로 형변환 해줘야 함
+        Object name1 = aa.getA();  // String으로 형변환 해줘야 함
+        System.out.println("String 타입 : "+name);
+        System.out.println("Object 타입 : "+name1);
+
+        GenericMain2&lt;?&gt;bb = new GenericMain2&lt;Integer&gt;(25);
+        /*int age = (int)bb.getA();*/  // 여기서 왜 와일드 카드(?)를 쓰는지 조금은 알거 같은 느낌?
+
+        int age = (Integer) bb.getA();  // unAutoBoxing
+        Integer age1 = (int) bb.getA();  // AutoBoxing
+
+        System.out.println("나이 = "+age);
+
+
+    }
+}
+</code></pre>
+<ul>
+  <li>AutoBoxing &amp; UnAutoBoxing
+<ul>
+  <li>AutoBoxing
+<ul>
+  <li>오토박싱은 기본 타입을 자동으로 해당하는 래퍼 클래스 객체로 변환하는 것을 말합니다. 예를 들어, <code>int</code>를 <code>Integer</code>로, <code>double</code>을 <code>Double</code>로 자동 변환합니다.</li>
+</ul>
+<pre><code class="language-java">public class AutoBoxingExample {
+    public static void main(String[] args) {
+        // 기본 타입 int를 Integer 객체로 자동 변환
+        int primitiveInt = 5;
+        Integer boxedInt = primitiveInt; // 오토박싱
+
+        System.out.println(boxedInt); // 출력: 5
+
+        // 기본 타입 double을 Double 객체로 자동 변환
+        double primitiveDouble = 3.14;
+        Double boxedDouble = primitiveDouble; // 오토박싱
+
+        System.out.println(boxedDouble); // 출력: 3.14
+    }
+}
+</code></pre></li>
+  <li>UnAutoBoxing
+<ul>
+  <li>언박싱은 래퍼 클래스 객체를 자동으로 해당하는 기본 타입으로 변환하는 것을 말합니다. 예를 들어, <code>Integer</code>를 <code>int</code>로, <code>Double</code>을 <code>double</code>로 자동 변환합니다.</li>
+</ul>
+<pre><code class="language-java">public class UnBoxingExample {
+    public static void main(String[] args) {
+        // Integer 객체를 기본 타입 int로 자동 변환
+        Integer boxedInt = 10;
+        int primitiveInt = boxedInt; // 언박싱
+
+        System.out.println(primitiveInt); // 출력: 10
+
+        // Double 객체를 기본 타입 double로 자동 변환
+        Double boxedDouble = 6.28;
+        double primitiveDouble = boxedDouble; // 언박싱
+
+        System.out.println(primitiveDouble); // 출력: 6.28
+    }
+}
+</code></pre></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/d173ae3149a24278adc956cf2b203335" target="_blank" rel="noopener">상속(Inheritance)</a></p>
+<div class="block-children">
+<ul>
+  <li>⭐ <strong>상속 : 클래스의 재(upgrade)구현</strong></li>
+  <li>is ~ a 관계 → 상속 관계
+<ul>
+  <li>ex) 아반떼(자식) is a 자동차(부모)</li>
+</ul></li>
+  <li>자바는 단일 상속밖에 못한다. 즉, 부모는 무조건 하나이다! (C언어는 다중상속 가능)</li>
+  <li>다중 상속을 해결하기 위한 것 → interface / public class Member extends UsersDetails implements BaseEntity</li>
+  <li>추상 클래스(진짜) / 인터페이스 (가짜)</li>
+  <li>상속을 받았다 → 부모 꺼를 자기꺼처럼 사용한다 (부모의 private 빼고)
+<ul>
+  <li>따라서 private과 생성자는 상속이 안된다. 자식이 부모 생성자를 호출하는 것이 가능할 뿐</li>
+  <li>근데 자식은 그러면 private 멤버 변수 못씀 → private으로 바꿔? ⇒ 클래스 캡슐화에 위배</li>
+  <li>따라서 <code>protected</code> 를 통해 나와 내 자식들을 사용 가능 
+<pre><code class="language-java">public class Super {
+    protected double weight, height; // 자식들도 사용 가능한 멤버 변수
+
+    public Super(){
+        System.out.println("Super 기본 생성자");
+    }
+
+    public Super(double weight,double height){
+        this.height=height;
+        this.weight=weight;
+        System.out.println("Super 일반 생성자");
+    }
+
+    public void disp(){
+        System.out.println("Super의 disp()");
+        System.out.println("몸무게 = "+weight);
+        System.out.println("키 = "+height);
+    }
+}</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>생성자 호출
+<pre><code class="language-java">package inheritance;
+
+/*
+*
+* */
+
+public class SubMain extends Super{
+    private String name;
+    protected int age;
+
+    public SubMain (){
+        System.out.println("SubMain 기본 생성자");
+    }
+    public SubMain(double weight, double height, String name, int age) {
+
+       1.  this.weight=weight;  // 부모의 height와 weight가 protected이기 때문에 바로 저장 가능
+           this.height=height;
+
+       2. super.weight=weight;
+          super.height=height;
+
+        super(weight, height); // 생성자끼리 서로 호출 가능 (자식 생성자가 부모 생성자 호출 가능), 무조건 첫번째 줄
+
+
+        this
+        this는 자신의 클래스의 참조값을 갖고 있다. / this()는 overload된 다른 생성자를 호출할 수 있다. / 첫줄에 써야 한다.
+
+        * super는 부모 클래스의 참조값을 갖고 있다
+        * super()는 부모 클래스의 생성자를 호출 할 수 있다.
+        * 첫줄에 써야한다.
+        
+
+        this.name = name;
+        this.age = age;
+
+        System.out.println("SubMain 일반 생성자");
+
+    }
+
+    public void output(){
+        System.out.println("이름 = "+name);
+        System.out.println("나이 = "+age);
+        System.out.println("몸무게 = "+weight);
+        System.out.println("키 = "+height);
+    }
+
+    public static void main(String[] args) {
+        double weight=78.5, height=178; String name="홍길동"; int age=27;
+        SubMain aa = new SubMain(weight,height,name,age);  // 생성자를 2번 호출
+        // 자식 클래스를 new하게 되면 자기꺼 뿐만 아니라 부모꺼까지 메모리에 클래스를 생성
+        // 이때 부모 클래스는 무조건 기본 생성자를 요청하게 됨. 생성자가 아예 없을 때 자동 호출
+        // 생성자가 있으면 자동 호출 x, 해당 생성자에 맞추라고 요청함.
+        aa.output();
+        System.out.println();
+
+
+        aa.disp();  // 부모 매서드 사용 가능
+        System.out.println("---------------------------------------------------");
+
+        Super bb = new SubMain(67.5,171,"코난",25);  // 자식은 지꺼만 메모리 안잡고 부모꺼도 같이 잡음
+        // bb라는 애는 super를 가르킴
+        /*bb.output();*/  // error -&gt; bb는 Super를 참조하기 때문에 SubMain 안에 있는 Super 꺼만 호출 가능
+        bb.disp();  
+        
+        SubMain cc = new Super(); // error -&gt; 다운 캐스팅해줘야함 SubMain cc = (SubMain) new Super();
+        Super dd = new Super();
+
+    }
+}
+</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.jpg" alt="img_001.jpg">
+</figure></li>
+  <li>다형성 예제
+<ul>
+  <li>overload &amp; override
+<table>
+  <tr><td>overloading</td><td>override</td></tr>
+  <tr><td>1. 하나의 클래스 안에서</td><td>1. 상속 관계</td></tr>
+  <tr><td>2. 메서드 명이 똑같다.</td><td>2. 다 똑같아야 함(한 글자도 틀리면 안됨) → <strong>단, 접근제어자는 틀려도 되지만, 반드시 자식클래스의 범위가 더 커야한다. ⇒ 밑에 예제 ㄱㄱ</strong></td></tr>
+  <tr><td>3. 인수의 갯수 또는 인수형이 다른경우</td><td></td></tr>
+</table></li>
+  <li>override 2번 예제
+<pre><code class="language-java">class Super{
+        protected void disp(int a){}
+    }
+    class Sub extends Super{
+        public void disp(int a);
+    }
+
+    불가능
+   class Super{
+        protected void disp(int a){}
+    }
+    class Sub extends Super{
+        private void disp(int a); 범위를 자식이 더 좁게 할 수가 없음
+    }</code></pre></li>
+  <li>예제</li>
+</ul>
+<pre><code class="language-java">class AA{
+    public int a = 3;
+    public void disp(){
+        a+=5;
+        System.out.println("AA : "+a+" ");
+    }
+}
+
+class BB extends AA{
+    public int a = 8;
+    public void disp(){
+        this.a+=5;
+        System.out.println("BB : "+a+" ");
+    }
+}
+
+public class TestMain {
+    public static void main(String[] args) { // AA가 부모, BB가 자식
+        BB aa = new BB();
+        aa.disp();
+
+        AA bb = new BB();  // 부모는 자식을 참조할 수 있음 -&gt; 다형성
+        bb.disp();  // 자식한테 우선권이 있음
+        System.out.println("bb.a : "+bb.a);  // override는 변수에는 없는 개념이다. -&gt; override는 메소드에 해당되는 개념이다.
+
+        // 부모는 자식 클래스를 참조할 수 있는 다형성이다. 하지만 자식은 부모 클래스를 참조할 수 없다. 따라서 casting이 진행되어야 한다.
+        /*BB cc = new AA();  error */
+       /* BB cc = (BB) new AA();  */
+        BB cc = (BB) bb;  // 자식의 부모 클래스 타입인 AA타입을 BB타입으로 casting하여 참조 -&gt; 자식 = (자식) 부모
+        cc.disp();
+        System.out.println("cc.a: "+cc.a);
+
+        AA dd = new AA();  // 부모만 잡힘.
+        dd.disp();
+        System.out.println("dd.a: "+dd.a);
+        System.out.println();
+
+        /*BB ee = (BB) dd;  // ClassCastException error가 나옴 / 형변환을 할 수 없다. 왜냐하면 dd 객체를 생성할 때 heap에 AA 클래스 객체로만 생성하였기 때문이다. (BB class를 생성하지 않음)
+        ee.disp();
+        System.out.println("ee.a: "+ee.a); */
+
+
+
+    }
+}</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.jpg" alt="img_001.jpg">
+</figure></li>
+  <li>InstanceOf: casting이 되는지 안되는지 유무를 판단할 수 있음
+<pre><code class="language-java">class AAA{
+
+}
+class BBB extends AAA{
+
+}
+
+public class InstanceOf {  // Instance -&gt; 메모리에 생성 , casting이 되는지 안되는지 유무를 판단할 수 있음.
+    // 객체에 원하는 클래스 타입이 메모리 할당이 되어 있는지, 형변환이 되는지 아닌지 판단용
+    public static void main(String[] args) {
+        AAA aaa = new AAA();
+        BBB bbb = new BBB();
+        AAA aaa1 = new BBB();
+
+        AAA aaa2 = aaa;
+        if(aaa2 instanceof AAA){  // aaa는 AAA에 참조할 수 있다.
+            System.out.println(true);
+        }
+        else System.out.println(false);
+
+        AAA aaa3 = bbb;
+        if(bbb instanceof AAA) System.out.println(true);
+        else System.out.println(false);
+
+        BBB bbb1 = (BBB)aaa1;  // 자식으로 캐스팅한 aaa1을 참조 -&gt; 가능
+        if(aaa1 instanceof BBB){
+            System.out.println(true);
+        }
+        else System.out.println(false);
+
+        /*BBB bbb2 = (BBB)aaa; // 얘는 순수하게 A -&gt; 불가능!! =&gt; ClassCastException*/
+        if(aaa instanceof BBB){
+            System.out.println(true);
+        }
+        else System.out.println(false);
+
+
+    }
+}</code></pre></li>
+  <li>상속과 주소값, 변수 비교 예제
+<pre><code class="language-java">class Test{
+    @Override
+    public String toString(){
+        return getClass()+"개바부";
+    }
+
+}
+
+public class ObjectMain {
+    public static void main(String[] args) {
+        Test test = new Test();
+        System.out.println("객체 test = "+test); // inheritance.Test@682a0b20
+        System.out.println("객체 test = "+test.toString());
+        System.out.println("객체 test = "+test.hashCode()); // @682a0b20 -&gt; 1747585824(10진수)
+        System.out.println();
+
+
+        String str = "apple";
+        System.out.println("객체 str = "+str);  // 클@16진수 ==&gt; 문자열
+        System.out.println("객체 str = "+str.toString());
+        System.out.println("객체 str = "+str.hashCode());
+
+        String aa = new String("apple");
+        String bb = new String("apple");
+        System.out.println("aa==bb : "+(aa==bb));  // 주소 비교
+        System.out.println("aa.equals(bb) : "+ aa.equals(bb));  // 문자열 비교 -&gt; String일때만 문자열 비교(String만 유별남)
+        System.out.println();
+
+        Object cc = new Object();
+        Object dd = new Object();
+        System.out.println("cc==dd : "+(cc==dd));
+        System.out.println("aa.equals(bb) : "+ cc.equals(dd));  // 이것도 주소값 물어봄 -&gt; 따라서 false
+        System.out.println();
+
+        Object ee = new String("apple");
+        Object ff = new String("apple");
+        System.out.println("ee==ff : "+(ee==ff));
+        System.out.println("ee.equals(ff) : "+ ee.equals(ff));  // 자식 우선(메서드 한정) -&gt; true
+        System.out.println();
+
+        ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+        list.add("호랑이");
+        list.add("사자");
+        System.out.println(list); // `클@16진수`가 나와야 하는데 [호랑이] 로 나옴 -&gt; [항목]이 되게 override함
+
+    }
+}
+/*
+class Object{
+    public String toString(){} // 클@16진수
+    public int hasCode() {} // 10진수
+    public boolean equals(Object object) {}
+}
+class String extends Object{
+    public String toString(){} // 문자열로 override
+    public int hashCode() {} // 믿지 마삼, 표현할 수 있는 문자열은 무한대이기 때문에 10진수 표현을 다 할 수 없다.
+    public boolean equals
+}
+*/</code></pre></li>
+</ul>
+<ul>
+  <li>⭐ toString override
+<ul>
+  <li>모든 객체 타입의 부모 타입은 Object이다.</li>
+  <li>Object 클래스 안에 <code>toString 메서드</code>가 존재한다.
+<pre><code class="language-java">public String toString() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }</code></pre>
+<ul>
+  <li>이 함수의 형태를 보면 <code>클래스@16진수</code> 형태로 나타나야 한다.</li>
+</ul></li>
+  <li>하지만 자식 클래스인 <code>String 타입</code> 에 <code>toString 메서드</code>를 override를 하여 형태를 변환하였다. 따라서 String의 값이 출력이 된다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.jpg" alt="img_001.jpg">
+</figure></li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/41b8c39813b44a368840a7656a0c291c" target="_blank" rel="noopener">인터페이스</a></p>
+<div class="block-children">
+<ol>
+  <li>is~a 관계</li>
+  <li><code>상수</code>와 <code>추상 메서드</code>만 존재
+<ol>
+  <li>변수에서 <code>public static final</code> 생략 가능</li>
+  <li>메서드에서 <code>abstract</code> 생략 가능</li>
+</ol></li>
+  <li>override 할 때 반드시 public을 붙여줘야 한다.</li>
+  <li>다중 상속이 가능 → <strong>자바의 클래스가 다중 상속이 안되는 거지 인터페이스는 다중 상속이 가능하다.</strong></li>
+  <li>상속과 같이 쓰일 땐 <code>extends</code> <code>implements</code> 순서로 쓴다 → 무조건 찐퉁부터</li>
+</ol>
+<h4>사용 방법</h4>
+<ol>
+  <li>implements : 모든 추상 메서드를 override 해줘야 한다 → implements 하려는 interface의 추상 메서드가 너무 많아…</li>
+  <li>대신 override를 해주는 클래스들 사용 (All Known Implementing Classes)
+<ol>
+  <li>대표적으로 ArrayList, Stack, Queue, LinkedList ..</li>
+</ol></li>
+  <li>메서드 (interface를 생성시켜주는 메서드를 제공한다)</li>
+  <li>익명 inner class → 단점: 흑기사 모든 메서드를 override + 잠깐 쓰고 버림</li>
+</ol>
+<ul>
+  <li>interface 필드 변수에는 public static final가 붙어 있는 상수 밖에 못 들어옴
+<pre><code class="language-java">public interface InterA {
+    public static final String NAME = "홍길동";  // 상수 -&gt; 다른 일반 변수는 못옴
+    int a = 0;  // ? 들어오는데?? -&gt; public static final가 생략되어 있다
+/*    private int b=0; // 못들어옴*/
+
+    public void aa(); // 이것도 추상메서드
+
+    public abstract void bb();  // abstract도 생략이 가능
+
+/*    public abstract void cc(){} // 대신 구현 body부분이 없어야 함 -&gt; error*/
+
+
+}</code></pre>
+<ul>
+  <li><code>int </code><em><code>a </code></em><code>= 0;</code> ⇒ public static final가 생략되어 있다</li>
+  <li><code>private int b=0;</code>  → error</li>
+</ul></li>
+  <li>메서드도 추상 메서드밖에 못 들어온다
+<ul>
+  <li><code>public void aa();</code>  → abstract 키워드 밖에 못 들어옴</li>
+</ul></li>
+  <li>메서드의 구현 body 부분이 없어야 한다.
+<ul>
+  <li><code>public abstract void cc(){}</code> → body { } 있으므로 error</li>
+</ul></li>
+  <li>인터페이스끼리는 <code>다중 상속</code> 이 가능하다.
+<pre><code class="language-java">public interface InterC extends InterA,InterB { // 인터페이스끼리는 다중 상속이 가능하다
+    // 추상 메서드가 4개
+}</code></pre>
+<ul>
+  <li><code>extends</code> 키워드를 써야 한다!!! → 주의 요망 ⚠️</li>
+</ul></li>
+  <li>⚠️ 문제
+<ul>
+  <li>클래스 <code>extends</code> 클래스 → 가능</li>
+  <li>인터페이스 <code>extends</code> 인터페이스 → 가능</li>
+  <li>인터페이스 <code>implements</code> 클래스 → 가능</li>
+  <li>클래스 <code>extends</code> 인터페이스 →불가능</li>
+</ul></li>
+  <li></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/556ef3c6cb7b4e999d73f5561523f324" target="_blank" rel="noopener">중첩 클래스 (Nested Class)</a></p>
+<div class="block-children">
+<ol>
+  <li>has ~ a 관계이다.
+<ol>
+  <li>하나의 클래스 내부에 또 다른 클래스가 내포되어 있는 상태</li>
+  <li>클래스 관리의 효율을 높일 수 있다.</li>
+</ol></li>
+  <li>특징
+<ol>
+  <li>중첩되는 클래스 → 하나 이상 가능</li>
+  <li>Outer 클래스 멤버를 Inner 클래스에서 사용 가능</li>
+  <li>Outer  클래스에서 Inner 클래스 멤버 사용 불가능
+<ol>
+  <li>사용하고 싶으면 객체를 직접 발생시켜야 한다.</li>
+</ol></li>
+  <li>일반 중첩 클래스 내부에서는 static과 관련된 멤버를 선언할 수 없음</li>
+</ol></li>
+</ol>
+<h4>형식</h4>
+<pre><code class="language-java">class Outer/*클래스명*/{
+	내용부;
+	class Inner{
+		내용부;
+		}
+}</code></pre>
+<h4>중첩 클래스 객체 생성</h4>
+<pre><code class="language-java">Outer 객체1 = new Outer();
+Outer.Inner 객체2 = 객체1.new Inner();</code></pre>
+<h4>생성된 클래스 파일 형식</h4>
+<ul>
+  <li>Inner 클래스는 <code>$</code> 라는 기호로 표시</li>
+</ul>
+<pre><code class="language-java">Outer.class
+Outer$Inner.class</code></pre>
+<h4>예제</h4>
+<ul>
+  <li>기본 예제</li>
+</ul>
+<pre><code class="language-java">// Outer$Inner -&gt; `$` 표시 -&gt; 안에 중첩됐다는 의미
+
+public class Outer { // 밖에 있는 클래스는 안에 있는 클래스에 접근할 수 없다.
+    // 하지만 Inner 클래스 객체를 생성하면 접근 가능하다.
+    private String name;
+
+
+    public void output(){
+        System.out.println("이름 = "+/*this.name*/name+" 나이 = "+/*new Inner().getAge()*/new Inner().age);
+        /*
+        *
+        * */
+    }
+
+    class Inner{  // 안에 있는 클래스는 상속관계처럼 Outer에 있는 것을 자기것처럼 사용한다. 하지만 포함관계임, 상속 x
+
+        private int age;
+        public int getAge() {
+            return age;
+        }
+        String str = name;  // 밖의 변수는 자기꺼처럼 쓸 수 있다.
+
+        public void disp(){
+            System.out.println("이름 = "+/*this.str*//*name*/Outer.this.name+" 나이 = "+age);  // outer 소속의 this
+        }
+
+    }
+
+
+
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        outer.name = "홍길동";
+        outer.new Inner().age=17;  // 의미가 없는 코드
+        outer.output();
+        System.out.println();
+
+        Outer.Inner inner = outer.new Inner(); // new Inner() x
+        inner.age=25;
+        inner.disp();
+
+        Outer.Inner inner2 = outer.new Inner();
+        inner2.age=30;
+        inner2.disp();
+        System.out.println();
+
+        Outer.Inner inner3 = new Outer().new Inner();
+ /*       inner3.name = "코난";  // 여기는 static으로 선언된 main영역 -&gt; Outer class 안에서만 접근 가능*/
+        inner3.age=35;
+        inner3.disp();
+
+    }
+}
+</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.jpg" alt="img_001.jpg">
+</figure>
+<ul>
+  <li>Inner 클래스에서 Outer 클래스 멤버 접근 예제
+<ul>
+  <li>Outer
+<pre><code class="language-java">public class Outer {
+    private int x = 100;
+    class Inner{
+        private int y = 200;
+
+        public void display(){
+            System.out.println("x : "+x);
+            System.out.println("y : "+y);
+        }
+    }
+}
+</code></pre></li>
+  <li>Main
+<pre><code class="language-java">public class InnerToOuter {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        Outer.Inner inner = outer.new Inner();
+        inner.display();
+    }
+}
+result:
+x : 100
+y : 200</code></pre></li>
+</ul></li>
+  <li>Outer 클래스에서 Inner 클래스 멤버 접근 예제
+<ul>
+  <li>Outer
+<pre><code class="language-java">public class Outer {
+    private int x = 100;
+    public void display(){
+        System.out.println("x : "+x);
+        /*System.out.println("y : "+y); compile error */
+
+
+        Inner inner = new Inner();
+        System.out.println("y : "+inner.y);
+    }
+
+    class Inner{
+        private int y = 200;
+    }
+}</code></pre>
+<ul>
+  <li>Outer 클래스 안에서 Inner  클래스 객체를 만들어서 main에서 outer만 생성해도 Inner 정보를 가져올 수 있다.</li>
+</ul></li>
+  <li>Main
+<pre><code class="language-java">public class OutToIn {
+    public static void main(String[] args) {
+        Outer outer = new Outer();
+        outer.display();
+    }
+}
+</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>정적 중첩 클래스(Static Inner Class)
+<ul>
+  <li>중첩 클래스 내부에서 static과 관련된 멤버를 선언할 수 있는 클래스</li>
+  <li>객체를 독립적으로 만들 수 있음 → static이기 때문에 </li>
+  <li>static 멤버를 선언할 수도 있고, static 메서드도 만들어 사용할 수 있음.</li>
+  <li>Outer 클래스의 static 멤버만 Inner에서 사용할 수 있음</li>
+  <li>형식
+<pre><code class="language-java">class Outer{
+	내용부;
+	static class Inner{
+		내용부;
+	}
+}</code></pre></li>
+  <li>객체 생성 방법
+<pre><code class="language-java">Outer.Inner 객체 = new Outer.Inner();</code></pre>
+<ul>
+  <li>static이 아닌 기존
+<pre><code class="language-java">Outer.Inner inner3 = new Outer().new Inner();</code></pre></li>
+</ul></li>
+  <li>예제
+<ul>
+  <li>Outer
+<pre><code class="language-java">public class Outer {
+    private int x= 100;
+    private static int z = 300;
+    static class Inner {
+        private int y= 200;
+
+        public void display(){
+            System.out.println("y : " +y);
+            System.out.println("z : "+z);
+        }
+    }
+}
+
+</code></pre></li>
+  <li>Main
+<pre><code class="language-java">public class StaticInnerMain {
+    public static void main(String[] args) {
+        Outer.Inner inner = new Outer.Inner();
+        inner.display();
+    }
+}</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>지역 중첩 클래스 (Local Inner Class)
+<ul>
+  <li>특정 메서드에 <code>한정적인 용도</code> 로 사용하는 클래스</li>
+  <li>특징
+<ul>
+  <li>접근 제한자와 지정 예악어를 사용할 수 없는 형태</li>
+  <li>일반 중첩 클래스와 형태와 유사하기 때문에 static 멤버를 선언하지 못함</li>
+  <li>객체 생성은 외부에서 할 수 없음</li>
+</ul></li>
+  <li>형식
+<pre><code class="language-java">class Outer{
+	내용부;
+	method(){
+		내용부;
+		class Inner{
+			내용부;
+			}
+	}
+}</code></pre></li>
+  <li>예제
+<ul>
+  <li>메서드 안에서 Inner 클래스 사용 예제
+<pre><code class="language-java">public class InnerInMethod {
+    public static void main(String[] args) {
+        int x = 100;
+        class Inner {
+            int y = 200;
+        }
+        
+        Inner inner = new Inner();
+
+        System.out.println("x : "+x);
+        System.out.println("y : "+inner.y);
+    }
+}</code></pre></li>
+  <li>메서드 안 Inner 클래스가 메서드의 멤버 사용 예제
+<pre><code class="language-java">public class MethodinInnerInMethod {
+    public static void main(String[] args) {
+        final int x = 300;  // final로 선언해야 Inner 클래스에서 사용 가능
+
+        class Inner {
+            int y = 400;
+
+            public void display(){
+                System.out.println("x : "+x);
+                System.out.println("y : "+y);
+            }
+        }
+        Inner inner = new Inner();
+        inner.display();
+
+    }
+}</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="block-children">
+<ul>
+  <li>익명 중첩 클래스(Anonymous Inner Class)
+<ul>
+  <li>지역 중첩 클래스의 변형된 형태</li>
+  <li>기존 클래스의 특정 메서드를 오버라이딩하여 원하는 형태로 재정의 하여 사용하는 방식</li>
+  <li>특징
+<ul>
+  <li>class 예악어와 클래스 명을 가지지 않고 단지 instance의 생성과 내용부의 정의만 가짐.</li>
+  <li>여기에 사용되는 중첩 클래스는 이미 기존에 존재하는 클래스여야 함.</li>
+  <li>내부 클래스는 생성자를 작성할 수 없음 (생성자를 작성하게 되면 컴파일 에러 발생)</li>
+  <li>외부 멤버 중  final 만 포함</li>
+</ul></li>
+  <li>형식
+<pre><code class="language-java">class Inner{
+	내용부;
+}
+
+class Outer{
+	내용부;
+	method(){
+		내용부;
+		new Inner(){
+			내용부;
+			};
+	}
+}</code></pre></li>
+  <li>예제 1
+<pre><code class="language-java">public class AA {
+    public int getY() {
+        return y;
+    }
+
+    private int y=200;
+
+    public AA() {
+        this.display();
+    }
+
+    public void display(){
+        System.out.println("AA 클래스");
+    }
+}
+</code></pre>
+<pre><code class="language-java">public class AnnonymousInner {
+    public static void main(String[] args) {
+        final int x = 100;
+        new AA(){
+            @Override
+            public void display() {
+                System.out.println("오버라이딩 한 display 메서드");
+                System.out.println("x : "+x);
+                System.out.println("y : "+getY());
+            }
+        };
+    }
+}
+</code></pre></li>
+  <li>예제 2
+<pre><code class="language-java">public class BB {
+    public void aaa(){
+        System.out.println("aaa");
+    }
+    public void bbb(){
+        System.out.println("bbb");
+    }
+    public void ccc(){
+        System.out.println("ccc");
+    }
+}</code></pre>
+<pre><code class="language-java">public class AnnonymousInner2 {
+    public static void main(String[] args) {
+        BB bb = new BB(){
+            public void bbb(){
+                System.out.println("overide bbb");
+                ddd();
+            }
+            public void ddd(){
+                System.out.println("ddd");
+            }
+        };
+        bb.aaa();
+        bb.bbb();
+        bb.ccc();
+        // bb.ddd();  // 익명 중첩 클래스 안에서 생성한 메서드 사용 불가능
+    }
+}
+</code></pre></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>📄 <a href="https://www.notion.so/a0b59abcbceb43c9a15779338f987659" target="_blank" rel="noopener">Input/Output </a></p>
+<div class="block-children">
+<ul>
+  <li><code>스트림</code>이란 데이터가 이동하는 통로이다. 데이터가 출발지에서 도착지로 단일 방향으로 흘러가는 개념을 의미한다.
+<ul>
+  <li>데이터라는 것은 키보드 - 프로그램 / 프로그램 - 모니터 / 프로그램 - 파일 / 소켓 - 소켓으로 흐를 수 있다.</li>
+  <li>이제까지 콘솔을 통한 출력은 System.out.println()을, 입력은 <code>Scanner 객체</code>를 당연하게 써왔는데, 사실 이것은 내부적으로 살펴봤을 때 스트림을 이용한 것이다.</li>
+</ul></li>
+  <li>프로세스가 데이터의 도착지라면 입력 스트림(<code>InputStream</code>), 프로세스가 데이터의 출발지라면 출력 스트림(<code>OutputStream</code>) 이라고 불린다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure>
+<h3>바이트 기반 스트림(숫자, 영문자)</h3>
+<h4><strong>최상위 바이트 기반 스트림 클래스, InputStream과 OutputStream</strong></h4>
+<p><strong><code>InputStream</code></strong> 은 바이트 기반 입력 스트림 최상위 추상 클래스이고, <strong><code>OutputStream</code></strong> 은 바이트 기반 출력 스트림 최상위 추상 클래스이다. 이들의 하위 클래스는 <strong><code>XXXInputStream</code></strong> , <strong><code>XXXOutputStream</code></strong> 이라는 네이밍을 가진다. 이를테면, <strong><code>FileInputStream</code></strong> 이 있다.
+</p>
+<h4>예제 코드</h4>
+<pre><code class="language-java">public class DataSteam {
+    public static void main(String[] args) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("result.txt");  // 파일이 없으면 자동으로 생성
+        DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
+
+        dataOutputStream.writeUTF("홍길동");
+        dataOutputStream.writeInt(25);
+        dataOutputStream.writeDouble(12.5);
+        dataOutputStream.close();
+
+        DataInputStream dataInputStream = new DataInputStream(new FileInputStream("result.txt"));
+        String name = dataInputStream.readUTF();
+        int age = dataInputStream.readInt();
+        double height = dataInputStream.readDouble();
+        System.out.println("이름 = "+name+" 나이 : "+age+" 몸무게 : "+height);
+        dataOutputStream.close();
+    }
+}</code></pre>
+<ol>
+  <li>데이터 쓰기
+<pre><code class="language-java">public class DataStream {
+    public static void main(String[] args) throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("result.txt");  // 파일이 없으면 자동으로 생성
+        DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
+
+        dataOutputStream.writeUTF("홍길동");  // 문자열 쓰기
+        dataOutputStream.writeInt(25);       // 정수 쓰기
+        dataOutputStream.writeDouble(12.5);  // 실수 쓰기
+        dataOutputStream.close();            // 스트림 닫기</code></pre>
+<ul>
+  <li><code>FileOutputStream</code>을 생성하여 "result.txt" 파일을 열고, 파일이 없으면 자동으로 생성</li>
+  <li><code>DataOutputStream</code>을 <code>FileOutputStream</code>에 연결한다. 이를 통해 다양한 데이터 타입을 파일에 쓸 수 있다.</li>
+  <li><code>writeUTF</code> 메서드를 사용하여 문자열 "홍길동"을 파일에 쓴다.</li>
+  <li><code>writeInt</code> 메서드를 사용하여 정수 25를 파일에 쓴다.</li>
+  <li><code>writeDouble</code> 메서드를 사용하여 실수 12.5를 파일에 쓴다.</li>
+  <li><code>dataOutputStream</code>을 닫는다. 스트림을 닫는 것은 리소스를 해제하고 데이터를 완전히 쓰기 위해 중요하다.</li>
+</ul></li>
+  <li>데이터 읽기
+<pre><code class="language-java">     DataInputStream dataInputStream = new DataInputStream(new FileInputStream("result.txt"));
+        String name = dataInputStream.readUTF();
+        int age = dataInputStream.readInt();
+        double height = dataInputStream.readDouble();
+        System.out.println("이름 = " + name + " 나이 : " + age + " 몸무게 : " + height);
+        dataInputStream.close();
+    }
+}</code></pre>
+<ul>
+  <li><code>DataInputStream</code>을 <code>FileInputStream</code>에 연결하여 "result.txt" 파일을 연다.</li>
+  <li><code>readUTF</code> 메서드를 사용하여 파일에서 문자열을 읽는다. 이 문자열은 이전에 <code>writeUTF</code>로 쓴 "홍길동"이다.</li>
+  <li><code>readInt</code> 메서드를 사용하여 파일에서 정수를 읽는다. 이 정수는 이전에 <code>writeInt</code>로 쓴 25이다.</li>
+  <li><code>readDouble</code> 메서드를 사용하여 파일에서 실수를 읽는다. 이 실수는 이전에 <code>writeDouble</code>로 쓴 12.5이다.</li>
+  <li>읽은 데이터를 출력한다.</li>
+  <li><code>dataInputStream</code>을 닫습니다. 스트림을 닫는 것은 리소스를 해제하고 파일을 닫기 위해 중요합니다.</li>
+</ul></li>
+</ol>
+<h3>문자 기반 스트림(숫자, 영문자, 한글)</h3>
+<h4><strong>최상위 문자 기반 스트림 클래스, Reader와 Writer</strong></h4>
+<p><strong><code>Reader</code></strong> 는 문자 기반 입력 스트림 최상위 추상 클래스이고, <strong><code>Writer</code></strong> 는 문자 기반 출력 스트림 최상위 추상 클래스이다. 이들의 하위 클래스는 <strong><code>XXXReader</code></strong> , <strong><code>XXXWriter</code></strong> 이라는 네이밍을 가진다. 이를테면, <strong><code>FileReader</code></strong> 가 있다.</p>
+<h4>예제 코드</h4>
+<pre><code class="language-java">public class CharacterStreamExample {
+    public static void main(String[] args) {
+        // 파일에 데이터 쓰기
+        try (FileWriter writer = new FileWriter("example.txt")) {
+            writer.write("Hello, World!\n");
+            writer.write("This is a test of character streams.\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 파일에서 데이터 읽기
+        try (FileReader reader = new FileReader("example.txt")) {
+            int data;
+            while ((data = reader.read()) != -1) {
+                System.out.print((char) data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<ol>
+  <li>파일에 데이터 쓰기
+<pre><code class="language-java">try (FileWriter writer = new FileWriter("example.txt")) {
+    writer.write("Hello, World!\n");
+    writer.write("This is a test of character streams.\n");
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+<ul>
+  <li><code>FileWriter</code>를 사용하여 텍스트 데이터를 파일에 쓴다.</li>
+  <li><code>FileWriter</code>를 생성하고, "example.txt" 쓰려고 한다. 블록이 끝나면 자동으로 스트림을 닫는다.</li>
+  <li><code>writer.write</code> 메서드를 사용하여 문자열을 파일에 쓴다.</li>
+</ul></li>
+  <li>파일에서 데이터 읽기
+<pre><code class="language-java">try (FileReader reader = new FileReader("example.txt")) {
+    int data;
+    while ((data = reader.read()) != -1) {
+        System.out.print((char) data);
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+<ul>
+  <li><code>FileReader</code>를 사용하여 텍스트 데이터를 파일에서 읽는다.</li>
+  <li><code>FileReader</code>를 생성하여 "example.txt"을 읽고, 블록이 끝나면 자동으로 스트림을 닫는다.</li>
+  <li><code>reader.read</code> 메서드를 사용하여 파일에서 데이터를 한 문자씩 읽는다. 파일 끝에 도달하면 <code>-1</code>을 반환한다.
+</li>
+</ul></li>
+</ol>
+<p>
+
+</p>
+<h3>바이트 기반 스트림과 문자 기반 스트림의 차이점</h3>
+<ul>
+  <li><strong>데이터 처리 단위</strong>:
+<ul>
+  <li><strong>바이트 스트림</strong>: 1바이트 단위로 데이터를 처리합니다. 주로 바이너리 데이터(예: 이미지, 오디오 파일)를 처리하는 데 사용된다.</li>
+  <li><strong>문자 스트림</strong>: 2바이트 유니코드 문자를 처리합니다. 주로 텍스트 데이터를 처리하는 데 사용된다.</li>
+</ul></li>
+  <li><strong>주요 클래스</strong>:
+<ul>
+  <li><strong>바이트 스트림</strong>: <code>InputStream</code>과 <code>OutputStream</code>을 기본 클래스로 사용</li>
+  <li><strong>문자 스트림</strong>: <code>Reader</code>와 <code>Writer</code>를 기본 클래스로 사용</li>
+</ul></li>
+  <li><strong>성능 및 효율성</strong>:
+<ul>
+  <li><strong>바이트 스트림</strong>: 모든 종류의 데이터를 처리할 수 있지만, 텍스트 데이터를 처리할 때는 문자 인코딩 문제를 신경 써야 합니다.</li>
+  <li><strong>문자 스트림</strong>: 텍스트 데이터를 처리할 때 더 적합하며, 자동으로 문자 인코딩을 처리합니다.</li>
+</ul></li>
+  <li><strong>사용 예</strong>:
+<ul>
+  <li><strong>바이트 스트림</strong>: 이미지, 비디오, 오디오 파일 등 텍스트가 아닌 데이터 파일을 읽고 쓸 때 사용됩니다.</li>
+  <li><strong>문자 스트림</strong>: 텍스트 파일을 읽고 쓸 때 사용됩니다.</li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/05a3ee728edc476e8ed78580796bf67b" target="_blank" rel="noopener">객체 직렬화</a></p>
+<div class="block-children">
+<ul>
+  <li>직렬화란?
+<ul>
+  <li>자바 언어에서 사용되는 Object 또는 Data를 다른 컴퓨터의 자바 시스템에서도 사용할 수 있도록 바이트 스트림 형태로 연속적인 데이터로 변환하는 포멧 변환 기술을 말한다.</li>
+  <li>JVM의 힙 혹은 스택 메모리에 상주하고 있는 객체 데이터를 직렬화를 통해 바이트 형태로 변환하여 DB 또는 파일과 같은 외부 저장소에 저장해두고, 다른 컴퓨터에 이 파일을 가져와 역직렬화를 통해 자바 객체로 변환해서 JVM 메모리에 적재하는 것으로 보면 된다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+  <li>객체 직렬화
+<ul>
+  <li>객체는 파일 또는 네트워크로 전송이 안된다.</li>
+  <li>객체를 byte[] 로 변환시켜서 전송해야 한다.</li>
+  <li>객체를 파일에 직렬화(serialize)하여 저장하고, 저장된 객체를 다시 역직렬화(deserialize)하여 읽어오기</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>직렬화 사용처
+<ul>
+  <li>휘발성이 있는 캐싱 데이터를 영구 저장이 필요할 때 사용할 수도 있다.
+<ul>
+  <li>JVM의 메모리에서만 상주되어있는 객체 데이터가 시스템이 종료되더라도 나중에 다시 재사용이 될 수 있을 때 영속화 해두면 좋다.</li>
+  <li>ex) 서블릿 세션, 캐시, 자바 RMI</li>
+</ul></li>
+</ul></li>
+  <li>직렬화 vs JSON
+<ul>
+  <li>자바 직렬화는 외부 파일이나 네트워크를 통해 클라이언트 간에 객체 데이터를 주고 받을 때 사용된다.</li>
+  <li>WHY 직렬화 instead of JSON, CSV??
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>직렬화의 장점
+<ul>
+  <li>자바의 고유 기술인 만큼 자바 시스템에서 개발에 최적화되어 있다.</li>
+  <li>자바의 광활한 레퍼런스 타입에 대해 제약없이 외부에 내보낼 수 있다.
+<ul>
+  <li>예를 들어 기본형(int, double, string) 타입이나 배열과 같은 타입들은 왠만한 프로그래밍 언어가 공통적으로 사용하는 타입이기 때문에, 이러한 값들을 JSON으로도 충분히 이용 가능</li>
+  <li>하지만 Wrapper 클래스, 인터페이스 타입들은 별도의 parsing이 존재</li>
+</ul></li>
+</ul></li>
+</ul></li>
+  <li>자바 직렬화 해보기
+<pre><code class="language-java">class Customer implements Serializable/*직렬화를 하겠다는 의도*/{
+    int id;
+    String name;
+    String password;
+    int age;
+
+    public Customer(int id, String name, String password, int age) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.age = age;
+    }
+    @Override
+    public String toString() {
+        return "Customer [id=" + id + ", name=" + name + ", password=" + password + ", age=" + age
+                +"]";
+    }
+
+}
+</code></pre>
+<pre><code class="language-java">public class SerializeMain {
+    public static void main(String[] args) {
+        Customer customer = new Customer(1, "John", "Doe", 30);
+
+        String fileName = "Customer.ser";
+
+        try(FileOutputStream fos = new FileOutputStream(fileName);
+            ObjectOutputStream oos = new ObjectOutputStream(fos)){
+            oos.writeObject(customer);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<ul>
+  <li>위를 실행하면 다음과 같은 내용의 Customer.ser 파일이 나온다.</li>
+</ul>
+<blockquote><strong>💡 �� sr serialize_.Customer94��e I ageI idL namet Ljava/lang/String;L passwordq ~ xp      t Johnt Doe</strong></blockquote>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>자바 역직렬화 하기
+<pre><code class="language-java">public class SerializeMain {
+    public static void main(String[] args) {
+        // 외부 파일명
+        String fileName = "Customer.ser";
+
+        // 파일 스트림 객체 생성 (try with resource)
+        try(
+                FileInputStream fis = new FileInputStream(fileName);
+                ObjectInputStream in = new ObjectInputStream(fis)
+        ) {
+            // 바이트 스트림을 다시 자바 객체로 변환 (이때 캐스팅이 필요)
+            Customer deserializedCustomer = (Customer) in.readObject();
+            System.out.println(deserializedCustomer);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>나머지 내용
+<ul>
+  <li><a href="https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EC%A7%81%EB%A0%AC%ED%99%94Serializable-%EC%99%84%EB%B2%BD-%EB%A7%88%EC%8A%A4%ED%84%B0%ED%95%98%EA%B8%B0" target="_blank" rel="noopener">https://inpa.tistory.com/entry/JAVA-☕-직렬화Serializable-완벽-마스터하기</a></li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/e0df692ffe8142a28f21229e267af5af" target="_blank" rel="noopener">Process & Thread</a></p>
+<div class="block-children">
+<table>
+  <tr><td>프로세스</td><td>스레드(Thread)</td></tr>
+  <tr><td>운영체제로부터 자원을 할당 받은 <code>작업의 단위</code></td><td>프로세스가 할당받은 자원을 이용하는 <code>실행 흐름의 단위</code></td></tr>
+</table>
+<ul>
+  <li>Program (Static Program)
+<ul>
+  <li>코드 덩어리임</li>
+  <li>컴퓨터에서 실행할 수 있는 파일을 통칭한다.</li>
+</ul></li>
+  <li>프로세스 (Process)
+<ul>
+  <li>프로세스는 <code>프로그램</code>을 실행시켜 정적인 프로그램이 동적으로 변하여 프로그램이 돌아가고 있는 상태이다.</li>
+  <li><code>ctrl + alt +del</code>을 통해 돌아가고 있는 프로세스를 쉽게 확인할 수 있다.</li>
+  <li>모든 프로그램은 운영체제가 실행되기 위한 메모리 공간을 할당해 줘야 실행될 수 있다. 그래서 프로그램을 실행하는 순간은 파일은 컴퓨터 메모리에 올라각 되고, 운영체제로부터 시스템 자원(CPU)을 할당 받아 프로그램 코드를 실행시켜 우리가 서비스를 이용할 수 있게 된다.</li>
+</ul></li>
+  <li>정리
+<table>
+  <tr><td><strong>프로그램</strong></td><td>프로세스</td></tr>
+  <tr><td>어떤 작업을 하기 위해 실행할 수 있는 파일</td><td>실행되어 작업중인 컴퓨터 프로그램</td></tr>
+  <tr><td>파일이 저장 장치에 있지만 메모리에는 올라가 있지 않은 정적인 상태</td><td>메모리에 적재되고 CPU 자원을 할당받아 프로그램이 실행되고 있는 상태</td></tr>
+  <tr><td>쉽게 말해 그냥 코드 덩어리</td><td>그 코드 덩어리를 실행한 것</td></tr>
+</table></li>
+</ul>
+<ul>
+  <li>프로세스의 한계
+<ul>
+  <li>과거에는 프로그램을 실행할 때, 프로세스 하나만을 사용해서 프로그램을 실행하기에는 한계가 있었음.
+<ul>
+  <li>하나 다운이 완료될때까지 하루종일 기다려야 했음</li>
+</ul></li>
+  <li>오늘날 컴퓨터는 파일을 다운 받으며 다른 일을 하는 멀티 작업은 너무나 당연한 기능이 됨</li>
+  <li>Thead는 프로세스 특성의 한계를 해결하기 위해 탄생하였다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>쓰레드(Thread)
+<ul>
+  <li>하나의 프로세스 내에서 동시에 진행되는 작업 갈래, 흐름의 단위를 말한다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>예를 들면 위와 같이 크롬 브라우저가 실행되면, 프로세스 하나가 생성될 것이다. 그런데 우리는 브라우저에서 파일을 다운 받으며 올라인  쇼핑을 하면서 게임을 하기도 한다.</li>
+  <li>즉, 하나의 프로세스 안에서 여러가지 작업들 흐름이 동시에 진행되기 때문에 가능한 것인데, 이러한 일련의 작업 흐름들을 <code>스레드</code>라고 하며, 여러 개가 있다면 이를 <code>멀티 쓰레드</code> 라고 부른다.</li>
+</ul></li>
+  <li>하나의 Process 내에 여러가지 쓰레드가 있는 모습이다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>하나의 프로그램은 하나 이상의 프로세스를 가지고 있고, 하나의 프로세스는 반드시 하나 이상의 스레드를 갖는다.</li>
+  <li>즉, 프로세스를 생성하면 기본적으로 하나의 <code>main thread</code> 가 생성이 되고, 나머지 그 이상의 스레드는 프로그래밍을 통해 개발자가 직접 프로그래밍 해줘야 한다.</li>
+</ul></li>
+</ul></li>
+  <li>나머지
+<ul>
+  <li><a href="https://inpa.tistory.com/entry/%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-%E2%9A%94%EF%B8%8F-%EC%93%B0%EB%A0%88%EB%93%9C-%EC%B0%A8%EC%9D%B4" target="_blank" rel="noopener">https://inpa.tistory.com/entry/👩‍💻-프로세스-⚔️-쓰레드-차이</a></li>
+</ul></li>
+</ul>
+<h4>예제</h4>
+<ul>
+  <li>SnackMain
+<pre><code class="language-sql">public class SnackMain extends Thread {
+    private String str;
+
+    public SnackMain(String str) {
+        this.str = str;
+    }
+}
+</code></pre>
+<ul>
+  <li><code>SnackMain</code> 클래스는 <code>Thread</code> 클래스를 상속 받는다. 이로 인해 <code>SnackMain</code> 객체는 독립적인 스레드로 실행될 수 있다.</li>
+</ul>
+<pre><code class="language-sql">public void run() {
+    for (int i = 1; i &lt;= 5; i++) {
+        System.out.println(str + "\t" + "i : " + i + "\t" + Thread.currentThread());
+    }
+}</code></pre>
+<ul>
+  <li>스레드가 시작되었을 때 <code>run</code> 메소드가 실행이 된다.</li>
+  <li><code>Thread</code> 클래스의 <code>start</code> 메서드가 호출이 되면 자동으로 <code>run</code> 메서드가 호출됩니다.</li>
+</ul>
+<pre><code class="language-sql">public static void main(String[] args) {
+    SnackMain aa = new SnackMain("새우깡");
+    SnackMain bb = new SnackMain("포카칩");
+    SnackMain cc = new SnackMain("수미칩");
+
+    aa.setName("새우깡");
+    bb.setName("포카칩");
+    cc.setName("수미칩");
+
+    aa.start(); // 스레드 시작 -&gt; 운영체제가 알아서 스레드 실행)
+
+    try {
+        aa.join(); // 스레드가 끝날때까지 기다리는 메소드
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    bb.start();
+    cc.start();
+    
+    //		aa.run();		//(운영체제가 알아서 run() 호출, 콜백메소드(Call Back)
+    //		bb.run();
+    //		cc.run();
+}
+</code></pre>
+<ul>
+  <li>처음에 스레드 <code>aa</code> 가 시작하고, 그  이후 <code>aa.join()</code> 메서드를 호출하여 <code>aa</code> 스레드가 끝날 때까지 <code>main</code> 스레드가 기다린다.</li>
+  <li>이후 <code>bb</code>와 <code>cc</code> 스레드를 시작한다.</li>
+  <li>전체 코드
+<pre><code class="language-sql">public class SnackMain extends Thread{
+    private String str;
+
+    public SnackMain(String str) {
+        this.str = str;
+    }
+
+    public void run() {
+        for (int i = 1; i &lt;= 5; i++) {
+            System.out.println(str + "\t" + "i : " + i + "\t" + Thread.currentThread());
+        }
+    }
+
+    public static void main(String[] args) {
+        SnackMain aa = new SnackMain("새우깡");
+        SnackMain bb = new SnackMain("포카칩");
+        SnackMain cc = new SnackMain("수미칩");
+
+        aa.setName("새우깡");
+        bb.setName("포카칩");
+        cc.setName("수미칩");
+
+        aa.start();		//스레드 시작 -&gt; 운영체제가 알아서 스레드 실행)
+
+        // 값을 항상 전의 것을 기억하고 있기 때문에 CPU, 메모리 많이 잡아먹음.
+        try {
+            aa.join();	// 스레드가 끝날때까지 기다리는 메소드
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        bb.start();
+        cc.start();
+
+//		aa.run();		//(운영체제가 알아서 run() 호출, 콜백메소드(Call Back)
+//		bb.run();
+//		cc.run();
+    }
+
+}
+
+result :
+새우깡	i : 1	Thread[새우깡,5,main]
+새우깡	i : 2	Thread[새우깡,5,main]
+새우깡	i : 3	Thread[새우깡,5,main]
+새우깡	i : 4	Thread[새우깡,5,main]
+새우깡	i : 5	Thread[새우깡,5,main]
+포카칩	i : 1	Thread[포카칩,5,main]
+포카칩	i : 2	Thread[포카칩,5,main]
+포카칩	i : 3	Thread[포카칩,5,main]
+포카칩	i : 4	Thread[포카칩,5,main]
+포카칩	i : 5	Thread[포카칩,5,main]
+수미칩	i : 1	Thread[수미칩,5,main]
+수미칩	i : 2	Thread[수미칩,5,main]
+수미칩	i : 3	Thread[수미칩,5,main]
+수미칩	i : 4	Thread[수미칩,5,main]
+수미칩	i : 5	Thread[수미칩,5,main]</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>Runnable 인터페이스
+<ul>
+  <li>Thread가 Runnable을 implements해서 <code>run()</code> 메서드를 override 한다.
+<pre><code class="language-sql">@FunctionalInterface
+public interface Runnable {
+    public abstract void run();
+}
+</code></pre>
+<pre><code class="language-sql">public class Thread implements Runnable {
+..../
+	  @Override
+    public void run() {
+        if (target != null) {
+            target.run();
+        }
+    }
+}</code></pre></li>
+  <li>예제
+<pre><code class="language-sql">class JoinTest implements Runnable{
+
+    @Override
+    public void run() {		//Call-Back 메소드(콜백메소드, 운영체제에 의해 불려지는 메소드)
+        for (int i = 1; i &lt;= 5; i++) {
+            System.out.println("i : " + i + "\t" + Thread.currentThread());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+<ul>
+  <li>Runnable 인터페이스의 추상 메서드를 override 했다.</li>
+  <li>for문을 돌면서 현재 스레드와 반복 인덱스를 출력하는데, 돌때마다 1초동안 대기한다.</li>
+</ul>
+<pre><code class="language-sql">public class JoinMain {
+
+    public static void main(String[] args) {
+        JoinTest joinTest = new JoinTest();
+        Thread t = new Thread(joinTest);  // 스레드 생성
+
+        System.out.println("스레드 시작");
+        t.start();  // 스레드 시작
+        try {
+            t.join();  // 스레드가 끝날 때까지 기다리는 메소드
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("스레드 종료");
+    }
+
+}
+</code></pre>
+<ul>
+  <li><code>t.start()</code> 를 해주면 이번엔 내가 override한 run 메서드를 실행하게 된다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>Synchroinze
+<ul>
+  <li>동기화 처리 : 여러 객체가 동시에 하나의 메서드에 접근하려고 할 때 심각한 부하가 발생된다. → 이를 방지하기 위해 lock을 건다. ⇒ 이를 동기화 처리라고 함(synchronized)</li>
+  <li>동기화 x 예시
+<pre><code class="language-sql">class Synchornized extends Thread{
+    private static int count;
+    @Override
+    public void run(){       
+        for(int i=1;i&lt;=5;i++){
+            count++;
+            System.out.println(Thread.currentThread()+" : "+count);
+        }
+
+    }
+
+}
+
+public class SynchronizedMain {
+    public static void main(String[] args) {
+        Synchornized aa = new Synchornized(); // 쓰레드 생성
+        Synchornized bb = new Synchornized(); // 쓰레드 생성
+        Synchornized cc = new Synchornized(); // 쓰레드 생성
+
+        aa.setName("aa");
+        bb.setName("bb");
+        cc.setName("cc");
+
+        // 스레드 시작 -&gt; 스레드 실행( run() 메서드 찾아감 )
+        aa.start();
+        bb.start();
+        cc.start();
+
+
+    }
+}
+result: -&gt; 결과 뒤죽박죽
+Thread[cc,5,main] : 3
+Thread[aa,5,main] : 1
+Thread[aa,5,main] : 5
+Thread[aa,5,main] : 6
+Thread[aa,5,main] : 7
+Thread[aa,5,main] : 8
+Thread[cc,5,main] : 4
+Thread[cc,5,main] : 9
+Thread[bb,5,main] : 2
+Thread[cc,5,main] : 10
+Thread[cc,5,main] : 12
+Thread[bb,5,main] : 11
+Thread[bb,5,main] : 13
+Thread[bb,5,main] : 14
+Thread[bb,5,main] : 15
+</code></pre>
+<ul>
+  <li><code>스레드 프로그래밍</code> 에서는 각 스레드의 실행 순서는 OS의 스케쥴러에 의해 관리된다.</li>
+  <li>즉, 스레드가 실행되는 순서와 각 스레드가 실행되는 시점은 예측할 수 없음.</li>
+  <li>세 개의 스레드 <code>aa</code>, <code>bb</code>, <code>cc</code>가 거의 동시에 시작되기 때문에 실행 순서가 뒤섞인다.</li>
+  <li><code>count</code> 변수를 증가시키는 부분에서 <code>동기화가 이루어지지 않기 때문에</code>여러 스레드가 동시에 <code>count</code> 변수를 수정하려고 할 때, 의도하지 않은 결과가 발생할 수 있다.</li>
+</ul></li>
+  <li>클래스 수준의 동기화
+<pre><code class="language-sql">class Synchornized extends Thread{
+    private static int count;
+
+    @Override
+    public void run(){       
+        synchronized (Synchornized.class) {
+            for(int i=1;i&lt;=5;i++){
+                count++;
+                System.out.println(Thread.currentThread()+" : "+count);
+            }
+        } 
+    }
+}
+result:
+Thread[aa,5,main] : 1
+Thread[aa,5,main] : 2
+Thread[aa,5,main] : 3
+Thread[aa,5,main] : 4
+Thread[aa,5,main] : 5
+Thread[cc,5,main] : 6
+Thread[cc,5,main] : 7
+Thread[cc,5,main] : 8
+Thread[cc,5,main] : 9
+Thread[cc,5,main] : 10
+Thread[bb,5,main] : 11
+Thread[bb,5,main] : 12
+Thread[bb,5,main] : 13
+Thread[bb,5,main] : 14
+Thread[bb,5,main] : 15</code></pre>
+<ul>
+  <li><code>Synchornized.class</code> 객체에 대해 동기화를 하고 있다.</li>
+  <li><code>synchronized (Synchornized.class)</code> 블록은 해당 클래스의 모든 인스턴스가 이 블록에 들어갈 때 동일한 모니터 객체를 사용하게 한다.
+<ul>
+  <li>여기서 <code>모니터 객체</code>란?
+<ul>
+  <li>자바에서 모든 객체는 monitor를 가지고 있다.</li>
+  <li>monitor는 여러 스레드가 객체로 동시에 객체로 접근하는 것을 막는다</li>
+  <li>여기서 모든 객체가 중요하다. heap 영역에 있는 객체는 모든 스레드에서 공유 가능하기 때문이다.</li>
+  <li>스레드가 monitor를 가지면, monitor를 가지는 객체에 lock을 걸 수 있다</li>
+  <li>그렇게 되면 다른 thread들이 해당 객체에 접근할 수가 없게된다.</li>
+</ul></li>
+</ul></li>
+  <li>즉, 어떤 스레드가 이 블록을 실행하는 동안 다른 스레드는 이 블록에 들어갈 수 없다.</li>
+</ul></li>
+  <li>인스턴스 수준의 동기화
+<pre><code class="language-sql">class Synchornized extends Thread{
+    private static int count;
+
+    @Override
+    public void run(){       
+        synchronized (this) { 
+            for(int i=1;i&lt;=5;i++){
+                count++;
+                System.out.println(Thread.currentThread()+" : "+count);
+            }
+        }
+    }
+}
+result:
+Thread[cc,5,main] : 3
+Thread[bb,5,main] : 2
+Thread[bb,5,main] : 5
+Thread[bb,5,main] : 6
+Thread[bb,5,main] : 7
+Thread[bb,5,main] : 8
+Thread[aa,5,main] : 1
+Thread[cc,5,main] : 4
+Thread[cc,5,main] : 10
+Thread[cc,5,main] : 11
+Thread[cc,5,main] : 12
+Thread[aa,5,main] : 9
+Thread[aa,5,main] : 13
+Thread[aa,5,main] : 14
+Thread[aa,5,main] : 15</code></pre>
+<ul>
+  <li> <code>this</code> 객체에 대해 동기화를 하고 있다.</li>
+  <li><code>synchronized (this)</code> 블록은 해당 인스턴스에 대해서만 동기화를 적용합니다. 따라서 서로 다른 인스턴스는 이 블록을 동시에 실행할 수 있다.</li>
+  <li><code>count</code> 변수는 <code>static</code>으로 선언되어 있으므로, 실제로는 모든 인스턴스가 동일한 <code>count</code> 변수를 공유.한다.</li>
+  <li>이는 <code>count</code> 변수의 동기화가 제대로 이루어지지 않게 됩니다. 따라서 인스턴스 수준의 동기화는 이 경우 올바른 동기화 방법이 아니다.</li>
+</ul></li>
+  <li>우선 순위 부여
+<pre><code class="language-sql">public class SynchronizedMain {
+    public static void main(String[] args) {
+        Synchornized aa = new Synchornized(); // 쓰레드 생성
+        Synchornized bb = new Synchornized(); // 쓰레드 생성
+        Synchornized cc = new Synchornized(); // 쓰레드 생성
+
+        aa.setName("aa");
+        bb.setName("bb");
+        cc.setName("cc");
+
+        // 우선 순위 부여 1~ 10까지
+
+        aa.setPriority(1);
+        aa.setPriority(Thread.MIN_PRIORITY); // = aa.setPriority(1);
+        bb.setPriority(10); //  bb.setPriority(Thread.MAX_PRIORITY);
+        cc.setPriority(5);
+
+        // 스레드 시작 -&gt; 스레드 실행( run() 메서드 찾아감 )
+        aa.start();
+        bb.start();
+        cc.start();
+
+    }
+}
+</code></pre></li>
+</ul></li>
+  <li>싱글톤
+<ul>
+  <li>DB에는 싱글톤을 걸어줘야 한다.</li>
+  <li>싱글톤 x 예제
+<pre><code class="language-sql">class Singleton{
+    private int num = 3;
+    private static Singleton singletonInstance;
+    public void calc(){
+        num++;
+    }
+    public void disp(){
+        System.out.println("num = " + num);
+    }    
+}
+
+public class SingletonMain {
+    public static void main(String[] args) {
+        Singleton aa =new Singleton();  -&gt; 싱글톤 지원 안함
+        System.out.println(aa);
+        aa.calc();
+        aa.disp();
+        System.out.println();
+
+        Singleton bb =new Singleton();
+        System.out.println(bb);
+        bb.calc();
+        bb.disp();
+        System.out.println();
+
+        Singleton cc =new Singleton();
+        System.out.println(cc);
+        cc.calc();
+        cc.disp();
+        System.out.println();
+
+        result :
+        thread.Singleton@3b07d329
+
+        num = 4
+
+        thread.Singleton@6d03e736
+        num = 4
+
+        thread.Singleton@568db2f2
+        num = 4
+        
+
+     
+    }
+}</code></pre></li>
+  <li>싱글톤 지원 o
+<pre><code class="language-sql">class Singleton{
+    private int num = 3;
+    private static Singleton singletonInstance;
+    public void calc(){
+        num++;
+    }
+    public void disp(){
+        System.out.println("num = " + num);
+    }
+    public static Singleton getInsatance(){
+        if(singletonInstance==null){
+            synchronized (Singleton.class){
+                singletonInstance = new Singleton();
+            }
+        }
+        return singletonInstance;
+    }
+}
+
+public class SingletonMain {
+    public static void main(String[] args) {    
+
+        // Singleton 적용 후
+        Singleton aa = Singleton.getInsatance();
+        System.out.println(aa);
+        aa.calc();
+        aa.disp();
+        System.out.println();
+
+        Singleton bb =Singleton.getInsatance();
+        System.out.println(bb);
+        bb.calc();
+        bb.disp();
+        System.out.println();
+
+        Singleton cc =Singleton.getInsatance();
+        System.out.println(cc);
+        cc.calc();
+        cc.disp();
+        System.out.println();
+    }
+}
+result:
+thread.Singleton@448139f0
+num = 4
+
+thread.Singleton@448139f0
+num = 5
+
+thread.Singleton@448139f0
+num = 6
+
+</code></pre></li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/8cdc84933af449bebc6d6c5fc2076624" target="_blank" rel="noopener">Lambda</a></p>
+<div class="block-children">
+<h3>함수형 프로그래밍이란?</h3>
+<div class="block-children">
+<p>: 함수를 정의하고 이 함수를 데이터 처리부로 보내 데이터를 처리하는 기법을 말한다.</p>
+<div class="block-children">
+<p>데이터 처리부는 데이터만 가지고 있을 뿐, 처리 방법이 정해져 있지 않아 외부에서 제공된 함수에 의존한다.</p>
+</div>
+</div>
+<h3>람다식</h3>
+<ul>
+  <li>Java 8 부터 지원한다.</li>
+  <li>데이터 처리부는 람다식을 받아 매개변수에 데이터를 대입하고 중괄호를 실행시킨다.</li>
+  <li>자바는 람다식을 익명 구현  객체로 변환한다.
+<ul>
+  <li>인터페이스의 익명 구현 객체를 람다식으로 표현하려면 <code>반드시 하나의 추상 메서드만 가져야 한다.</code></li>
+  <li>인터페이스가 함수형 인터페이스임을 보장하기 위해서는 <code>@FunctionalInterface</code> 어노테이션을  붙이면 된다.
+<ul>
+  <li>컴파일 시 추상 메서드가 하나인지 검색하기 때문에 정확한 함수형 인터페이스를 작성할 수 있다.</li>
+</ul>
+<pre><code class="language-java">@FunctionalInterface  // 람다식이라는 어노테이션 -&gt; 람다식은 추상 메서드 하나
+public interface Compute {
+    public void calc(int x, int y);
+    // public void abc();  // 추상메서드 하나 이상으로 추가하면 어노테이션에 에러 뜸
+}
+</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>형식
+<blockquote><strong>💡 ( 매개변수 , … ) → { 처리 내용 }</strong></blockquote></li>
+</ul>
+<h4>예제</h4>
+<ul>
+  <li>LambdaMain01
+<ul>
+  <li>Compute 인터페이스
+<pre><code class="language-java">@FunctionalInterface  // 람다식이라는 어노테이션 -&gt; 람다식은 추상 메서드 하나
+public interface Compute {
+    public void calc(int x, int y);
+    // public void abc();  // 추상메서드 하나 이상으로 추가하면 어노테이션에 에러 뜸
+}</code></pre>
+<ul>
+  <li><code>@FunctionalInterface</code> 어노테이션을 선언하고 추상 메서드가 하나인 것을 볼 수 있다.</li>
+  <li>추상 메서드를 추가하면 어노테이션에서 에러가 남 → Compile time에서 에러 사전 방지</li>
+</ul></li>
+  <li>LambdaMain01
+<pre><code class="language-java">public class LambdaMain01 {
+    public void execute(Compute compute){  // 인터페이스를 매개변수로 집어넣음
+        int x = 25; int y = 36;
+        compute.calc(x,y); // Compute의 추상 메서드 호출
+        
+
+    }
+    public static void main(String[] args) {
+        LambdaMain01 lambdaMain = new LambdaMain01();
+        // lambdaMain.execute(new Compute());  -&gt; 인터페이스이기 때문에 new 키워드를 통해 생성하여 인자로 넘여줄 수 없다.
+        lambdaMain.execute((x,y)-&gt;{
+            int result = x+y;
+            System.out.println(x+" + "+y+" = "+result);
+        });
+
+        lambdaMain.execute((x,y)-&gt;{
+            int result = x*y;
+            System.out.println(x+" * "+y+" = "+result)
+            ;
+        });
+
+    }
+}</code></pre>
+<ul>
+  <li>lambdaMain에서 <code>execute()</code> 메서드를 호출했다 → <code>execute()</code> 메서드에 인자에는 <code>함수형 인터페이스</code>인 Compute를 받았다. </li>
+  <li><code>execute()</code> 메서드에서 인터페이스를 인자로 받은 이상, 인터페이스에 해당하는 추상 메서드를 override를 해주거나 람다함수를 통해 구현해줘야 한다.
+<ul>
+  <li>override
+<pre><code class="language-java">    public static void main(String[] args) {
+        LambdaMain01 lambdaMain = new LambdaMain01();
+
+        // 첫 번째 호출: 덧셈과 뺄셈
+        lambdaMain.execute(new Compute() {
+            @Override
+            public void calc(int x, int y) {
+
+            }
+        });
+
+    }</code></pre></li>
+  <li>람다 함수
+<pre><code class="language-java">  public static void main(String[] args) {
+        LambdaMain01 lambdaMain = new LambdaMain01();
+
+        // 첫 번째 호출: 덧셈과 뺄셈
+        lambdaMain.execute((x,y)-&gt;{  
+            System.out.println("Hello World");
+        });
+
+    }</code></pre>
+<ul>
+  <li>이때 <code>(x, y)</code> 는 calc의 인자로 들어가게 된다.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+  <li>만약 추상 메서드 2개를 인자로 받는다면???
+<ul>
+  <li>Compute Interface
+<pre><code class="language-java">@FunctionalInterface  // 람다식이라는 어노테이션 -&gt; 람다식은 추상 메서드 하나
+public interface Compute {
+    public void calc(int x, int y);
+}</code></pre></li>
+  <li>Compute1 Interface
+<pre><code class="language-java">@FunctionalInterface
+public interface Compute1 {
+    public void calc1(int x, int y);
+}</code></pre></li>
+  <li>LambdaMain01
+<pre><code class="language-java">public class LambdaMain01 {
+    public void execute(Compute compute, Compute1 compute1) {  // 인터페이스를 매개변수로 집어넣음
+        int x = 25; int y = 36;
+        compute1.calc1(x, y);
+        compute.calc(x, y); // Compute의 추상 메서드 호출
+    }
+
+    public static void main(String[] args) {
+        LambdaMain01 lambdaMain = new LambdaMain01();
+
+        // 첫 번째 호출: 덧셈과 뺄셈
+        lambdaMain.execute((x, y) -&gt; {
+            int result = x + y;
+            System.out.println(x + " + " + y + " = " + result);
+        }, (x, y) -&gt; {
+            int result = x - y;
+            System.out.println(x + " - " + y + " = " + result);
+        });
+
+        // 두 번째 호출: 곱셈과 나눗셈
+        lambdaMain.execute((x, y) -&gt; {
+            int result = x * y;
+            System.out.println(x + " * " + y + " = " + result);
+        }, (x, y) -&gt; {
+            if (y != 0) {
+                int result = x / y;
+                System.out.println(x + " / " + y + " = " + result);
+            } else {
+                System.out.println("Division by zero is not allowed.");
+            }
+        });
+    }
+}
+
+</code></pre>
+<ul>
+  <li>인자를 인터페이스 2개를 받았기 때문에, <code>execute</code> 메서드를 실행할 때마다 각각 인터페이스마다의 추상메서드를 override 또는 람다식으로 구현을 해줘야 한다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>처리하는 실행문이 하나라 {} 를 생략하는 경우
+<pre><code class="language-java">@FunctionalInterface
+public interface Workable {
+    public void work();
+}
+
+class Person {
+    public void execute(Workable workable){
+        workable.work();
+    }
+}
+
+public class LambdaMain02 {
+    public static void main(String[] args) {
+        Person person = new Person();
+        person.execute(()-&gt;{
+            System.out.println("hello");
+        });
+
+        // 처리하는 실행문이 1개일 경우에는 {}를 생략할 수 있다.
+        person.execute(
+                ()-&gt; System.out.println("yo man")
+        );
+
+    }
+}
+</code></pre></li>
+</ul>
+<ul>
+  <li>추상메서드의 매개변수가 1개라 ( ) 를 생략하는 경우
+<pre><code class="language-java">@FunctionalInterface
+public interface InterA {
+    public void a(String  name, int age);
+}
+</code></pre>
+<pre><code class="language-java">@FunctionalInterface
+public interface InterB {
+    public void b(String data);
+}
+</code></pre>
+<pre><code class="language-java">class Person03{
+    public void execute(InterA interA){
+        interA.a("홍길동",25);
+    }
+    public void execute(InterB interB){
+        interB.b("안녕하세요 홍길동입니다.");
+    }
+
+}
+
+public class InterMain {
+    public static void main(String[] args) {
+        Person03 person03 = new Person03();
+        person03.execute((name,age)-&gt;{
+            System.out.println("나의 이름은 "+name+"입니다.");
+            System.out.println("내 나이는 "+age+"살 입니다.");
+        });
+
+        // 매개변수가 1개일 경우에는 () 생략 가능
+        person03.execute(
+                data -&gt;
+            System.out.println(data)
+        );
+
+
+    }
+}
+</code></pre>
+<ul>
+  <li>InterB의 추상 메서드는 인자가 1개이기 때문에 ( ) 이 생략이 가능하다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>메서드 참조
+<ul>
+  <li>람다 표현식을 더 간결하게 작성할 수 있는 방법</li>
+  <li>Compute2 인터페이스
+<pre><code class="language-java">public interface Compute2 {
+    public String calc(int x, int y);  // 지금까지와 다르게 return 타입이 존재
+}</code></pre></li>
+  <li>Person04 클래스
+<pre><code class="language-java">class Person04{
+    public void execute(Compute2 compute2){
+        String result = compute2.calc(25,36);
+        System.out.println(result);
+    }
+
+    public int mul(int x, int y){
+        return x * y;
+    }
+}
+</code></pre></li>
+  <li>Calculator 클래스
+<pre><code class="language-java">class Calculator {
+    public static String staticMethod(int x, int y) {  // 정적 메서드
+        return x + " + " + y + " = " + (x + y);
+    }
+
+    public String nonStaticMethod(int x, int y) {  // 인스턴스 메서드
+        return x + " * " + y + " = " + (x * y);
+    }
+}
+</code></pre></li>
+  <li>LambdaMain05
+<pre><code class="language-java">public class LambdaMain05 {
+    public static void main(String[] args) {
+        Person04 person04 = new Person04();
+
+        person04.execute((x, y) -&gt; Calculator.staticMethod(x, y));
+        person04.execute(Calculator::staticMethod);
+
+        Calculator calculator = new Calculator();
+        person04.execute((x, y) -&gt; calculator.nonStaticMethod(x, y));
+        person04.execute(calculator::nonStaticMethod);
+    }
+}
+</code></pre>
+<ol>
+  <li><code>Person04</code> 클래스 타입의 객체를 선언하고 <code>execute()</code> 메서드를 호출했다.</li>
+  <li><code>execute()</code> 메서드를 보면 인터페이스인 <code>Compute</code> 인터페이스를 인자로 받았다. → 이 말은 즉, <code>execute()</code> 메서드 호출을 하면 <code>@override</code> 또는 람다식을 통해 <code>Compute</code> 인터페이스의 추상 메서드를 구현해줘야 한다.</li>
+  <li>처음 메서드를 구현부를 <code>Caculator</code> 클래스의 <code>staticMethod</code> 로 덮어버린 거고, 두번째는 <code>Caculator</code> 클래스 객체인 <code>calculator</code> 의 인스턴스 메서드인 <code>nonStaticMethod</code> 로 덮어버린 것이다.
+<ol>
+  <li><code>person04.execute((x, y) -&gt; Calculator.staticMethod(x, y));</code> = <code>person04.execute(Calculator::staticMethod);</code></li>
+</ol></li>
+  <li>형식
+<ol>
+  <li>정적 메서드
+<ol>
+  <li>클래스 : : 메서드</li>
+</ol></li>
+  <li>인스턴스 메서드
+<ol>
+  <li>참조변수 : : 메서드</li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ul></li>
+  <li>메서드 참조 예제 2
+<pre><code class="language-java">@FunctionalInterface
+interface Comp{
+    public int compare(String a, String b);
+}
+
+//
+class Person06{
+    public void order(Comp comp){
+        String a = "홍길동";
+        String b = "코난";
+
+        int result = comp.compare(a, b);
+
+        if(result&lt;0){
+            System.out.println(a + ", " + b);
+        }else if(result&gt;0){
+            System.out.println(b + ", " + a);
+        }else System.out.println("같은 이름입니다.");
+    }
+}
+
+public class LambdaMain06 {
+    public static void main(String[] args) {
+        Person06 person06 = new Person06();
+        person06.order((a,b)-&gt; a.compareTo(b));
+        person06.order(String::compareTo);
+    }
+}
+</code></pre></li>
+</ul>
+<ul>
+  <li>생성자 참조
+<ul>
+  <li>생성자를 참조한다는 것은 객체를 생성하는 것을 의미한다.</li>
+  <li><strong>생성자가 여러 개로 overload가 된 경우</strong>, <code>함수형 인터페이스의 추상 메서드와 동일한 매개변수 타입과 개수를 가진 생성자를 찾아 실행</code>한다.</li>
+</ul>
+<pre><code class="language-java">@FunctionalInterface
+interface Create1{
+    public Person create(String name);
+}
+
+@FunctionalInterface
+interface Create2{
+    public Person create(String name, int age);
+}
+
+
+class Person{
+    private String name;
+    private int age;
+
+    public Person(String name) {
+        this.name = name;
+        System.out.println("Person(String name) 생성자");
+    }
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+        System.out.println("Person(String name, int age) 생성자");
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}
+
+class PersonTest{
+    public Person getPerson1(Create1 create1){
+        String name ="none";
+        Person person = new Person(name);
+        return person;
+    }
+
+    public Person getPerson2(Create2 create2){
+        String name = "홍길동";
+        int age = 20;
+        Person person = new Person(name, age);
+        return person;
+    }
+}
+public class LambdaMain07 {
+    public static void main(String[] args) {
+        PersonTest personTest = new PersonTest();
+
+        Person one = personTest.getPerson1(Person::new);
+        System.out.println("이름 : "+one.getName());
+        System.out.println("나이 : "+one.getAge());
+        System.out.println();
+
+        Person two = personTest.getPerson2(Person::new);
+        System.out.println("이름 : "+one.getName());
+        System.out.println("나이 : "+one.getAge());
+        System.out.println();
+
+    }
+
+}
+// result:
+Person(String name) 생성자
+이름 : none
+나이 : 0
+
+Person(String name, int age) 생성자
+이름 : none
+나이 : 0</code></pre>
+<ol>
+  <li>처음에 <code>Person one = personTest.getPerson1(Person::new);</code> 를 실행한다
+<ol>
+  <li><code>getPerson1</code> 메서드는 인터페이스인 <code>Create1</code> 를 인자로 받는다. 즉, <code>create</code> 메서드를 
+<ol>
+  <li><code>@Override</code> 하거나</li>
+  <li>람다식을 통해 구현을 해주거나 </li>
+  <li>메서드 참조를 통해 덮어씌워줘야 한다.</li>
+</ol></li>
+  <li><code>getPerson1</code> 메서드를 통해 <code>String name = “none”</code>이 되고, <code>Person person = new Person(name)</code> 을 통해 인자를 String 1개를 받는 생성자를 호출한다.
+<ol>
+  <li>이 때문에 <code>Person(String name) 생성자</code> 가 먼저 출력된다.</li>
+</ol></li>
+  <li><code>(Person::new)</code> 를 통해 <code>create</code> 메서드를 덮어씌우는 선택을 했다. 그렇다면 어떤 생성자로 덮어씌웠을까? 하고 생성자의 인자의 갯수, 타입을 확인해야 한다.</li>
+  <li><code>String name</code> 인자 1개이므로 다음 생성자가 덮어씌운다.
+<pre><code class="language-java">   public Person(String name) {
+        this.name = name;
+        System.out.println("Person(String name) 생성자");
+    }</code></pre></li>
+  <li>이 때문에 <code>Person(String name) 생성자</code> 가 먼저 출력이 되고, 이름은 <code>String name = “none”</code> 을 통해 none으로 설정했으므로 결과가 다음과 같이 나온다
+<blockquote><strong>💡 // result:
+Person(String name) 생성자
+이름 : none
+나이 : 0</strong></blockquote></li>
+</ol></li>
+</ol></li>
+</ul>
+<p>📄 <a href="https://www.notion.so/5cf87887b8c64fcc90ac49e22b788ac4" target="_blank" rel="noopener">네트워크 프로그래밍</a></p>
+<div class="block-children">
+<h3>OSI 7 Layers</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>뭐하러 7 계층으로 나누어놨을까?
+<ul>
+  <li>통신이 일어나는 과정을 단계별로 파악할 수 있기 때문이다.</li>
+  <li>7단계 중 특정한 곳에 이상이 생기면 다른 단계의 장비 및 소프트웨어를 건들이지 않고도 이상이 생긴 단계만 고칠 수 있기 때문이다.</li>
+</ul>
+<blockquote><strong>💡 <strong>문제 )</strong>
+PC방에서 오버워치를 하는데 연결이 끊겼다.</strong></blockquote>
+<div class="block-children">
+<p>어디에 문제가 있는지 확인하기 위해서는</p>
+<p>모든 PC가 문제가 있다면</p>
+<p>라우터의 문제(3계층 네트워크 계층)이거나 광랜을 제공하는 회사의 회선 문제(1계층 물리 계층)</p>
+<p>한 PC만 문제가 있고</p>
+<p>오버워치 소프트웨어에 문제가 있다면(7계층 어플리케이션 계층)</p>
+<p>오버워치 소프트웨어에 문제가 없고, 스위치에 문제가 있으면(2계층 데이터링크 계층)</p>
+<p>있다고 판단해 다른 계층에 있는 장비나 소프트웨어를 건들이지 않는 것이다.</p>
+</div></li>
+</ul>
+<div class="block-children">
+<div class="block-children">
+<ol>
+  <li>물리 계층(Physical Layer)
+<ol>
+  <li>이 계층에서는 주로 전기적, 기계적, 기능적인 특성을 이용해서 통신 케이블로 데이터를 전송하게 된다.</li>
+  <li>통신 단위 : 비트 (0과 1)</li>
+  <li>데이터를 전달만 할 뿐, 전송하려는 데이터가 무엇인지, 어떤 에러가 있는지 등에는 전혀 신경쓰지 않는다.</li>
+  <li>허브: 다양한 기기들로부터 오는 전기 신호들을 받아서 그 신호들을 증폭시켜 다른 기기들로 뿌려주는 역할</li>
+  <li>리피터: 전기 신호를 정형(일그러진 전기 신호를 복원)하고 증폭하는 기능을 가진 네트워크 중계 장비.</li>
+</ol></li>
+</ol>
+</div>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_002.png" alt="img_002.png">
+</figure>
+</div>
+</div>
+<ol>
+  <li>데이터 링크 계층(Data Link Layer)
+<ol>
+  <li>송수신되는 정보의 오류와 흐름을 관리 → 안전한 정보의 전달을 수행할 수 있도록 도와주는 역할</li>
+  <li>MAC 주소를 가지고 통신</li>
+  <li>통신 단위 : 프레임(Frame)</li>
+  <li>물리 계층에서 발생할 수 있는 오류를 찾아내고, 수정하는데 필요한 기능적, 절차적 수단을 제공</li>
+  <li>브리지 : 허브와 마찬가지로 Eternet 장비를 물리적으로 연결하고 Frame의 전송거리 연장</li>
+  <li>스위치 : Mac주소와 해당 장비의 포트번호가 기록된 MAC Address 테이블을 보고 목적지에게만 Frame을 전송한다.</li>
+</ol></li>
+</ol>
+<ol>
+  <li>네트워크 계층 (Network Layer)
+<ol>
+  <li>이 계층에서 가장 중요한 기능은 <strong>데이터를 목적지까지 가장 안전하고 </strong><strong><code>빠르게</code></strong><strong> 전달하는 기능(라우팅)</strong>이다. </li>
+  <li>이 계층은 경로를 선택하고 주소를 정하고 경로에 따라 패킷을 전달해주는 것이 이 계층의 역할이다. </li>
+  <li>통신 단위 : 패킷(packet)</li>
+</ol></li>
+</ol>
+<ol>
+  <li>전송 계층(Transport Layer)
+<ol>
+  <li>포트를 열어서 응용 프로그램들이 전송을 할 수 있게 한다.</li>
+  <li>전송 계층(Transport layer)은 양 끝단(End to end)의 사용자들이 <code>신뢰성</code> 있는 데이터를 주고 받을 수 있도록 해 주어, 상위 계층들이 데이터 전달의 유효성이나 효율성을 생각하지 않도록 해준다.</li>
+  <li>통신 단위 : 세그먼트(Segment)</li>
+</ol>
+<ul>
+  <li><strong>port 번호</strong>, 전송방식<strong>(TCP/UDP)</strong> 결정 &gt; <strong>TCP 헤더</strong> 붙음
+<ul>
+  <li>TCP : 신뢰성, 연결지향적</li>
+  <li>UDP : 비신뢰성, 비연결성, 실시간</li>
+</ul></li>
+</ul></li>
+</ol>
+<ol>
+  <li>세션 계층(Session Layer)
+<ol>
+  <li> 지점간의 프로세스 및 통신하는 호스트 간의 연결 유지</li>
+  <li>TCP/IP 세션 체결, 포트번호를 기반으로 <strong>통신 세션</strong> 구성</li>
+</ol></li>
+</ol>
+<ol>
+  <li>표현 계층(Presentation Layer)
+<ol>
+  <li>전송하는 <strong>데이터의 표현방식</strong>을 결정(ex. 데이터변환, 압축, 암호화 등</li>
+  <li>파일인코딩, 명령어를 포장, 압축, 암호화</li>
+  <li>JPEG, MPEG, GIF, ASCII 등</li>
+</ol></li>
+</ol>
+<ol>
+  <li>응용 계층(Application Layer)
+<ol>
+  <li>최종 목적지로, 응용 프로세스와 직접 관계하여 일반적인 응용 서비스를 수행(ex. explore, chrome 등)</li>
+  <li>HTTP, FTP, SMTP, POP3, IMAP, Telnet 등과 같은 프로토콜이 있다.</li>
+</ol></li>
+</ol>
+<h3>예제 코드</h3>
+<ul>
+  <li>InetAddress
+<ul>
+  <li>IP 주소를 나타내고,  이를 통해 호스트 이름과 IP 주소 간의 매칭을 처리한다.</li>
+</ul>
+<pre><code class="language-java">public class InetAddressMain {
+
+    public static void main(String[] args) throws UnknownHostException {
+        InetAddress naver = InetAddress.getByName("www.naver.com");
+        System.out.println("Naver Ip = " + naver.getHostAddress());
+        System.out.println();
+        
+        InetAddress local = InetAddress.getLocalHost();
+        System.out.println("Local Ip = " + local.getHostAddress());
+        System.out.println();
+        
+//      회사 내 Ip가 여러개이기 때문에 배열로 받는다
+        InetAddress[] ar = InetAddress.getAllByName("www.naver.com");
+        for (InetAddress data : ar) {
+			System.out.println("Naver Ip = " + data.getHostAddress());
+		}
+    }
+
+}
+result:
+Naver Ip = 223.130.200.219
+
+Local Ip = 192.168.0.50
+
+Naver Ip = 223.130.200.219
+Naver Ip = 223.130.192.248
+Naver Ip = 223.130.192.247
+Naver Ip = 223.130.200.236</code></pre>
+<ul>
+  <li><code>InetAddress.getByName("www.naver.com")</code>는 주어진 도메인 이름 ("www.naver.com")에 해당하는 IP 주소를 조회</li>
+  <li><code>naver.getHostAddress()</code>는 조회된 IP 주소를 문자열 형태로 반환</li>
+  <li><code>InetAddress.getAllByName("www.naver.com")</code>는 주어진 도메인 이름에 해당하는 모든 IP 주소를 배열로 반환한다. 이는 도메인이 여러 IP 주소를 가질 수 있기 때문이다.
+
+
+</li>
+</ul></li>
+  <li>Url
+<pre><code class="language-java">public class URLMain {
+
+	public static void main(String[] args) throws IOException {
+		URL url = new URL("https://www.naver.com/index.html");
+		System.out.println("프로토콜 = " + url.getProtocol());
+		System.out.println("호스트 = " + url.getHost());
+		System.out.println("포트 = " + url.getPort());
+		System.out.println("기본 포트 = " + url.getDefaultPort());
+		System.out.println("파일 = " + url.getFile());
+		System.out.println();
+		
+//		IO 생성
+//		파일 스크립트 한줄씩 읽어오기
+		BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+		String line = null;
+		while((line = br.readLine()) != null) {
+			System.out.println(line);
+		}
+		br.close();
+	}
+}
+result:
+프로토콜 = https
+호스트 = www.naver.com
+포트 = -1
+기본 포트 = 443
+파일 = /index.html
+
+&lt;!doctype html&gt; &lt;html lang="ko" class="fzoom"&gt; &lt;head&gt; &lt;meta charset="utf-8"&gt;
+ &lt;meta name="Referrer" content="origin"&gt; &lt;meta http-equiv="X-UA-Compatible"
+  content="IE=edge"&gt; &lt;meta name="viewport" content="width=1190"&gt; 
+  &lt;title&gt;NAVER&lt;/title&gt; &lt;meta name="apple-mobile-web-app-title" content="NAVER"/&gt;
+   &lt;meta name="robots" content="index,nofollow"/&gt; 
+   &lt;meta name="description" content=
+   "네이버 메인에서 다양한 정보와 유용한 컨텐츠를 만나 보세요"/&gt;
+    &lt;meta property="og:title" content="네이버"&gt; &lt;meta property="og:url"</code></pre>
+<ul>
+  <li></li>
+</ul></li>
+</ul>
+<ul>
+  <li>Protocol
+<ul>
+  <li>간단한 클라이언트 - 서버 프로토콜을 구현하여 클라이언트와 서버 간의 통신을 관리하는 예제
+<ul>
+  <li>클라이언트는 서버에 메세지를 보내고, 서버는 클라이언트로부터 받은 메세지를 처리하여 응답합니다.</li>
+</ul></li>
+  <li>Protocol
+<pre><code class="language-java">public final class Protocol {
+    public static final String ENTER = "100";
+    public static final String EXIT = "200";
+    public static final String SEND_MESSAGE = "300";
+}</code></pre>
+<ul>
+  <li><code>ENTER</code>: 클라이언트가 입장할 때 사용하는 코드 ("100").</li>
+  <li><code>EXIT</code>: 클라이언트가 퇴장할 때 사용하는 코드 ("200").</li>
+  <li><code>SEND_MESSAGE</code>: 클라이언트가 메시지를 보낼 때 사용하는 코드 ("300").</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-java-oop/img_001.png" alt="TCP 소켓을 사용하는 흐름">
+  <figcaption>TCP 소켓을 사용하는 흐름</figcaption>
+</figure>
+<ul>
+  <li>ProtocolClient
+<pre><code class="language-java">public class ProtocolClient {
+	Socket socket;  // 서버와 연결을 나타냄
+	BufferedReader br;  // 서버로부터 데이터를 읽어오는데 사용
+	BufferedWriter bw;  // 서버로 데이터를 보내는데 사용된다.
+	Scanner sc;
+
+	public ProtocolClient() {
+		try {
+			socket = new Socket("localhost", 9500);	//9500번 통로에 길 뚫어놓기
+//			통신 간에 길 만들어놓기
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+			sc = new Scanner(System.in);
+
+		} catch (UnknownHostException e) {
+			System.out.println("서버를 찾을 수 없습니다");
+			e.printStackTrace();
+			System.exit(0);
+		} catch (IOException e) {
+			System.out.println("서버와 연결이 안되었습니다");
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+//		한줄 단위로 읽기위해 line 생성
+		String message, line;
+		try {
+			while(true) {
+//				서버로 보내기
+				System.out.println();
+				System.out.print("입장은 100:대화명이라고 입력하세요 \n");
+				System.out.print("퇴장하려면 200:대화명이라고 입력하세요 \n");
+				System.out.print("메세지는 300:대화명:메세지라고 입력하세요 \n");
+				message = sc.nextLine();
+
+				bw.write(message + "\n");	//서버로 보내기
+				bw.flush(); //io buffer에 있는 데이터값 비워주기
+
+//				서버로부터 받기
+				line = br.readLine();
+				System.out.println(line);
+
+//				200:apple -&gt; "200", "apple" - 200 = 퇴장, apple = 대화명
+				String[] ar = message.split(":");	//  :을 기준으로 분해  // line으로 해보기
+				if(ar[0].equals(Protocol.EXIT)) {	// Protocol.EXIT = "200"
+					br.close();
+					bw.close();
+					socket.close();
+					System.exit(0);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		new ProtocolClient();
+	}
+
+}</code></pre></li>
+  <li>ProtocolServer
+<pre><code class="language-java">public class ProtocolServer {
+	ServerSocket serverSocket;  // 클라이언트와의 연결을 기다리는 소켓
+	Socket socket; // 클라이언트와의 연결을 나타냄
+	BufferedReader br;  // 클라이언트로부터 데이터를 읽어오는데 사용된다.
+	BufferedWriter bw;  // 클라이언트로 데이터를 보내는 데 사용된다.
+
+	public ProtocolServer() {
+		try {
+			serverSocket = new ServerSocket(9500);	//클라이언트 9500번 요청이 올 때까지 기다린다
+			System.out.println("서버 준비 완료");
+
+			socket = serverSocket.accept();	//클라이언트를 낚아챈 후 소켓을 생성
+
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+
+		} catch (IOException e) {
+			System.out.println("클라이언트와 연결이 안되었습니다");
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+		String line;
+
+		try {
+			while(true) {
+//				클라이언트로부터 받기
+				line = br.readLine();
+
+//				클라이언트로 보내기
+				String[] ar = line.split(":");
+				if(ar[0].equals(Protocol.ENTER)) {	//입장 =&gt; 100:대화명
+					bw.write(ar[1] + "님이 입장하였습니다.\n");
+					bw.flush();
+				} else if(ar[0].equals(Protocol.EXIT)) { //퇴장 =&gt; 200:대화명
+					bw.write(ar[1] + "님이 퇴장하였습니다.\n");
+					bw.flush();
+
+					bw.close();
+					br.close();
+					socket.close();
+
+					System.out.println("서버 종료");
+					System.exit(0);
+				} else if(ar[0].equals(Protocol.SEND_MESSAGE)) { //메세지 =&gt; 300:대화명:메세지
+					bw.write("[" + ar[1] + "] : " + ar[2] + "\n");
+					bw.flush();
+				}
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		new ProtocolServer();
+	}
+
+}</code></pre>
+<ul>
+  <li>결과</li>
+</ul>
+<pre><code class="language-java">입장은 100:대화명이라고 입력하세요 
+퇴장하려면 200:대화명이라고 입력하세요 
+메세지는 300:대화명:메세지라고 입력하세요 
+100:hello
+hello님이 입장하였습니다.
+
+입장은 100:대화명이라고 입력하세요 
+퇴장하려면 200:대화명이라고 입력하세요 
+메세지는 300:대화명:메세지라고 입력하세요 
+300:hello:hi man:)
+[hello] : hi man
+
+입장은 100:대화명이라고 입력하세요 
+퇴장하려면 200:대화명이라고 입력하세요 
+메세지는 300:대화명:메세지라고 입력하세요 
+200:hello
+hello님이 퇴장하였습니다.</code></pre></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<p>📄 <a href="https://www.notion.so/95edb19fb27244faaead3cdc2eccd2d8" target="_blank" rel="noopener">스트림 (Stream)</a></p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

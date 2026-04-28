@@ -1,0 +1,64 @@
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>Hadoop Cloud 구성</li>
+  <li>Hadoop test data load 실습</li>
+  <li>Query를 통한 data table  생성확인</li>
+</ol>
+<h3>1. Hadoop Cloud Object Storage 구성</h3>
+<ul>
+  <li>Services &gt; ObjectStorage &gt; Bucket Management &gt;+버킷 생성 선택</li>
+  <li>기본정보 &gt;“버킷이름” 에 labhadoop-아이디 입력 후  하단의 ‘다음’ 버튼 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>잠금설정,암호화설정은디폴트값으로두고‘다음’버튼클릭</li>
+  <li>권한 관리도 디폴트 값으로 유지 후 하단의 ‘다음’ 버튼 클릭</li>
+  <li>마지막 확인 페이지에서 “버킷생성” 클릭하면 Object Storage 생성 완료</li>
+</ul>
+<h3>2. Hadoop 클러스터  설정</h3>
+<ul>
+  <li>Services &gt; Bigdata&amp;Analytics &gt; CloudHadoop &gt; +클러스터 생성 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_003.png" alt="img_003.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_004.png" alt="img_004.png">
+</figure>
+<h3>3. Zeppelin Notebook 접속</h3>
+<ul>
+  <li>Zeppelin notebook에 접속하기 위해서 cloud Hadoop ACG를 업데이트합니다.</li>
+  <li>Services &gt;Server &gt;ACG항목에서 cloud-hadoop-acg-*로 시작하는 acg를 클릭 후, <code>myip</code>에 대해서
+9996포트를 허용해줍니다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>lab-hadoop 선택 후, 상단의 ‘application별 보기’ 클릭 후 zeppelin notebook 접속용 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>아래와 같이 페이지가 노출되면, 고급 버튼을 클릭합니다
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>**(안전하지않음)링크를 클릭합니다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab6-hadoop/img_007.png" alt="img_007.png">
+</figure>
+<ul>
+  <li>아래와 같이 zeppelin 화면이 노출되면 정상 접속이 된 것입니다.</li>
+  <li>Zeppelin 메인 화면 우측 상단의 로그인 버튼을 클릭한 후 클러스터 생성 시  기입한 클러스터 관리자 계정 정보로 접속을 합니다.</li>
+</ul>

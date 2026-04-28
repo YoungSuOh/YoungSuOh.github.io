@@ -1,0 +1,238 @@
+<ul>
+  <li>네이버 클라우드 설정
+</li>
+  <li>NCP Object storage
+<ul>
+  <li><a href="https://p3chaeyeon.tistory.com/208" target="_blank" rel="noopener">https://p3chaeyeon.tistory.com/208</a> </li>
+</ul></li>
+  <li>NCP MySQL
+<ul>
+  <li><a href="https://www.notion.so/11c4cd810d9c80ec95b3e3b5d20e46a1#11f4cd810d9c80cfba4bfa99785103e4" target="_blank" rel="noopener">https://www.notion.so/11c4cd810d9c80ec95b3e3b5d20e46a1?pvs=4#11f4cd810d9c80cfba4bfa99785103e4</a></li>
+</ul></li>
+  <li>족보
+<ul>
+  <li><a href="https://nvcbt.netlify.app/" target="_blank" rel="noopener">https://nvcbt.netlify.app/</a></li>
+</ul></li>
+</ul>
+<h3>버킷 &amp; 파일 CRUD API 구축</h3>
+<ul>
+  <li>Service
+<pre><code class="language-java">@Service
+public class NCPObjectStorageService {
+
+    private String accessKey = "0389DFB99F746878DB12";
+    private String secretKey = "050CE19EB83E86EEDD7EA995DB392AEE59CC3D1A";
+    private String regionName = "kr-standard";
+    private String endPoint = "https://kr.object.ncloudstorage.com";
+
+    final AmazonS3 s3;
+
+    public NCPObjectStorageService() {
+        s3 = AmazonS3ClientBuilder
+                .standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+                .build();
+    }
+    public List&lt;Bucket&gt; showBucketList() {
+        List&lt;Bucket&gt; buckets = new ArrayList&lt;&gt;();
+        try {
+            buckets = s3.listBuckets();  // S3 버킷 리스트를 가져옴
+        } catch (AmazonS3Exception e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
+        return buckets;
+    }
+    public void makeBucket(String bucketName) {
+        try {
+            // create bucket if the bucket name does not exist
+            if (s3.doesBucketExistV2(bucketName)) {
+                System.out.format("Bucket %s already exists.\n", bucketName);
+            } else {
+                s3.createBucket(bucketName);
+                System.out.format("Bucket %s has been created.\n", bucketName);
+            }
+        } catch (AmazonS3Exception e) {
+            e.printStackTrace();
+        } catch(SdkClientException e) {
+            e.printStackTrace();
+        }
+    }
+    public void deleteBucket(String bucketName) {
+        try {
+            // delete bucket if the bucket exists
+            if (s3.doesBucketExistV2(bucketName)) {
+                // delete all objects
+                ObjectListing objectListing = s3.listObjects(bucketName);
+                while (true) {
+                    for (Iterator&lt;?&gt; iterator = objectListing.getObjectSummaries().iterator(); iterator.hasNext();) {
+                        S3ObjectSummary summary = (S3ObjectSummary)iterator.next();
+                        s3.deleteObject(bucketName, summary.getKey());
+                    }
+
+                    if (objectListing.isTruncated()) {
+                        objectListing = s3.listNextBatchOfObjects(objectListing);
+                    } else {
+                        break;
+                    }
+                }
+
+                // abort incomplete multipart uploads
+                MultipartUploadListing multipartUploadListing = s3.listMultipartUploads(new ListMultipartUploadsRequest(bucketName));
+                while (true) {
+                    for (Iterator&lt;?&gt; iterator = multipartUploadListing.getMultipartUploads().iterator(); iterator.hasNext();) {
+                        MultipartUpload multipartUpload = (MultipartUpload)iterator.next();
+                        s3.abortMultipartUpload(new AbortMultipartUploadRequest(bucketName, multipartUpload.getKey(), multipartUpload.getUploadId()));
+                    }
+
+                    if (multipartUploadListing.isTruncated()) {
+                        ListMultipartUploadsRequest listMultipartUploadsRequest = new ListMultipartUploadsRequest(bucketName);
+                        listMultipartUploadsRequest.withUploadIdMarker(multipartUploadListing.getNextUploadIdMarker());
+                        multipartUploadListing = s3.listMultipartUploads(listMultipartUploadsRequest);
+                    } else {
+                        break;
+                    }
+                }
+
+                s3.deleteBucket(bucketName);
+                System.out.format("Bucket %s has been deleted.\n", bucketName);
+            } else {
+                System.out.format("Bucket %s does not exist.\n", bucketName);
+            }
+        } catch (AmazonS3Exception e) {
+            e.printStackTrace();
+        } catch(SdkClientException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String uploadFile(String bucketName, String directoryPath, File file) {
+        // String fileName = file.getName(); - public void
+
+        String fileName = UUID.randomUUID().toString();
+        // UUID : 숫자 형식으로 파일명을 만들어줌; 같은 파일명을 올려도 다른 이름으로 계속 올라감
+
+        FileInputStream fileIn = null;
+        try {
+            fileIn = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        /* 정보 파일 잡기 */
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        // objectMetadata.setContentType("image/jpeg"); 이러면 귀찮음 for 문 써줘야함
+
+        Path path = Paths.get(file.getAbsolutePath());
+        String contentType = null;
+        try {
+            contentType = Files.probeContentType(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        objectMetadata.setContentType(contentType);
+        objectMetadata.setContentLength(file.length());
+
+        // putObjectRequest 생성해서 bucketName 에 directoryPath + fileName 이름으로 파일 불러들임
+        PutObjectRequest putObjectRequest =
+                new PutObjectRequest(bucketName,
+                        directoryPath + fileName,
+                        fileIn,
+                        objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead);
+        // Acl : 리소스에 대한 접근 권한
+        // 모든 사용자가 객체를 읽을 수 있지만, 수정과 삭제는 불가능
+
+        s3.putObject(putObjectRequest); // Object에 올리기
+
+        return fileName;
+    }
+    public List&lt;S3ObjectSummary&gt; showFileList(String bucketName) {
+        List&lt;S3ObjectSummary&gt; fileList = new ArrayList&lt;&gt;(); // 파일 목록을 저장할 리스트
+
+        try {
+            ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                    .withBucketName(bucketName)
+                    .withMaxKeys(300);
+
+            ObjectListing objectListing = s3.listObjects(listObjectsRequest);
+
+            while (true) {
+                for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                    fileList.add(objectSummary); // 파일 정보를 리스트에 추가
+                }
+
+                if (objectListing.isTruncated()) {
+                    objectListing = s3.listNextBatchOfObjects(objectListing);
+                } else {
+                    break;
+                }
+            }
+        } catch (AmazonS3Exception e) {
+            e.printStackTrace();
+        }
+
+        return fileList; // 파일 목록 반환
+    }
+
+}</code></pre></li>
+  <li>Controller
+<pre><code class="language-java">@Controller
+public class FileUploadController {
+
+    private final NCPObjectStorageService objectStorageService;
+    private final String bucketName="my-bucket1";
+    private final String directoryPath="storage";
+
+    public FileUploadController(NCPObjectStorageService objectStorageService) {
+        this.objectStorageService = objectStorageService;
+    }
+    @GetMapping("/showBucketList")
+    public String showBucketList(Model model) {
+        List&lt;Bucket&gt; buckets = objectStorageService.showBucketList();
+        model.addAttribute("buckets", buckets);  // Model에 버킷 리스트 추가
+        return "showBucketList";  // showBucketList.html 템플릿을 반환
+    }
+    @PostMapping("/makeBucket")
+    public String makeBucket(@RequestParam("bucketName") String bucketName) {
+        objectStorageService.makeBucket(bucketName);
+        return "makeBucket";  // showBucketList.html 템플릿을 반환
+    }
+    @DeleteMapping("/deleteBucket")
+    public String deleteBucket(@RequestParam("bucketName") String bucketName) {
+        objectStorageService.deleteBucket(bucketName);
+        return "deleteBucket";
+    }
+    @GetMapping("/showFileList")
+    public String showFileList(@RequestParam("bucketName") String bucketName, Model model) {
+        List&lt;S3ObjectSummary&gt; fileList = objectStorageService.showFileList(bucketName);
+        model.addAttribute("fileList", fileList);
+        model.addAttribute("bucketName", bucketName); // 추가: 버킷 이름을 모델에 추가
+        return "showFileList";
+    }
+
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile multipartFile, Model model) {
+        try {
+            // MultipartFile을 임시 파일로 변환
+            File file = convertMultipartFileToFile(multipartFile);
+            // Object storage에 파일 업로드
+            objectStorageService.uploadFile(bucketName, directoryPath, file);
+            return "uploadSuccess";  // 성공 시 uploadSuccess.html을 반환
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "uploadError";  // 실패 시 uploadError.html을 반환
+        }
+    }
+    private File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+        File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(convFile); // MultipartFile을 임시 파일로 변환
+        return convFile;
+    }
+
+}
+</code></pre></li>
+</ul>

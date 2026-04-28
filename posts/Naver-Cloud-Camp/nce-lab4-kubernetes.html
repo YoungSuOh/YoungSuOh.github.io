@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lab 4 Ncloud Kubernetes Service — Naver Cloud Camp 정리 노트." />
+    <title>Lab 4 Ncloud Kubernetes Service · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-09 · Naver Cloud Camp</p>
+        <h1 class="article-title">Lab 4 Ncloud Kubernetes Service</h1>
+        <p class="article-lead muted">Lab 4 Ncloud Kubernetes Service — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCE Lab</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>쿠버네티스 클러스터 생성</li>
+  <li>쿠버네티스 Pod 배포</li>
+  <li>쿠버네티스 Service 배포 및 확인</li>
+  <li>쿠버네티스 모니터링 확인</li>
+</ol>
+<h3>쿠버네티스란?</h3>
+<hr>
+<ul>
+  <li>Kubernetes(k8s)는 Google에서 Borg와 Omega를 개발/운영하면서 얻은 교훈을 기반으로 개발한 container scheduler로 2014년에 배포한 오픈소스 프로젝트이다</li>
+  <li>Kubernetes는 container의 배포(scheduling), 운영(HA, Failover), 확장(Scaling)을 자동화하기 위한 플랫폼으로 설계되었다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>Control Plane
+<ul>
+  <li>클러스터의 상태를 유지하고 제어</li>
+</ul></li>
+  <li>kube-api-server
+<ul>
+  <li>사용자, 컨트롤 플레인과 통신</li>
+</ul></li>
+  <li>스케줄러
+<ul>
+  <li>애플리케이션의  배포 가능한 각 구성 요소에 워커 노드를 할당</li>
+</ul></li>
+  <li>컨트롤 매니저
+<ul>
+  <li>구성 요소 복제, 워커 노드 추적, 노드 장애 처리 등 클러스터 수준의 기능 수행</li>
+</ul></li>
+  <li>데이터 스토리지
+<ul>
+  <li>etcd는  클러스터 구성을 지속적으로 저장하는  안정적인 분산</li>
+</ul></li>
+  <li>워커 노드
+<ul>
+  <li>컨테이너화된 애플리케이션을 실행하는 시스템</li>
+</ul></li>
+  <li>애플리케이션에 서비스를 실행, 모니터링, 제공하는 작업은 다음과 같은 구성요소로 수행
+<ul>
+  <li>Kubelet
+<ul>
+  <li>API 서버와 통신하고 노드에서 컨테이너를 관리</li>
+</ul></li>
+  <li>Kubeproxy
+<ul>
+  <li>애플리케이션 간에 네트워크 트래픽을 분산 및 연결</li>
+</ul></li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>
+<h3>쿠버네티스의 핵심 개념  - Pod</h3>
+<ul>
+  <li>파드는 쿠버네티스 애플리케이션의 기본 실행 단위이다.</li>
+  <li>쿠버네티스 객체 모델 중 만들고 배포할 수 있는 가장 작고 간단한 단위</li>
+</ul>
+<ol>
+  <li>단일 컨테이너만 동작하는 파드</li>
+  <li>함께 동작하는 작업이 필요한 다중 컨테이너가 동작하는 파드</li>
+</ol>
+<h3>1. LB private subnet 생성</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<h3>2. NKS 클러스터 생성</h3>
+<ul>
+  <li>Services &gt;Containers &gt; Ncloud Kubernetes Service &gt; 생성하기
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>클러스터 설정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>노드풀 설정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+  <li>생성 확인
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h3>3.  Kubectl config 설정</h3>
+<ul>
+  <li>스크립트 확인
+<ul>
+  <li><a href="https://kr.object.ncloudstorage.com/nce-edu/ncp-iam.txt" target="_blank" rel="noopener">kr.object.ncloudstorage.com/nce-edu/ncp-iam.txt</a></li>
+</ul>
+<pre><code class="language-javascript">1. ncp-iam-autthenticator설치
+# cd ~
+#curl -o ncp-iam-authenticator https://kr.object.ncloudstorage.com/nks-download/ncp-iam-authenticator/v1.0.0/linux/amd64/ncp-iam-authenticator
+
+2. 바이너리 실행 권한 추가
+# chmod +x ./ncp-iam-authenticator
+
+3. $HOME/bin/ncp-iam-authenticator를 생성하고 $PATH에 추가
+# mkdir -p /root/bin &amp;&amp; cp ./ncp-iam-authenticator /root/bin/ncp-iam-authenticator &amp;&amp; export PATH=$PATH:/root/bin
+
+4. Shell Profile에 PATH를 추가 후 명령어가 잘 작동하는지 확인
+# echo 'export PATH=$PATH:$HOME/bin' &gt;&gt; ~/.bash_profile
+# ncp-iam-authenticator help
+
+5. API 인증키값 설정
+# export NCLOUD_ACCESS_KEY=&lt;사용자의 Access key&gt;
+# export NCLOUD_SECRET_KEY=&lt;사용자의 Secret key&gt;
+# export NCLOUD_API_GW=https://ncloud.apigw.ntruss.com
+
+6. 사용자 환경 홈 디렉터리의 .ncloud 폴더에 configure 파일
+# mkdir .ncloud
+# vi ~/.ncloud/configure
+[DEFAULT]
+ncloud_access_key_id = ACCESSKEY
+ncloud_secret_access_key = SECRETKEY
+ncloud_api_url = https://ncloud.apigw.ntruss.com
+
+7. ncp-iam-authenticator create-kubeconfig 명령을 사용하여 kubeconfig를 생성
+# ncp-iam-authenticator create-kubeconfig --region KR --clusterUuid &lt;cluster-uuid&gt; &gt; kubeconfig.yml
+
+8. Kubeconfig 파일이 생성되면 kubectl 명령어를 테스트
+# kubectl get namespaces --kubeconfig kubeconfig.yml
+
+9. Kubeconfig 파일이 지정이 번거로울 경우, 아래와 같이 bash_profile 에 alias로 명시
+# vi ~/.bash_profile
+alias kubectl='kubectl --kubeconfig="/root/kubeconfig.yml"'   -&gt; 파일 맨 밑에 alias 내용 추가 
+# source ~/.bash_profile
+# kubectl get namespaces</code></pre></li>
+</ul>
+<ul>
+  <li>다음과같이web001서버에서ncp-iam-authenticator설치
+<ul>
+  <li>Ncp-iam-authenticator 바이너리 파일을 홈  디렉토리에  다운로드
+<pre><code class="language-javascript">cd ~
+curl -o ncp-iam-authenticator https://kr.object.ncloudstorage.com/nks-download/ncp-iam-authenticator/v1.0.0/linux/amd64/ncp-iam-authenticator</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>바이너리에 실행 권한 추가
+<pre><code class="language-javascript">chmod +x ./ncp-iam-authenticator</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>$HOME/bin/ncp-iam-authenticator를 생성하고 $PATH에 추가
+<pre><code class="language-javascript">mkdir -p /root/bin &amp;&amp; cp ./ncp-iam-authenticator /root/bin/ncp-iam-authenticator &amp;&amp; export PATH=$PATH:/root/bin</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li> Shell Profile에 PATH를 추가 후 명령어가 잘 작동하는지 확인
+<pre><code class="language-javascript">echo 'exportPATH=$PATH:$HOME/bin' &gt;&gt; ~/.bash_profile
+ncp-iam-authenticator help</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ul>
+  <li>다음과 같이 IAM 인증을 위해 kube config를 생성합니다</li>
+  <li>Kube config 생성 시 ncp-iam-authenticator를 통해 진행해야 합니다. 
+<ul>
+  <li>이때 ncp-iam-authenticator를 사용하기 위해서 먼저 API 인증키 값을 설정</li>
+  <li>홈페이지&gt;마이페이지에서 API인증키 값을 확인 후, 아래 명령어에 맞게 넣어 실행
+<pre><code class="language-javascript">export NCLOUD_ACCESS_KEY=&lt;사용자의Accesskey&gt;
+export NCLOUD_SECRET_KEY=&lt;사용자의Secretkey&gt;
+export NCLOUD_API_GW=https://ncloud.apigw.ntruss.com
+
+export NCLOUD_ACCESS_KEY=0389DFB99F746878DB12
+export NCLOUD_SECRET_KEY=050CE19EB83E86EEDD7EA995DB392AEE59CC3D1A
+export NCLOUD_API_GW=https://ncloud.apigw.ntruss.com</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ul>
+  <li>사용자 환경 홈 디렉토리의 .ncloud 폴더에 configure 파일
+<pre><code class="language-javascript">mkdir .ncloud
+vi ~/.ncloud/configure
+
+ [DEFAULT]
+ ncloud_access_key_id=ACCESSKEY
+ ncloud_secret_access_key=SECRETKEY
+ ncloud_api_url=https://ncloud.apigw.ntruss.com</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li><code>ncp-iam-authenticator create-kubeconfig</code> 명령을 사용하여 kube config를 생성
+<pre><code class="language-javascript">ncp-iam-authenticator create-kubeconfig --region KR  --clusterUuid &lt;cluster-uuid&gt; &gt;kubeconfig.yml</code></pre>
+<ul>
+  <li>ClusterUUID는 Services&gt;KubernetesService에서 생성한 Cluster를 클릭하면 클러스터 이름옆에서 확인 가능합니다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-javascript">ncp-iam-authenticator create-kubeconfig --region KR  --clusterUuid f40eb183-9a14-4919-8476-b24a09953ccc &gt;kubeconfig.yml</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>
+<ul>
+  <li>Kubeconfig 파일이 생성되면 kubectl 명령어를 테스트합니다
+<pre><code class="language-javascript">kubectl get namespaces --kubeconfig kubeconfig.yml</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>Kubeconfig 파일이 지정이 번거로울 경우, 아래와 같이 bash_profile에 alias로 명시합니다
+<pre><code class="language-javascript">vi ~/.bash_profile
+source ~/.bash_profile
+kubectl get namespaces</code></pre>
+<ul>
+  <li>파일 맨 밑에 alias 추가
+<pre><code class="language-javascript">alias kubectl='kubectl --kubeconfig="/root/kubeconfig.yml"' </code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+  <li>쿠버네티스 연결 -완-</li>
+</ul></li>
+</ul>
+<h3>4. Container에 올라간 이미지를 이용하여 Pod 생성</h3>
+<ul>
+  <li>이 이미지 사용 예정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li>Container Registry의 Access/SecretKey를 저장한 Secret 오브젝트 생성
+<pre><code class="language-javascript">kubectl create secret docker-registry regcred \
+--docker-server=&lt;private-registry-end-point&gt; --docker-username=&lt;access-key-id&gt; \
+--docker-password=&lt;secret-key&gt; --docker-email=&lt;your-email&gt;
+
+kubectl get secret</code></pre>
+<pre><code class="language-javascript">kubectl create secret docker-registry regcred \
+--docker-server=etg0dg57.kr.private-ncr.ntruss.com --docker-username=0389DFB99F746878DB12 \
+--docker-password=050CE19EB83E86EEDD7EA995DB392AEE59CC3D1A --docker-email=paul9119298@gmail.com
+
+kubectl get secret</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Pod 생성
+<pre><code class="language-javascript">cd lab_source
+cd lab3</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ul>
+  <li>create_only_pod.yaml 파일 생성 및 배포
+<ul>
+  <li>image : registry-name 값 변경
+<pre><code class="language-javascript">vi create_only_pod.yaml
+
+-------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+	name: apache-pod
+	namespace: default
+spec:
+	 containers:
+	 - name: apache-pod
+		 image: &lt;prviate-endpoint&gt;/image_apache:1.0
+	 imagePullSecrets:
+	 - 	name: regcred</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-javascript">kubectl create -f create_only_pod.yaml
+kubectl get pods -o wide</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+</ul></li>
+</ul>
+<ol>
+  <li>Deployment 오브젝트로 Pod 생성
+<ol>
+  <li>create_deployment.yaml 파일 수정</li>
+  <li>image: registry-name 값 변경</li>
+</ol>
+<pre><code class="language-javascript">vi create_deployment.yaml
+
+------------------------------
+
+
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+	  name: apache-deployment
+ spec:
+	 replicas: 3
+	 selector:
+		 matchLabels:
+			  app: apache
+	 template:
+		 metadata:
+			  labels:
+				   app: apache
+		 spec:
+			  containers:
+			  - name: apache
+				  image: &lt;private-endpoint&gt;/image_apache:1.0
+				  ports:
+				  - containerPort:80
+				imagePullSecrets:
+				-name: regcred		
+			 </code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-javascript">kubectl apply -f create_deployment.yaml
+kubectl get pods</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure></li>
+</ol>
+<ol>
+  <li>Deployment로 생성한 Pod에 Service 연결
+<ol>
+  <li>create_service.yaml 파일 생성</li>
+</ol>
+<pre><code class="language-javascript">vi create_service.yaml
+---------------------
+
+
+kind: Service
+apiVersion: v1
+metadata:
+	name:example-service
+spec:
+	ports:
+	- port: 80
+		targetPort: 80
+	selector:
+		app: apache
+	type: LoadBalancer
+	</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-javascript">kubectl apply -f create_service.yaml
+kubectl get service</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_003.png" alt="img_003.png">
+</figure></li>
+</ol>
+<h3>로드밸런서 확인 및 서비스 접속 테스트</h3>
+<ol>
+  <li>Services &gt; LoadBalancer&gt;생성된 LB  확인
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>브라우저에서 LB 접속 정보(URL)로 접속
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<h3>쿠버네티스 클러스터 모니터링</h3>
+<ol>
+  <li>Services &gt; Containerservice &gt;Kubernetes로 이동</li>
+  <li>운영중인 Kubernetes 클러스터 클릭</li>
+  <li>그라파나와 연동되어 워커노드 및  컨테이너 현황 모니터링 가능</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_003.png" alt="img_003.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>대시보드 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_005.png" alt="img_005.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab4-kubernetes/img_006.png" alt="img_006.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

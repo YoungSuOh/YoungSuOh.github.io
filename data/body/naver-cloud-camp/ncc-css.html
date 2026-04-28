@@ -1,0 +1,1146 @@
+<h3>개요</h3>
+<p>CSS(Cascading Style Sheets) </p>
+<ul>
+  <li>웹페이지에 자주 적용되는 부분들은 미리 정리하고 조합하여 정의한 후, 페이지 내부에서 필요할 때마다 해당 부분을 적용하는 스타일시트 중 하나</li>
+  <li>HTML로는 부족한 레이아웃이나 폰트 등에 다양성을 부여한다.</li>
+</ul>
+<h3>기본 동작</h3>
+<ul>
+  <li>CSS  사용하는 방법 3가지
+<ol>
+  <li><code>&lt;head&gt;&lt;/head&gt;</code> 사이 기술
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        body{
+            background: mistyrose;
+        }
+        h3{
+            color: purple;
+        }
+        hr{
+            border: 5px solid yellowgreen;
+        }
+        span{
+            color:blue;
+            font-size: 20px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;CSS 스타일 맛보기&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;나는 &lt;span&gt;웹 프로그래밍&lt;/span&gt;을 좋아합니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li><code>&lt;body&gt;</code> 안에서 직접 기술
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;손 흥 민&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;오페라를 좋아하고&lt;/p&gt;
+&lt;p&gt;엘비스 프레슬리를 좋아하고&lt;/p&gt;
+&lt;p style="color: blue"&gt;김치부침개를 좋아하고&lt;/p&gt;
+&lt;p style="color:magenta; font-size:10px"&gt;축구를 좋아합니다.&lt;/p&gt; &lt;!-- 안에 있는 설정이 우선권이 더 높음--&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li><code>*.css</code>(파일)로 따로 저장
+<ol>
+  <li>import
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        @import url("../css/myStyle.css");
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;김연아&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;저는 피겨 선수 김연아입니다. 음악을 들으면서 책읽기를 좋아합니다. 김치 찌개와 삼겹살을 무척 좋아합니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li>link
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;link rel="stylesheet" href="../css/myStyle.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;김연아&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;저는 피겨 선수 김연아입니다. 음악을 들으면서 책읽기를 좋아합니다. 김치 찌개와 삼겹살을 무척 좋아합니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ol></li>
+</ol></li>
+</ul>
+<h3>특성</h3>
+<ul>
+  <li>기존의 HTML 기능을 확장해서 사용할 수 있다.</li>
+  <li>한 번의 지정으로 웹 문서 모든 곳에 적용할 수 있다.</li>
+  <li>CSS는 상위의 기능을 상속받을 수 있다.</li>
+  <li>복잡하지 않고 쉽게 파악할 수 있어 관리가 용이하다.</li>
+</ul>
+<h3>상속</h3>
+<p>상속이란 상위(부모, 조상) 요소에 적용된 프로퍼티를 하위(자식, 자손) 요소가 물려받는 것을 의미한다.</p>
+<p>상속 기능이 없다면 각 요소의 Rule set에 프로퍼티를 매번 각각 지정해야 한다.</p>
+<p>하지만 모든 프로퍼티가 상속되는 것은 아니다. 프로퍼티 중에는 상속이 되는 것과 되지 않는 것이 있다.</p>
+<p>font, color, visibility, opacity, line-height, text-align, white-space 이 상속 가능하다</p>
+<h4>스타일 시트가 중복되었을 때</h4>
+<ul>
+  <li>1순위
+<ul>
+  <li>태그 안의 스타일 시트
+<pre><code class="language-html">&lt;p style="font-size: 25px"&gt;안녕하세요 길동님!&lt;/p&gt;</code></pre></li>
+</ul></li>
+  <li>2순위
+<ul>
+  <li><code>&lt;style&gt;</code> 태그
+<pre><code class="language-html">&lt;style type="text/css"&gt;        
+        p{
+            color: blue;
+            font-size: 12px;
+        }
+    &lt;/style&gt;</code></pre></li>
+</ul></li>
+  <li>3순위
+<ul>
+  <li>파일 스타일 시트
+<pre><code class="language-html">&lt;style type="text/css"&gt;
+        @import "../css/external.css";   /*가장 순위가 낮음*/
+        p{
+            color: blue;
+            font-size: 12px;
+        }
+    &lt;/style&gt;</code></pre></li>
+</ul></li>
+</ul>
+<h3>Selector</h3>
+<ol>
+  <li>자식 selector
+<ol>
+  <li><code>&gt;</code> 기호로 지정한</li>
+  <li>중간 태그를 건너 뛰어도 안된다.</li>
+</ol>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+/*        h3{   !*태그에 직접 씌우는 방법 -&gt; 아주 안좋은 방법*!
+            color: brown;
+        }
+        li{
+            color: brown;
+        }*/
+        h3, li{
+            color: brown;
+        }
+        /* 자식 선택자(selector)
+        1. &gt; 기호로 지정한다.
+        2. 중간 태그를 건너 뛰어도 안된다.
+        */
+        /*
+        div -&gt; div =&gt; strong 상속관계
+        */
+        div &gt; div &gt; strong{
+            background: yellow;
+        }     
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="main"&gt;
+&lt;h3&gt;Web Programming&lt;/h3&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;div&gt;2학기 &lt;strong&gt;학습 내용&lt;/strong&gt;입니다&lt;/div&gt;
+    &lt;ul id="list"&gt;
+        &lt;li&gt;&lt;span&gt;HTML5&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;CSS&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;JavaScript&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="warning"&gt;60점 이하는 F&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>같은 style을 씌우고 싶은 태그들이 있으면 <code>h3, li</code> 처럼 사용해도 된다.</li>
+  <li><code>&lt;strong&gt;학습 내용&lt;/strong&gt;</code> → div &gt; div &gt; strong 타고 상속관계에 들어간다.</li>
+</ul></li>
+</ol>
+<ol>
+  <li>자손 selector
+<ol>
+  <li>공백으로 지정한다</li>
+  <li>자식 selector와 다르게 중간 태그를 건너 뛰어도 된다.</li>
+</ol>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+
+        /* 자손 셀렉터
+        1. 공백으로 지정한다
+        2. 중간 태그를 건너 띄워도 된다.
+        */
+        ul  strong{
+            background: magenta;
+        }
+        
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="main"&gt;
+&lt;h3&gt;Web Programming&lt;/h3&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;div&gt;2학기 &lt;strong&gt;학습 내용&lt;/strong&gt;입니다&lt;/div&gt;
+    &lt;ul id="list"&gt;
+        &lt;li&gt;&lt;span&gt;HTML5&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;CSS&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;JavaScript&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="warning"&gt;60점 이하는 F&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ol>
+<ol>
+  <li>클래스 선택(<code>.</code>) / id 선택(<code>#</code>)
+<ol>
+  <li><code>.</code> 을 통해 선택해도 된다 → 하지만 어떤 태그의 클래스인지 알 수 없다</li>
+  <li><code>body.main</code> 을 통해 body태그의 클래스 <code>main</code>을 지정한 것을 명시적으로 알 수 있다.</li>
+</ol>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        .warning{
+            color: red;
+        }
+        body.main{   /*태그를 구체적으로 적어줘야 남들이 봤을 때 혼동이 적음*/
+            background: aliceblue;
+        }
+        #list span{    /*#list = id="list"*/
+            color: forestgreen;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="main"&gt;
+&lt;h3&gt;Web Programming&lt;/h3&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;div&gt;2학기 &lt;strong&gt;학습 내용&lt;/strong&gt;입니다&lt;/div&gt;
+    &lt;ul id="list"&gt;
+        &lt;li&gt;&lt;span&gt;HTML5&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;CSS&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;JavaScript&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="warning"&gt;60점 이하는 F&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ol>
+<h4>가상 선택자</h4>
+<p>css에는 가상 요소(pseudo-element)와 가상 클래스(pseudo-class)가 있다.</p>
+<p>이것들을 사용해서 html 문서의 수정 없이 css만으로 디자인적 요소를 추가할 수 있다.</p>
+<p>가상 클래스는 콜른을 1개, 가상 요소는 콜론을 2개 쓴다.</p>
+<p>하지만 콜론을 한 개만 써도 대부분의 브라우저에서 제대로 작동한다.</p>
+<h4>가상 요소</h4>
+<p>가상 클래스가 실제로 존재하는 요소에 클래스 추가 없이 디자인을 입히기 위한 것이라면,</p>
+<p>가상 요소는 아예 실제로 존재하지 않는 요소를 만들게 해준다</p>
+<p>가상 요소를 이용하면 특정 요소 앞에 문자열이나 이미지를 넣을 수 있다</p>
+<p>HTML을 변경하지 않고 요소를 추가할 수 있는 유용한 선택자이다.</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        /*가상 클래스 - 첫 번째 문자를 선택*/
+        h3:first-letter{
+            color: red;
+            font-size: 25px;
+        }
+        li:hover{
+            background: linen;
+        }
+        ::selection{    /* 가상 요소 - 마우스로 드래그하면 글자색은 빨강, 바탕색은 노랑으로 변한다. */
+            color: red;
+            background: yellow;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="main"&gt;
+&lt;h3&gt;Web Programming&lt;/h3&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;div&gt;2학기 &lt;strong&gt;학습 내용&lt;/strong&gt;입니다&lt;/div&gt;
+    &lt;ul id="list"&gt;
+        &lt;li&gt;&lt;span&gt;HTML5&lt;/span&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;strong&gt;CSS&lt;/strong&gt;&lt;/li&gt;
+        &lt;li&gt;JavaScript&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class="warning"&gt;60점 이 하는 F&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Title&lt;/title&gt;
+  &lt;style&gt;
+    h1::before{
+      content: "안뇽하세염";
+    }
+    h2::after{
+      content: "안녕못해염";
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;hello world&lt;/h1&gt;
+&lt;h2&gt;hello world&lt;/h2&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>Back Ground Repeat</h3>
+<div class="block-children">
+<div class="block-children">
+<pre><code class="language-css">&lt;style&gt;
+        div{
+            width: 200px;
+            height: 200px;
+            color: blueviolet;
+            font-size: 16px;
+            background-color: skyblue;
+            background-size: 100px;
+            background-image: url("../../static/spongebob.png");
+        }
+    &lt;/style&gt;</code></pre>
+</div>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+</div>
+</div>
+<div class="block-children">
+<div class="block-children">
+<pre><code class="language-css">&lt;style&gt;
+        div{
+            width: 200px;
+            height: 200px;
+            color: blueviolet;
+            font-size: 16px;
+            background-color: skyblue;
+            background-size: 100px;
+            background-image: url("../../static/spongebob.png");
+            background-repeat: repeat-y;   /* y축 반복*/
+        }
+    &lt;/style&gt;</code></pre>
+</div>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+</div>
+</div>
+<div class="block-children">
+<div class="block-children">
+<pre><code class="language-css">&lt;style&gt;
+        div{
+            width: 200px;
+            height: 200px;
+            color: blueviolet;
+            font-size: 16px;
+            background-color: skyblue;
+            background-size: 100px;
+            background-image: url("../../static/spongebob.png");
+            background-repeat: repeat-y;   /* y축 반복*/
+            background-position: center center;
+        }
+    &lt;/style&gt;</code></pre>
+</div>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+</div>
+</div>
+<h3>⭐ Display 속성</h3>
+<blockquote>요소를 어떻게 보여줄지 레이아웃을 결정하는 속성
+디폴트 → inline
+모든 elements에 적용 가능하다.</blockquote>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_002.png" alt="img_002.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;style type="text/css"&gt;
+div {
+	border: 1px solid yellowgreen;
+	color: blue;
+	background: aliceblue;
+}
+span {
+	border: 3px dotted red;
+	background: yellow;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h3&gt;인라인, 인라인 블록, 블록&lt;/h3&gt;
+	&lt;hr&gt;
+	나는 &lt;div&gt;div&lt;/div&gt;입니다&lt;br&gt;&lt;br&gt;
+	나는 &lt;div style="display: none;"&gt;div(none)&lt;/div&gt;입니다&lt;br&gt;&lt;br&gt;
+	나는 &lt;div style="display: inline;"&gt;div(inline)&lt;/div&gt;입니다&lt;br&gt;&lt;br&gt;
+	나는 &lt;div style="display: inline-block; height: 50px;"&gt;div(inline-block)&lt;/div&gt;입니다&lt;br&gt;&lt;br&gt;
+	나는 &lt;div&gt;div&lt;span style="display: block;"&gt;span(block)&lt;/span&gt;입니다&lt;br&gt;&lt;br&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>display:none</code> : 아예 없었던 것처럼 영역도 잡히지 않는다</li>
+  <li><code>display:inline</code> : 줄바꿈 없이 순서대로 한 줄에 다른 엘리먼트들과 나란히 배치된다.
+<ul>
+  <li>content의 크기만큼 공간을 차지하므로 width, height 속성을 지정해도 무시된다.</li>
+  <li><code>padding, margin 속성</code>은 <strong>좌우 간격만 반영이 되고 상하 간격은 반영되지 않는다.</strong></li>
+  <li><code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;em&gt;</code> 등</li>
+</ul></li>
+  <li><code>display:block</code> : 혼자 한 줄을 차지한다
+<ul>
+  <li>매번 줄바꿈이 되어 여러 줄에 보이게 된다</li>
+  <li>width, height, padding, margin 속성이 모두 반영된다</li>
+  <li><code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code> 등</li>
+</ul></li>
+  <li><code>display:inline-block</code> : inline 엘리먼트처럼 전후 줄바꿈 없이 한 줄에 다른 엘리먼트들과 나란히 배치된다
+<ul>
+  <li>inline에서 불가능하던 width, height, padding, margin 속성의 상하 간격 지정이 가능하다</li>
+  <li>inline-block을 이용하면 여러 개의 엘리먼트를 한 줄에 정확히 원하는 너비만큼 배치할 수 있기 때문에 레이아웃에 활용할 수 있다.</li>
+  <li><code>&lt;button&gt;</code>, <code>&lt;select&gt;</code> 등</li>
+</ul></li>
+</ul>
+<ul>
+  <li><code>display: flex</code>
+<ul>
+  <li>아이템들을 가로 방향 혹은 세로 방향으로(1차원 배치) 배치할 수 있는 방식</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            height: 200px;
+            border: 2px solid #333;
+        }
+        .item {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            text-align: center;
+            line-height: 100px;
+            border: 1px solid #000;
+        }
+    &lt;/style&gt;
+    &lt;title&gt;Flexbox Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="item"&gt;Item 1&lt;/div&gt;
+        &lt;div class="item"&gt;Item 2&lt;/div&gt;
+        &lt;div class="item"&gt;Item 3&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><code>display: flex</code>가 적용된 <code>.container</code> 내부에 3개의 <code>.item</code> 요소가 있다.</li>
+  <li><code>row</code> 방향으로 정렬되며, 각 아이템 사이에 동일한 간격(<code>space-between</code>)이 적용된다. 아이템은 <code>align-items: center</code>로 세로축 중앙에 정렬된다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li><code>display:grid</code>
+<ul>
+  <li>flex와 다르게 2차원으로 배치하는 방식 → column과  row의 비율이나 크기를 지정한다
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: 100px 100px;
+            grid-gap: 10px;
+            border: 2px solid #333;
+        }
+        .item {
+            background-color: lightgreen;
+            text-align: center;
+            line-height: 100px;
+            border: 1px solid #000;
+        }
+    &lt;/style&gt;
+    &lt;title&gt;Grid Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+    &lt;div class="item"&gt;Item 1&lt;/div&gt;
+    &lt;div class="item"&gt;Item 2&lt;/div&gt;
+    &lt;div class="item"&gt;Item 3&lt;/div&gt;
+    &lt;div class="item"&gt;Item 4&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><code>grid-template-rows</code> 는 가로에 배치할 셀들의 비율이나 크기를 지정하는 속성</li>
+  <li><code>grid-template-columns</code> 는 세로로 배치할 셀들의 비율이나 크기를 나타낸다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li><code>display : table</code>
+<ul>
+  <li>레이아웃을 table로 표현할 수 있는 속성이다.
+<blockquote>display : table // table 요소처럼 표현하기
+display : table // table 요소처럼 표현하기
+display : table // table 요소처럼 표현하기
+display : table-cell // td 요소처럼 표현하기
+display : table-caption // caption요소처럼 표현하기</blockquote></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        .container {
+            display: table;
+            width: 100%;
+            border-spacing: 10px;
+            border: 2px solid #333;
+        }
+        .row {
+            display: table-row;
+        }
+        .cell {
+            display: table-cell;
+            padding: 20px;
+            background-color: lightcoral;
+            text-align: center;
+            border: 1px solid #000;
+        }
+    &lt;/style&gt;
+    &lt;title&gt;Table Layout Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="container"&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="cell"&gt;Cell 1&lt;/div&gt;
+        &lt;div class="cell"&gt;Cell 2&lt;/div&gt;
+        &lt;div class="cell"&gt;Cell 3&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="row"&gt;
+        &lt;div class="cell"&gt;Cell 4&lt;/div&gt;
+        &lt;div class="cell"&gt;Cell 5&lt;/div&gt;
+        &lt;div class="cell"&gt;Cell 6&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></li>
+</ul>
+<h4>CSS Flexbox 정리</h4>
+<hr>
+<p>📄 <a href="https://www.notion.so/12e4cd810d9c804d8eadd46dfc8efd50" target="_blank" rel="noopener">CSS Flexbox  정리</a></p>
+<div class="block-children">
+<p>Flexbox는 총 2가지만 이해하면 된다.</p>
+<ol>
+  <li>container(box에 적용되는 속성값)과 그 안에 각각의 요소인 item들이 존재한다.</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>container에 꾸며줄 수 있는 속성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>item에 적용할 수 있는 속성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_003.png" alt="img_003.png">
+</figure>
+<ol>
+  <li>Flexbox에는 중심축과 반대축이 존재한다.</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>여기선 수평축이 중심축이고, 수직축이 반대축이 된다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>여기의 경우에는 위에서 아래로 정렬되기 때문에 수직축이 중심축, 수평축이 반대축이 된다.</li>
+</ul>
+</div>
+<h3>visibility 속성</h3>
+<ul>
+  <li>기본값은 ‘visible’이며 ‘hidden’을 지정할 경우에는 지정된 요소가 보이지 않게 된다.</li>
+  <li><code>display:none</code> 은 원래 없었던 것처럼 표현되지만,</li>
+  <li><code>visibility: hidden</code>은 보이진 않지만 공간은 유지가 된다.</li>
+</ul>
+<ul>
+  <li><code>visibility: visible</code>와 <code>visibility: hidden</code> 예제</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_003.png" alt="img_003.png">
+</figure>
+<pre><code class="language-css">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;CSS Visibility Example&lt;/title&gt;
+    &lt;style&gt;
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: skyblue;
+            margin: 10px;
+            text-align: center;
+            line-height: 100px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .visible-box {
+            visibility: visible; /* 요소가 화면에 보임 */
+        }
+
+        .hidden-box {
+            visibility: hidden; /* 요소가 화면에 보이지 않지만, 공간은 차지함 */
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="box visible-box"&gt;Visible&lt;/div&gt;
+&lt;div class="box hidden-box"&gt;Hidden&lt;/div&gt;
+&lt;p&gt;첫 번째 박스는 보이는 상태입니다.&lt;/p&gt;
+&lt;p&gt;두 번째 박스는 숨겨져 있지만, 공간은 유지됩니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><code>visibility: collapse</code> 예제</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_004.png" alt="img_004.png">
+</figure>
+<pre><code class="language-css">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;CSS Visibility Collapse Example&lt;/title&gt;
+  &lt;style&gt;
+    table {
+      width: 50%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .hidden-row {
+      visibility: collapse; /* 이 행은 테이블에서 완전히 사라짐 */
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Header 1&lt;/th&gt;
+    &lt;th&gt;Header 2&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Row 1, Cell 1&lt;/td&gt;
+    &lt;td&gt;Row 1, Cell 2&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr class="hidden-row"&gt;
+    &lt;td&gt;Row 2, Cell 1&lt;/td&gt;
+    &lt;td&gt;Row 2, Cell 2&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Row 3, Cell 1&lt;/td&gt;
+    &lt;td&gt;Row 3, Cell 2&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;두 번째 행은 visibility: collapse 때문에 테이블에서 완전히 사라집니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><strong><code>visibility: collapse</code></strong>: 이 속성 값은 주로 테이블 행과 열에 사용되며, 해당 행이나 열이 테이블에서 완전히 사라지게 만듭니다. 즉, 요소가 사라지며 다른 행이나 열이 그 자리를 대신 채웁니다.
+
+</li>
+</ul>
+<h3>⭐ float 속성 &amp; clear 속성</h3>
+<ul>
+  <li>float 속성
+<ul>
+  <li>left, right</li>
+</ul></li>
+</ul>
+<ul>
+  <li>⭐⭐ clear 속성
+</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_005.png" alt="img_005.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;style type="text/css"&gt;
+p#float {
+	float: right;
+}
+p.text1 {
+	clear: both;
+	margin-right: 30em;
+	text-align: justify;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h3&gt;학기말 공지&lt;/h3&gt;
+	&lt;hr&gt;
+	&lt;div&gt;
+		&lt;p id="float"&gt;
+			24일은 피아니스트 조성진의 크리스마스 특별 연주가 있습니다
+		&lt;/p&gt;
+		&lt;p class="text1"&gt;
+			이제 곧 겨울 방학이 시작됩니다. 학기 중 못다한 Java, C++, 프로그래밍 열심히 하기 바랍니다.
+			인턴을 준비하는 학생들은 프로젝트 개발에 더욱 힘쓰세요. 그럼 다음 학기에 만나요.
+		&lt;/p&gt;
+		&lt;p class="text2"&gt;
+			이제 곧 겨울 방학이 시작됩니다. 학기 중 못다한 Java, C++, 프로그래밍 열심히 하기 바랍니다.
+			인턴을 준비하는 학생들은 프로젝트 개발에 더욱 힘쓰세요. 그럼 다음 학기에 만나요.
+		&lt;/p&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li>text1부터 float가 해제된다.</li>
+</ul>
+<h3>⭐ Position 속성</h3>
+<ul>
+  <li><strong><code>static</code></strong>: 기본값으로, 문서 흐름에 따라 자동 배치됩니다.</li>
+  <li><strong><code>relative</code></strong>: <code>원래 위치를 기준으로 상대적으로 배치되며, 문서 흐름에 포함</code>됩니다.</li>
+  <li><strong><code>absolute</code></strong>: 문서 흐름에서 제거되고, <code>가장 가까운 위치 지정된 조상 요소를 기준으로 배치</code>됩니다.</li>
+  <li><strong><code>fixed</code></strong>: 브라우저 창을 기준으로 고정되며, <code>스크롤해도 위치가 변하지 않습니다.</code></li>
+  <li><strong><code>sticky</code></strong>: <code>스크롤에 따라</code> <code>상대적인 위치에서 고정된 위치로 변하며</code>, 임계점을 넘어서면 다시 상대적인 위치로 돌아갑니다.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        .box {
+            width: 150px;
+            height: 150px;
+            background-color: lightblue;
+            margin: 20px;
+            border: 2px solid #000;
+        }
+
+        /* static: 기본값 */
+        .static-box {
+            position: static;
+            background-color: lightcoral;
+        }
+
+        /* relative: 원래 위치에서 상대적으로 이동 */
+        .relative-box {
+            position: relative;
+            top: 20px;
+            left: 30px;
+            background-color: lightgreen;
+        }
+
+        /* absolute: 가장 가까운 위치 지정된 조상 요소를 기준으로 배치 */
+        .absolute-box {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background-color: lightyellow;
+        }
+
+        /* fixed: 브라우저 창을 기준으로 고정 */
+        .fixed-box {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: lightpink;
+        }
+
+        /* sticky: 스크롤 시 임계점에서 고정 */
+        .sticky-box {
+            position: sticky;
+            top: 0;
+            background-color: lightgray;
+        }
+
+        /* Container for demonstration */
+        .container {
+            position: relative;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+    &lt;/style&gt;
+    &lt;title&gt;CSS Position Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Position: static (default)&lt;/h2&gt;
+&lt;div class="box static-box"&gt;Static Box&lt;/div&gt;
+
+&lt;h2&gt;Position: relative&lt;/h2&gt;
+&lt;div class="box relative-box"&gt;Relative Box&lt;/div&gt;
+
+&lt;h2&gt;Position: absolute (within container)&lt;/h2&gt;
+&lt;div class="container"&gt;
+    &lt;div class="box absolute-box"&gt;Absolute Box&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;Position: fixed (fixed to viewport)&lt;/h2&gt;
+&lt;div class="box fixed-box"&gt;Fixed Box&lt;/div&gt;
+
+&lt;h2&gt;Position: sticky (sticky on scroll)&lt;/h2&gt;
+&lt;div class="box sticky-box"&gt;Sticky Box&lt;/div&gt;
+
+&lt;p style="height: 1000px;"&gt;Scroll down to see the Sticky Box behavior.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4>1. <code>position: static</code></h4>
+<pre><code class="language-html">&lt;div class="box static-box"&gt;Static Box&lt;/div</code></pre>
+<ul>
+  <li><strong>설명</strong>: <code>static</code>은 기본 위치 지정 방식입니다. 이 값은 요소를 문서의 정상적인 흐름에 따라 배치하며, <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code> 속성은 적용되지 않습니다. 이 예제에서는 별도의 위치 조정이 없으며, 요소는 페이지에서 기본 위치에 놓입니다.</li>
+</ul>
+<h4>2. <code>position: relative</code></h4>
+<pre><code class="language-html">&lt;div class="box relative-box"&gt;Relative Box&lt;/div&gt;</code></pre>
+<ul>
+  <li><strong>설명</strong>: <code>relative</code>는 요소를 문서 흐름에 남기면서, 원래 위치를 기준으로 상대적으로 이동시킵니다. 이 예제에서는 <code>top: 20px</code>, <code>left: 30px</code>으로 설정되어 요소가 원래 위치에서 아래로 20px, 오른쪽으로 30px 이동합니다. 다른 요소들은 원래 위치를 기준으로 배치됩니다.</li>
+</ul>
+<h4>3. <code>position: absolute</code></h4>
+<pre><code class="language-html">&lt;div class="container"&gt;
+    &lt;div class="box absolute-box"&gt;Absolute Box&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<ul>
+  <li><strong>설명</strong>: <code>absolute</code>는 요소를 문서 흐름에서 제거하고, 가장 가까운 조상 요소 중 <code>position</code>이 <code>relative</code>, <code>absolute</code>, <code>fixed</code>로 설정된 요소를 기준으로 위치를 설정합니다. 여기서는 <code>.container</code>가 <code>relative</code>로 설정되어 있으며, <code>absolute-box</code>는 이 컨테이너를 기준으로 <code>top: 50px</code>, <code>left: 50px</code>에 배치됩니다.</li>
+</ul>
+<h4>4. <code>position: fixed</code></h4>
+<pre><code class="language-html">&lt;div class="box fixed-box"&gt;Fixed Box&lt;/div&gt;</code></pre>
+<ul>
+  <li><strong>설명</strong>: <code>fixed</code>는 요소를 브라우저 창(viewport)을 기준으로 고정합니다. 이 예제에서는 <code>bottom: 10px</code>, <code>right: 10px</code>으로 설정되어, 요소가 화면의 오른쪽 하단에 고정됩니다. 스크롤을 하더라도 이 위치는 변하지 않습니다.</li>
+</ul>
+<h4>5. <code>position: sticky</code></h4>
+<pre><code class="language-html">&lt;div class="box sticky-box"&gt;Sticky Box&lt;/div&gt;</code></pre>
+<ul>
+  <li><strong>설명</strong>: <code>sticky</code>는 요소가 기본적으로는 문서의 흐름에 따라 배치되다가, 지정된 임계점(<code>top: 0</code>)에 도달하면 그 위치에 고정됩니다. 이 예제에서는 페이지를 스크롤하면 <code>Sticky Box</code>가 페이지 상단에 고정됩니다. 스크롤을 계속하면 요소는 다시 원래 위치로 돌아갑니다.</li>
+</ul>
+<h3>Z-Index</h3>
+<blockquote>CSS에서 요소의 쌓임 순서를 제어하는 데 사용되는 속성이다.
+<code>z-index</code>를 통해 요소들이 2D 평면에서 어느 것이 위에 표시될지를 결정할 수 있다.</blockquote>
+<ul>
+  <li>z-index 값
+<ul>
+  <li>정수 값을 가지며, 값이 높을수록 해당 요소는 더 위에 쌓인다</li>
+  <li>양수, 음수, 0 모두 사용할 수 있다.</li>
+  <li><code>-index</code> 속성은 <code>position</code>이 <code>relative</code>, <code>absolute</code>, <code>fixed</code>, <code>sticky</code>로 설정된 요소에서만 적용됩니다. <code>static</code> 위치에서는 무시된다.</li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        div{
+            position: absolute;
+        }
+        img{
+            position: absolute;
+        }
+        #spadeA{
+            left: 10px;
+            top: 20px;
+            z-index: -3;
+
+        }
+        #spade2{
+            left: 30px;
+            top: 30px;
+            z-index: 2;
+        }
+        #spade7{
+            left: 80px;
+            top: 40px;
+            z-index: 7;
+        }
+        #spade3{
+            left: 120px;
+            top: 50px;
+            z-index: 3;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;z-index 프로퍼티&lt;/h3&gt;
+&lt;hr&gt;
+&lt;div&gt;
+    &lt;img id="spadeA" src="../../static/spade-A.png" width="100" height="140" alt="스페이드A"&gt;
+    &lt;img id="spade2" src="../../static/spade-2.png" width="100" height="140" alt="스페이드2"&gt;
+    &lt;img id="spade7" src="../../static/spade-7.png" width="100" height="140" alt="스페이드7"&gt;
+    &lt;img id="spade3" src="../../static/spade-3.png" width="100" height="140" alt="스페이드3"&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h3>Overflow 프로퍼티</h3>
+<blockquote>CSS의 overflow 프로퍼티는 요소내의 컨텐츠가 너무 커서 요소내에 모두 보여주기 힘들때 그것을 어떻게 보여줄지를 지정한다.</blockquote>
+<div class="block-children">
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure>
+</div>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;style type="text/css"&gt;
+p {
+	width: 15em;
+	height: 3em;
+	border: 1px solid lightgray;
+}
+
+.hidden { overflow: hidden; }
+.visible { overflow: visible; }
+.scroll { overflow: scroll; }
+.auto { overflow: auto; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h3&gt;overflow 프로퍼티&lt;/h3&gt;
+    &lt;hr&gt;
+    &lt;p class="hidden"&gt;overflow에 hidden 값을 적용하면 박스를 넘어가는 내용이 잘려 보이지 않습니다.&lt;/p&gt;&lt;br&gt;
+    &lt;p class="visible"&gt;overflow에 visible 값을 적용하면 콘텐트가 박스를 넘어가서도 출력됩니다.&lt;/p&gt;&lt;br&gt;
+    &lt;p class="scroll"&gt;overflow에 scroll 값을 적용하면 박스에 스크롤바를 붙여 출력합니다.&lt;/p&gt;&lt;br&gt;
+    &lt;p class="auto"&gt;overflow에 auto 값을 적용하면 콘텐트가 박스를 넘어갔을 때 박스에 스크롤바를 붙여 출력합니다.&lt;/p&gt;&lt;br&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</div>
+</div>
+<h3>transform &amp; transition (이미지 확대 + 부드럽게 확대)</h3>
+<ul>
+  <li>transform : scale
+<ul>
+  <li>box안의 이미지를 확대할 때 사용한다</li>
+</ul></li>
+</ul>
+<ul>
+  <li>transition
+<ul>
+  <li>시간의 흐름을 줘서 <code>부드럽게 확대</code>되도록 설정한다.</li>
+  <li>ease : 기본값, 느리게 시작해서 빠르게 전환한 다음 다시 천천히 종료</li>
+  <li>linear : 처음부터 끝까지 같은 속도로 전환</li>
+</ul></li>
+</ul>
+<ul>
+  <li>예시 코드
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;style type="text/css"&gt;
+.imgDiv {
+	border: 1px solid red;
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	margin: 100px;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* 상위 div에 맞게 들어가도록 설정 */
+}
+
+.imgDiv:hover img {
+	transform: scale(1.4);
+}
+
+.imgDiv img {
+	transition: all 0.35s linear;
+	/* 애니메이션 효과 - 마우스 오버 시 이미지가 즉시 커지지 않고 0.35초의 시간에 걸쳐 커진다. */
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div class="imgDiv"&gt;
+        &lt;img src="../../../static/1.gif" alt="망상토끼"&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+<h3>@keyframes</h3>
+<blockquote>keyframes로 어떤 모양에서 어떤 모양으로 변할지를 지정한다.</blockquote>
+<ul>
+  <li>형식
+<pre><code class="language-plain text">@keyframes name {
+    0% { ... }
+    n% { ... }
+    100% { ... }
+}</code></pre>
+<ul>
+  <li>name : 애니메이션을 이름을 정한다</li>
+  <li>0% : 시작할 때의 모양을 정한다.
+<ul>
+  <li>0% 대신 from을 사용해도 된다.</li>
+</ul></li>
+  <li>n% : n%일 때의 모양을 정한다</li>
+  <li>100% : 끝날 때의 모양을 정한다. 100% 대신 to를 사용해도 된다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>예시 코드
+<pre><code class="language-plain text">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        @keyframes bomb {
+            from{font-size: 500%;}
+            to{font-size: 100%;}
+        }
+        h3{
+            animation-name: bomb;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;꽝!&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;꽝! 글자가 3초동안 500%에서 시작하여 100%로 바뀌는 애니메이션입니다. 무한 반복합니다.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+<h3><code>&lt;iframe&gt;</code> 태그</h3>
+<blockquote>inline frame의 약자로, 웹 페이지안에 또 다른 웹페이지를 삽입하는 것을 의미한다.</blockquote>
+<ul>
+  <li>사용법
+<pre><code class="language-html">&lt;iframe src="삽입하는 웹페이지 URL" title="내용"&gt;&lt;/iframe&gt;</code></pre></li>
+</ul>
+<ul>
+  <li>예시 코드
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+    html{height: 100%}
+    body{height: 100%;margin: 0;padding: 0}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;iframe src="https://www.google.com/maps/embed?pb=!
+1m18!1m12!1m3!1d5317.43502542758!2d126.99097147951467!3d37.58
+413259904598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s
+0x357ca2d63cdfd837%3A0x4ae06b4de851f3cf!2z7LC96rK96raB!5e0!3m2!1s
+ko!2skr!4v1723620028057!5m2!1sko!2skr" width="100%" height="100%" st
+        yle="border:0;" allowfullscreen="" loading="lazy" referrerpolicy=
+                "no-referrer-when-downgrade"&gt;&lt;/iframe&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-css/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h3>Skip Navigation</h3>
+<blockquote>웹 접근성을 위해 사용 → 장애인에 대한 편의를 제공함</blockquote>
+<ul>
+  <li>본문으로 이동하기 위해서는 tab을 여러 번 쳐서 이동 → 간편하게 제공하기 위함
+<ul>
+  <li>ex) 마우스 고장, 키보드 고장</li>
+</ul></li>
+  <li>Skip Navigation은 <code>&lt;body&gt;</code> 다음으로 나오는 것이 가장 적절하다.</li>
+</ul>

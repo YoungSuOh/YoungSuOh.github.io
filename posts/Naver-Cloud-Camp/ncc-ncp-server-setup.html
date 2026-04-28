@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NCP 서버 구축 및 접속 — Naver Cloud Camp 정리 노트." />
+    <title>NCP 서버 구축 및 접속 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-10-21 · Naver Cloud Camp</p>
+        <h1 class="article-title">NCP 서버 구축 및 접속</h1>
+        <p class="article-lead muted">NCP 서버 구축 및 접속 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">클라우드</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>NCP 서버 구축</h3>
+<ol>
+  <li>Server를 생성한다. (ubuntu 서버를 생성하자)</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>서버 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_005.png" alt="img_005.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_006.png" alt="img_006.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_008.png" alt="img_008.png">
+</figure>
+<ul>
+  <li>서버 생성 완료</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_009.png" alt="img_009.png">
+</figure>
+<h3>서버 SSH 접속</h3>
+<ul>
+  <li>서버 관리자 비밀번호 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_010.png" alt="img_010.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_011.png" alt="img_011.png">
+</figure>
+<ul>
+  <li>키페어 삽입</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_012.png" alt="img_012.png">
+</figure>
+<ul>
+  <li>powershell에서 SSH  접속 진행</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_013.png" alt="img_013.png">
+</figure>
+<ul>
+  <li>powershell에서 SSH  접속 완료</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-server-setup/img_014.png" alt="img_014.png">
+</figure>
+<h3>SSH 접속을 왜하는가?</h3>
+<ul>
+  <li>SSH(Secure Shell) 접속에서 키 페어(Key Pair)를 사용하는 것은 서버와 클라이언트 간의 인증을 안전하게 하기 위한 방법이다.</li>
+  <li>키 페어는 비공개 키(Private Key)와 공개 키(Public Key)로 구성된다.</li>
+  <li>SSH 접속 과정에서의 키 페어 사용 절차는 다음과 같습니다
+<ol>
+  <li>사용자가 <strong>SSH 클라이언트</strong>에서 서버로 접속 요청을 보냅니다.</li>
+  <li>서버는 클라이언트에게 <strong>공개 키</strong>를 사용하여 암호화한 메시지를 보냅니다.</li>
+  <li>클라이언트는 자신의 <strong>비공개 키</strong>로 이 메시지를 복호화합니다.</li>
+  <li>클라이언트가 메시지를 성공적으로 복호화하면 서버는 클라이언트가 올바른 사용자인지 확인하고 접속을 허용합니다</li>
+</ol></li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

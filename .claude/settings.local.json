@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(node scripts/notion-import.mjs --batch scripts/notion-batch.json --build)"
     ]
   }
 }

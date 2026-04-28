@@ -1,0 +1,178 @@
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-redirect-forward-scope/img_001.jpg" alt="img_001.jpg">
+</figure>
+<ul>
+  <li>sendRedirect는 데이터 공유없이 그냥 페이지를 넘긴다
+<ul>
+  <li>따라서 이전 페이지의 데이터를 받아올 수 없다.</li>
+  <li>예시코드
+<ul>
+  <li>sendProc.jsp
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;%
+	request.setAttribute("apple","사과");
+
+	// 페이지 이동
+	response.sendRedirect("sendResult.jsp");
+%&gt;</code></pre></li>
+  <li>sendResult.jsp
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;%
+	String apple = (String)request.getAttribute("apple");
+%&gt;
+결과 &lt;%=apple%&gt; // null 됨</code></pre></li>
+</ul></li>
+</ul></li>
+  <li>forward를 사용하면 데이터는 공유되고, 한 개의 page 개념으로 봐도 된다
+<ul>
+  <li>예시코드
+<ul>
+  <li>fowardProc.jsp
+<ul>
+  <li>페이지가 fowardResult.jsp로 넘어가지 않고 fowardProc.jsp 그대로 남는다.
+<ul>
+  <li>은행 망하면 망했다 공지하는게 아니라  인수한 은행의 페이지로 넘기고, 데이터도 넘겨줌</li>
+</ul></li>
+</ul>
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;%
+	request.setAttribute("apple","사과");
+	
+	RequestDispatcher dispatcher = request.getRequestDispatcher("forwardResult.jsp"); // 반드시 상대번지
+	dispatcher.forward(request,response); // 제어권을 넘겨줌
+%&gt;
+// 페이지 이동
+&lt;jsp:forward page="forwardResult.jsp"/&gt;</code></pre>
+<ol>
+  <li>방법 1 : <code>&lt;jsp:forward page="forwardResult.jsp"/&gt;</code></li>
+  <li>방법 2: 
+<pre><code class="language-java">RequestDispatcher dispatcher = request.getRequestDispatcher("forwardResult.jsp"); // 반드시 상대번지
+	dispatcher.forward(request,response); // 제어권을 넘겨줌</code></pre></li>
+  <li>방법 2로 보통 많이 쓰고  주소는 무조건 상대번지 / 제어권을 다른 페이지로 넘겨줌</li>
+</ol></li>
+  <li>fowardResult.jsp
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;%
+	String apple = (String)request.getAttribute("apple");
+%&gt;
+결과 &lt;%=apple%&gt;</code></pre></li>
+</ul></li>
+</ul></li>
+</ul>
+<h3>Request 받아올 때 메서드 호출 시..</h3>
+<blockquote>메소드 호출시 접두사 set/get를 생략 할 수 있다</blockquote>
+<div class="block-children">
+<p>메소드명을 변수명처럼 사용 할 수 있다</p>
+</div>
+<ul>
+  <li>fowardStart.jsp
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;%@page import="java.util.ArrayList"%&gt;
+&lt;%@page import="java.util.List"%&gt;
+&lt;%@page import="com.jstl.PersonDTO"%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;%
+	// 자바 역할
+	List&lt;String&gt;list = new ArrayList&lt;String&gt;();
+	list.add("호랑이");
+	list.add("사자");
+	list.add("기린");
+	list.add("코끼리");
+	list.add("타조");
+	list.add("코알라");
+	list.add("여우");
+	//request.setAttribute("list",list);
+	
+	PersonDTO aa = new PersonDTO("홍길동",25);
+	PersonDTO bb = new PersonDTO("라이언",23);
+	PersonDTO cc = new PersonDTO("프로도",30);
+	
+	List&lt;PersonDTO&gt;list2 = new ArrayList&lt;PersonDTO&gt;();
+	list2.add(aa);
+	list2.add(bb);
+	list2.add(cc);
+	
+	request.setAttribute("list",list);
+	request.setAttribute("list2",list2);
+	
+	// 페이지 이동
+	RequestDispatcher dispatcher = request.getRequestDispatcher("forwardEnd.jsp"); // 반드시 상대번지
+	dispatcher.forward(request,response); // 제어권을 넘겨줌
+%&gt;
+&lt;%-- &lt;jsp:forward page="forwardEnd.jsp"/&gt; --%&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li>forwardEnd.jsp
+<pre><code class="language-java">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+    &lt;%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;
+	forward로 보내면 데이터는 공유받는다&lt;br&gt;
+	주소는 forwardStart.jsp
+&lt;/h3&gt;
+결과 = ${requestScope.list}&lt;br&gt;
+3번째 항목 = ${requestScope.list[2]}&lt;br&gt;&lt;br&gt;
+
+&lt;c:forEach var="data" items="${list}"&gt;  &lt;!-- pageScope - requestScope(여기있음) =&gt; 그냥 list로 쓰면 됨 - sessionScope - applicationScope --&gt;
+	${data}&lt;br&gt;
+&lt;/c:forEach&gt;
+
+&lt;!--  --&gt;
+&lt;c:forEach var="personDTO" items="${list2}"&gt;
+	${personDTO.getName()} &amp;emsp;&amp;emsp; ${personDTO.getAge()}&lt;br&gt;
+	
+	&lt;!-- JSTL에서는 머세드 이름을 변수명처럼 사용한다. personDTO 필드 변수들과 상관 없음--&gt;
+	${personDTO.name} &amp;emsp;&amp;emsp; ${personDTO.age}&lt;br&gt; &lt;!-- 머리띠고 꼬리띠고 첫글자 소문자로 --&gt;
+&lt;/c:forEach&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>${personDTO.name}</code> -&gt; 머리띠고 꼬리띠고 첫글자 소문자로</li>
+</ul></li>
+</ul>
+<h3>Scope</h3>
+<p>JSP에서 스코프(scope)는  웹 애플리케이션 내에서 객체가 존재하는 <strong>범위와 생명주기</strong>를 정의한다.</p>
+<p>pageScope → requestScope → sessionScope → applicationScope 순으로 호출된다</p>
+<ol>
+  <li>pageScope
+<ol>
+  <li><strong>범위</strong>: 현재 JSP 페이지 내</li>
+  <li>생명주기 : 페이지가 실행되는 동안만 객체가 유지됩니다. 다른 페이지로 이동하거나 요청이 넘어가면 객체는 사라집니다.</li>
+</ol></li>
+  <li>requestScope
+<ol>
+  <li><strong>범위</strong>: 하나의 요청(request) 동안</li>
+  <li><strong>생명주기</strong>: 클라이언트가 요청한 페이지 내에서 또는 <strong>forward</strong>나 <strong>include</strong>로 다른 페이지에 데이터를 넘길 때까지 객체가 유지됩니다</li>
+</ol></li>
+  <li><strong>sessionScope</strong>
+<ol>
+  <li><strong>범위</strong>: 사용자 세션 전체</li>
+  <li><strong>생명주기</strong>: 사용자가 웹 서버에 접속해서 세션이 종료될 때까지 객체가 유지됩니다</li>
+</ol></li>
+  <li>applicationScope
+<ol>
+  <li><strong>범위</strong>: 웹 애플리케이션 전체</li>
+  <li><strong>생명주기</strong>: 서버가 시작되고 종료될 때까지 객체가 유지됩니다.</li>
+</ol></li>
+</ol>
+<h4>스코프에 대한 오해</h4>
+<hr>
+<p><code>request</code>나 <code>response</code> 객체는 문자열과 같은 단순한 데이터뿐만 아니라 <strong>객체</strong>도 전달할 수 있습니다. 예를 들어, <code>request.setAttribute("list", list);</code>와 같이 <code>ArrayList</code> 같은 객체도 <code>request</code> 스코프를 통해 다른 JSP 페이지에 전달할 수 있습니다.</p>

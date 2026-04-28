@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lab 12 Data Query 서비스 활용(DataGrip 맹키로..) — Naver Cloud Camp 정리 노트." />
+    <title>Lab 12 Data Query 서비스 활용(DataGrip 맹키로..) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-06 · Naver Cloud Camp</p>
+        <h1 class="article-title">Lab 12 Data Query 서비스 활용(DataGrip 맹키로..)</h1>
+        <p class="article-lead muted">Lab 12 Data Query 서비스 활용(DataGrip 맹키로..) — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP Lab</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>Data Query 서비스 생성</li>
+  <li>Cloud DB 서비스와 Data Query 서비스 연결</li>
+  <li>Sakila DB 데이터 조회</li>
+</ol>
+<ol>
+  <li>Cloud DB for MySQL ACG에 110.165.25.5,223.130.128.167에 대한 3306포트 허용 필요
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>Data Query 서비스로 이동 및 서비스 신청
+<ol>
+  <li>Services &gt; Big-data and Analytics &gt; Data Query 클릭 (상품이용신청이안되어있다면상품이용신청부터진행)</li>
+  <li>QueryEditor로 이동
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>상단의 ‘+데이터소스추가’ 클릭</li>
+  <li>우측 하단의 ‘커넥션’ 클릭 (‘커넥션’ 클릭 시 DataCatalog 서비스로  이동)</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Data Catalog를 통한 커넥션생성
+<ol>
+  <li>상단의 ‘+커넥션생성’ 클릭</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>이름 : cdb-connection</li>
+  <li>데이터유형 : JDBC선택</li>
+  <li>접근URL  : 아래의 형식에 맞추어 URL입력</li>
+  <li>jdbc:mysql://(각자의 CDB for mysql Domain):3306/sakila?characterEncoding=utf8&amp;autoReconnect=true
+<pre><code class="language-javascript">jdbc:mysql://db-302mqn-kr.vpc-pub-cdb.ntruss.com:3306/sakila?characterEncoding=utf8&amp;autoReconnect=true</code></pre></li>
+  <li>ID :student</li>
+  <li>암호 : (CDB forMysql생성시입력했던비밀번호입력)</li>
+  <li>계정 정보 하단의 연결테스트’ 클릭</li>
+  <li>연결 테스트가 완료되면  하단의  ‘생성’ 버튼 클릭</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_002.png" alt="img_002.png">
+</figure></li>
+</ol>
+<ul>
+  <li>Data query를 사용해서 데이터 조회
+<ul>
+  <li>데이터 소스 드롭 다운 메뉴에서 ‘cdb_query’ 선택</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>우측의 쿼리 실행창 활성화, 데이터베이스는 ‘sakila’로 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>쿼리창에 아래 SQL문을 기입하여 데이터 조회
+<ul>
+  <li>예시 코드</li>
+</ul>
+<pre><code class="language-javascript">SELECT 
+    CONCAT(first_name, ' ', last_name) AS full_name, 
+    COUNT(film_id) AS film_count
+FROM 
+    actor
+LEFT JOIN 
+    film_actor USING (actor_id)
+GROUP BY 
+    first_name, last_name
+ORDER BY 
+    film_count DESC
+LIMIT 10;
+</code></pre></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>실행 구조도 탭 클릭 시 각SQL문이 실행되었을 시에 사용하는 스캔데이터 크기, 메모리 최대 사용
+량 등 상세한 정보 확인이 가능</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_006.png" alt="img_006.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab12-dataquery/img_007.png" alt="img_007.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

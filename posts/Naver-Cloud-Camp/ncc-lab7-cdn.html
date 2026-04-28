@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lab7 CDN 사용해보기 — Naver Cloud Camp 정리 노트." />
+    <title>Lab7 CDN 사용해보기 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-05 · Naver Cloud Camp</p>
+        <h1 class="article-title">Lab7 CDN 사용해보기</h1>
+        <p class="article-lead muted">Lab7 CDN 사용해보기 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP Lab</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h4>학습 목표</h4>
+<hr>
+<ol>
+  <li>CDN - 프라이빗 컨텐트에 대한 액세스 제한
+<ol>
+  <li>Referrer 설정을 통한 인가된 요청만 컨텐츠 딜리버리 설정</li>
+</ol></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab7-cdn/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>CDN 설정 변경
+<ol>
+  <li>Services &gt;contentsdelivery &gt;CDN+</li>
+  <li>서비스이름 : lab-cdn 선택 후 설정 변경 선택</li>
+  <li>Viewer 전송 설정에서</li>
+  <li>ReferrerDomain : 사용</li>
+  <li>도메인 리스트 : 로드밸런서에서의 lab-alb 접속 정보 입력</li>
+  <li>레퍼러 없는 경우 허용 여부 : 허용 안함 선택
+<ol>
+  <li>Reffer 도메인으로 지정된 경우에는 경로를 들어갈 수 있다. 즉, alb 경로는 해당 CDN을 들어갈 수 있다.</li>
+</ol></li>
+</ol></li>
+  <li>서버에서 CDN 사용하도록 설정
+<ol>
+  <li>Web001 서버에 접속하여 다음 파일을 수정합니다</li>
+  <li><code>vi /var/www/html/image.html</code>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab7-cdn/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>기존
+<pre><code class="language-javascript">&lt;img src='logo1.jpg' title='uuuuu' alt=''/&gt;</code></pre></li>
+  <li>변경
+<pre><code class="language-javascript">&lt;img src='http://CDN접속정보/logo1.jpg' title='uuuuu' alt=''/&gt;</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab7-cdn/img_001.png" alt="img_001.png">
+</figure></li>
+</ol></li>
+</ol></li>
+  <li>이후 웹 브라우저에서 CDN 접속 정보로 접근
+<ol>
+  <li><code><a href="http://lab-alb-100772604-447ccaf633a0.kr.lb.naverncp.com/logo1.jpg" target="_blank" rel="noopener">http://lab-alb-100772604-447ccaf633a0.kr.lb.naverncp.com/logo1.jpg</a></code></li>
+  <li>이 경로는 접근 가능</li>
+</ol></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab7-cdn/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li>CDN 도메인으로 접근</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab7-cdn/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li><a href="http://gzjjrgjkdqqv27306021.gcdn.ntruss.com/logo1.png" target="_blank" rel="noopener">http://gzjjrgjkdqqv27306021.gcdn.ntruss.com/logo1.png</a></li>
+  <li>당연히 접속이 되지 않는다 → ReferredDomian으로  등록되지 않았기 때문이다.</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NCP Disk 마운트 — Naver Cloud Camp 정리 노트." />
+    <title>NCP Disk 마운트 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-31 · Naver Cloud Camp</p>
+        <h1 class="article-title">NCP Disk 마운트</h1>
+        <p class="article-lead muted">NCP Disk 마운트 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<ul>
+  <li>ncp에서 20GB → 40GB 증설 후 모습</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>서버 디스크 vda는 40GB를 할당 받았지만, 기존에 사용하고 있는 디스크 <code>vda2</code> 는 20GB이다</li>
+  <li>디스크 크기가 40GB인데, 파티션 합계는 20GB(<code>vda2</code>) + 1MB(<code>vda1</code>)로 나머지 약 20GB는 아직 할당되지 않은 상태</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li><code>fdisk</code> 명령어를 통해 디스크 <code>/dev/vda</code>의 파티션을 수정한 과정을 진행한다.</li>
+  <li><code>p</code> 명령: 현재 디스크 파티션 정보 확인
+<ol>
+  <li><code>/dev/vda</code> 디스크 크기: 40GB
+<ol>
+  <li><code>/dev/vda1</code>: 크기 1MB, BIOS 부팅 파티션</li>
+  <li><code>/dev/vda2</code>: 크기 20GB, 리눅스 파일 시스템</li>
+</ol></li>
+</ol></li>
+  <li><code>d</code> 명령: 기존 파티션 삭제
+<ol>
+  <li>파티션 번호 2(<code>/dev/vda2</code>)를 삭제</li>
+  <li>이 작업은 메모리에서만 반영되며, 실제로 디스크에 적용된 것은 아닙니다. <code>w</code> 명령을 실행해야 디스크에 저장된다.</li>
+</ol></li>
+  <li><code>n</code> 명령: 새로운 파티션 생성
+<ol>
+  <li>새 파티션 번호: 2 (삭제된 <code>/dev/vda2</code>를 대체)</li>
+  <li>시작 섹터: 기본값(4096)</li>
+  <li>마지막 섹터: 기본값(83886046, 즉 전체 디스크 크기를 사용)</li>
+  <li>크기: 40GB (디스크 전체 사용)</li>
+</ol></li>
+  <li><code>N (No)</code> 선택: 파티션의 기존 파일 시스템 시그니처 유지
+<ol>
+  <li>파티션을 생성할 때, 기존 파티션(<code>/dev/vda2</code>)의 파일 시스템 시그니처(ext4)를 발견
+<ol>
+  <li><code>N</code>: 기존 파일 시스템 시그니처를 유지.</li>
+  <li> 시그니처 제거</li>
+</ol></li>
+</ol></li>
+  <li><code>w</code> 명령: 변경 사항 저장
+<ol>
+  <li>새로운 파티션 테이블이 디스크에 저장되고, 디스크 동기화가 완료</li>
+</ol></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>파티션 크기를 40GB로 확장했지만, 파일 시스템 크기를 동기화(확장)하지 않았기 때문에 추가적인 20GB 공간이 사용되지 않고 있다.</li>
+</ul>
+<ul>
+  <li>따라서 <code>resize2fs</code> 명령을 사용하여 파일 시스템 크기를 확장해야 한다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>이후 lsblk를 보면 정상적으로 마운트된 것을 볼 수 있다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk/img_005.png" alt="img_005.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="지연 로딩 문제 — Naver Cloud Camp 정리 노트." />
+    <title>지연 로딩 문제 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-11-25 · Naver Cloud Camp</p>
+        <h1 class="article-title">지연 로딩 문제</h1>
+        <p class="article-lead muted">지연 로딩 문제 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>지연 로딩(Lazy Loading)</h3>
+<ul>
+  <li>지연 로딩은 엔티티의 연관 객체를 실제로 사용하려고 할 때까지 데이터베이스에서 해당 데이터를 가져오지 않고 미루는 전략이다.</li>
+  <li>즉, 객체를 처음 로딩할 때는 연관 관계에 있는 객체들을 즉시 가져오지 않고, 해당 연관 객체에 접근하는 시점에 데이터를 로딩한다.</li>
+</ul>
+<h4>동작 과정 설명</h4>
+<pre><code class="language-java">@Entity
+public class User {
+    @Id
+    private Long id;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List&lt;Post&gt; posts;
+
+    // getters and setters
+}
+
+@Entity
+public class Post {
+    @Id
+    private Long id;
+
+    @ManyToOne
+    private User user;
+
+    // getters and setters
+}
+</code></pre>
+<ul>
+  <li>User : Post = 1 : N 관계</li>
+</ul>
+<ul>
+  <li>지연 로딩 시나리오
+<pre><code class="language-java">// 세션 시작
+User user = entityManager.find(User.class, 1L);
+// 이 시점에서는 User의 기본 필드만 로딩되고, posts는 프록시로 남아 있음
+// posts에 접근하는 순간 데이터베이스에서 해당 데이터를 가져옴
+List&lt;Post&gt; posts = user.getPosts();
+// 세션 종료</code></pre></li>
+  <li>즉시 로딩 시나리오
+<pre><code class="language-java">@OneToMany(fetch = FetchType.EAGER)
+private List&lt;Post&gt; posts;
+
+// 세션 시작
+User user = entityManager.find(User.class, 1L);
+// 이 시점에서 User와 연관된 모든 posts가 즉시 로딩됨
+// 세션 종료</code></pre></li>
+</ul>
+<h3>N+1 문제</h3>
+<p>기본적으로 한 번의 쿼리로 해결할 수 있는 작업이 여러 번의 쿼리로 분할되어 실행되면서 불필요한 데이터베이스 호출이 발생하는 현상이다.</p>
+<h4>예시 상황</h4>
+<ul>
+  <li><code>User</code>와 <code>Post</code>라는 두 개의 엔티티가 있고, 각 <code>User</code>는 여러 개의 <code>Post</code>를 가질 수 있다고 가정합시다. 모든 사용자와 그들의 게시물을 가져오고 싶을 때 다음과 같은 코드가 있을 수 있다.</li>
+</ul>
+<pre><code class="language-java">List&lt;User&gt; users = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+for (User user : users) {
+    System.out.println(user.getPosts());
+}</code></pre>
+<ul>
+  <li>첫 번째 쿼리는 모든 사용자 정보를 가져온다.</li>
+  <li>그러나 <code>user.getPosts()</code>를 호출할 때마다 해당 사용자의 게시물을 가져오기 위한 추가적인 쿼리가 발생한다.</li>
+  <li>따라서 총 실행되는 쿼리 수는 1(사용자 조회) + N(각 사용자의 게시물 조회)로 N+1이 된다.</li>
+</ul>
+<h4>문제점</h4>
+<ul>
+  <li><strong>성능 저하:</strong> 불필요한 쿼리 호출로 인해 응답 시간이 길어지고 데이터베이스 부하가 증가한다.</li>
+  <li><strong>리소스 낭비:</strong> 네트워크 트래픽과 데이터베이스 리소스를 불필요하게 사용한다.</li>
+</ul>
+<h4>해결 방법</h4>
+<ol>
+  <li>페치 조인(Fetch Join) 사용
+<pre><code class="language-java">List&lt;User&gt; users = entityManager.createQuery(
+    "SELECT u FROM User u JOIN FETCH u.posts", User.class).getResultList();</code></pre>
+<ul>
+  <li><code>JOIN FETCH</code> 구문을 사용하여 관련 엔티티를 한 번의 쿼리로 가져올 수 있다.</li>
+</ul></li>
+  <li>엔티티 그래프(Entity Graph) 활용
+<pre><code class="language-java">EntityGraph&lt;User&gt; graph = entityManager.createEntityGraph(User.class);
+graph.addAttributeNodes("posts");
+List&lt;User&gt; users = entityManager.createQuery("SELECT u FROM User u", User.class)
+    .setHint("javax.persistence.fetchgraph", graph)
+    .getResultList();</code></pre>
+<ul>
+  <li>엔티티 그래프를 사용하여 필요한 연관 관계를 명시적으로 로딩할 수 있다.</li>
+</ul></li>
+  <li>배치 사이즈(Batch Size) 조정
+<pre><code class="language-java">&lt;property name="hibernate.default_batch_fetch_size" value="16" /&gt;</code></pre>
+<ul>
+  <li>ORM 프레임워크의 설정을 통해 한 번에 가져오는 엔티티 수를 조정하여 쿼리 수를 줄일 수 있다.</li>
+</ul></li>
+</ol>
+<h3>LazyInitializationException</h3>
+<p><code>LazyInitializationException</code>는 Hibernate와 같은 ORM 프레임워크에서 지연 로딩(Lazy Loading)된 엔티티를 초기화하려 할 때 해당 세션이 이미 종료된 경우 발생하는 예외이다.</p>
+<p>서비스 계층에서 트랜잭션이 끝난 후 컨트롤러나 뷰 계층에서 지연 로딩된 필드에 접근하려고 할 때 발생할 수 있다.</p>
+<pre><code class="language-java">// 서비스 계층
+@Transactional
+public User getUser(Long id) {
+    return entityManager.find(User.class, id);
+}
+
+// 컨트롤러 계층
+public String showUserPosts(Model model, Long id) {
+    User user = userService.getUser(id);
+    // 여기서 LazyInitializationException 발생 가능
+    model.addAttribute("posts", user.getPosts());
+    return "userPosts";
+}
+</code></pre>
+<h4>문제점</h4>
+<ul>
+  <li><strong>지연 로딩된 필드 접근 불가:</strong> 세션이 종료되어 지연 로딩된 필드에 접근할 수 없다.</li>
+  <li><strong>예기치 않은 예외 발생:</strong> 런타임 시 예외가 발생하여 애플리케이션이 중단될 수 있다.</li>
+</ul>
+<h4>해결 방법</h4>
+<ol>
+  <li>즉시 로딩(Eager Loading) 사용
+<ol>
+  <li>연관 필드를 즉시 로딩하도록 설정하여 세션이 열려 있을 때 데이터를 가져온다. → 하지만 성능 저하 일으킴.
+<pre><code class="language-java">@OneToMany(fetch = FetchType.EAGER)
+private List&lt;Post&gt; posts;</code></pre></li>
+</ol></li>
+  <li>DTO(Data Transfer Object) 사용
+<ol>
+  <li>필요한 데이터만을 포함하는 DTO를 생성하여 서비스 계층에서 데이터를 모두 로딩하고, 세션 종료 후에도 데이터에 접근할 수 있게 한다</li>
+</ol></li>
+  <li>페치 조인(Fetch Join) 사용
+<ol>
+  <li>필요한 연관 데이터를 미리 로딩하여 세션 종료 전 엔티티를 완전히 초기화
+<pre><code class="language-java">public User getUserWithPosts(Long id) {
+    return entityManager.createQuery(
+        "SELECT u FROM User u JOIN FETCH u.posts WHERE u.id = :id", User.class)
+        .setParameter("id", id)
+        .getSingleResult();
+}</code></pre></li>
+</ol></li>
+</ol>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

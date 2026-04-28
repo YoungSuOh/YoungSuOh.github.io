@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="로드 밸런서 — Naver Cloud Camp 정리 노트." />
+    <title>로드 밸런서 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-03 · Naver Cloud Camp</p>
+        <h1 class="article-title">로드 밸런서</h1>
+        <p class="article-lead muted">로드 밸런서 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP 특강</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<ul>
+  <li>로드밸런서
+<ul>
+  <li>부하처리 성능에 따라 Small / Medium / Large 중 선택 가능</li>
+  <li>로드밸런서마다 각각 초당 연결 수(CPS) 기준이 다르다
+<ul>
+  <li>Application : 각 30,000 / 60,000 / 90,000 개의 분산 처리를 보장</li>
+  <li>Network : 각 100,000 / 200,000 / 400,000 개의 분산 처리를 보장</li>
+  <li>Network Proxy : 각 30,000 / 60,000 / 90,000개의 분산 처리 보장</li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>로드 밸런싱 알고리즘
+<ul>
+  <li>Round Robin : 클라이언트에서 요청이 오면 서버에  1개씩 분배하는 ㅂ방식</li>
+  <li>Least Connection : 클라이언트 연결이 제일 적은 서버에게 새로운 커넥션을 분배하는 방식</li>
+  <li>Source IP Hash : 클라이언트 IP에 대한 해시테이블을 가지고 클라이언트 IP에 매핑되는 서버에 새로운 커넥션을 분배하는 방식</li>
+  <li>나머지 LB 알고리즘은 ncp에는 존재하지 않음 → 나머지는 weight가 있는 방식이라 트래픽 비율을 조정할 수 있음 ⇒ 옛날 서버 장비의 경우 처리가 느리므로 최신 장비와 결합하면 비율 조정이 필요</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_001.png" alt="img_001.png">
+</figure>
+<h3>Load balancer 종류</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_003.png" alt="img_003.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_005.png" alt="img_005.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_006.png" alt="img_006.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_007.png" alt="img_007.png">
+</figure>
+<h3>CDN</h3>
+<ul>
+  <li>cache이다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_008.png" alt="img_008.png">
+</figure>
+<ul>
+  <li>예시</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_009.png" alt="img_009.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-load-balancer/img_010.png" alt="img_010.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

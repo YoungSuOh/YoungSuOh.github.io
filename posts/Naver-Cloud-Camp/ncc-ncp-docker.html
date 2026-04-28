@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NCP docker 설치 및 실습 — Naver Cloud Camp 정리 노트." />
+    <title>NCP docker 설치 및 실습 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-10-21 · Naver Cloud Camp</p>
+        <h1 class="article-title">NCP docker 설치 및 실습</h1>
+        <p class="article-lead muted">NCP docker 설치 및 실습 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">클라우드</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>도커 설치</h3>
+<p>SSH 접속을 완료했으면 도커를 설치해보자</p>
+<ul>
+  <li>apt-get update
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><code>apt-get update</code>는 <strong>Debian</strong> 기반의 리눅스 배포판(Ubuntu, Debian 등)에서 사용되는 패키지 관리 명령어로, 시스템에서 사용할 수 있는 패키지 목록을 업데이트하는 명령</li>
+  <li>패키지 목록이 최신 상태로 업데이트되면, 이후에 <code>apt-get install</code>이나 <code>apt-get upgrade</code> 같은 명령을 실행할 때 최신 버전의 패키지를 설치하거나 업그레이드할 수 있��.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>도커를 설치하는 플러그 설치
+<pre><code class="language-javascript">curl https://get.docker.com&gt;docker-install.sh</code></pre>
+<ul>
+  <li>docker를 설치하는 스크립트를 다운로드하는 과정dlek</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>설치 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>
+<ul>
+  <li>권한 변경 후 도커 설치 진행
+<pre><code class="language-javascript">chmod 755
+./docker-install.sh</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>도커 설치 완료</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>도커 버전 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_003.png" alt="img_003.png">
+</figure></li>
+</ul>
+<h3>도커 실습</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><code>docker ps -a</code> : 모든 Docker 컨테이너의 목록을 보여줌.
+<ul>
+  <li>다음 정보를 제공
+<ul>
+  <li>컨테이너 ID</li>
+  <li>이미지 이름</li>
+  <li>명령어</li>
+  <li>생성 시간</li>
+  <li>상태 (실행 중, 중지됨, 종료됨 등)</li>
+  <li>포트 매핑</li>
+  <li>컨테이너 이름</li>
+  <li>ex
+<pre><code class="language-javascript">$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED        STATUS                     PORTS         NAMES
+abc12345       nginx:latest   "nginx -g 'daemon of…"   5 minutes ago   Exited (0) 3 minutes ago                 my-nginx
+def67890       ubuntu:latest  "/bin/bash"              10 minutes ago  Up 9 minutes                             my-ubuntu
+</code></pre></li>
+</ul></li>
+</ul></li>
+  <li>IMAGE → 냉동 식품</li>
+  <li><code>docker run hello-world</code> : 냉동 해동</li>
+  <li>이후 다시 <code>docker ps -a</code> </li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>도커 컨테이너 제거
+<ul>
+  <li>docker rm <code>{CONTAINER ID}</code></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-docker/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Access Token과 Refresh Token 정책 — Naver Cloud Camp 정리 노트." />
+    <title>Access Token과 Refresh Token 정책 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-07 · Naver Cloud Camp</p>
+        <h1 class="article-title">Access Token과 Refresh Token 정책</h1>
+        <p class="article-lead muted">Access Token과 Refresh Token 정책 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>Access Token과 Refresh  Token의 역할</h3>
+<table>
+  <tr><th><strong>특징</strong></th><th><strong>Access Token</strong></th><th><strong>Refresh Token</strong></th></tr>
+  <tr><td>역할</td><td>자원 접근 권한(server 접근권한) 부여</td><td>Access Token 재발급 요청</td></tr>
+  <tr><td>유효기간</td><td>짧음(보통 1시간 정도)</td><td>김(보통 2주 정도)</td></tr>
+  <tr><td>전송 방식</td><td>요청마다 서버로 전송</td><td>일반적으로 서버에 저장</td></tr>
+  <tr><td>보안 고려</td><td>유출 시 제한된 시간만 위험</td><td>유출 시 장기적인 위험 발생 가능</td></tr>
+</table>
+<h3>Access Token과 Refresh Token 정책</h3>
+<p>사실 이것은<strong> 서비스 요구사항에 따라서 달라지는게 맞긴 하다</strong></p>
+<h4>정책 1 :  Refresh Token을 서버에서만 관리 (클라이언트에 전달하지 않음)</h4>
+<ul>
+  <li>장점
+<ul>
+  <li>보안이 확실히 강화가 된다
+<ul>
+  <li>refresh token은 유효 기간이 길고 access token을 발급을 해주기 때문에 탈취되어서는 안되는 중요한 토큰이다.</li>
+  <li>그러므로 쿠키든 HTTP Header든 애초에 서버에서 안 내보내는 것이 보안이 강화되는 것을 직관적으로 생각해 볼 수 있다.</li>
+</ul></li>
+  <li>중앙 집중 관리가 가능
+<ul>
+  <li>모든 Refresh Token이 서버(DB)에서 관리되므로, 필요할 때 강제 로그아웃(토큰 무효화) 같은 중앙 제어가 가능하다. → DB에 있는 refresh 없애버리면 됨</li>
+</ul></li>
+  <li>유효성 검사 로직이 단순해진다.
+<ul>
+  <li>reissue api(access token 재발급 api) 를 호출할 때는 access token 검증 +  db에 refresh가 있는지 확인만 하면 된다.
+<ul>
+  <li>refresh token은 DB에 넣고  꺼낼 일이 없기에 배포 서버의 모든 정보를 알고 있지 않는 이상 접근이 불가능하다.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h4>정책 2: refresh token을 클라이언트에  쿠키에 전달하는 방식</h4>
+<ul>
+  <li>장점
+<ul>
+  <li>Stateless 설계
+<ul>
+  <li>서버가 클라이언트마다 Refresh Token의 상태를 관리하지 않아도 된다(DB에 넣지 않으므로)</li>
+  <li>이거 말고는 장점을 잘 모르겠다..</li>
+</ul></li>
+  <li>단점
+<ul>
+  <li>CSRF 공격을 막을 방법이 없다
+<ul>
+  <li>왜 why??
+<ul>
+  <li>나중에 로그인 형님들이 구현해보면 알겠지만 Cookie을 보낼 때 <code>SameSite("none")</code> 을 설정을 해야 될 것이다.</li>
+  <li>SameSite은 외부 도메인에서 쿠키를 사용하지 못하도록 제한할 수 있는 옵션인데 우리 프로젝트에서는 이를 default값인 Strict가 아닌 none으로 설정해야 된다</li>
+  <li>왜 why??
+<ul>
+  <li>우리 프로젝트는 현재 도메인이 <code>dr-rate.store</code>와 <code>dr-rate.shop</code>이므로 samesite 즉, 서로 외부 도메인이기 때문이다</li>
+</ul></li>
+</ul></li>
+</ul></li>
+  <li>reissue api를 진행할 때마다  refresh token의 유효성 검사를 해야 하기 때문에 그만크 오버 헤드가 발생한다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3>최선의 방법은??</h3>
+<p>제가 생각하는 최선의 방법은<strong> access token을 HTTP Header로 보내는 대신 유효 기간을 짧게 설정</strong>하고, refresh token을 DB 서버에만 저장하는 방식입니다.</p>
+<h4>Q) Access Token을 쿠키에 보내면 안되나요? 쿠키를 통해 보낼 때 <strong>HTTP Only</strong> 속성을 설정하면 JavaScript에서 쿠키에 접근할 수 없으므로, XSS공격을 방지할 수가 없다는데?</h4>
+<p>앞서  말했듯이 front-end 서버와 back-end 서버의 도메인이 다르기 때문에 CSRF 공격을 막을 방법이 없습니다. 따라서 큰 메리트는 없는 방법이라는 생각이 듭니다.</p>
+<h4>Q) 그렇게 치면 HTTP Header로 보내는 것은 XSS(크로스 사이트 스크립팅)공격 위험에 노출된다고 하는데요??</h4>
+<p>��는 말입니다. </p>
+<p>하지만 저희 프로젝트는 HTTPS를 통해 데이터는 TLS(Transport Layer Security)로 암호화하기 때문에 네트워크가 가로채더라도 데이터를 복호화할 수 없습니다.</p>
+<h4>Q) Access Token 유효시간이 짧은만큼 server에 대한 부하가 생기는 아닌가요?</h4>
+<p>넵. 그렇기 때문에 refresh token을 disk에 저장하는 방식인 RDBMS MySQL에 저장하는 것이 아닌 Caching 방식을 사용하는 Redis를 이용하여 오버헤드를 줄이는 방식을 채택을 하는 것이 어떤가 싶습니다.</p>
+<p>잠깐 설명하자면 Redis는 NoSQL로 DB를 Key, Value 형태로 저장합니다. 따라서 Key에 PK인 userId, value에 refresh token을 저장을 합니다.</p>
+<h4>Q) refresh token은 중요한 정보라 얘기하셨는데, 그대로 저장하는 것은 너무 보안에 취약한 거 아닌가요?</h4>
+<p>redis는 private subnet을 통해서 접근이 가능하기 때문에 오히려 현재 저희가 사용하는 MySQL보다 훨씬 안전합니다.</p>
+<p>redis 정보가 탈취되려면 일단 서버의 정보가 먼저 탈취되어야 탈취가 가능합니다. </p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

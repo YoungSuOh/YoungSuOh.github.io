@@ -1,0 +1,251 @@
+<h3>예제 코드</h3>
+<ul>
+  <li>Main
+<pre><code class="language-java">public class IndexMain {
+    private Scanner scanner = new Scanner(System.in);
+
+    public void menu() {
+        boolean exit = false;
+        int num = 0;
+        while (true) {
+            if (exit) break;
+            System.out.print("******************\n" +
+                    "   1. 글쓰기\n" +
+                    "   2. 목록\n" +
+                    "   3. 작성한 글 내용 보기\n" +
+                    "   4. 끝\n" +
+                    "******************\n" +
+                    "  번호 : ");
+            num = scanner.nextInt();
+            switch (num) {
+                case 1:
+                    new BoardWriteService().execute();
+                    break;
+                case 2:
+                    new BoardListService().execute();
+                    break;
+                case 3:
+                    new BoardViewService().execute();
+                    break;
+                case 4:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("올바른 입력값이 아닙니다. 다시 입력해주세요");
+                    break;
+            }
+        }
+
+    }
+
+
+    public static void main(String[] args) {
+        new IndexMain().menu();
+        System.out.println("프로그램을 종료합니다.");
+    }
+}
+</code></pre></li>
+  <li>서비스 인터페이스 Board
+<pre><code class="language-java">public interface Board {
+    public void execute();
+}
+</code></pre></li>
+  <li>서비스 클래스( BoardListService.java, BoardViewService.java, BoardWriteService.java)
+<pre><code class="language-java">public class BoardListService implements Board{
+    @Override
+    public void execute() {
+        BoardDAO.getInstance().listBoard();
+    }
+}
+
+
+public class BoardViewService implements Board{
+    @Override
+    public void execute() {
+        BoardDAO.getInstance().viewBoard();
+    }
+}
+
+
+public class BoardWriteService implements Board{
+    private Scanner scanner = new Scanner(System.in);
+    private BoardDTO boardDTO;
+
+    @Override
+    public void execute() {
+        System.out.print("아이디 입력 : ");
+        String id = scanner.next();
+
+        System.out.print("이름 입력 : ");
+        String name = scanner.next();
+        scanner.nextLine();
+
+        System.out.print("제목 입력 : ");
+        String title = scanner.nextLine();
+
+        System.out.print("내용 입력 : ");
+        String content = scanner.nextLine();
+
+        boardDTO = new BoardDTO(id,name,title,content);
+        BoardDAO.getInstance().writeBoard(boardDTO);
+        System.out.println();
+    }
+}
+</code></pre></li>
+  <li>BoardDTO
+<pre><code class="language-java">@Data
+@AllArgsConstructor
+public class BoardDTO {
+    private String id, name, subject, content;
+}
+</code></pre></li>
+  <li> ⭐ BoardDAO ⭐
+<pre><code class="language-java">public class BoardDAO {
+    private final String driver = "oracle.jdbc.driver.OracleDriver";
+    private final String url = "jdbc:oracle:thin:@localhost:1521:XE";
+    private final String user = "C##java";
+    private final String password = "oracle";
+
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
+
+
+    private static BoardDAO instance = new BoardDAO();
+
+    public BoardDAO() {
+        try{
+            Class.forName(driver);
+            System.out.println("loaded driver");
+        }catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+    public static BoardDAO getInstance() {  // 싱글톤
+        return instance;
+    }
+
+    public void getConnection(){
+        try {
+            conn = DriverManager.getConnection(url,user,password);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void closeConnection(){
+        try{
+            if(rs != null){rs.close();}
+            if(pstmt!=null){pstmt.close();}
+            if(conn!=null){conn.close();}
+            System.out.println("connection closed");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void writeBoard(BoardDTO boardDTO) {
+        this.getConnection();
+        try{
+            pstmt=conn.prepareStatement("insert into board_java values (board_java_seq.NEXTVAL,?,?,?,?,sysdate)");
+            pstmt.setString(1,boardDTO.getId());
+            pstmt.setString(2,boardDTO.getName());
+            pstmt.setString(3,boardDTO.getSubject());
+            pstmt.setString(4,boardDTO.getContent());
+
+            int update = pstmt.executeUpdate();
+            if(update&gt;0){
+                System.out.println("작성하신 글을 등록하였습니다.");
+            }
+            else{
+                System.out.println("작성하신 글 등록에 실패하였습니다.");
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        closeConnection();
+
+    }
+
+    public void listBoard() {
+        System.out.println("---------------------------------------------------------\n" +
+                "글번호\t제목\t\t아이디\t날짜\n" +
+                "---------------------------------------------------------");
+        this.getConnection();
+        try{
+            pstmt=conn.prepareStatement("select * from board_java ORDER BY LOGTIME DESC");
+
+            rs=pstmt.executeQuery();
+
+            while(rs.next()){
+                System.out.println(rs.getInt(1)+"\t"+rs.getString(4)+
+                        "\t"+rs.getString(2)+"\t"+rs.getDate(6));
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        closeConnection();
+
+    }
+
+    public void viewBoard() {
+        System.out.print("글 번호 입력 : ");
+        Scanner scanner = new Scanner(System.in);
+        int num = scanner.nextInt();
+
+        this.getConnection();
+        try{
+            pstmt=conn.prepareStatement("select * from board_java where seq=?");
+            pstmt.setInt(1,num);
+
+            rs=pstmt.executeQuery();
+
+            while(rs.next()){
+                System.out.println("아이디 : "+rs.getString(2));
+                System.out.println("이름 : "+rs.getString(3));
+                System.out.println("날짜 : "+rs.getDate(6));
+                System.out.println("내용 : "+rs.getString(5));
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        closeConnection();
+
+    }
+
+
+
+}
+</code></pre></li>
+</ul>
+<ul>
+  <li>Sequence
+<ul>
+  <li>유저 테이블
+<pre><code class="language-sql">CREATE TABLE users (
+    id NUMBER NOT NULL,
+    user_id VARCHAR2(50) NOT NULL,
+    password VARCHAR2(50) NOT NULL,
+    age NUMBER NOT NULL,
+    PRIMARY KEY (id)
+);</code></pre></li>
+  <li>시퀀스
+<pre><code class="language-sql">CREATE SEQUENCE users_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;</code></pre></li>
+  <li>트리거
+<pre><code class="language-sql">CREATE OR REPLACE TRIGGER users_bir 
+BEFORE INSERT ON users
+FOR EACH ROW
+BEGIN
+    SELECT users_seq.NEXTVAL
+    INTO :NEW.id
+    FROM dual;
+END;</code></pre></li>
+</ul></li>
+</ul>

@@ -1,0 +1,333 @@
+<h4><strong>1. 일반 관리 명령어</strong></h4>
+<ul>
+  <li><code>PING</code>: Redis 서버의 응답 확인. (<code>PONG</code> 반환)</li>
+  <li><code>SELECT &lt;db-index&gt;</code>: 데이터베이스 선택 (기본값: 0).</li>
+  <li><code>FLUSHDB</code>: 현재 데이터베이스의 모든 키 삭제.</li>
+  <li><code>FLUSHALL</code>: 모든 데이터베이스의 키 삭제.</li>
+  <li><code>INFO</code>: Redis 서버의 정보와 상태 반환.</li>
+  <li><code>CONFIG GET &lt;parameter&gt;</code>: 특정 설정 값 조회.</li>
+  <li><code>CONFIG SET &lt;parameter&gt; &lt;value&gt;</code>: 설정 값 변경.</li>
+  <li><code>SHUTDOWN</code>: Redis 서버 종료.</li>
+</ul>
+<hr>
+<h4><strong>2. Key 관련 명령어</strong></h4>
+<ul>
+  <li><code>KEYS &lt;pattern&gt;</code>: 특정 패턴과 일치하는 모든 키 조회.</li>
+  <li><code>EXISTS &lt;key&gt;</code>: 특정 키가 존재하는지 확인.</li>
+  <li><code>DEL &lt;key&gt;</code>: 특정 키 삭제.</li>
+  <li><code>EXPIRE &lt;key&gt; &lt;seconds&gt;</code>: 키의 TTL(Time to Live) 설정.</li>
+  <li><code>TTL &lt;key&gt;</code>: 키의 남은 TTL 조회.</li>
+  <li><code>RENAME &lt;key&gt; &lt;newkey&gt;</code>: 키 이름 변경.</li>
+  <li><code>TYPE &lt;key&gt;</code>: 키의 데이터 타입 반환.</li>
+</ul>
+<hr>
+<h4><strong>3. String 관련 명령어</strong></h4>
+<ul>
+  <li><code>SET &lt;key&gt; &lt;value&gt;</code>: 키에 문자열 값 설정.</li>
+  <li><code>GET &lt;key&gt;</code>: 키의 값 조회.</li>
+  <li><code>GETSET &lt;key&gt; &lt;value&gt;</code>: 기존 값을 반환하고 새 값 설정.</li>
+  <li><code>INCR &lt;key&gt;</code>: 키의 값을 1 증가.</li>
+  <li><code>INCRBY &lt;key&gt; &lt;value&gt;</code>: 키의 값을 지정한 수만큼 증가.</li>
+  <li><code>DECR &lt;key&gt;</code>: 키의 값을 1 감소.</li>
+  <li><code>DECRBY &lt;key&gt; &lt;value&gt;</code>: 키의 값을 지정한 수만큼 감소.</li>
+  <li><code>MGET &lt;key1&gt; &lt;key2&gt;</code>: 여러 키의 값 조회.</li>
+  <li><code>MSET &lt;key1&gt; &lt;value1&gt; &lt;key2&gt; &lt;value2&gt;</code>: 여러 키-값 설정.</li>
+</ul>
+<hr>
+<h4><strong>4. Hash 관련 명령어</strong></h4>
+<ul>
+  <li><code>HSET &lt;key&gt; &lt;field&gt; &lt;value&gt;</code>: 해시 필드 설정.</li>
+  <li><code>HGET &lt;key&gt; &lt;field&gt;</code>: 해시 필드 값 조회.</li>
+  <li><code>HDEL &lt;key&gt; &lt;field&gt;</code>: 해시 필드 삭제.</li>
+  <li><code>HEXISTS &lt;key&gt; &lt;field&gt;</code>: 해시 필드 존재 확인.</li>
+  <li><code>HGETALL &lt;key&gt;</code>: 모든 필드와 값을 반환.</li>
+  <li><code>HINCRBY &lt;key&gt; &lt;field&gt; &lt;value&gt;</code>: 해시 필드 값 증가.</li>
+  <li><code>HLEN &lt;key&gt;</code>: 해시 필드의 개수 반환.</li>
+</ul>
+<hr>
+<h4><strong>5. List 관련 명령어</strong></h4>
+<ul>
+  <li><code>LPUSH &lt;key&gt; &lt;value&gt;</code>: 리스트 왼쪽에 값 삽입.</li>
+  <li><code>RPUSH &lt;key&gt; &lt;value&gt;</code>: 리스트 오른쪽에 값 삽입.</li>
+  <li><code>LPOP &lt;key&gt;</code>: 리스트 왼쪽에서 값 제거 및 반환.</li>
+  <li><code>RPOP &lt;key&gt;</code>: 리스트 오른쪽에서 값 제거 및 반환.</li>
+  <li><code>LRANGE &lt;key&gt; &lt;start&gt; &lt;end&gt;</code>: 지정된 범위의 리스트 요소 반환.</li>
+  <li><code>LLEN &lt;key&gt;</code>: 리스트 길이 반환.</li>
+  <li><code>LREM &lt;key&gt; &lt;count&gt; &lt;value&gt;</code>: 리스트에서 값 삭제.</li>
+</ul>
+<hr>
+<h4><strong>6. Set 관련 명령어</strong></h4>
+<ul>
+  <li><code>SADD &lt;key&gt; &lt;value&gt;</code>: 셋에 값 추가.</li>
+  <li><code>SREM &lt;key&gt; &lt;value&gt;</code>: 셋에서 값 제거.</li>
+  <li><code>SMEMBERS &lt;key&gt;</code>: 셋의 모든 값 반환.</li>
+  <li><code>SISMEMBER &lt;key&gt; &lt;value&gt;</code>: 값의 존재 여부 확인.</li>
+  <li><code>SCARD &lt;key&gt;</code>: 셋의 요소 개수 반환.</li>
+  <li><code>SUNION &lt;key1&gt; &lt;key2&gt;</code>: 두 셋의 합집합 반환.</li>
+  <li><code>SINTER &lt;key1&gt; &lt;key2&gt;</code>: 두 셋의 교집합 반환.</li>
+  <li><code>SDIFF &lt;key1&gt; &lt;key2&gt;</code>: 두 셋의 차집합 반환.</li>
+</ul>
+<hr>
+<h4><strong>7. Sorted Set 관련 명령어</strong></h4>
+<ul>
+  <li><code>ZADD &lt;key&gt; &lt;score&gt; &lt;value&gt;</code>: 정렬된 셋에 값 추가.</li>
+  <li><code>ZRANGE &lt;key&gt; &lt;start&gt; &lt;stop&gt;</code>: 정렬된 셋의 범위 내 값 반환.</li>
+  <li><code>ZREM &lt;key&gt; &lt;value&gt;</code>: 정렬된 셋에서 값 제거.</li>
+  <li><code>ZSCORE &lt;key&gt; &lt;value&gt;</code>: 값의 점수 반환.</li>
+  <li><code>ZCARD &lt;key&gt;</code>: 정렬된 셋의 요소 개수 반환.</li>
+  <li><code>ZRANK &lt;key&gt; &lt;value&gt;</code>: 값의 순위 반환.</li>
+</ul>
+<hr>
+<h4><strong>8. Pub/Sub 관련 명령어</strong></h4>
+<ul>
+  <li><code>PUBLISH &lt;channel&gt; &lt;message&gt;</code>: 특정 채널에 메시지 발행.</li>
+  <li><code>SUBSCRIBE &lt;channel&gt;</code>: 채널 구독.</li>
+  <li><code>PSUBSCRIBE &lt;pattern&gt;</code>: 패턴과 일치하는 채널 구독.</li>
+  <li><code>UNSUBSCRIBE &lt;channel&gt;</code>: 채널 구독 취소.</li>
+  <li><code>PUBSUB CHANNELS</code>: 현재 활성화된 채널 조회.</li>
+  <li><code>PUBSUB NUMSUB</code>: 특정 채널의 구독자 수 조회.</li>
+</ul>
+<hr>
+<h4><strong>9. HyperLogLog 관련 명령어</strong></h4>
+<ul>
+  <li><code>PFADD &lt;key&gt; &lt;value&gt;</code>: HyperLogLog에 값 추가.</li>
+  <li><code>PFCOUNT &lt;key&gt;</code>: 고유 값의 근사 개수 반환.</li>
+  <li><code>PFMERGE &lt;dest&gt; &lt;source1&gt; &lt;source2&gt;</code>: 두 HyperLogLog 병합.</li>
+</ul>
+<hr>
+<h4><strong>10. 기타 고급 명령어</strong></h4>
+<ul>
+  <li><code>BITSET &lt;key&gt; &lt;offset&gt; &lt;value&gt;</code>: 비트 값 설정.</li>
+  <li><code>BITCOUNT &lt;key&gt;</code>: 비트 값의 1 개수 세기.</li>
+  <li><code>GEOADD &lt;key&gt; &lt;longitude&gt; &lt;latitude&gt; &lt;member&gt;</code>: 지리적 위치 추가.</li>
+  <li><code>GEODIST &lt;key&gt; &lt;member1&gt; &lt;member2&gt;</code>: 두 위치 간 거리 반환.</li>
+  <li><code>GEOHASH &lt;key&gt; &lt;member&gt;</code>: 지리적 위치의 해시 값 반환.</li>
+</ul>
+<h3><strong>Pub/Sub 관련 명령어</strong></h3>
+<ol>
+  <li><code>publish</code>
+<ol>
+  <li>특정 채널에 메세지를 발행한다.
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">PUBLISH &lt;channel&gt; &lt;message&gt;</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">PUBLISH news_channel "Breaking news: Redis is amazing!"</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+
+public class RedisPublisher {
+    public static void main(String[] args) {
+        // Redis 연결
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 메시지 발행
+        String channel = "news_channel";
+        String message = "Breaking news: Redis with Java!";
+        
+        jedis.publish(channel, message);
+
+        System.out.println("Message published to channel: " + channel);
+
+        jedis.close();
+    }
+}
+</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>subscribe</code>
+<ol>
+  <li>특정 채널을 구독한다. 구독 중인 채널에서 메세지가 발행되면 실시간으로 수신한다.
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">SUBSCRIBE &lt;channel&gt;</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">SUBSCRIBE news_channel</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
+
+public class RedisSubscriber {
+    public static void main(String[] args) {
+        // Redis 연결
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 채널 구독
+        String channel = "news_channel";
+        JedisPubSub subscriber = new JedisPubSub() {
+            @Override
+            public void onMessage(String channel, String message) {
+                System.out.println("Received message: " + message + " from channel: " + channel);
+            }
+        };
+
+        System.out.println("Subscribed to channel: " + channel);
+        jedis.subscribe(subscriber, channel);
+
+        jedis.close();
+    }
+}</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>psubscribe</code>
+<ol>
+  <li>패턴 기반으로  채널을 구독한다</li>
+  <li>와인드 카드 (<code>*</code>)를 사용해 여러 채널을 일괄 구독할 수 있다.
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">PSUBSCRIBE &lt;pattern&gt;</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">PSUBSCRIBE news_*</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
+
+public class RedisPatternSubscriber {
+    public static void main(String[] args) {
+        // Redis 연결
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 패턴 구독
+        String pattern = "news_*";
+        JedisPubSub patternSubscriber = new JedisPubSub() {
+            @Override
+            public void onPMessage(String pattern, String channel, String message) {
+                System.out.println("Pattern matched: " + pattern);
+                System.out.println("Received message: " + message + " from channel: " + channel);
+            }
+        };
+
+        System.out.println("Subscribed to pattern: " + pattern);
+        jedis.psubscribe(patternSubscriber, pattern);
+
+        jedis.close();
+    }
+}
+</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>unsubscribe</code>
+<ol>
+  <li>특정 채널의 구독을 취소</li>
+  <li>모든 채널에서 구독을 취소하려면 채널 이름을 생략
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">UNSUBSCRIBE &lt;channel&gt;</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">UNSUBSCRIBE news_channel</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
+
+public class RedisUnsubscribe {
+    public static void main(String[] args) {
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 구독자 정의
+        JedisPubSub subscriber = new JedisPubSub() {
+            @Override
+            public void onMessage(String channel, String message) {
+                System.out.println("Received message: " + message);
+            }
+
+            @Override
+            public void onSubscribe(String channel, int subscribedChannels) {
+                System.out.println("Subscribed to: " + channel);
+            }
+
+            @Override
+            public void onUnsubscribe(String channel, int subscribedChannels) {
+                System.out.println("Unsubscribed from: " + channel);
+            }
+        };
+
+        // 채널 구독
+        new Thread(() -&gt; jedis.subscribe(subscriber, "news_channel")).start();
+
+        // 잠시 대기 후 구독 취소
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        subscriber.unsubscribe();
+        jedis.close();
+    }
+}
+</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>pubsub channels</code>
+<ol>
+  <li>현재 활성화된 채널 목록을 반환한다.
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">PUBSUB CHANNELS [pattern]</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">PUBSUB CHANNELS news_*</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+
+public class RedisPubSubChannels {
+    public static void main(String[] args) {
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 현재 활성화된 채널 조회
+        System.out.println("Active channels: " + jedis.pubsubChannels("*"));
+
+        jedis.close();
+    }
+}</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>pubsub numsub</code>
+<ol>
+  <li>특정 채널의 구독자 수를 반환
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">pubsub numsub &lt;channel&gt;</code></pre></li>
+  <li>예시
+<ol>
+  <li>pubsub numsub news_channel</li>
+</ol></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+
+public class RedisNumSub {
+    public static void main(String[] args) {
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 특정 채널 구독자 수 조회
+        System.out.println("Subscribers for 'news_channel': " + jedis.pubsubNumSub("news_channel"));
+
+        jedis.close();
+    }
+}</code></pre></li>
+</ol></li>
+</ol></li>
+  <li><code>pubsub numpat</code>
+<ol>
+  <li>특정 채널의 구독자 수를 반환
+<ol>
+  <li>명령어
+<pre><code class="language-javascript">PUBSUB NUMPAT</code></pre></li>
+  <li>예시
+<pre><code class="language-javascript">PUBSUB NUMPAT</code></pre></li>
+  <li>코드 예시
+<pre><code class="language-javascript">import redis.clients.jedis.Jedis;
+
+public class RedisNumPat {
+    public static void main(String[] args) {
+        Jedis jedis = new Jedis("localhost", 6379);
+
+        // 패턴 구독자의 수 조회
+        System.out.println("Number of pattern subscriptions: " + jedis.pubsubNumPat());
+
+        jedis.close();
+    }
+}
+</code></pre></li>
+</ol></li>
+</ol></li>
+</ol>

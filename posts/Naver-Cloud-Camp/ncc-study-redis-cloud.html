@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Redis 실습 (Cloud) — Naver Cloud Camp 정리 노트." />
+    <title>Redis 실습 (Cloud) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-07 · Naver Cloud Camp</p>
+        <h1 class="article-title">Redis 실습 (Cloud)</h1>
+        <p class="article-lead muted">Redis 실습 (Cloud) — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>Redis Cloud 생성</h3>
+<ol>
+  <li>subnet 생성 (private)</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_001.png" alt="img_001.png">
+</figure>
+<p>
+</p>
+<ol>
+  <li>Config Group 생성</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li>Redis Server 생성</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>redis server acg에 동일 vpc는 허용하게끔 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_005.png" alt="img_005.png">
+</figure>
+<h3>EC2 서버 접속 (동일 VPC)</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_006.png" alt="img_006.png">
+</figure>
+<h3>EC2 서버 안에 Redis 설치</h3>
+<pre><code class="language-javascript">wget http://download.redis.io/releases/redis-4.0.6.tar.gz
+tar xvfz redis-4.0.6.tar.gz
+cd redis-4.0.6
+make</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_008.png" alt="img_008.png">
+</figure>
+<h3>Redis Server 접속</h3>
+<pre><code class="language-javascript">cd src
+ls -l</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li><code>redis/cli</code> 가 설치된 모습을 볼 수 있다.</li>
+</ul>
+<ul>
+  <li>이제 redis server에 접속을 진행해보자</li>
+</ul>
+<pre><code class="language-javascript">./redis-cli -c -h DNS명 -p Redis접속포트</code></pre>
+<pre><code class="language-javascript">./redis-cli -c -h redisc-304btu.vpc-cdb.ntruss.com -p 6379</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-cloud/img_010.png" alt="img_010.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

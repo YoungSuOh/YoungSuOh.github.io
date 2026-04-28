@@ -1,0 +1,180 @@
+<h3>Jenkins</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>기본적으로 8080포트를 쓴다.</li>
+  <li><code>docker run -d -p 8080:8080 -p 50000:50000 —name docker-jenkins —restart=on-failue jenkins/jenkins:lts-jdk-17</code>
+<pre><code class="language-javascript">docker run -d -p 8080:8080 -p 50000:50000 --name docker-jenkins --restart=on-failure jenkins/jenkins:lts-jdk17</code></pre>
+<ul>
+  <li>Jenkins 서버를 Docker 컨테이너에서 실행하기 위한 명령어이다.</li>
+  <li>세부 내용
+<ul>
+  <li><strong><code>docker run</code></strong>: 새 컨테이너를 생성하고 실행합니다.</li>
+  <li><strong><code>d</code></strong>: 컨테이너를 <strong>백그라운드</strong>에서 실행합니다. 이 옵션이 없으면, 터미널에서 Jenkins 실행 로그가 계속 표시되지만, <code>d</code>를 사용하면 로그를 백그라운드에서 처리합니다.</li>
+  <li><strong><code>p 8080:8080</code></strong>: <strong>포트 매핑</strong>을 설정합니다. 호스트(로컬 머신)의 8080 포트를 컨테이너의 8080 포트에 연결합니다. Jenkins의 웹 인터페이스는 기본적으로 8080 포트에서 실행되므로, 이 매핑을 통해 브라우저에서 <code>http://localhost:8080</code>으로 Jenkins에 접근할 수 있습니다.</li>
+  <li><strong><code>p 50000:50000</code></strong>: Jenkins에서 <strong>에이전트 연결</strong>을 위한 포트 매핑입니다. Jenkins의 슬레이브 에이전트들이 50000 포트로 연결됩니다.</li>
+  <li><strong><code>-name docker-jenkins</code></strong>: 생성할 컨테이너의 이름을 **<code>docker-jenkins</code>*로 지정합니다. 이 이름을 통해 나중에 컨테이너를 관리할 수 있습니다.</li>
+  <li><strong><code>-restart=on-failure</code></strong>: 만약 컨테이너가 오류로 종료되면, <strong>재시작</strong>합니다. 단, 실패한 경우에만 재시작됩니다. 지속적인 실행을 보장하는 설정입니다.</li>
+  <li><strong><code>jenkins/jenkins:lts-jdk-17</code></strong>: 사용할 <strong>이미지</strong>입니다. 이 경우, Jenkins의 <strong>LTS(Long Term Support)</strong> 버전으로, <strong>JDK 17</strong>이 포함된 Jenkins 이미지를 사용합니다.</li>
+</ul></li>
+  <li>실행 목적
+<ul>
+  <li>이 명령어를 실행하면 Jenkins 서버가 Docker 컨테이너에서 실행됩니다.</li>
+  <li>웹 인터페이스에 접근하려면, 브라우저에서 <code>http://localhost:8080</code>을 열면 됩니다.</li>
+  <li>Jenkins는 CI/CD 도구로, 소프트웨어 개발에서 빌드 자동화, 테스트, 배포 등을 관리하는 역할을 합니다.</li>
+  <li>이 명령어는 개발 환경에서 Jenkins 서버를 쉽게 실행하고 테스트할 수 있는 방법입니다.</li>
+</ul></li>
+</ul></li>
+  <li>실행</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>도커 컨테이너 실행 &amp; 정지 &amp;  삭제
+<ul>
+  <li>docker container start <code>{containerID}</code></li>
+  <li><code>docker container stop</code> <code>{containerID}</code>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_001.png" alt="img_001.png">
+</figure></li>
+  <li><code>docker container rm</code> <code>{containerID}</code></li>
+</ul></li>
+</ul>
+<p>pc→ 도커 엔진 → 젠킨스 서버 설치</p>
+<h4>도커 허브(냉동 식품 창고)</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>jenkins 검색</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_004.png" alt="img_004.png">
+</figure>
+<h3>도커 엔진에 안에서 젠킨스에 접속</h3>
+<ul>
+  <li><code>docker exec -it {container NAMES} bash</code>
+<ul>
+  <li><strong> 실행 중인 Docker 컨테이너에 접속</strong>하여 <strong>터미널 세션</strong>을 시작하는 명령어.</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_005.png" alt="img_005.png">
+</figure>
+<h3>브라우저에서 젠킨스 실행</h3>
+<ul>
+  <li>http://{<strong>공인 IP </strong>}:8080
+<ul>
+  <li>실행 : http://223.130.157.178:8080</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>비밀번호 찾는법
+<ul>
+  <li><code>docker logs {containerNAME}</code></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>젠킨스에 접속</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>플러그인 설치</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_008.png" alt="img_008.png">
+</figure>
+<ul>
+  <li>정보  입력</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li>젠킨스에 접속하려면 해당 url에 접속</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_010.png" alt="img_010.png">
+</figure>
+<ul>
+  <li>젠킨스 접속 완료</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_011.png" alt="img_011.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_012.png" alt="img_012.png">
+</figure>
+<ul>
+  <li>이전에 설정했던 정보로 젠킨스 다시 접속 가능</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_013.png" alt="img_013.png">
+</figure>
+<ul>
+  <li>docker inspect docker-jenkins
+<ul>
+  <li>젠킨스가 실행되면(브라우저에 접속했으면) 자바 버전을 확인해준다.</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_014.png" alt="img_014.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_015.png" alt="img_015.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_016.png" alt="img_016.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_017.png" alt="img_017.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_018.png" alt="img_018.png">
+</figure>
+<ul>
+  <li>이후 save 해준다.</li>
+</ul>
+<h3>실습</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_019.png" alt="img_019.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_020.png" alt="img_020.png">
+</figure>
+<ul>
+  <li>demo이  있는 Configuration(환경 설정)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_021.png" alt="img_021.png">
+</figure>
+<ul>
+  <li>add build step</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_022.png" alt="img_022.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_023.png" alt="img_023.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_024.png" alt="img_024.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_025.png" alt="img_025.png">
+</figure>
+<ul>
+  <li>해당 결과가 나와야  젠킨스가  제대로 도는 것이다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-jenkins/img_026.png" alt="img_026.png">
+</figure>

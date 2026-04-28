@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MyBatis — Naver Cloud Camp 정리 노트." />
+    <title>MyBatis · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-09-05 · Naver Cloud Camp</p>
+        <h1 class="article-title">MyBatis</h1>
+        <p class="article-lead muted">MyBatis — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">DB</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<ul>
+  <li><strong>MyBatis는 ORM은 아니고 그냥 Mapper이다</strong></li>
+</ul>
+<ul>
+  <li>ORM (Object Relational Mapping : 객체 관계 매핑)  
+<ul>
+  <li>ORM(Object Relational Mapping) 프레임워크는 데이터베이스와 객체와의 관계를 맵핑시켜 퍼시스턴스 로직 처리를 도와주는 프레임워크이다.</li>
+  <li>자바의 JDBC를 이용할 경우 Java 언어와 SQL언어가 한 파일에 존재해서 재사용성이 좋지 않음
+<ul>
+  <li>MyBatis는 JDBC의 이런 단점을 개선하여 SQL 명령어를 별도의 XML 파일에 분리하여 SQL 명령어와 자바 객체를 매핑해주는 기능을 제공</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-mybatis/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>대표적으로 iBatis와 hibernate, JPA가 있다</li>
+</ul></li>
+  <li>관계를 매핑시킬 때, 이름이 똑같아야 한다.
+<pre><code class="language-sql">CREATE TABLE boardJSP(
+ seq NUMBER NOT NULL, -- 글번호 (시퀀스 객체 이용)
+ id VARCHAR2(20) NOT NULL, -- 아이디
+ name VARCHAR2(40) NOT NULL, -- 이름
+ email VARCHAR2(40), -- 이메일
+ subject VARCHAR2(255) NOT NULL, -- 제목
+ content VARCHAR2(4000) NOT NULL, -- 내용 
+ ref NUMBER NOT NULL, -- 그룹번호
+ lev NUMBER DEFAULT 0 NOT NULL, -- 단계
+ step NUMBER DEFAULT 0 NOT NULL, -- 글순서
+ pseq NUMBER DEFAULT 0 NOT NULL, -- 원글번호
+ reply NUMBER DEFAULT 0 NOT NULL, -- 답변수
+ hit NUMBER DEFAULT 0, -- 조회수
+ logtime DATE DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE seq_boardJSP NOCACHE NOCYCLE;</code></pre>
+<pre><code class="language-java">public class BoardDTO {
+	private int seq;
+	private String id, name, email, subject, content;
+	private int ref, lev, step, pseq, reply;
+	private int hit;
+	private Date logtime;
+	}</code></pre></li>
+</ul></li>
+</ul>
+<h3>특징</h3>
+<ul>
+  <li>MyBatis는 SQL쿼리문, 예외처리, 트랙잭션 관리들을 <strong>XML형식으로 관리한다</strong></li>
+  <li>myBatis는 자바오브젝트와 SQL문 사이의 자동 매핑 기능을 지원하는 ORM 프레임워크이다
+<ul>
+  <li>SQL문과 자바코드를 분리함으로 인해 자바 개발자는 쿼리문을 신경 쓰지 않아도 된다.</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-mybatis/img_001.png" alt="img_001.png">
+</figure>
+<h3>예시</h3>
+<h4>환경 설정</h4>
+<ol>
+  <li><a href="http://db.properties/" target="_blank" rel="noopener">db.properties</a> → yml임
+<pre><code class="language-sql">jdbc.driver=oracle.jdbc.driver.OracleDriver
+jdbc.url=jdbc:oracle:thin:@localhost:1521:xe
+jdbc.username=c##java
+jdbc.password=oracle</code></pre></li>
+  <li>mybatis-config.xml
+<pre><code class="language-sql">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE configuration PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" &gt;
+&lt;configuration&gt;
+	&lt;properties resource="db.properties"&gt;&lt;/properties&gt;
+
+	&lt;typeAliases&gt;
+		&lt;typeAlias type="user.bean.UserDTO" alias="user"/&gt;
+	&lt;/typeAliases&gt;
+
+	&lt;environments default="development"&gt;
+		&lt;environment id="development"&gt;
+			&lt;transactionManager type="JDBC" /&gt;
+			&lt;dataSource type="POOLED"&gt;
+				&lt;property name="driver" value="${jdbc.driver}"/&gt;
+				&lt;property name="url" value="${jdbc.url}"/&gt;
+				&lt;property name="username" value="${jdbc.username}"/&gt;
+				&lt;property name="password" value="${jdbc.password}"/&gt;
+			&lt;/dataSource&gt;
+		&lt;/environment&gt;
+	&lt;/environments&gt;
+	&lt;mappers&gt;
+		&lt;mapper resource="mapper/userMapper.xml"/&gt;
+	&lt;/mappers&gt;
+&lt;/configuration&gt;</code></pre>
+<ul>
+  <li><code>&lt;properties resource="db.properties"&gt;&lt;/properties&gt;</code> 로 <a href="http://db.properties/" target="_blank" rel="noopener">db.properties</a>  정보들 받음</li>
+  <li><code>&lt;typeAliases&gt;</code> 를 통해 기존에는 <code>parameterType="user.bean.UserDTO"</code> 로 받아야 하는 것을 parameterType=<em>"user"</em>  로 짧게 바꿀 수 있음. 즉, 별명 짓기임.</li>
+</ul>
+<pre><code class="language-sql">	&lt;environments default="development"&gt;
+		&lt;environment id="development"&gt;
+			&lt;transactionManager type="JDBC" /&gt;
+			&lt;dataSource type="POOLED"&gt;
+				&lt;property name="driver" value="${jdbc.driver}"/&gt;
+				&lt;property name="url" value="${jdbc.url}"/&gt;
+				&lt;property name="username" value="${jdbc.username}"/&gt;
+				&lt;property name="password" value="${jdbc.password}"/&gt;
+			&lt;/dataSource&gt;
+		&lt;/environment&gt;
+	&lt;/environments&gt;
+	&lt;mappers&gt;
+		&lt;mapper resource="mapper/userMapper.xml"/&gt;
+	&lt;/mappers&gt;
+&lt;/configuration&gt;</code></pre>
+<ul>
+  <li><code>environments</code> 태그는 MyBatis가 사용할 환경을 정의</li>
+  <li><code>transactionManager</code>가 <code>JDBC</code>로 설정되어 있으므로, MyBatis가 데이터베이스 연결에 직접 트랜잭션을 관리한다.</li>
+  <li><code>dataSource</code>는 <code>POOLED</code> 타입으로 설정되어 있어, MyBatis가 <code>Connection Pool</code>을 사용해 데이터베이스 연결을 관리한다</li>
+  <li>그 밑은 <code>mappers</code> 설정을 통해 mapper/userMapper.xml을 사용한다.</li>
+</ul>
+<h4>회원 가입</h4>
+<ul>
+  <li>UserInsertService</li>
+</ul>
+<pre><code class="language-java">public class UserInsertService implements UserService{
+	
+	@Override
+	public void execute() {
+		System.out.println();
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print("이름 입력 : ");
+		String name = sc.next();
+		System.out.print("아이디 입력 : ");
+		String id = sc.next();
+		System.out.print("비밀번호 입력 : ");
+		String pwd = sc.next();
+		
+		UserDTO userDTO = new UserDTO(name, id, pwd);
+		
+		UserDAO userDAO = UserDAO.getInstance();
+		boolean check = userDAO.write(userDTO);
+		
+		if (check) System.out.println("등록이 완료되었습니다");
+		else System.out.println("등록이 실패하였습니다");
+	}
+}
+</code></pre></li>
+</ol>
+<ul>
+  <li>UserDAO
+<pre><code class="language-java">public boolean write(UserDTO userDTO) {
+		boolean check = false;
+		SqlSession sqlSession = sqlSessionFactory.openSession();	//생성
+		int su = sqlSession.insert("userSQL.write", userDTO);
+		sqlSession.commit();
+		sqlSession.close();
+		if(su &gt; 0) check = true;
+		return check;
+	}</code></pre>
+<ul>
+  <li><code>sqlSessionFactory.openSession();</code> 을 통해 sqlSession를 생성하여 MyBatis에 접근</li>
+</ul>
+<pre><code class="language-java">&lt;insert id="write" parameterType="user"&gt; &lt;!-- 원래는 user.bean.UserDTO인데 typeAlias로 지정함 --&gt;
+		insert into usertable values (#{name}, #{id}, #{pwd})
+	&lt;/insert&gt;</code></pre>
+<ul>
+  <li>회원 가입은 <code>insert</code> 이기 때문에 sqlSession의 <code>insert()</code> 함수를 호출하고, userMapper.xml의 id=”write”를 <code>"userSQL.write"</code> 로 접근한다.</li>
+  <li>이때, (#{name}, #{id}, #{pwd})는 UserDTO의 필드와 일치해야 한다.
+<pre><code class="language-java">public class UserDTO {
+    private String name;
+    private String id;
+    private String pwd;
+}</code></pre></li>
+</ul></li>
+</ul>
+<h4>회원 조회</h4>
+<ul>
+  <li>UserSelectService
+<pre><code class="language-java">public class UserSelectService implements UserService {
+	
+	@Override
+	public void execute() {
+		System.out.println();
+	      UserDAO userDAO = UserDAO.getInstance();
+	      List&lt;UserDTO&gt; list = userDAO.getAllList();
+	      
+	      for (UserDTO userDTO : list) {
+	         System.out.println(userDTO.getName() + "\t" +
+	                        userDTO.getId() + "\t" +
+	                        userDTO.getPwd());
+	      }
+	}
+}
+</code></pre></li>
+  <li>UserDAO
+<pre><code class="language-java">public List&lt;UserDTO&gt; getAllList() {
+	      SqlSession sqlSession = sqlSessionFactory.openSession();   //생성
+	      List&lt;UserDTO&gt; list = sqlSession.selectList("userSQL.getAllList");
+	      sqlSession.close();
+	      return list;
+	   }</code></pre>
+<ul>
+  <li>정보 조회이므로 <code>commit()</code> 하지 않는다.</li>
+  <li><code>userMapper.xml</code>  의 id="getAllList"를 호출</li>
+</ul></li>
+  <li>userMapper.xml
+<pre><code class="language-java">&lt;resultMap type="user" id="userResult"&gt;
+		&lt;result column="NAME" property="name" /&gt;
+		&lt;result column="ID" property="id" /&gt;
+		&lt;result column="PWD" property="pwd" /&gt;
+	&lt;/resultMap&gt;
+	
+	&lt;select id="getAllList" resultMap="userResult"&gt;
+		select * from usertable
+	&lt;/select&gt;</code></pre>
+<ul>
+  <li>여기서 resultMap은 데이터베이스에서 가져온 결과 값을 Java 객체의 필드와 일치시켜 주는 매핑 설정이다.
+<ul>
+  <li><strong><code>&lt;result column="NAME" property="name" /&gt;</code></strong>: 데이터베이스의 <code>NAME</code> 컬럼을 Java 객체의 <code>name</code> 필드에 매핑합니다.</li>
+  <li><strong><code>&lt;result column="ID" property="id" /&gt;</code></strong>: 데이터베이스의 <code>ID</code> 컬럼을 Java 객체의 <code>id</code> 필드에 매핑합니다.</li>
+  <li><strong><code>&lt;result column="PWD" property="pwd" /&gt;</code></strong>: 데이터베이스의 <code>PWD</code> 컬럼을 Java 객체의 <code>pwd</code> 필드에 매핑합니다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4>회원 검색</h4>
+<ul>
+  <li>조건
+<pre><code class="language-plain text">- 번호 선택 :
+
+1번 선택
+검색을 원하는 이름 입력 : 홍 (홍이 들어간 이름을 다 가져온다)
+
+2번 선택
+검색을 원하는 아이디 입력 : n (n이 들어간 아이디를 다 가져온다)
+
+단 &lt;select id="search" 는 1개여야 한다 -&gt; 요것이 문제의 핵심!</code></pre></li>
+</ul>
+<ul>
+  <li>UserSearchService
+<pre><code class="language-java">public class UserSearchService implements UserService {
+    @Override
+    public void execute() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+
+        System.out.print("1. 이름으로 검색\n2. 아이디로 검색\n번호 선택 : ");
+        int opt = scanner.nextInt(); String key, type;
+        List&lt;UserDTO&gt;list  = null;
+        switch (opt) {
+            case 1:
+                System.out.print("검색을 원하는 이름 입력 : ");
+                key = scanner.next();
+                type = "name";
+                list = UserDAO.getInstance().search(key, type);
+                break;
+            case 2:
+                System.out.print("검색을 원하는 아이디 입력 : ");
+                key = scanner.next();
+                type = "id";
+                list = UserDAO.getInstance().search(key, type);
+                break;
+        }
+        if(list != null) {
+            for(UserDTO user : list) {
+                System.out.println(user.getName()+ " " + user.getId()+ " "+ user.getPwd());
+            }
+        }
+    }
+}
+</code></pre>
+<ul>
+  <li><code>type</code> 이라는 임의의 string을 만들어서 search 함수에 넣었다 → 추후 쿼리문 삽입하여 활용</li>
+</ul></li>
+  <li>UserDAO
+<pre><code class="language-java">public List&lt;UserDTO&gt; search(String value, String type){
+	        SqlSession sqlSession = sqlSessionFactory.openSession();
+	        HashMap&lt;String,String&gt;data = new HashMap&lt;&gt;();
+	        data.put("type",type);
+	        data.put("value",value);
+	        List&lt;UserDTO&gt; list = sqlSession.selectList("userSQL.search", data);
+	        sqlSession.close();
+	        return list;
+	    }</code></pre>
+<ul>
+  <li>HashMap으로 type과 value를 저장하여 이후 xml파일에서 활용한다.</li>
+</ul></li>
+  <li>userMapper.xml
+<pre><code class="language-java">&lt;select id="search"  parameterType="HashMap" resultType="user"&gt;
+		select * from usertable where ${type} like '%${value}%'
+	&lt;/select&gt;</code></pre>
+<ul>
+  <li><strong>#{ } → 자동으로 ‘ ‘ 처리가 된다 </strong>⇒ 따라서 여기서 사용하면 안된다</li>
+  <li>따라서 ‘ ‘ 처리를 안 시킬려면  $ { } 로 변수를 받아야 한다.</li>
+  <li>resultType에서 user를 해놓으면 UserDTO 형태가 List 형태로 반환이 된다.</li>
+</ul></li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

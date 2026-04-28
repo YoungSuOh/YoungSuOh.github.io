@@ -1,0 +1,52 @@
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>싱글모드로 부팅</li>
+</ol>
+<h3>싱글 모드 부팅을 사용하는 이유</h3>
+<ul>
+  <li>서버 부팅 시 오류 발생
+<ul>
+  <li>주된 원인 : fstab 오류, 파일 시스템 오류</li>
+  <li>파일 시스템의 경우 부팅 시퀀스 상 매우 높은 순위로 먼저 실행됨</li>
+</ul></li>
+  <li>Root 패스워드 분실 시
+<ul>
+  <li>로그인 할 수 없는 경우</li>
+</ul></li>
+  <li>장애 발생 시  조치 방법
+<ul>
+  <li>부트로더에서 싱글모드로 부팅</li>
+</ul></li>
+</ul>
+<h3>싱글 모드 진입</h3>
+<ul>
+  <li>Server에서 web001 선택 후 상단의 재시작 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab14-single-mode/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>웹 콘솔로 진입</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab14-single-mode/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>커널 버전 선택 화면에서 ‘e’ 입력하여 파라미터  수정 화면으로 진입</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab14-single-mode/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>Linux 문장의 맨 마지막에 “rd.break” 추가 후 <code>Ctrl+X</code>로 부팅 시작</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab14-single-mode/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>싱글 모드 진입 -완-</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab14-single-mode/img_005.png" alt="img_005.png">
+</figure>

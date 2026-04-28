@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Spring Boot 배포 — Naver Cloud Camp 정리 노트." />
+    <title>Spring Boot 배포 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-19 · Naver Cloud Camp</p>
+        <h1 class="article-title">Spring Boot 배포</h1>
+        <p class="article-lead muted">Spring Boot 배포 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<p>먼저 시작하기 전에 프로젝트 root 경로에 Dockerfile을 생성해준다.</p>
+<pre><code class="language-java"># OpenJDK 17을 기반 이미지로 사용
+FROM openjdk:17-jdk-slim
+
+# JAR 파일을 컨테이너로 복사
+ARG JAR_FILE=build/libs/SpringJPA-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
+
+# 애플리케이��� 실행
+ENTRYPOINT ["java", "-jar", "/app.jar"]</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure>
+<h3>1.  서버를 만들어준다.</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_002.png" alt="img_002.png">
+</figure>
+<h3>2. ssh 접속을 진행한다.</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_003.png" alt="img_003.png">
+</figure>
+<h3>3. 도커를 설치하고 컨테이너를 만들자</h3>
+<pre><code class="language-javascript">curl https://get.docker.com &gt; docker-install.sh
+chmod 755 docker-install.sh
+./docker-install.sh</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>docker 컨테이너를 만들어서 젠킨스를 받아오자
+<pre><code class="language-javascript">docker run -d \
+  -p 8090:8080 \
+  -p 50000:50000 \
+  --name jenkins \
+  --user root \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  jenkins/jenkins:lts</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>관리자 비밀번호를 바꿔줘야 되겠구만
+<pre><code class="language-javascript">docker logs {containerNAME}</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>docker admin 정보 입력 후 로그인
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<h3>4. 플러그인 설치</h3>
+<ol>
+  <li>Github Integration
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ol>
+  <li>Docker Pipeline
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<h3>5. 자격증명(Credential 등록)</h3>
+<ol>
+  <li>Github Credential
+<ol>
+  <li>git_credential</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ol>
+  <li>Dockerhub Credential
+<ol>
+  <li>dockerhub_credential</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ol>
+  <li>application_yml
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<p>총 3개의 자격증명을 등록해준다.</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_005.png" alt="img_005.png">
+</figure>
+<h3>6. Jenkins Gradle 설정</h3>
+<p>maven 기반 spring과 다르게 spring boot는 gradle 기반으로 의존성을 추가하기 때문에 Tools 인에 gradle 항목에서 다음과 같이 설정해줘야 한다.</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_006.png" alt="img_006.png">
+</figure>
+<p>추후에  pipeling 을 진행할 때 </p>
+<pre><code class="language-java">tools {
+        gradle 'gradle-8.11' // Jenkins에 설정된 Gradle 이름
+    }</code></pre>
+<p>이렇게 설정이 된다.</p>
+<h3>7. Pipeline 생성</h3>
+<pre><code class="language-java">pipeline {
+    agent any
+
+    environment {
+        GIT_CREDENTIAL = 'git_credential' // GitHub 자격증명 ID
+        DOCKERHUB_CREDENTIAL = 'dockerhub_credential' // Docker Hub 자격증명 ID
+        DOCKERHUB_USERNAME = 'youngsuoh' // Docker Hub 사용자명
+        IMAGE_NAME = 'dr-rate-backend' // Docker 이미지 이름
+    }
+
+    tools {
+        gradle 'gradle-8.11' // Jenkins에 설정된 Gradle 이름
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: "${env.GIT_CREDENTIAL}", url: 'https://github.com/BitCamp-Final-Project/Dr.Rate-Backend.git'
+            }
+        }
+        stage('Create Directory and Copy application.yml') {
+            steps {
+                script {
+                    sh 'mkdir -p src/main/resources'
+                }
+                withCredentials([file(credentialsId: 'application_yml', variable: 'APPLICATION_YML_PATH')]) {
+                    sh 'cp $APPLICATION_YML_PATH src/main/resources/application.yml'
+                }
+            }
+        }
+        stage('Build with Gradle') {
+            steps {
+                // gradlew에 실행 권한 추가
+                sh 'chmod +x ./gradlew'
+                // Gradle 빌드 명령어
+                sh './gradlew clean build'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME} .'
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // 기존 컨테이너 중지 및 제거
+                    sh 'docker stop springboot-app || true &amp;&amp; docker rm springboot-app || true'
+                    // 새 컨테이너 실행
+                    sh 'docker run -d -p 8080:8080 --name springboot-app ${DOCKERHUB_USERNAME}/${IMAGE_NAME}'
+                }
+            }
+        }
+        stage('Check Application Status') {
+            steps {
+                script {
+                    // 애플리케이션이 시작될 시간을 주기 위해 잠시 대기
+                    sh 'sleep 15'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIAL}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                }
+                sh 'docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '배포 성공!'
+        }
+        failure {
+            echo '배포 실패. 로그를 확인해 주세요.'
+        }
+    }
+}
+</code></pre>
+<h3>8. Jenkins jdk 버전 확인 (jdk 17) 및 Jenkins 안에 docker 설치</h3>
+<ul>
+  <li>먼저 root 권한으로 Jenkins에 접속해주자</li>
+</ul>
+<pre><code class="language-java">docker exec -it --user root jenkins bash</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_007.png" alt="img_007.png">
+</figure>
+<ul>
+  <li>이후에 자바 버전 17인지 확인해주고</li>
+  <li>docker 설치를 진행한다.
+<pre><code class="language-java">apt update
+apt install docker.io</code></pre></li>
+</ul>
+<h3>9. 결과 확인하기</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_008.png" alt="img_008.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_009.png" alt="img_009.png">
+</figure>
+<h3>파이프 라인 구조 설명</h3>
+<ol>
+  <li>Spring Boot 프로젝트의 Dockerfile
+<ol>
+  <li><strong>Spring Boot 애플리케이션</strong>을 실행하는 <strong>Docker 이미지</strong>를 만들게 된다.</li>
+</ol>
+<pre><code class="language-java"># 1. Use a base image with JDK
+FROM openjdk:17-jdk-slim as build
+
+# 2. Set the working directory
+WORKDIR /app
+
+# 3. Copy the Spring Boot Jar file (from target)
+COPY target/springboot-app.jar /app/app.jar
+
+# 4. Expose port
+EXPOSE 8080
+
+# 5. Run the Spring Boot application
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+</code></pre>
+<ul>
+  <li><strong>Base Image</strong>: <code>openjdk:17-jdk-slim</code> 이미지를 사용하여 <strong>JDK 17</strong> 환경을 설정합니다.</li>
+  <li><strong>Working Directory</strong>: <code>/app</code> 디렉터리로 작업 디렉터리를 설정합니다.</li>
+  <li><strong>Copy Jar</strong>: Spring Boot 프로젝트에서 빌드된 JAR 파일을 컨테이너로 복사합니다.</li>
+  <li><strong>Expose Port</strong>: 컨테이너의 <code>8080</code> 포트를 외부에 노출합니다.</li>
+  <li><strong>EntryPoint</strong>: <code>java -jar /app/app.jar</code> 명령어로 Spring Boot 애플리케이션을 실행합니다.</li>
+</ul></li>
+</ol>
+<h3>HTTPS 적용</h3>
+<pre><code class="language-java">pipeline {
+    agent any
+
+    environment {
+        GIT_CREDENTIAL = 'git_credential' // GitHub 자격증명 ID
+        DOCKERHUB_CREDENTIAL = 'dockerhub_credential' // Docker Hub 자격증명 ID
+        DOCKERHUB_USERNAME = 'youngsuoh' // Docker Hub 사용자명
+        IMAGE_NAME = 'dr-rate-backend' // Docker 이미지 이름
+    }
+
+    tools {
+        gradle 'gradle-8.11' // Jenkins에 설정된 Gradle 이름
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: "${env.GIT_CREDENTIAL}", url: 'https://github.com/BitCamp-Final-Project/Dr.Rate-Backend.git'
+            }
+        }
+        stage('Create Directory and Copy application.yml') {
+            steps {
+                script {
+                    sh 'mkdir -p src/main/resources'
+                }
+                withCredentials([file(credentialsId: 'application_yml', variable: 'APPLICATION_YML_PATH')]) {
+                    sh 'cp $APPLICATION_YML_PATH src/main/resources/application.yml'
+                }
+            }
+        }
+        stage('Build with Gradle') {
+            steps {
+                // gradlew에 실행 권한 추가
+                sh 'chmod +x ./gradlew'
+                // Gradle 빌드 명령어
+                sh './gradlew clean build'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME} .'
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // 기존 컨테이너 중지 및 제거
+                    sh 'docker stop springboot-app || true &amp;&amp; docker rm springboot-app || true'
+                    // 새 컨테이너 실행
+                    sh 'docker run -d -p 80:8080 -p 443:443 --name springboot-app ${DOCKERHUB_USERNAME}/${IMAGE_NAME}'
+                }
+            }
+        }
+        stage('Check Application Status') {
+            steps {
+                script {
+                    // 애플리케이션이 시작될 시간을 주기 위해 잠시 대기
+                    sh 'sleep 15'
+                    // 애플리케이션 상태 확인
+                    sh 'curl -I http://localhost:8081/api/users/mypage/1 || echo "Application is not running"'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIAL}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                }
+                sh 'docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '배포 성공!'
+        }
+        failure {
+            echo '배포 실패. 로그를 확인해 주세요.'
+        }
+    }
+}
+</code></pre>
+<h4>SSL 인증서 준비</h4>
+<ul>
+  <li>설치</li>
+</ul>
+<pre><code class="language-java">sudo apt update
+sudo apt install certbot
+</code></pre>
+<ul>
+  <li>인증서 발급</li>
+</ul>
+<pre><code class="language-java">sudo certbot certonly --standalone -d yourdomain.com
+</code></pre>
+<ul>
+  <li>인증서 발급 확인</li>
+</ul>
+<pre><code class="language-java">ls -l /etc/letsencrypt/live/www.dr-rate.shop/</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_010.png" alt="img_010.png">
+</figure>
+<ul>
+  <li><strong>tomcat에서 HTTPS를 사용하기 위해 SSL 인증서를 PKCS12 형식의 keystore 파일로 변환</strong>하는 과정
+<pre><code class="language-java">openssl pkcs12 -export \
+  -in /etc/letsencrypt/live/www.dr-rate.shop/fullchain.pem \
+  -inkey /etc/letsencrypt/live/www.dr-rate.shop/privkey.pem \
+  -out /etc/letsencrypt/live/www.dr-rate.shop/keystore.p12 \
+  -name "springboot-ssl"</code></pre>
+<ul>
+  <li>Tomcat은 SSL/TLS를 지원하기 위해 keystore 파일을 필요로 하며, 이 명령은 Let’s Encrypt 인증서를 사용해 keystore 파일을 생성하는 작업을 수행 (<code>qwe123!@#</code>)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-boot/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>내장 톰켓이므로 application.yml에 ssl 설정</li>
+</ul>
+<pre><code class="language-java">server:
+  port: 8080
+  ssl:
+    enabled: true
+    key-store: /etc/letsencrypt/live/www.dr-rate.shop/keystore.p12
+    key-store-password: qwe123!@#
+    key-store-type: PKCS12</code></pre>
+<ul>
+  <li>pipeline에 도커 컨테이너에 
+<ul>
+  <li>Let's Encrypt 인증서 파일(<code>/etc/letsencrypt</code>)을 읽기 전용(<code>:ro</code>)으로 컨테이너에 마운트 진행</li>
+</ul></li>
+</ul>
+<pre><code class="language-java">  stage('Run Docker Container') {
+            steps {
+                script {
+                    // 기존 컨테이너 중지 및 제거
+                    sh 'docker stop springboot-app || true &amp;&amp; docker rm springboot-app || true'
+                    // 새 컨테이너 실행 (볼륨 마운트 포함)
+                    sh '''
+                        docker run -d \
+                        -p 80:8080 -p 443:8080 \
+                        -v /etc/letsencrypt:/etc/letsencrypt:ro \
+                        --name springboot-app ${DOCKERHUB_USERNAME}/${IMAGE_NAME}
+                    '''
+                }
+            }
+        }</code></pre>
+<ul>
+  <li>pipeline 코드 전체</li>
+</ul>
+<pre><code class="language-java">pipeline {
+    agent any
+
+    environment {
+        GIT_CREDENTIAL = 'git_credential' // GitHub 자격증명 ID
+        DOCKERHUB_CREDENTIAL = 'dockerhub_credential' // Docker Hub 자격증명 ID
+        DOCKERHUB_USERNAME = 'youngsuoh' // Docker Hub 사용자명
+        IMAGE_NAME = 'dr-rate-backend' // Docker 이미지 이름
+    }
+
+    tools {
+        gradle 'gradle-8.11' // Jenkins에 설정된 Gradle 이름
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', credentialsId: "${env.GIT_CREDENTIAL}", url: 'https://github.com/BitCamp-Final-Project/Dr.Rate-Backend.git'
+            }
+        }
+        stage('Create Directory and Copy application.yml') {
+            steps {
+                script {
+                    sh 'mkdir -p src/main/resources'
+                }
+                withCredentials([file(credentialsId: 'application_yml', variable: 'APPLICATION_YML_PATH')]) {
+                    sh 'cp $APPLICATION_YML_PATH src/main/resources/application.yml'
+                }
+            }
+        }
+        stage('Build with Gradle') {
+            steps {
+                // gradlew에 실행 권한 추가
+                sh 'chmod +x ./gradlew'
+                // Gradle 빌드 명령어
+                sh './gradlew clean build'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME} .'
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // 기존 컨테이너 중지 및 제거
+                    sh 'docker stop springboot-app || true &amp;&amp; docker rm springboot-app || true'
+                    // 새 컨테이너 실행 (볼륨 마운트 포함)
+                    sh '''
+                        docker run -d \
+                        -p 443:443 \
+                        -v /etc/letsencrypt:/etc/letsencrypt:ro \
+                        --name springboot-app ${DOCKERHUB_USERNAME}/${IMAGE_NAME}
+                    '''
+                }
+            }
+        }
+        stage('Check Application Status') {
+            steps {
+                script {
+                    // 애플리케이션이 시작될 시간을 주기 위해 잠시 대기
+                    sh 'sleep 15'
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.DOCKERHUB_CREDENTIAL}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                }
+                sh 'docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '배포 성공!'
+        }
+        failure {
+            echo '배포 실패. 로그를 확인해 주세요.'
+        }
+    }
+}
+</code></pre>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

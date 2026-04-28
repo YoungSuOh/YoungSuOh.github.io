@@ -1,0 +1,60 @@
+<ul>
+  <li>서버에 미리 connection을 쫙 만들어 놓는 것
+<ul>
+  <li>미리 김밥을 만들어놔야 출근시간에 바로 줌 → 출근 시간에만 적용시킴</li>
+</ul></li>
+  <li>DB와 연결된 커넥션을 <code>미리 만들어서</code> <strong>Pool 속에 저장해두고 있다가, </strong>필요할 때 커넥션을 풀에서 가져다가 쓰고 다시 <code>풀에 반환(close)</code> 하는 기법</li>
+  <li>Connection의 내용이 바뀌면 서버만 수정해주면 된다</li>
+  <li>풀속에 미리 커넥션이 생성 되어있기 때문에 커넥션을 생성하는데 드는 <code>연결시간이 소비되지 않는다</code></li>
+  <li>커넥션을 계속해서 재사용하기 때문에 생성되는 커넥션 수는 많지 않다</li>
+  <li>오라클 주소, 드라이버, ID, PW를 서버에 숨겨 놓음으로 보안에 좋다</li>
+  <li>서버의 Connection 들을 얻어오려면 javax.sql.DataSource 를 이용</li>
+  <li><code>server.xml</code>에서 &lt;Context&gt;&lt;/Context&gt;에 추가해야하는데 따로 context.xml를 만들어서 사용해보자 ⇒ META-INF 밑에 만들면 됨</li>
+</ul>
+<h3>필요한 라이브러리</h3>
+<p>commons-collections-3.2.1.jar
+commons-dbcp-1.4.jar
+commons-pool-1.6.jar</p>
+<h3>용어 정리</h3>
+<p>maxActive - 커넥션 풀이 제공할 최대 커넥션 개수
+maxIdle - 사용되지 않고 풀에 저장될 수 있는 최대 커넥션의 개수, 음수일 경우 제한을 두지 않음
+maxWait - 커넥션 풀을 대기하는 대기시간, 음수일 경우 제한을 두지 않음</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-connection-pool/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>yml 처럼 설정을 한다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-connection-pool/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>type → <em>javax.sql.DataSource ⇒ 여직원</em></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-connection-pool/img_003.png" alt="img_003.png">
+</figure>
+<pre><code class="language-java">public MemberDAO() {
+    	Context context;
+        try{
+        	context = new InitialContext();
+        	// ds = (DataSource)context.lookup("jdbc/oracle");  
+        	ds = (DataSource)context.lookup("java:comp/env/jdbc/oracle");  // Tomcat인 경우 -&gt; 앞에 접두사 java:comp/env/  필요
+        }catch(NamingException e){
+            e.printStackTrace();
+        }
+    }</code></pre>
+<ul>
+  <li>context .lookup을 통해 드라이버 로딩 진행</li>
+</ul>
+<h3>
+두 <code>closeConnection()</code>의 차이점
+</h3>
+<table>
+  <tr><td>특징</td><td>JdbcDAO의 closeConnection()</td><td>MemberDAO의 closeConnection()</td></tr>
+  <tr><td>커넥션 생성 방식</td><td><code>DriverManager</code>를 통해 매번 새로운 커넥션 생성</td><td><code>DataSource</code>를 통해 커넥션 풀에서 커넥션 가져오기</td></tr>
+  <tr><td><code>close()</code>의 역할</td><td>데이터베이스와의 실제 커넥션 종료</td><td>커넥션 풀에 커넥션 반환</td></tr>
+  <tr><td>리소스 관리</td><td>커넥션을 닫지 않으면 리소스 누수 발생 가능</td><td>커넥션을 닫지 않으면 커넥션 풀이 고갈될 수 있음</td></tr>
+  <tr><td>성능</td><td>매번 커넥션 생성 및 종료로 인한 오버헤드 발생 가능</td><td>커넥션 재사용으로 인한 성능 향상</td></tr>
+  <tr><td>사용 시 주의사항</td><td>반드시 <code>closeConnection()</code>을 호출하여 리소스를 해제해야 함</td><td>반드시 <code>closeConnection()</code>을 호출하여 커넥션을 풀에 반환해야 함</td></tr>
+</table>

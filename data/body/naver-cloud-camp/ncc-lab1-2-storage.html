@@ -1,0 +1,286 @@
+<h3>Lab 1</h3>
+<h4>학습 목표</h4>
+<hr>
+<ol>
+  <li>(Demo) Root로의 원격 접속 제한 설정</li>
+  <li>Cloud DB와 Web001 서버 연결 작업</li>
+</ol>
+<h4>Root 접속 차단하기</h4>
+<p>지금까지는 <code>keypair</code> 를 통해 Root 접속이 가능했다. 이제는 서버에 들어가서 계정을 따로 생성해주고, root 접속 차단을 진행할 예정이다.</p>
+<ul>
+  <li>우선 서버 접속을 진행 (Root 접속)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>계정 생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>root 접속 차단 진행
+<ul>
+  <li>우선 다음 명령어를 통해 SSH 환경설정 파일 접근
+<pre><code class="language-javascript">vi /etc/ssh/sshd_config</code></pre></li>
+  <li>이후 RootSSH 접속제한
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ul>
+  <li><code>systemctl restart sshd.service</code> 명령어로 sshd 서비스 재시작
+<pre><code class="language-javascript"> systemctl restart sshd.service</code></pre></li>
+  <li>이후 root계정으로는 서버에 접근할 수 없음을 확인할 수 있다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>이제는 만든 계정인 Student로 가보도록 하자</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>잘 되죵?</li>
+</ul>
+<h4>Cloud DB와 Web001 연결 작업</h4>
+<p>서버 실습을 위해 서버에 다음과 같은 설정 내용을 반영해야 한다.</p>
+<ul>
+  <li>변경 파일
+<pre><code class="language-javascript">/var/www/html/dbconnect.php
+/var/www/html/key.php</code></pre></li>
+</ul>
+<ul>
+  <li>변경하기 이전에 student는 자격이 너무 없기 때문에 <code>su - root</code> 명령어를 통해 root에서 실행하도록 하자
+<pre><code class="language-javascript">su - root</code></pre></li>
+</ul>
+<ul>
+  <li>먼저 <code>/var/www/html/dbconnect.php</code> 부터 진행해보자
+<pre><code class="language-javascript">vi /var/www/html/dbconnect.php</code></pre>
+<ul>
+  <li>다음 내용을 추가해준다.
+<pre><code class="language-javascript">&lt;?php
+ $servername="db-302mqn.vpc-cdb.ntruss.com";
+ $username="ncpuser";
+ $password="ncp!@#12345";
+ $dbname="application";
+ //Createconnection
+ $conn=newmysqli($servername,$username,$password,$dbname);
+ //Checkconnection
+ if ($conn-&gt;connect_error){
+ die("Connectionfailed:".$conn-&gt;connect_error);
+ }
+ ?&gt;</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>servername은 mySQL은 private 도메인을 넣어준다.</li>
+</ul></li>
+</ul>
+<ul>
+  <li>이후 <code>/var/www/html/key.php</code> 를 편집해준다.
+<ul>
+  <li>이때 마이페이지&gt;인증키 관리에서 AccessKeyID와 SecretKey를 확인하여 입력을 진행한다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ul>
+  <li>추가로 다음 명령어를 통해 패키지를 설치한다
+<pre><code class="language-javascript"># 필요한 패키지 설치
+dnf install -y redis mariadb-server php-mysqlnd
+
+# 서비스 활성화 및 시작
+systemctl enable redis
+systemctl enable mariadb
+systemctl start redis
+systemctl start mariadb
+
+# Apache와 PHP-FPM 서비스 재시작
+systemctl restart httpd
+systemctl restart php-fpm
+
+# MySQL 초기화 스크립트 실행
+mysql &lt; /var/www/html/dbstep1.sql
+mysql &lt; /var/www/html/dbstep2.sql
+</code></pre></li>
+</ul>
+<h3>Lab2</h3>
+<h4>학습 목표</h4>
+<hr>
+<ol>
+  <li>Container Registry 서비스 생성</li>
+  <li>Custom image 생성 후, Container Registry에 Push</li>
+</ol>
+<h4>Storage 생성</h4>
+<ul>
+  <li> lnxsvr-org-disk1</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li> lnxsvr-org-disk2</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_006.png" alt="img_006.png">
+</figure>
+<ul>
+  <li>생성이 완료되면 상단의  “스토리지 설정” &gt; “서버에 연결” 선택 </li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_008.png" alt="img_008.png">
+</figure>
+<h4>Storage 마운트</h4>
+<p>web001 서버에 접속하여 다음과 같이 작업은 진행한다.</p>
+<ol>
+  <li>마운트하기 위한 폴더�� 생성
+<pre><code class="language-javascript">mkdir /disk1
+mkdir /lvm</code></pre></li>
+  <li>생성하여 Attach한 디스크의 파티션 생성을 진행
+<pre><code class="language-javascript">fdisk /dev/vdb</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>생성한 /dev/vdb1 파티션에 대해 포맷을 진행
+<pre><code class="language-javascript">mkfs.ext4 /dev/vdb1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>마운트하기 위한 디렉터리 생성 작업 후 /dev/vdb1 파티션 마운트 및 데이터를 생성
+<pre><code class="language-javascript">mount /dev/vdb1 /disk1
+cp -rf /etc/* /disk1/</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li> lnxsvr-org-disk1,  lnxsvr-org-disk2 디스크는 LVM 구성하여 마운트
+<pre><code class="language-javascript">fdisk /dev/vdc</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>이후 /dev/ vdd도 동일한 작업 수행
+<pre><code class="language-javascript">fdisk /dev/vdd</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Pvcreate로 물리적인 볼륨을 생성
+<pre><code class="language-javascript">pvcreate /dev/vdc1
+pvcreate /dev/vdd1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>볼륨 그룹 생성
+<pre><code class="language-javascript">vgcreate lvmVG /dev/vdc1 /dev/vdd1
+vgdisplay</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>논리적인 볼륨 생성 및 포맷
+<pre><code class="language-javascript">lvcreate --extents 100%FREE -n lvmLV lvmVG
+mkfs.ext4 /dev/lvmVG/lvmLV</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>마운트 및 파일 시스템 확인
+<pre><code class="language-javascript">mount /dev/lvmVG/lvmLV /lvm
+df</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<h4>스토리지 용량 증설</h4>
+<p>사전에 구성한 /disk1 파티션의 공간을 기존 10GB에서 20GB로 증설하고자 한다.</p>
+<ul>
+  <li>Umount를 통한 마운트 해제(umount가 안되는 경우엔 서버를 리부팅한다)
+<pre><code class="language-javascript">umount /dev/vdb1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>growpart 설치
+<pre><code class="language-javascript">yum install -y cloud-utils-growpart</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Lsblk로 파티션 정보 확인
+<pre><code class="language-javascript">lsblk</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>디스크 용량 증설
+<ol>
+  <li>Services&gt;Compute&gt;Server&gt;Storage 선택</li>
+  <li>Web001-disk1 스토리지를 선택 후 상단의 스토리지 설정 &gt;서버에서 연결 해제 선택</li>
+  <li>디스크 선택 후 상단의 스토리지 설정 &gt; 스토리지 변경 선택</li>
+  <li>디스크 크기를 20GB로 변경 후 하단의 확인 버튼  클릭
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_002.png" alt="img_002.png">
+</figure></li>
+  <li>용량 변경 후 사용 가능 상태로 바뀌면, 상단의 스토리지 설정 &gt;서버에 연결을 선택하여 기존서버 (web001) 선택 후 하단의 ‘예’ 버튼 클릭
+<ol>
+  <li>이미 연결돼 있는 거 아닌가..</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>변경된 내용 확인 (만약 lsblk 명령어로 디스크 정보가 보여지지 않을 경우에는 서버  재부팅)
+<pre><code class="language-javascript">lsblk
+growpart /dev/vdb 1
+lsblk</code></pre></li>
+  <li>파티션 공간 확장
+<pre><code class="language-javascript">e2fsck -f /dev/vdb1
+resize2fs /dev/vdb1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Mount를 하여 데이터와 공간 확인</li>
+  <li>mount /dev/vdb1 /disk1</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h4>서버 스펙 변경 및 확인</h4>
+<ul>
+  <li>서버 탭에서 web001 서버 선택</li>
+  <li>상단의 서버 “정지” 선택
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_002.png" alt="img_002.png">
+</figure></li>
+  <li>서버가 셧다운 되면 서버 관리 및 설정 변경에서 “서버 스펙 변경” 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li>아무거나 선택 후 “예” 선택
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>상단의 서버 “시작” 버튼 선택
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>서버 접속 후 다음 명령으로 CPU와 메모리 정보 확인
+<pre><code class="language-javascript">cat /proc/cpuinfo 
+cat /proc/meminfo</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab1-2-storage/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="VPC Peering &amp; LB 분기 처리(Lab5 &amp; Lab6) — Naver Cloud Camp 정리 노트." />
+    <title>VPC Peering &amp; LB 분기 처리(Lab5 &amp; Lab6) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-05 · Naver Cloud Camp</p>
+        <h1 class="article-title">VPC Peering &amp; LB 분기 처리(Lab5 &amp; Lab6)</h1>
+        <p class="article-lead muted">VPC Peering &amp; LB 분기 처리(Lab5 &amp; Lab6) — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP Lab</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>Lab 5 : VPC Peering</h3>
+<h4>학습 목표</h4>
+<hr>
+<ol>
+  <li>(Demo)Peering 설정
+<ol>
+  <li>VPC ID, 계정명, VPC명 교환</li>
+  <li>Peering 구성</li>
+  <li>Route table 추가</li>
+</ol></li>
+</ol>
+<h3>Lab 6</h3>
+<h4>학습 목표</h4>
+<hr>
+<ol>
+  <li>N-LB 로드밸런서 생성하기
+<ol>
+  <li>Ncp-N-lb 로드밸런서 생성</li>
+  <li>Public IP 네트워크</li>
+  <li>TCP 프로토콜</li>
+  <li>Web001, Web002 서버 추가</li>
+</ol></li>
+  <li>A-LB 로드밸런서 생성하기
+<ol>
+  <li>Ncp-A-lb 로드밸런서 생성</li>
+  <li>Public IP 네트워크</li>
+  <li>HTTP 프로토콜</li>
+  <li>Web001, Web002 서버에 대해 URL로 분기</li>
+</ol></li>
+  <li>Proxy LB 생성 및 클라이언트 IP 확인
+<ol>
+  <li>Proxy LB 생성하기</li>
+  <li>클라이언트 IP 확인을 위한 x-fowarded-for 설정</li>
+</ol></li>
+</ol>
+<h4>타겟 그룹 생성</h4>
+<ul>
+  <li>웹 서비스의 가용성을 확보하기 위한 로드밸런서를 구성하고자 합니다</li>
+  <li>타겟 그룹 생성
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Health Check 설정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>타겟 설정
+<ul>
+  <li>타겟 추가에서는 앞에서 생성한 web001, web002을 선택하여 타겟  그룹에 추가</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h4>네트워크 로드밸런서 생성</h4>
+<ul>
+  <li>웹 서비스의 가용성을 확보하기 위한 로드밸런서를 구성하고자 합니다.</li>
+  <li>Services &gt;Networking&gt;‘LoadBalancer’를 선택합니다. 그리고 상단의 로드밸런서 생성을 선택합니다
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>그 후 네트워크 로드밸런서 생성을 클릭합니다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>결과 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_005.png" alt="img_005.png">
+</figure>
+<p>⭐⭐ 네트워크 로드 밸런서는 직접 클라이언트에게 데이터를 전달하기 때문에 리얼 IP가 기록되는 것을 볼  수 있다.</p>
+<pre><code class="language-javascript"> cd /var/log/httpd
+ tail -10 access_log</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_006.png" alt="img_006.png">
+</figure>
+<h4>애플리케이션 로드 밸런서 </h4>
+<blockquote><strong>💡 URL 분기 처리가 가능</strong></blockquote>
+<ul>
+  <li>타겟 그룹 생성(Web001만 있음)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_008.png" alt="img_008.png">
+</figure>
+<ul>
+  <li>타겟 추가에서는 앞에서 <strong>생성한 web001만  선택하여 타겟 그룹에 추가</strong>합니다</li>
+</ul>
+<ul>
+  <li>타겟 그룹 하나 더 생성(Web001, Web002 2개 있음)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li>Services &gt; Networking &gt; ‘LoadBalancer’를 선택합니다. 그리고 상단의 로드밸런서 생성을 선택합니다</li>
+  <li>그 후 어플리케이션 로드밸런서  생성을 클릭합니다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_010.png" alt="img_010.png">
+</figure>
+<ul>
+  <li>타겟 선택(Web001, Web002 둘 다 타겟하는 그룹으로 선택)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_011.png" alt="img_011.png">
+</figure>
+<h4>어플리케이션 로드 밸런서 분기 설정</h4>
+<ul>
+  <li>하위 디렉토리인 ip디렉토리에 대해서는 lab-alb-ip-tg 로 분기하고자 합니다.</li>
+  <li>Services &gt;Networking &gt;‘LoadBalancer’를선택합니다. 선택 후 ‘리스너설정변경’ 클릭
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>‘ListenerNo’를 선택 후 상단의 ‘규칙조회/변경’을 선택합니다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>생성되어 있는 우선 순위 선택 후 상단의 규칙 추가를 선택한다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>PathPattern 선택 후 우측의 ‘추가’를 선택합니다.
+<ul>
+  <li><code>/ip/</code>를 입력 후 우측의 +추가를 선택합니다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>TargetGroup에서 <code>lab-alb-ip-tg</code>를 선택하고  가중치는 1, 우측의 <code>+추가</code>를 선택 후 하단의 ‘확인’ 버튼 클릭 
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>이렇게 되면 {공인IP}/ip/ 로 접근하는 경로는 Path Pattern에 의해서 Target Group이 <code>lab-alb-ip-tg</code>, 즉 Web001로만 분기되도록 설정을 한  것이다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>
+<ul>
+  <li>그냥 로드 밸런서에 접근하는 경우</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_012.png" alt="img_012.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_013.png" alt="img_013.png">
+</figure>
+<p>⇒ 설정한 대로 Web001, Web002 둘 다 나온다</p>
+<ul>
+  <li><code>/ip/</code> 로 접근하는 경우</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb/img_014.png" alt="img_014.png">
+</figure>
+<p>→ Web001 IP만 찍힌다.</p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

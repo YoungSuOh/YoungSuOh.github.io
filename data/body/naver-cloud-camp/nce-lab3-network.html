@@ -1,0 +1,49 @@
+<h3>학습  목표</h3>
+<hr>
+<ol>
+  <li>서버 추가 네트워크 인터페이스 설정
+<ol>
+  <li>Lnsvr1 eth0에  secondary IP 추가</li>
+</ol></li>
+</ol>
+<h3>1. 서버에 추가 IP 설정</h3>
+<ul>
+  <li>Services &gt;server&gt;network interface 선택</li>
+  <li>web001 서버에 할당되어 있는 네트워크 인터페이스 선택 후 상단의 secondaryIP 버튼 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>SecondaryIP 입력란에 ’10.0.1.251’ 입력 후 우측에 추가 버튼 클릭
+<ul>
+  <li>하단의 설정 버튼 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>web001 접속하여 네트워크 매니저 서비스 활성화 및 서비스 상태 확인
+<pre><code class="language-javascript">systemctl unmask NetworkManager.service
+systemctl start NetworkManager
+systemctl status NetworkManager</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>네트워크 매니저로 Secondary IP 추가
+<pre><code class="language-javascript">nmcli connection
+nmcli connection modify "System eth0" +ipv4.addresses 10.0.1.251/32</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>변경 사항 적용 및 활성화
+<pre><code class="language-javascript">nmcli connection reload
+nmcli connection up "System eth0"</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>10.0.1.251로 ping 시, 통신이 되는 지 확인
+<pre><code class="language-javascript">ping 10.0.1.251</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab3-network/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NCP Auto Scaling &amp;  LoadBalancing (FrontEnd) — Naver Cloud Camp 정리 노트." />
+    <title>NCP Auto Scaling &amp;  LoadBalancing (FrontEnd) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-11-29 · Naver Cloud Camp</p>
+        <h1 class="article-title">NCP Auto Scaling &amp;  LoadBalancing (FrontEnd)</h1>
+        <p class="article-lead muted">NCP Auto Scaling &amp;  LoadBalancing (FrontEnd) — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3><strong>LoadBalancing</strong></h3>
+<h4>1. VPC 설정하기</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>CIDR 블록은 추후 private subnet과 public subnet을 나눠주기 위해 <code>10.0.0.0/16</code> 으로 설정해주었다.</li>
+</ul>
+<h4>2. 서브넷 생성하기</h4>
+<p>NCP에서는 AWS와 다르게 <strong>NAT 게이트웨이와 로드 밸런서가 위치할 서브넷을 따로 생성</strong>해주어야 한다.</p>
+<p>또한 각 서브넷 당 최대 5개의 로드 밸런서를 생성할 수 있기 때문에 그 부분도 고려해야 한다.</p>
+<p>로드 밸런서의 경우 Private 서브넷으로만 생성할 수 있다.</p>
+<ul>
+  <li>퍼블릭 서브넷 (일반): <code>10.0.0.0/24</code></li>
+  <li>프라이빗 서브넷 (로드���런서): <code>10.0.1.0/24</code>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h4>4. NACL 설정하기</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_002.png" alt="img_002.png">
+</figure>
+<h4>5. 타겟 그룹(Target Group) 생성하기</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>443 포트 설정(HTTPS)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>헬스 체크할 때 로드밸런서에서 서버로의 요청이 유효한지 확인을 해야 되기 때문에, 서버 포트와 호출 가능한 api 경로로 설정해야 함</li>
+</ul>
+<ul>
+  <li>로드 밸런싱할 서버 선택
+<ul>
+  <li>서버를 만들어 놓는 이유
+<ul>
+  <li>이게 오토스케일링할 서버 하나 만듬 + 이후에 오토스케일링을 0개 이상부터 붙임
+<ul>
+  <li>이렇게 되면 최초의 서버는 항상 돌아가는 거임</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_005.png" alt="img_005.png">
+</figure>
+<h4><strong>6. Certificate Manager 설정</strong></h4>
+<p><a href="https://www.notion.so/Certitication-Manager-1524cd810d9c80a79d7fc8188aa41040#1524cd810d9c80bb91bde252e4f5f0be" target="_blank" rel="noopener">https://www.notion.so/Certitication-Manager-1524cd810d9c80a79d7fc8188aa41040?pvs=4#1524cd810d9c80bb91bde252e4f5f0be</a></p>
+<h4>7. 로드 밸런서 생성</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_006.png" alt="img_006.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_007.png" alt="img_007.png">
+</figure>
+<ul>
+  <li>배포할 때 8080과 443 모두 열어놨기 때문에 2개를 설정했다. (어차피 80으로 들어와도  443으로 redirect 되게 설정함)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_008.png" alt="img_008.png">
+</figure>
+<ul>
+  <li>gpt한테 물어봐서 다음 사항은 뺐다</li>
+</ul>
+<hr>
+<ul>
+  <li><strong>제외할 Cipher Suite</strong></li>
+</ul>
+<p>아래는 보안성이 낮아 설정에서 제외해야 할 Cipher Suite</p>
+<ol>
+  <li><strong>TLS_RSA_WITH_AES_128_CBC_SHA</strong></li>
+  <li><strong>TLS_RSA_WITH_AES_256_CBC_SHA</strong></li>
+  <li><strong>TLS_RSA_WITH_AES_128_CBC_SHA256</strong></li>
+  <li><strong>TLS_DHE_RSA_WITH_AES_128_CBC_SHA</strong></li>
+  <li><strong>TLS_DHE_RSA_WITH_AES_256_CBC_SHA</strong></li>
+</ol>
+<ul>
+  <li>what is Cipher Suite</li>
+</ul>
+<ul>
+  <li>타겟 그룹 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_009.png" alt="img_009.png">
+</figure>
+<ul>
+  <li>생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_010.png" alt="img_010.png">
+</figure>
+<h4>8. 가비아에서 IP를 로드밸런서 IP로 변경</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_011.png" alt="img_011.png">
+</figure>
+<h3>AutoScaling</h3>
+<h4>1. 서버 이미지 만들기</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_012.png" alt="img_012.png">
+</figure>
+<h4>2. Launch Configuration</h4>
+<ul>
+  <li>내 이미지로 들어감</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_013.png" alt="img_013.png">
+</figure>
+<ul>
+  <li>오토스케일링 할 이미지 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_014.png" alt="img_014.png">
+</figure>
+<ul>
+  <li>⭐ Init Script가 꼭 필요하다 → 서버를 이미지로 만들게 되면 모두 꺼져있기 때문에 실행해줘야 한다.
+<ul>
+  <li>init script
+<pre><code class="language-javascript">docker start container-name</code></pre></li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_015.png" alt="img_015.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_016.png" alt="img_016.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_017.png" alt="img_017.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_018.png" alt="img_018.png">
+</figure>
+<ul>
+  <li>생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_019.png" alt="img_019.png">
+</figure>
+<h4>3. AutoScaling Group 생성</h4>
+<ul>
+  <li>launch config 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_020.png" alt="img_020.png">
+</figure>
+<ul>
+  <li>target group 선택 (반드시 눌러줘야함)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_021.png" alt="img_021.png">
+</figure>
+<ul>
+  <li>acg 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_022.png" alt="img_022.png">
+</figure>
+<ul>
+  <li>정책 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_023.png" alt="img_023.png">
+</figure>
+<ul>
+  <li>생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_024.png" alt="img_024.png">
+</figure>
+<ul>
+  <li>서버가 자동 생성되는 것을 볼 수 있음(최소 용량 1)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_025.png" alt="img_025.png">
+</figure>
+<h3>Cloud Insight  (Monitoring) 설정</h3>
+<h4>1. Event Rule 설정</h4>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_026.png" alt="img_026.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_027.png" alt="img_027.png">
+</figure>
+<ul>
+  <li>그룹 생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_028.png" alt="img_028.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_029.png" alt="img_029.png">
+</figure>
+<ul>
+  <li>생성한 그룹 선택 후 다음</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_030.png" alt="img_030.png">
+</figure>
+<ul>
+  <li>적당히 템플릿 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_031.png" alt="img_031.png">
+</figure>
+<ul>
+  <li>정책 설정 후 다음</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_032.png" alt="img_032.png">
+</figure>
+<ul>
+  <li>생성</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_033.png" alt="img_033.png">
+</figure>
+<h3>부하 테스트 진행</h3>
+<h4>K6로 부하 테스트 진행</h4>
+<ul>
+  <li>설치</li>
+</ul>
+<pre><code class="language-javascript">sudo apt update &amp;&amp; sudo apt install -y wget
+wget https://github.com/grafana/k6/releases/download/v0.44.1/k6-v0.44.1-linux-amd64.tar.gz
+tar -xvzf k6-v0.44.1-linux-amd64.tar.gz</code></pre>
+<ul>
+  <li>버전 확인</li>
+</ul>
+<pre><code class="language-javascript"> k6 version</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_034.png" alt="img_034.png">
+</figure>
+<ul>
+  <li>테스트 코드 생성</li>
+</ul>
+<pre><code class="language-javascript">import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '1m', target: 10 }, // 1분 동안 10명까지 증가
+    { duration: '5m', target: 20 }, // 5분 동안 20명까지 증가 유지
+    { duration: '1m', target: 0 },  // 1분 동안 사용자 감소
+  ],
+};
+
+export default function () {
+  const res = http.get('https://www.dr-rate.store'); // HTTPS URL 사용
+  check(res, { 'status was 200': (r) =&gt; r.status === 200 });
+  sleep(1);
+}</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_035.png" alt="img_035.png">
+</figure>
+<ul>
+  <li>부하 테스트  진행
+<pre><code class="language-javascript">k6 run load_test.js</code></pre></li>
+</ul>
+<ul>
+  <li>gpt 피셜 적당한 부하 테스트 진행
+<pre><code class="language-javascript">import http from 'k6/http';
+import { sleep } from 'k6';
+
+export const options = {
+  stages: [
+    { duration: '2m', target: 100 }, // 2분 동안 초당 100 요청
+    { duration: '5m', target: 300 }, // 5분 동안 초당 300 요청 (Scale-Out 트리거)
+    { duration: '2m', target: 150 }, // 2분 동안 초당 150 요청 (Scale-In 테스트)
+    { duration: '2m', target: 0 },   // 부하 감소
+  ],
+};
+
+export default function () {
+  http.get('https://www.dr-rate.store');
+  sleep(1);
+}</code></pre></li>
+</ul>
+<ul>
+  <li>테스트 결과</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_036.png" alt="img_036.png">
+</figure>
+<ul>
+  <li>10만번의 요청에도 끄덕없다~ 이말이야</li>
+</ul>
+<h4>Nginx 로그 확인</h4>
+<ul>
+  <li>오토스케일링한 서버 공인 IP할당해서 들어간 다음 로그 찍어봄
+<pre><code class="language-javascript">docker logs -f ad5212589df5</code></pre></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-autoscaling/img_037.png" alt="img_037.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

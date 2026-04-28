@@ -1,0 +1,245 @@
+<h3>Redis Cloud 생성</h3>
+<ol>
+  <li>subnet 생성 (private)</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure>
+<p>
+</p>
+<ol>
+  <li>Config Group 생성</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li>Redis Server 생성</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>redis server acg에 동일 vpc는 허용하게끔 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_005.png" alt="img_005.png">
+</figure>
+<h3>EC2 서버 접속 (동일 VPC)</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_006.png" alt="img_006.png">
+</figure>
+<h3>EC2 서버 안에 Redis 설치</h3>
+<ul>
+  <li>7.0.13 버전으로 설치해즘 (ncp도 7.0.13 버전임)</li>
+</ul>
+<pre><code class="language-javascript">wget http://download.redis.io/releases/redis-7.0.13.tar.gz
+tar xzf redis-7.0.13.tar.gz
+cd redis-7.0.13
+make</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_007.png" alt="img_007.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_008.png" alt="img_008.png">
+</figure>
+<h3>Spring boot와  연결하기</h3>
+<ul>
+  <li>Spring Boot 애플리케이션이 클러스터 노드의 외부 DNS에 접근을 하려면  Redis 클러스터 설정 파일 확인 (<code>redis.conf</code>)에서 설정을 건드려야 한다
+<ul>
+  <li><strong><code>bind</code></strong><strong> 설정</strong>
+<pre><code class="language-java">bind 0.0.0.0</code></pre></li>
+  <li><code>cluster-announce-ip</code> 설정
+<ul>
+  <li><strong><code>dr-rate.shop</code></strong><strong>이 외부에서 접근 가능한 IP/도메인을 나타내는 경우</strong>
+<ul>
+  <li><code>dr-rate.shop</code> 서버에서 Redis 클러스터가 실행 중이라면, <code>cluster-announce-ip</code>는 해당 도메인의 <strong>외부 IP</strong>나 도메인을 사용해야 합니다.
+<pre><code class="language-plain text">conf
+코드 복사
+cluster-announce-ip dr-rate.shop
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+
+</code></pre></li>
+</ul></li>
+  <li><strong><code>dr-rate.shop</code></strong><strong>이 프록시 서버를 통해 Redis에 접근하는 경우</strong>
+<ul>
+  <li>만약 <code>dr-rate.shop</code>이 프록시(Nginx, AWS ALB 등)로 설정되어 있고 Redis는 내부에서 실행 중이라면, 프록시가 Redis 클러스터에 트래픽을 전달할 수 있도록 내부 IP를 사용합니다.</li>
+  <li>이 경우 <code>cluster-announce-ip</code>에 내부 네트워크 IP를 설정해야 합니다.</li>
+</ul>
+<pre><code class="language-plain text">cluster-announce-ip 10.0.5.6  # Redis 노드의 내부 IP
+cluster-announce-port 6379
+cluster-announce-bus-port 16379</code></pre></li>
+  <li><strong>VPC 내부에서만 Redis를 사용하는 경우</strong>
+<ul>
+  <li>클라이언트(Backend 서버)가 Redis와 동일한 VPC 내에 있으면, Redis 노드의 <strong>내부 IP</strong>를 사용해야 합니다.</li>
+  <li><code>dr-rate.shop</code> 서버가 VPC 내부에서만 Redis와 통신하면, <code>cluster-announce-ip</code>를 각 Redis 노드의 **내부 IP(10.0.5.x)**로 설정합니다.
+<pre><code class="language-plain text">cluster-announce-ip 10.0.5.6
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+</code></pre></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>나는 <strong>VPC 내부에서만 Redis를 사용하는 경우로  방향을 잡았다</strong>
+<ul>
+  <li>먼저 ncp redis private subnet부터 확인해보자
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Redis 클러스터들 상태(3개)
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ul>
+  <li>각 Redis 노드에 대한 설정
+<ul>
+  <li>Redis 노드가 3개라면 다음과 같이 설정 파일을 복사한다
+<pre><code class="language-java">cp redis.conf redis-node-1.conf
+cp redis.conf redis-node-2.conf
+cp redis.conf redis-node-3.conf</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+  <li><strong>각 설정 파일 수정</strong>
+<ul>
+  <li>각 설정 파일에서 노드별로 필요한 설정 값을 수정
+<ol>
+  <li>redis-node-1.conf
+<pre><code class="language-java">bind 0.0.0.0
+port 6379
+cluster-enabled yes
+cluster-config-file nodes-6379.conf
+cluster-node-timeout 5000
+cluster-announce-ip 10.0.5.6
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+appendonly yes
+</code></pre></li>
+  <li>redis-node-2.conf
+<pre><code class="language-java">bind 0.0.0.0
+port 6380
+cluster-enabled yes
+cluster-config-file nodes-6380.conf
+cluster-node-timeout 5000
+cluster-announce-ip 10.0.5.7
+cluster-announce-port 6380
+cluster-announce-bus-port 16380
+appendonly yes</code></pre></li>
+  <li>redis-node-3.conf
+<pre><code class="language-java">bind 0.0.0.0
+port 6381
+cluster-enabled yes
+cluster-config-file nodes-6381.conf
+cluster-node-timeout 5000
+cluster-announce-ip 10.0.5.8
+cluster-announce-port 6381
+cluster-announce-bus-port 16381
+appendonly yes</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+</ol></li>
+</ul></li>
+  <li><strong>Redis 인스턴스 실행</strong>
+<ul>
+  <li>각 설정 파일을 사용하여 Redis 노드를 개별적으로 실행
+<pre><code class="language-java">./redis-server ../redis-node-1.conf
+./redis-server ../redis-node-2.conf
+./redis-server ../redis-node-3.conf</code></pre></li>
+  <li>accept to connect
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>다 켜야 하므로 백그라운드 실행을 해주자
+<ul>
+  <li>Redis를 백그라운드에서 실행하려면 각 설정 파일(<code>redis-node-1.conf</code>, <code>redis-node-2.conf</code>, <code>redis-node-3.conf</code>)에서 <code>daemonize</code> 옵션을 <strong><code>yes</code></strong><strong>로 변경</strong>해야 한다
+<pre><code class="language-java">daemonize yes</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>이후 백그라운드로 실행
+<pre><code class="language-java">./redis-server ../redis-node-1.conf
+./redis-server ../redis-node-2.conf
+./redis-server ../redis-node-3.conf</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-spring-redis/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li><strong>클러스터 초기화</strong>
+<ul>
+  <li>최신 <code>redis-cli</code>를 사용하여 클러스터를 생성
+<pre><code class="language-java">./redis-cli --cluster create 10.0.5.6:6379 10.0.5.7:6380 10.0.5.8:6381 --cluster-replicas 0</code></pre></li>
+</ul></li>
+</ul>
+<ul>
+  <li>redis <code>application.yml</code> 등록
+<pre><code class="language-java">spring:
+  profiles:
+    active: local
+
+  application:
+    name: Dr.Rate-Backend
+
+  #Redis
+  data:
+    redis:
+      cluster:
+        nodes:
+          - 10.0.5.6:6379
+          - 10.0.5.7:6379
+          - 10.0.5.8:6379</code></pre></li>
+</ul>
+<ul>
+  <li>이후 RedisConfig에서 <code>@Value</code> 로  하나씩 하나씩 불러와야 됨
+<pre><code class="language-java">@Configuration
+public class RedisConfig {
+
+    @Value("${spring.data.redis.cluster.nodes[0]}")
+    private String node1;
+
+    @Value("${spring.data.redis.cluster.nodes[1]}")
+    private String node2;
+
+    @Value("${spring.data.redis.cluster.nodes[2]}")
+    private String node3;
+
+    @Bean
+    @Primary
+    public RedisConnectionFactory redisConnectionFactory() {
+        RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
+        clusterConfiguration.addClusterNode(new RedisNode(node1.split(":")[0], Integer.parseInt(node1.split(":")[1])));
+        clusterConfiguration.addClusterNode(new RedisNode(node2.split(":")[0], Integer.parseInt(node2.split(":")[1])));
+        clusterConfiguration.addClusterNode(new RedisNode(node3.split(":")[0], Integer.parseInt(node3.split(":")[1])));
+        return new LettuceConnectionFactory(clusterConfiguration);
+    }
+    @Bean
+    @Primary
+    public RedisTemplate&lt;String, String&gt; redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate&lt;String, String&gt; template = new RedisTemplate&lt;&gt;();
+        template.setConnectionFactory(connectionFactory);
+
+        // Key와 Hash Key는 String 직렬화
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+
+        // Value와 Hash Value는 JSON 직렬화
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return template;
+    }
+}
+</code></pre></li>
+</ul>

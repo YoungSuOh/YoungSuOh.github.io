@@ -1,0 +1,159 @@
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>Object Storage 생성 및 s3 fuse 사용하여 마운트
+<ol>
+  <li>Object Storage → 용량 제한 x</li>
+  <li>서버에 마운트하여 사용 (io 값이 안나와서 권장 x)</li>
+</ol></li>
+  <li>백업 서비스 신청</li>
+</ol>
+<h3>1. Object  Storage 사용을 위한 fuse 구성</h3>
+<ul>
+  <li>Services &gt;Storage &gt;ObjectStorage 선택 &gt;+버킷생성선택</li>
+  <li>버킷 이름에 ‘네이버클라우드플랫폼아이디-fuse’ 버킷 생성
+<ul>
+  <li>설정 관리 및 암호화 설정, 권한 관리는 디폴트 값으로 두고 생성 진행</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>Web001에 접속하여 패키지 설치
+<ul>
+  <li>패키지 설치 명령어
+<ul>
+  <li><a href="https://kr.object.ncloudstorage.com/ai-edu/s3fuse.txt" target="_blank" rel="noopener">https://kr.object.ncloudstorage.com/ai-edu/s3fuse.txt</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<pre><code class="language-javascript">yum install automake fuse-devel gcc-c++ git libcurl-devel libxml2-devel make openssl-devel -y
+git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+cd s3fs-fuse
+./autogen.sh
+./configure
+make
+make install</code></pre>
+<ul>
+  <li>마운트 포인트 생성</li>
+</ul>
+<pre><code class="language-javascript"> mkdir -p /objectstorage/아이디</code></pre>
+<pre><code class="language-javascript"> mkdir -p /objectstorage/camp125</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>환경설정
+<ul>
+  <li>각자의 accesskey와 secretkey값은  마이페이지&gt;인증키관리에서 확인 가능</li>
+</ul>
+<pre><code class="language-javascript">echo ACCESS_KEY_ID:SECRET_ACCESS_KEY &gt; /etc/passwd-s3fs
+chmod 600 /etc/passwd-s3fs</code></pre>
+<pre><code class="language-javascript">echo 0389DFB99F746878DB12:050CE19EB83E86EEDD7EA995DB392AEE59CC3D1A &gt; /etc/passwd-s3fs
+chmod 600 /etc/passwd-s3fs</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>마운트
+<pre><code class="language-javascript">s3fs camp125-fuse /objectstorage/camp125 -o url=https://kr.object.ncloudstorage.com</code></pre></li>
+</ul>
+<ul>
+  <li>마운트 확인
+<pre><code class="language-javascript">df -h</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<h3>백업 서비스 신청하기</h3>
+<h4>리소스 생성</h4>
+<ol>
+  <li><strong>메뉴 이동:</strong>
+<p><code>Services &gt; Storage &gt; Backup</code> 선택</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<p><code>Backup &gt; Resource</code> 메뉴로 이동</p></li>
+  <li><strong>리소스 생성:</strong>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<p>상단의 <strong>‘리소스 생성’</strong> 클릭</p>
+<ul>
+  <li><strong>리소스 이름:</strong> <code>nce-backup</code></li>
+  <li><strong>존:</strong> <code>KR-2</code></li>
+  <li><strong>서버:</strong> <code>web002</code></li>
+  <li><strong>에이전트 유형:</strong> <code>Data</code></li>
+  <li><strong>아이디:</strong> <code>root</code> (백업 서비스 수행을 위해 root 권한 필요)</li>
+  <li><strong>비밀번호:</strong> root 계정 비밀번호 입력하단의 <strong>‘다음’</strong> 버튼 클릭</li>
+</ul></li>
+  <li><strong>생성 확인:</strong>
+<p>마지막 최종 페이지 확인 후 하단의 <strong>‘리소스 생성’</strong> 클릭</p></li>
+</ol>
+<hr>
+<h4>저장소 생성</h4>
+<ol>
+  <li><strong>메뉴 이동:</strong>
+<p><code>Backup &gt; Storage</code> 클릭</p></li>
+  <li><strong>저장소 생성:</strong>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<p><strong>‘저장소 생성’</strong> 클릭</p>
+<ul>
+  <li><strong>저장소 이름:</strong> <code>nce-backup</code></li>
+  <li><strong>존:</strong> <code>KR-2</code> 선택하단의 <strong>‘다음’</strong> 버튼 클릭 &gt; 하단의 <strong>‘생성’</strong> 클릭</li>
+</ul></li>
+</ol>
+<hr>
+<h4>정책 생성</h4>
+<ol>
+  <li><strong>메뉴 이동:</strong>
+<p><code>Backup &gt; Policy</code> 클릭</p></li>
+  <li><strong>정책 생성:</strong>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<p>상단의 <strong>‘정책 생성’</strong> 클릭</p>
+<ul>
+  <li><strong>정책 이름:</strong> <code>nce-policy</code></li>
+  <li><strong>보관 기간:</strong> <code>7일</code></li>
+  <li><strong>존:</strong> <code>KR-2</code>하단의 <strong>‘다음’</strong> 클릭 &gt; <strong>‘생성’</strong> 클릭</li>
+</ul></li>
+</ol>
+<hr>
+<h4>작업 생성</h4>
+<ol>
+  <li><strong>메뉴 이동:</strong>
+<p><code>Backup &gt; Job</code> 클릭</p></li>
+  <li><strong>작업 생성:</strong>
+<p><strong>‘작업 생성’</strong> 클릭</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><strong>작업 이름:</strong> <code>nce-job</code></li>
+  <li><strong>리소스:</strong> <code>nce-backup</code></li>
+  <li><strong>백업 대상 유형:</strong> <code>Data</code></li>
+  <li><strong>백업 대상 경로:</strong> <code>/root</code></li>
+  <li><strong>정책:</strong> <code>nce-policy</code> 선택하단의 <strong>‘다음’</strong> 클릭 &gt; <strong>‘생성’</strong> 클릭</li>
+</ul></li>
+</ol>
+<hr>
+<h4>일정 생성</h4>
+<ol>
+  <li><strong>메뉴 이동:</strong>
+<p><code>Backup &gt; Schedule</code> 클릭</p></li>
+  <li><strong>일정 생성:</strong>
+<p>상단의 <strong>‘일정 생성’</strong> 클릭</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab5-storage-backup/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li><strong>일정 이름:</strong> <code>nce-backup-schedule</code></li>
+  <li><strong>작업:</strong> <code>nce-job</code></li>
+  <li><strong>백업 방식:</strong> <code>전체</code></li>
+  <li><strong>백업 주기:</strong> <code>일간</code></li>
+  <li><strong>시작 시간:</strong> <code>AM 10:00</code>하단의 <strong>‘다음’</strong> 버튼 클릭 &gt; <strong>‘생성’</strong> 클릭</li>
+</ul></li>
+</ol>

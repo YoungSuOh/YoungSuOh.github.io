@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="React  배포 — Naver Cloud Camp 정리 노트." />
+    <title>React  배포 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-11-01 · Naver Cloud Camp</p>
+        <h1 class="article-title">React  배포</h1>
+        <p class="article-lead muted">React  배포 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">클라우드</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>React 배포</h3>
+<h4>배포 구조</h4>
+<ul>
+  <li>일단 배포하기 앞서 front-end 배포는 어떤 구조로 진행했는지 알아보자</li>
+  <li>배포 구조는 기존에 소스코드를 깃허브에 push하고 pull하는 과정과 거의 유사하다고 보면 된다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>각자 vscode에서 Dockerfile을 생성한다.</li>
+  <li>Dockerfile을 이용해 프로젝트를 docker image로 빌드를 한다.</li>
+  <li>이전에 만든 docker image를 docker hub에 push를 진행한다
+<ol>
+  <li>굳이 docker hub를 사용한 이유는 ncp 서버에서 local에서 빌드한 image를 가져올 방법이 없기 때문이다.</li>
+</ol></li>
+  <li>docker hub에 push한 image를 ncp에서 ssh 접속 후 pull을 해서 ncp 서버에 dockerfile을 받는다.</li>
+  <li>가져온 docker image를 docker run을 통해 container를 생성하고 실행하면 배포가 완료된다.</li>
+</ol>
+<h4>배포 실습 진행</h4>
+<ul>
+  <li>일단 실습 이전에 준비물이 필요하다.
+<ol>
+  <li>React 전용 독자적인 서버</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>wsl 설치 후 vscode와 연동
+<ol>
+  <li>WSL은 Windows Subsystem for Linux의 약자로 Windows에서 리눅스 배포판을 실행할 수 있게 해주는 기능인데, 이게 필요한 이유는 vscode 상에서 <code>sudo apt-aget update</code> 처럼 리눅스 명령어를 사용해야 하기에 꼭 필요하다.</li>
+  <li>아래는 설치법 링크이다.
+<ol>
+  <li><a href="https://velog.io/@gidskql6671/WSL-WSL2-%EC%84%A4%EC%B9%98-VSCode-%EC%97%B0%EB%8F%99" target="_blank" rel="noopener">https://velog.io/@gidskql6671/WSL-WSL2-설치-VSCode-연동</a></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ul>
+<ol>
+  <li>먼저 Dockerfile을 만들어줘야 한다.</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>경로는 React가 아니라(→ 얘는 workspace) 프로젝트 생성하면 그 안에 Project Root에 <code>Dockerfile</code>을 생성해야 한다.
+<ul>
+  <li><code>Dockerfile</code>은 일종의 스크립트 파일로, Docker 이미지를 자동으로 생성하기 위한 명령어들을 포함하는데, linux의 Makefile가 결이 비슷하다.</li>
+  <li>쉽게 말해서 내가 만든 프로젝트의 image를 만들어준다~ 생각하믄 된다.</li>
+</ul></li>
+  <li>다음은 Dockerfile에 포함된 코드이다.
+<pre><code class="language-javascript"># Node.js 20으로 업데이트
+FROM node:20
+
+# 경로 설정하기
+WORKDIR /app
+
+# package.json과 package-lock.json을 워킹 디렉토리에 복사
+COPY package.json ./
+
+# 의존성 설치
+RUN npm install
+
+# 모든 파일을 도커 컨테이너의 워킹 디렉토리에 복사
+COPY . .
+
+# 3000번 포트 노출
+EXPOSE 3000
+
+# React 서버를 0.0.0.0에서 실행
+CMD ["npm", "start", "--", "--host"]
+
+# Vite 서버를 0.0.0.0에서 실행
+CMD ["npm", "run", "dev", "--", "--host"]</code></pre>
+<ul>
+  <li>여기서 주의할 점은 먼저 node.js의 버전을 확인해줘야 한다.  <code>node -v</code> 명령어로 확인을 하여 버전을 맞춰주면 된다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>또! 주의할 점은 나는 vite project로 만들었기 때문에 <code>CMD ["npm", "run", "dev", "--", "--host"]</code> 를 사용했지만, 자신의 프로젝트를 실행할 때 <code>npm start</code> 로 실행된다면 <code>CMD ["npm", "start", "--", "--host"]</code> 를 사용해야 한다.</li>
+</ul></li>
+</ul>
+<ol>
+  <li><code>wsl</code> 을 통해 docker 설치를 진행한다.</li>
+</ol>
+<pre><code class="language-javascript">sudo apt-get update
+sudo apt-get install -y docker.io
+docker --version</code></pre>
+<ul>
+  <li>명령어는 다음 절차로 진행하면 된다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>현재 과정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>다음 명령어를 사용하여 현재 사용자를 Docker 그룹에 추가해줬다. 안그러면 자꾸 <code>permission denied</code> 같은게 뜨면서 튕겨된다 -ㅅ-
+<pre><code class="language-javascript">sudo usermod -aG docker $USER</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ol>
+  <li>이후 docker image를 만든다.
+<pre><code class="language-javascript">docker build -t react-app .</code></pre>
+<ul>
+  <li>여기서 react-app은 이미지 이름으로 입맛대로 바꿔줘도 된다.</li>
+  <li><code>.</code> 은 지금 현재 경로의 Dockerfile을 빌드하는 것이기에 빌드하기 전에 경로를 잘 확인하자</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>이렇게 야물딱지게 빌드가 되면 현재 로컬 환경에서 docker image를 빌드한 상태인 것이다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_002.png" alt="img_002.png">
+</figure></li>
+</ol>
+<ol>
+  <li>이제 dockerhub에 올려줘야 한다. Google에 docker hub를 검색해서 들어간다.
+<ol>
+  <li>회원 가입을 진행해주자.</li>
+  <li>이때 나는 Github 계정과 연동하여 회원가입을 하였다.</li>
+  <li>회원 가입하고 repository에 보면 아무것도 아직 안 올라와있다. 이제 여기에 우리가 빌드한 docker image를 올릴 예정이다.</li>
+  <li>우측 상단에 보면 빨간색으로 표시한 영역이 <code>username</code> 이다. 로그인할 때 쓸 것이니 꼭 기억하쟈</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ul>
+  <li>다시 vscode에 돌아와서 docker 로그인을 진행한다.
+<pre><code class="language-javascript">docker login</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>username은 아까 언급했던 username을 입력하면 되고, 비밀번호는 만약 나랑 같이 Github 연동해서 로그인 했다면 Github 비밀번호가 password이다</li>
+  <li>🤬 일부 축복 받지 못한 계정은 잘 입력해도 로그인이 안되는 경우가 있다. 이건 Docker hub token을 발급받아서 진행하여야 한다.
+<ul>
+  <li>도커 허브 토큰 발급 방법 : <a href="https://teichae.tistory.com/entry/Docker-Hub%EC%97%90%EC%84%9C%EC%9D%98-Token-%EB%B0%9C%EA%B8%89-%EB%B0%A9%EB%B2%95" target="_blank" rel="noopener">https://teichae.tistory.com/entry/Docker-Hub에서의-Token-발급-방법</a></li>
+</ul></li>
+  <li>다행히도 주인장은 축복을 받아 한번에 들어왔다. 😃</li>
+</ul></li>
+</ul>
+<ol>
+  <li>이제 docker hub에 만든 이미지를 올려봅시다.
+<pre><code class="language-javascript">docker push [Docker Hub 사용자명]/react-app </code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+</ol>
+<ul>
+  <li>그러면 아까와 다르게 Docker hub 레포지토리에 image가 생성된 것을 볼 수 있다.
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>현재 과정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ol>
+  <li>이제 ncp ssh 접속 이후에 docker image를 가져와야 한다.</li>
+</ol>
+<ul>
+  <li>ncp 접속을 해보자</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>이후 도커를 pull 하기 전에 로그인을 먼저 진행을 해야 한다.
+<ul>
+  <li>당연히 docker login은 local에 되어 있는 것이지, 서버에는 login이 안되어 있기 때문에 받아오려면 로그인을 해줘야 한다.</li>
+</ul>
+<pre><code class="language-javascript">docker login -u [dockerhub username]</code></pre>
+<ul>
+  <li>이때 -u 옵션을 붙여주자. 아니면 OTP처럼 password를 요구하는데 우째해야 하는건지 모르겠다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>이제 dockerhub에 있는 image를 가져와보자
+<pre><code class="language-javascript">docker pull [Docker Hub 사용자명]/react-app</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>현재 과정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure></li>
+</ul></li>
+</ul>
+<ol>
+  <li>이제 도커 이미지 기반으로 컨테이너를 실행해보자.
+<pre><code class="language-javascript">// Vite project 전용
+docker run -d -p 3000:5173 [도커 사용자명]/react-app
+// React project 전용
+docker run -d -p 3000:3000 [도커 사용자명]/react-app</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>주의할 점은 왼쪽 포트는 호스트 포트번호이고, 오른쪽 포트는 <strong>컨테이너 내 애플리케이션</strong>이 실행되는 포트이므로 각각 프로젝트에 따라서 <code>3000:3000</code> 또는 <code>3000:5173</code> 를 실행해야 한다.</li>
+  <li><code>docker ps -a</code> 를 통해 컨테이너가 만들어져 있는 것을 확인할 수 있고, <code>docker logs [컨테이너 ID]</code> 를 통해 컨테이너 로그를 확인하여 정상적으로 실행되는지 확인이 가능하다.</li>
+  <li>만약 컨테이너 실행이 제대로 안된다면 <code>Dockerfile</code> 또는 <code>package.json</code> 설정 문제이다. 이거는 프로젝트마다 달라서 구글링 또는 Chatgpt 센세한테 공손히 여쭤봐야 할거 같아요..</li>
+</ul></li>
+</ol>
+<ul>
+  <li>실행 결과</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-react-deploy/img_006.png" alt="img_006.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

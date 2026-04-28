@@ -1,0 +1,1043 @@
+<ul>
+  <li>Servlet
+<ul>
+  <li>Java EE의 서버 측 컴포넌트로, 클라이언트의 HTTP 요청을 처리하고 동적인 응답을 생성하는 역할을 한다.</li>
+  <li>특징
+<ol>
+  <li>요청 처리: 라이언트로부터 전송된 HTTP 요청 데이터를 읽고, 이를 바탕으로 필요한 처리를 수행</li>
+  <li>응답 생성: 처리 결과를 HTTP 응답 형태로 클라이언트에게 전송한다. (이 때, HTML, JSON, XML 등 다양한 형식의 데이터를 전송할 수 있다)</li>
+  <li>상태 관리: 클라이언트의 세션 정보를 유지하고 관리하여 연속적인 사용자 경험을 제공</li>
+</ol></li>
+</ul></li>
+</ul>
+<ul>
+  <li>JSP (JavaServer Pages)
+<ul>
+  <li>HTML 문서 내에 Java 코드를 삽입하여 동적인 웹 페이지를 생성할 수 있는 기술</li>
+  <li>특징
+<ul>
+  <li><strong>태그 기반 문법</strong>: JSP는 HTML 문서 내에 <code>&lt;% %&gt;</code>와 같은 특수 태그를 사용하여 Java 코드를 삽입할 수 있다.</li>
+  <li><strong>서블릿 변환</strong>: JSP 파일은 실행 시 서블릿으로 변환되어 웹 컨테이너에 의해 실행된다. </li>
+  <li><strong>표현 언어 (EL)</strong>: JSP는 표현 언어 (Expression Language, EL)를 지원하여, Java 코드 없이도 간단한 데이터 접근과 처리를 수행할 수 있다.</li>
+  <li><strong>JSTL</strong>: JSP 표준 태그 라이브러리 (JavaServer Pages Standard Tag Library, JSTL)는 JSP에서 자주 사용하는 기능을 제공하는 태그 라이브러리로, 반복문, 조건문, 데이터 포맷팅 등을 지원한다.</li>
+</ul></li>
+</ul></li>
+</ul>
+<ul>
+  <li>Tomcat
+<ul>
+  <li>apache 소프트웨어 재단에서 개발한 서블릿 및 JSP 컨테이너</li>
+  <li>Java Servlet과 JavaServer Pages (JSP) 기술을 구현하여 웹 애플리케이션을 실행할 수 있도록 한다.</li>
+  <li>특징
+<ul>
+  <li><strong>Servlet 실행</strong></li>
+  <li><strong>JSP 실행</strong></li>
+  <li><strong>웹 애플리케이션 배포</strong>: 톰켓은 WAR (Web ARchive) 파일을 배포하고 관리하여 여러 웹 애플리케이션을 동시에 실행할 수 있게 함.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4>정리</h4>
+<blockquote><strong>💡 톰켓은 서블릿과 JSP를 실행할 수 있는 컨테이너를 제공하고, 서블릿은 HTTP 요청을 처리하고 응답을 생성하는 서버 측 컴포넌트를, JSP는 동적인 웹 페이지를 생성할 수 있는 기술을 제공한다.</strong></blockquote>
+<h3>HTML</h3>
+<hr>
+<p>📄 <a href="https://www.notion.so/c7ee1d7014314724be92484855919589" target="_blank" rel="noopener">1_font.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html xmlns:th="http://www.thyleaf.org"&gt;
+&lt;head&gt;
+    &lt;title&gt;Welcome Page&lt;/title&gt;  // 제목 페이지
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;!--&lt;meta charset="UTF-8"&gt; 한글을 지원하겠습니다--&gt;
+&lt;/head&gt;
+&lt;style type="text/css"&gt;  // css를 인라인 형태로 넣기 위해서 body 태그전에 넣음
+    div{
+        border: 1px solid red;  /*모든 div 태그에 해당 스타일 적용*/
+    }
+    span{
+        border: 1px dotted blue;
+        font-weight: bold;
+        color: 0000000;   /*검은색*/
+        font-style: italic;
+        text-decoration: underline;
+    }
+&lt;/style&gt;
+&lt;body&gt;
+&lt;h1&gt;Hello HTML!!&lt;/h1&gt;
+&lt;p th:text="'안녕하세요. '+${data}"&gt;&lt;/p&gt;
+
+&lt;div style="border: 3px dotted blue;"&gt; &lt;!--화면 1줄 영역--&gt;   &lt;!--Css -&gt; 변수 : 값; --&gt;
+    &lt;font size ="1"&gt;크기=1&lt;/font&gt;
+    &lt;font size ="3" color="#ff6600"&gt;크기=3, 색상=오렌지&lt;/font&gt;&lt;br&gt;
+    &lt;font size ="5" face="맑은고딕"&gt;크기=5, 글꼴=맑은고딕&lt;/font&gt;&lt;br&gt;
+    &lt;font size ="7" color="#0000ff" face="궁서"&gt;크기=7, 색상=파랑, 글꼴=궁서&lt;/font&gt;&lt;br&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;font size="3" color="#003300" face="굴림"&gt;
+        폰트태그는
+        &lt;font size="5" color="#FF0000" FACE="궁서"&gt;중첩사용&lt;/font&gt;
+        도 가능합니다.
+    &lt;/font&gt;
+&lt;/div&gt;
+
+&lt;!--글자의 모양--&gt;
+&lt;div&gt;
+    &lt;strong&gt;글자를 굵게 표시합니다.&lt;/strong&gt;
+    &lt;br&gt;
+    &lt;u&gt;글자에 밑줄을 표시합니다&lt;/u&gt;
+    &lt;br&gt;
+    &lt;i&gt;글자를 기울임 표시합니다.&lt;/i&gt;
+    &lt;br&gt;
+    &lt;strong&gt;&lt;u&gt;&lt;i&gt;굵게 밑줄 기울임을 표시합니다.&lt;/i&gt;&lt;/u&gt;&lt;/strong&gt;
+&lt;/div&gt;
+
+&lt;!--단어의 문자의 영역 지정 --&gt;
+&lt;div&gt;
+    &lt;span style="border: 1px solid magenta"&gt;SPAN&lt;/span&gt; 태크는
+    &lt;span&gt;문장 단위로 텍스트 영역을 지정하는 것&lt;/span&gt;인데
+    그 자체로는 아무 역할도 하지 않고,
+    문장의 특정 구역에 &lt;span&gt;Css스타일&lt;/span&gt;을 지정할 때 사용합니다.
+&lt;/div&gt;
+&lt;hr&gt;  &lt;!--경계선--&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>&lt;head&gt;</code> 태그 : <code>head</code> 태그는 HTML 문서의 머리 부분을 정의하며, 문서의 메타데이터와 설정 정보를 포함</li>
+  <li><code>&lt;meta&gt;</code> 태그 : 문서의 메타데이터를 정의. 메타 태그는 다양한 종류의 메타데이터를 설정하는 데 사용된다.</li>
+  <li><code>&lt;span&gt;</code> 태그 : 문장 단위로 텍스트 영역을 지정하는 것
+</li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/33be3a2c22514841b15ed6bcabd5ab80" target="_blank" rel="noopener">2_img.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        div {
+            border: 2px solid cornflowerblue;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--이미지 태그 사용법--&gt;
+&lt;p&gt;
+    &lt;img src="/img1.gif" alt="망상토끼"/&gt;&lt;br&gt;
+    &lt;img src="http://localhost:8080/img1.gif" alt="망상토끼"/&gt;
+&lt;/p&gt;
+&lt;!--이미지 크기 조정--&gt;
+&lt;p&gt;
+    &lt;img src="/img1.gif" width="200" height="200" alt="망상토끼"/&gt;
+&lt;/p&gt;
+
+&lt;!--링크 - 네이버 이동--&gt;
+&lt;p&gt;
+    &lt;a href="http://www.naver.com"&gt;
+        &lt;img src="/img1.gif" width="100" height="100" alt="망상토끼"&gt;
+    &lt;/a&gt;
+&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>src → source의 약자로 해당 태그가 참조하는 파일의 경로를 지정한다.</li>
+  <li>href : "hypertext reference"의 약자로, 앵커 태그 <code>&lt;a&gt;</code>가 참조하는 링크의 URL을 지정한다.
+
+</li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/f649919aaca042f6bbf3835c52c56564" target="_blank" rel="noopener">3_ul.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+
+    &lt;style type="text/css"&gt;
+        /*id 속성 # 중에서 blank인것*/
+        #blank{
+            height: 1000px;
+        }
+        # {
+            height: 1000px;
+        }
+        div{
+            height:1000px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;링크의 기본 사용 방법&lt;/h1&gt;
+&lt;ul&gt;
+    &lt;li type="square"&gt;&lt;a href="./2_img"&gt;현재 사이트의 특정 파일로 링크&lt;/a&gt; &lt;/li&gt; // type = "square" 
+    &lt;li&gt;&lt;a href="http://www.naver.com" target="_blank"&gt;  // type -&gt; default는 동그라미
+    다른 사이트로 이동(새창)&lt;/a&gt; &lt;/li&gt; 
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;div id="blank"&gt;빈 공간&lt;/div&gt;
+&lt;hr&gt;
+&lt;h1&gt;현재 페이지에서의 링크 이동&lt;/h1&gt;
+&lt;ul&gt;
+    &lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div&gt;빈 공간&lt;/div&gt;
+&lt;hr&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/3f6a5b4be7e24096bdd6bd11bd7ba5cf" target="_blank" rel="noopener">4_form.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;내용 입력하기&lt;/legend&gt;
+        &lt;div&gt;
+            &lt;label for="id"&gt;아이디&lt;/label&gt;   &lt;!--for=""와 id="" 같아야 한다.--&gt;
+            &lt;input type="text" name="user_id" id="id" maxlength="5" placeholder="아이디 입력"/&gt;
+            // placeholder -&gt; 입력칸에 흐리게 글씨 나옴 
+        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;label for="user_pw"&gt;비밀번호&lt;/label&gt;
+            &lt;input type="password" name="user_pw" id="user_pw" maxlength="20"&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;label for="memo"&gt;자기소개&lt;/label&gt;
+            &lt;!--&lt;textarea name="memo" id="memo" maxlength="100"&gt;&lt;/textarea&gt;--&gt;
+            &lt;!--&lt;textarea name="memo" id="memo" rows="5" cols="50" maxlength="100"&gt;
+                빈 공간을 잡고 들어감 -&gt; 따라서 엔터로 띄우면 안됨.
+            &lt;/textarea&gt;--&gt;
+            &lt;textarea name="memo" id="memo" rows="5" cols="50" maxlength="100"&gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;label for="data"&gt;숨겨진 항목&lt;/label&gt;
+            `&lt;!--&lt;input type="hidden" name="data" id="data" value="숨겨진 데이터"&gt;--&gt;`
+            &lt;input type="text" name="data" id="data" value="숨겨진 데이터"&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+  <li><code>&lt;form&gt;</code> 태그 : 사용자 의견이나 정보를 알기 위해 입력할 큰 틀을 만드는 데 사용되기 때문이다. 폼은 입력된 데이터를 한 번에 서버로 전송힌다.
+<ul>
+  <li>form의 내부에는 <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code> 등의 태그들이 포함된다.</li>
+  <li>name 속성의 값과 유저가 입력한 값이 한 쌍이 되어 서버측에 전달된다.</li>
+</ul></li>
+  <li><code>&lt;fieldset&gt;</code> 태그 : 폼 태그 안에 관련되어 있는 폼 요소들을 그룹화할 때 사용한다. 그리고 </li>
+  <li><code>&lt;fieldset&gt;</code>  태그 하위에 <code>&lt;legend&gt;</code> 태그를 사용하여 그룹화한 폼 엔리먼트들을 목적에 맞게 이름을 지정한다.</li>
+  <li><code>&lt;label&gt;</code> 속성을 사용하여 그룹 이름을 지정한다.</li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/0512c4e30f0b401099ca3c7c6605f8df" target="_blank" rel="noopener">5_checkbox.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form&gt;
+    &lt;fieldset&gt;
+        &lt;div&gt;
+            &lt;!--체크박스 -&gt; 사각형 선택지, 여러 개 선택 가능 --&gt;
+            &lt;input type="checkbox" name="hobby" id="hobby1" value="축구" checked="checked"/&gt;  &lt;!--default로 체크가 되어 있음--&gt;
+            &lt;label for="hobby1"&gt;축구&lt;/label&gt;   &lt;!--id와 for를 맞춰줘야 사용자한테 편리 -&gt; 위의 체크박스를 눌러도 체크되고 이 줄의 축구를 눌러도 체크됨--&gt;
+            &lt;input type="checkbox" name="hobby" id="hobby2" value="농구"/&gt;
+            &lt;label for="hobby2"&gt;농구&lt;/label&gt;
+            &lt;input type="checkbox" name="hobby" id="hobby3" value="야구"/&gt;
+            &lt;label for="hobby3"&gt;야구&lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+
+    &lt;fieldset&gt;
+        &lt;legend&gt;성별 선택하기&lt;/legend&gt;
+        &lt;div&gt;
+            &lt;!--라디오 버튼 -&gt; 동그란 체크박스, 둘 중 하나 선택 가능--&gt;
+            &lt;input type="radio" name="gender" id="gender_m" value="M" checked&gt;
+            &lt;label for="gender_m"&gt;남자&lt;/label&gt;
+            &lt;input type="radio" name="gender" id="gender_f" value="F"&gt;
+            &lt;label for="gender_f"&gt;여자&lt;/label&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/5123baeb815f48d695b5550cdc311cab" target="_blank" rel="noopener">6_select.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form&gt;
+    &lt;fieldset&gt;
+        &lt;div&gt;
+            &lt;!--드롭다운(싱글타입)  -&gt; 콤보 박스 -&gt; 스크롤 중 하나만 선택--&gt;
+            &lt;label for="telecom"&gt;이동통신사 선택&lt;/label&gt;
+            &lt;select name="telecom" id="telecom"&gt;
+                &lt;option&gt;-----선택하세요------&lt;/option&gt;  &lt;!-- 유효한 값이 아니므로 value를 넣을 필요 없음--&gt;
+                &lt;option value="SKT" selected="selected"&gt;SKTelecom&lt;/option&gt; &lt;!-- selected 해주면 기본적으로 SKT가 뜸--&gt;
+                &lt;option value="KT"&gt;KT&lt;/option&gt;
+                &lt;option value="U+"&gt;U+&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;&lt;br&gt;
+
+    &lt;fieldset&gt;
+        &lt;legend&gt;스마트폰 운영체제 선택하기&lt;/legend&gt;
+        &lt;div&gt;
+            &lt;!--드롭다운(멀티타입)--&gt;
+            &lt;label for="smartphone"&gt;스마트폰 운영체제&lt;/label&gt;
+            &lt;select name="smartphone" id="smartphone" multiple size="5"&gt;  &lt;!--ctrl+클릭, shift 클릭 적용 가능--&gt;
+                &lt;option value="android" selected="selected"&gt;안드로이드&lt;/option&gt;
+                &lt;option value="ios"&gt;ios&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+                &lt;option value="windows" &gt;windows&lt;/option&gt;
+            &lt;/select&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/0632b4cc303b4d95bfce5b8d5b4c2b86" target="_blank" rel="noopener">7_dataList.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        div {
+            border: 2px solid cornflowerblue;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--이미지 태그 사용법--&gt;
+&lt;p&gt;
+    &lt;img src="/img1.gif" alt="망상토끼"/&gt;&lt;br&gt;
+    &lt;img src="http://localhost:8080/img1.gif" alt="망상토끼"/&gt;
+&lt;/p&gt;
+&lt;!--이미지 크기 조정--&gt;
+&lt;p&gt;
+    &lt;img src="/img1.gif" width="200" height="200" alt="망상토끼"/&gt;
+&lt;/p&gt;
+
+&lt;!--링크 - 네이버 이동--&gt;
+&lt;p&gt;
+    &lt;a href="http://www.naver.com"&gt;
+        &lt;img src="/img1.gif" width="100" height="100" alt="망상토끼"&gt;
+    &lt;/a&gt;
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>datalist 요소는 input 요소에 대해 미리 정의된 옵션 리스트를 명시해 주는 요소이다</li>
+  <li>사용자는 텍스트를 바로 입력해도 되고, 드롭다운 메뉴에서 미리 정의한 옵션 중의 하나를 골라도 된다.</li>
+  <li>단, input 요소의 list 속성값이 <code>datalist 요소의 id 속성값과 반드시 일치해야 연결됩니다.</code></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/9e4c186b2d934717a4bf95a9d393e058" target="_blank" rel="noopener">8_file.html</a></p>
+<div class="block-children">
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form enctype="multipart/form-data" action=""&gt;  &lt;!--mutipart를 form-data를 해야 파일 업로드가 가능--&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;파일 첨부&lt;/legend&gt;
+        &lt;div&gt;
+            &lt;label for="photo"&gt;사진선택&lt;/label&gt;
+            &lt;input type="file" name="photo" id="photo"&gt;  &lt;!--파일 타입으로 파일을 선택--&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/c18dc096d6e1497597c8363c641e26d3" target="_blank" rel="noopener">9_form, 9_result.html(GET, POST)</a></p>
+<div class="block-children">
+<ul>
+  <li>9_form.html
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--&lt;form action="9_result.html"&gt;--&gt;
+&lt;form method="get" action="/9_result"&gt;
+&lt;!--&lt;form method="post" action="9_result.html"&gt; 넘어가는 data가 안보임--&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;이름 입력하기&lt;/legend&gt;
+        &lt;div&gt;
+            &lt;label for="username"&gt;이름 : &lt;/label&gt;
+            &lt;input type="text" name="user_name" id="username"&gt;
+        &lt;/div&gt;&lt;br&gt;
+
+        &lt;div&gt;
+            &lt;input type="submit" value="입력완료"&gt; &lt;!--submit은 action을 찾아서 이동 -&gt; Get 방식으로 /9_result api 호출--&gt;
+            &lt;input type="reset" value="초기화"&gt;  &lt;!--초기화 버튼 누르면 초기화됨--&gt;
+            &lt;!--&lt;input type="button" value="버튼입력완료"&gt;  button은 onclick 없으면 아무 반응이 없음--&gt;
+            &lt;input type="button" value="버튼입력완료" onclick="javascript:location.href='9_result.html'"&gt; &lt;!--자바 스크립트와 연동해서 처리--&gt;
+
+            &lt;input type="image" src="/ok.png" width="30" height="30" alt="OK"&gt; &lt;!--image는 자동으로 submit을 진행한다--&gt;
+            &lt;input type="image" src="/ok.png" width="30" height="30" alt="OK" onclick="return false"&gt; &lt;!--자동으로 submit 안하게 됨 -&gt; onclick=return false--&gt;
+        &lt;/div&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li>submit ~ action : <code>&lt;form&gt;</code> 태그 안에 있는 입력 상자의 데이터를 들고 페이지 이동</li>
+  <li>페이지 이동 (HTTP 메서드)
+<ol>
+  <li>GET
+<ol>
+  <li>default 요청</li>
+  <li>Query String(주소 표시줄 url)을 통해 이동
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>한국어의 민낯
+<pre><code class="language-html">http://localhost:8080/9_result?user_name=홍길동   -&gt; 브라우저에서 보기 좋게 해놓음
+http://localhost:8080/9_result?user_name=%ED%99%8D%EA%B8%B8%EB%8F%99
+-&gt; 한글의 진짜 얼굴
+
+http://localhost:8080/9_result?user_name=?? -&gt; 한글이 죽어버림</code></pre></li>
+</ol></li>
+  <li>POST
+<ol>
+  <li>클라이언트가 post로 요청 시 이동</li>
+  <li>주소에 입력 정보가 표시되지 않기 때문에 보안에 더 좋음 → 회원가입</li>
+</ol></li>
+</ol></li>
+  <li><code>&lt;input type="button" /&gt; =&gt; 자동 submit</code></li>
+  <li><code>&lt;input type="image" src="" alt="" /&gt;  =&gt; 자동 submit</code></li>
+  <li>onclick=”return false” 해주면 자동  submit 안함</li>
+</ul></li>
+</ul>
+<ul>
+  <li>9_result
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;입력 결과를 전송받기 위한 페이지&lt;/h1&gt;
+&lt;P&gt;사용자가 form에 입력한 내용을 전송받아서, 후속 처리를 수행하게 된다.&lt;/P&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/31f4cd9e06c14e049a0d43950e90259f" target="_blank" rel="noopener">table : tr td th</a></p>
+<div class="block-children">
+<ul>
+  <li>10_table.html
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;table border="1" width="300"&gt;
+    &lt;!--제목 영역--&gt;
+    &lt;thead&gt;
+    &lt;tr&gt; &lt;!--행, 줄--&gt;
+        &lt;th width="50%" height="50"&gt;No&lt;/th&gt;  &lt;!--열, 칸--&gt; &lt;!--width="50% 화면의 정 가운데로 정렬--&gt;
+        &lt;th&gt;획득 포인트&lt;/th&gt;  &lt;!--th는 가운데로 정렬하고, 글자가 굵게 나옴--&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;!--본문 영역--&gt;
+    &lt;tbody&gt;
+    &lt;tr align="center"&gt;  &lt;!--align에는 "left" "right" "center"가 존재--&gt;
+        &lt;td&gt;2&lt;/td&gt;
+        &lt;td&gt;루비 결제 5000G&lt;/td&gt;  &lt;!--td는 기본이 왼쪽 정렬--&gt;
+    &lt;/tr&gt;
+
+    &lt;tr align="center"&gt;
+        &lt;td&gt;3&lt;/td&gt;
+        &lt;td&gt;가입 축하 10000 지급&lt;/td&gt;  &lt;!--td는 기본이 왼쪽 정렬--&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+
+    &lt;!--하단 영역--&gt;
+    &lt;tfoot&gt;
+    &lt;tr&gt;
+        &lt;th width="50" height="30"&gt;합계&lt;/th&gt;
+        &lt;th&gt;15000G&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+<ul>
+  <li>11_table.html
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;table border="1" width="300"&gt;
+    &lt;!--제목 영역--&gt;
+    &lt;thead&gt;
+    &lt;tr&gt; &lt;!--행, 줄--&gt;
+        &lt;th width="50%" height="50"&gt;No&lt;/th&gt;  &lt;!--열, 칸--&gt; &lt;!--width="50% 화면의 정 가운데로 정렬--&gt;
+        &lt;th&gt;획득 포인트&lt;/th&gt;  &lt;!--th는 가운데로 정렬하고, 글자가 굵게 나옴--&gt;
+    &lt;/tr&gt;
+    &lt;/thead&gt;
+
+    &lt;!--본문 영역--&gt;
+    &lt;tbody&gt;
+    &lt;tr align="center"&gt;  &lt;!--align에는 "left" "right" "center"가 존재--&gt;
+        &lt;td&gt;2&lt;/td&gt;
+        &lt;td&gt;루비 결제 5000G&lt;/td&gt;  &lt;!--td는 기본이 왼쪽 정렬--&gt;
+    &lt;/tr&gt;
+
+    &lt;tr align="center"&gt;
+        &lt;td&gt;3&lt;/td&gt;
+        &lt;td&gt;가입 축하 10000 지급&lt;/td&gt;  &lt;!--td는 기본이 왼쪽 정렬--&gt;
+    &lt;/tr&gt;
+    &lt;/tbody&gt;
+
+    &lt;!--하단 영역--&gt;
+    &lt;tfoot&gt;
+    &lt;tr&gt;
+        &lt;th width="50" height="30"&gt;합계&lt;/th&gt;
+        &lt;th&gt;15000G&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+<ul>
+  <li>12_table.html
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Cell과 내용 사이의 여백 - cellpadding&lt;/h1&gt;
+&lt;table border="1"cellpadding="30"&gt;
+    &lt;tr align="center"&gt;
+        &lt;td&gt;1-1&lt;/td&gt;
+        &lt;td&gt;1-2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h1&gt;Cell과 내용 사이의 여백 - cellspacing&lt;/h1&gt;
+&lt;table border="1" cellspacing="30"&gt;
+    &lt;tr align="center"&gt;
+        &lt;td&gt;1-1&lt;/td&gt;
+        &lt;td&gt;1-2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h1&gt;cellspacing은 보통 0으로 씀&lt;/h1&gt;
+&lt;table border="1" cellspacing="0"&gt;
+    &lt;tr align="center"&gt;
+        &lt;td&gt;1-1&lt;/td&gt;
+        &lt;td&gt;1-2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h1&gt;강사님이 시킨거&lt;/h1&gt;
+&lt;table cellpadding="30" border="=1" cellspacing="0" align="left"&gt;
+    &lt;tr&gt;
+        &lt;td width="100"&gt;1-1&lt;/td&gt;
+        &lt;td&gt;1-2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td width="100"&gt;2-1&lt;/td&gt;
+        &lt;td&gt;2-2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr align="center"&gt;
+        &lt;td colspan="2"&gt;3-1&lt;/td&gt;`
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td rowspan="2"&gt;&lt;img src="../static/img1.gif"&gt;&lt;/td&gt;
+        &lt;td&gt;4-2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;5-2&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/25bec09368274e5aa4f14dfd68941c20" target="_blank" rel="noopener">mark, abbr, dfn, cite, small, ruby 태그</a></p>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;옵티컬아트는 굳이 번역한다면 &lt;strong&gt;광학적 미술&lt;/strong&gt;이라고 할 수 있는데,
+&lt;mark&gt;광학적&lt;/mark&gt;이란 망막에 접수된 자극이 시신경에  의해 자각되어진다는 것을 의미한다.&lt;/p&gt;
+&lt;hr&gt;
+
+
+&lt;p&gt;&lt;abbr title="HyperText Markup Language"&gt;HTML&lt;/abbr&gt;은 제목, 단락, 목록 등 과 같은
+본문을 위한 구조적 의미를 나타내는 것뿐만 아니라 링크, 인용과 그 밖의 항목으로 구조적 문서를 만들 수 있는 방법을 제공한다.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;p&gt;창이 작고 벽이 넓은 로마네스크 교회의 실내는 거의 모두
+&lt;dfn title="소석회에 모래를 섞은 모르타르를 벽면에 바르고 수분이 있는 동안 채색하여 완성하는 회화"&gt;프레스코회&lt;/dfn&gt;로 장식되었다.&lt;/p&gt;
+
+&lt;p&gt;&lt;dfn&gt;&lt;abbr title="HyperText Mark Language"&gt;html&lt;/abbr&gt;&lt;/dfn&gt;은
+웹 문서를 만들기 위하여 사용하는 기본적인 프로그래밍 언어의 한 종류이다. 하이퍼 텍스트를 작성하기 위해 개발되었다.&lt;/p&gt;
+&lt;/body&gt;
+
+&lt;p&gt;고갱은 1988년 브르타뉴ㅠ의 퐁타벙에서 &lt;cite&gt;천사와 싸우는 야콥&lt;/cite&gt;을 그리고 나서 반 고흐에게 편지를 썼는데 ...&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;p&gt;이 기사는 &lt;small&gt;&amp;copy; &amp;phone; 홍길동 기자&lt;/small&gt;가 작성하였습니다.&lt;/p&gt;
+&lt;hr&gt;
+
+&lt;h1&gt;&lt;ruby&gt;構&lt;rt&gt;구&lt;/rt&gt;石&lt;rt&gt;석&lt;/rt&gt;氣&lt;rt&gt;기&lt;/rt&gt;&lt;/ruby&gt;시대&lt;/h1&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+  <li><code>&lt;mark&gt;</code> 태그 : 구문을 하이라이팅한다</li>
+  <li><code>&lt;abbr&gt;</code> 태그 : 약어 또는 두 문자어를 나타내는데, ‘title’ 속성으로 약어의 원형을 나타낸다
+<ul>
+  <li> → 마우스 갔다대면 title 내용 보임</li>
+</ul></li>
+  <li><code>&lt;dfn&gt;</code> 태그(definition) : 단어의 정의를 나타낸다. title’ 속성으로 정의 표현한다. <code>&lt;abbr&gt;</code> 태그와 같이 사용할 수 있다.
+<ul>
+  <li>→ 얘도 마우스 갔다대면 title 내용 보임</li>
+</ul></li>
+  <li><code>&lt;cite&gt;</code> 태그 : 작품 제목을 표현</li>
+  <li><code>&lt;ruby&gt;</code> 태그 : <code>주로 일본어나 한자에 발음이나 주석을 얹는 방법으로 많이 쓰인다.</code></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_002.png" alt="img_002.png">
+</figure>
+</div>
+<p>📄 <a href="https://www.notion.so/098e9122f2e74016bd894701d85a55f2" target="_blank" rel="noopener">blockquote, q 태그</a></p>
+<div class="block-children">
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-sql">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;다음은 '웹 접근성 연구소'에서 정리한 웹 접근성 정의 내용입니다&lt;/h1&gt;
+    &lt;blockquote cite="http://www.wah.or.kr/Accessibility/define.asp"
+                title="'웹 접근성 연구소'에서 정리한 웹 접근성 정의 내용입니다."&gt;
+        &lt;p&gt;
+            월드 와이드 웹 (World Wide Web)을 창시한 팀 버너스 리(Tim Berners-Lee)는
+            웹이란 '장애에 구애 없이 모든 사람들이 손쉽게 정보를 공유할 수 있는 공간'이라고 정의하였으며,
+            웹 콘텐츠를 제 작할 때에는 장애에 구애됨이 없이 누구나 접근할 수 있도록 제작하여야 한다고 하였다.
+            이렇듯 웹 창시자가 웹의 기본적 철학에서 웹 접근성 부문을 강조함에도
+            불구하고, 웹 접근성을 바라보는 입장에 따라 다르게 정의하고 있다.
+        &lt;/p&gt;
+
+        &lt;p&gt;
+            월드 와이드 웹 (World Wide Web)을 창시한 팀 버너스 리(Tim Berners-Lee)는
+            웹이란 '장애에 구애 없이 모든 사람들이 손쉽게 정보를 공유할 수 있는 공간'이라고 정의하였으며,
+            웹 콘텐츠를 제 작할 때에는 장애에 구애됨이 없이 누구나 접근할 수 있도록 제작하여야 한다고 하였다.
+            이렇듯 웹 창시자가 웹의 기본적 철학에서 웹 접근성 부문을 강조함에도
+            불구하고, 웹 접근성을 바라보는 입장에 따라 다르게 정의하고 있다.
+        &lt;/p&gt;
+        &lt;hr&gt;
+
+        &lt;p&gt;
+            월드 와이드 웹 (World Wide Web)을 창시한 팀 버너스 리(Tim Berners-Lee)는 웹이란 &lt;br&gt;
+            &lt;q cite="http://www.wah.or.kr/Accessibility/define.asp"&gt;
+                '장애에 구애 없이 모든 사람들이 손쉽게 정보를 공유할 수 있는 공간'이라고 정의하였으며,
+                웹 콘텐츠를 제 작할 때에는 장애에 구애됨이 없이 누구나 접근할 수 있도록 제작하여야 한다고 하였다.
+                이렇듯 웹 창시자가 웹의 기본적 철학에서 웹 접근성 부문을 강조함에도
+                불구하고, 웹 접근성을 바라보는 입장에 따라 다르게 정의하고 있다.
+            &lt;/q&gt;
+
+        &lt;/p&gt;
+    &lt;/blockquote&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;!--
+* &lt;blockquote&gt;
+- 다른 사람의 말이나 글, 혹은 다른 소스를 인용하는 경우에 사용한다.
+- 블록 요소이다.
+- 들여쓰기 형태로 출력된다.
+- cite 속성 : 해당 컨텐츠의 출처를 나타낸다.
+- title 속성 : 내용을 요약해 입력
+
+* &lt;q&gt;
+- 다른 사람의 말이나 글, 혹은 다른 소스를 인용하는 경우에 사용한다.
+- 인라인 요소이다.
+- 인라인 형태의 짧은 인용문을 작성할 때 사용하기 때문에 title 속성은 필요하지 않다.
+- “ ”로 묶는다.
+ --&gt;</code></pre>
+<ul>
+  <li><code>&lt;blockquote&gt;</code> 태그 : 다른 사람의 말이나 글, 혹은 다른 소스를 인용하는 경우에 사용한다.
+<ul>
+  <li>블록 요소임</li>
+</ul></li>
+  <li><code>&lt;q&gt;</code> 태그 : 다른 사람의 말이나 글, 혹은 다른 소스를 인용하는 경우에 사용한다.
+<ul>
+  <li>인라인 요소임</li>
+</ul></li>
+</ul>
+</div>
+<p>📄 <a href="https://www.notion.so/18ab6a585bfd4b6ba6aedeefc716537f" target="_blank" rel="noopener">pre, code 태그</a></p>
+<div class="block-children">
+<p><code>&lt;pre&gt;</code> 태그 : 내용을 있는 그대로 보여줄 때 사용</p>
+<ul>
+  <li>일반적으로 코드의 예제를 보여주기 위한 방안으로 활용된다.</li>
+</ul>
+<p><code>&lt;code&gt;</code> : 코드임을 알리는 용도이다.</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;pre&gt;
+    &lt;code&gt;
+        &amp;lt;script src="js/jquery.js"&amp;gt;&amp;lt;/script&amp;gt;
+        &amp;lt;script&amp;gt;
+        $(".selector").click(function(){
+            $(".box").hide();
+        });
+        &amp;lt;/script&amp;gt;
+    &lt;/code&gt;
+&lt;/pre&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/b04d9b78b8014e5d886a0786ca74f7ae" target="_blank" rel="noopener">
+
+DL, DT, DD</a></p>
+<div class="block-children">
+<ul>
+  <li>DL(Definition List)의 약자.
+정의 목록 : 어떤 용어를 정의하여 풀어 나열한다.</li>
+  <li>DT(Definition Term)
+정의 : &lt;dd&gt;는 &lt;dt&gt;가 적용된 곳에서 한 탭 들여쓰기 적용된다.</li>
+  <li>DD(Definition Description)과 함께 쓴다.
+정의에 대한 해설, &lt;br&gt;태그 속성이 포함된다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h3&gt;도시 소개&lt;/h3&gt;
+&lt;hr&gt;
+
+&lt;dl&gt;
+    &lt;dt&gt;California&lt;/dt&gt;
+    &lt;dd&gt;맑고 화창한 날씨가 좋고 태평양의 아름다운 해변을 가진 멋진 주&lt;/dd&gt;
+
+    &lt;dt&gt;Florida&lt;/dt&gt;
+    &lt;dd&gt;맑고 화창한 날씨가 좋고 태평양의 아름다운 해변을 가진 멋진 주&lt;/dd&gt;
+
+    &lt;dt&gt;California&lt;/dt&gt;
+    &lt;dd&gt;맑고 화창한 날씨가 좋고 태평양의 아름다운 해변을 가진 멋진 주&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<h3>HTML 5</h3>
+<hr>
+<p>📄 <a href="https://www.notion.so/32ccc24680eb4fe9bc39208ed0fb15c1" target="_blank" rel="noopener">Semantic 태그</a></p>
+<div class="block-children">
+<p>Semantic은 '의미의', '의미론적인'이라는 뜻을 가진 형용사이다. 따라서 시맨틱 태그란 <strong>의미가 있는 태그</strong>를 말한다.
+</p>
+<p>
+</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        .header{
+            width: 100%;
+            height: 15%;
+            background: yellow;
+        }
+        .nav{
+            width: 15%; height: 70%;
+            float: left;
+            background: orange;
+        }
+        .section{
+            width: 70%; height: 70%;
+            float: left;
+            background: olivedrab;
+        }
+        .aside{
+            width: 15%; height: 70%;
+            float: left;
+            background: orange;
+        }
+        .footer{
+            width: 100%; height: 15%;
+            clear: both; /*display: flex;  이것도 된다*/
+            background: plum;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header class="header"&gt;header&lt;/header&gt;
+
+&lt;nav class="nav"&gt;nav&lt;/nav&gt;
+
+&lt;section class="section"&gt;section&lt;/section&gt;
+
+&lt;aside class="aside"&gt;aside&lt;/aside&gt;
+
+&lt;footer class="footer"&gt;footer&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/1fd16ea02e184db484cb5739798349a4" target="_blank" rel="noopener">Figure 태그, figcaption(설명)</a></p>
+<div class="block-children">
+<p>사진, 도표, 삽화 등을 담는 컨테이너 역할을 하는 태그</p>
+<p>figcation은 사진에 대한 설명 기술 가능</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+    &lt;h1&gt;전체 문서에 대한 헤더(header)&lt;/h1&gt;
+&lt;/header&gt;
+&lt;hr&gt;
+
+&lt;nav&gt;
+    &lt;a href="https://www.naver.com"&gt;네이버&lt;/a&gt; |
+    &lt;a href="https://store.kakao.com/kakaofriends"&gt;카카오 프렌즈&lt;/a&gt; |
+    &lt;a href="https://www.google.com"&gt;구글&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;section&gt;
+    &lt;header&gt;
+        &lt;h2&gt;섹션 부분에 대한 헤더(header)&lt;/h2&gt;
+        &lt;p&gt;헤더 부분에 들어간 단락&lt;/p&gt;
+    &lt;/header&gt;
+    &lt;p&gt;It's a mountain rabbit. Where are you going? Where are you going by hopping?&lt;/p&gt;
+&lt;/section&gt;
+&lt;hr&gt;
+
+&lt;h1&gt;figure 요소와 figcaption 요소&lt;/h1&gt;
+&lt;figure&gt;
+    &lt;img src="../static/1.jpg" alt="카카오 프렌즈 단체사진" width="350" height 270&gt;
+    &lt;figcaption&gt;[ 그림 1. 카카오 프렌즈 단체사진 ]&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;footer&gt;
+    &lt;p&gt;전체 문서에 대하나 footer&lt;/p&gt;
+    &lt;p&gt;copyright all rights reserved&lt;/p&gt;
+    &lt;p&gt;&amp;phone; 연락처 : 02-1234-5678&lt;/p&gt;
+&lt;/footer&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+<p>📄 <a href="https://www.notion.so/6637bf727e1348f8b257822b1e2b8e17" target="_blank" rel="noopener">HTML 총정리</a></p>
+<div class="block-children">
+<h4><code>&lt;div&gt;</code> 태그</h4>
+<p>division의 약자로 ‘경계를 분할하다’ 라는 뜻 내포.</p>
+<p><code>&lt;div&gt;</code> 태그는 공간분할 태그이자 레이아웃을 나타내기 위해 사용된다.</p>
+<p>대부분의 태그들은 Inline 태그와 Block 태그로 나뉜다.</p>
+<ol>
+  <li>Inline 태그
+<ol>
+  <li>자신의 내용과 앞뒤 태그의 내용을 같은 라인에 출력하는 태그</li>
+  <li>대표적으로 <code>&lt;span&gt;</code> 태그가 존재</li>
+  <li>width, height, margin-top/bottom이 적용되지 않아 다른 방법이 필요</li>
+</ol></li>
+  <li>block 태그 ( ⭐반응형임 : 줄였다가 늘였다가 할 때 같이 반응)
+<ol>
+  <li>자신의 내용과 앞뒤 태그의 내용을 다른 라인에 출력하는 태그이며 <code>한 라인을 독점적으로 점유</code></li>
+  <li>대표적으로 <code>&lt;div&gt;</code> 태그</li>
+  <li>width, height, margin-top/bottom이 적용됨</li>
+</ol></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>float 속성
+<ul>
+  <li>float 속성은 주로 웹페이지에서 이미지 어떻게 띄워서 텍스트와 함께 배치할  사용되거나 각 객체를 왼쪽, 오른쪽으로 정렬하여 배치할 떄 사용됩니다.</li>
+  <li>예시 코드
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Phoenix editor&lt;/title&gt;
+    &lt;style&gt;
+        div{
+            background-color: aquamarine;
+            font-size: 20px;
+            font-weight: 600;
+            width: 450px;
+            height: 300px;
+            border: 5px solid #000;
+            margin: 10px;
+            padding-left: 10px;
+            float: left;
+        }
+        img{
+            float: left;
+            width:180px; height:150px;
+            padding: 10px;
+        }
+        p{
+            font-size: 8px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div&gt;
+    &lt;img src="%EC%82%AC%EA%B3%BC.jpg"&gt;
+    &lt;h4 style="color: green"&gt;사과&lt;/h4&gt;
+    &lt;p&gt;
+        사과는 수확시기에 따라 조생종, 중생종, 만생종으로 나뉜다. 8월 하순 이전이 최성수확기인 조생종에는 미광, 조홍, 서홍, 쓰가루(아오리) 등이 있고, 최성수확기가 9월 상순에서 10월 중순까지인 중생종에는 홍로, 홍월, 양광, 추광, 골든딜리셔스, 세계일, 조나골드, 시나노스위트 등이 있다. 10월 하순 이후가 최성수확기인 만생종에는 후지(부사), 홍옥, 감홍, 화홍 등이 있다.
+        알칼리성 식품으로, 칼로리가 적고 몸에 좋은 성분이 많이 들어있다. 식이섬유는 혈관에 쌓이는 유해 콜레스테롤을 몸밖으로 내보내고 유익한 콜레스테롤을 증가시켜 동맥경화를 예방해준다. 또한 칼륨은 몸속의 염분을 배출시켜 고혈압 예방과 치료에 도움을 준다. 수용성 식이섬유인 펙틴 또한 위액의 점도를 높히고 악성 콜레스테롤을 내보내어 급격한 혈압상승을 억제해주며, 페놀산은 체내의 불안정한 유해산소를 무력화시켜 뇌졸중을 예방한다.
+        [네이버 지식백과] 사과 [apple, 沙果,砂果] (두산백과 두피디아, 두산백과)
+
+
+
+    &lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+    &lt;img src="%EB%94%B8%EA%B8%B0.jpg"&gt;
+
+    &lt;h4 style="color: red"&gt;딸기&lt;/h4&gt;
+    &lt;p&gt;
+        잎자루는 길고 비교적 큰 3개의 잎이 달리며 각각은 둥글고 가장자리가 톱니 모양이다. 봄에 몇 개의 꽃자루가 나와 몇 개에서 십수 개의 흰색 꽃이 달리는데 꽃잎이 다섯개이고 암술과 수술이 노란색이다. 씨방이 발달하여 과실이 되는 것이 아니라 꽃턱이 발달하여 육질화되며 과실은 표면에 깨와 같이 박히는 수과의 일종이다. 전체 모양은 공 모양, 달걀 모양 또는 타원형이고, 대개는 붉은색이지만 드물게 흰색 품종도 있다.
+        재배종은 원예적으로 육성된 것으로 유럽이나 미국에서 몇 종의 야생종과 교배시킨 것이라고 한다. 현재의 딸기가 재배되기 시작한 것은 17세기경부터이다.
+        [네이버 지식백과] 딸기 [strawberry] (두산백과 두피디아, 두산백과)
+    &lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li>실행화면
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>div 태그 css  <code>float: left</code> 을 없앴을 경우</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>img 태그 css <code>float: left</code> 을 없앴을 경우</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-html/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>
+<h4><code>&lt;p&gt;</code> 태그</h4>
+<p>p 태그는 paragraph → 절, 단락이라는 뜻</p>
+<p>→ 문장의 단락을 표시하는데 사용</p>
+<h4><code>&lt;img&gt;</code> 태그</h4>
+<pre><code class="language-html">&lt;img src="/img1.gif" width="200" height="200" alt="망상토끼"/&gt;</code></pre>
+<ul>
+  <li>src : 이미지 소스 url</li>
+  <li>alt : 이미지를 가져오는데 실패했을 경우 보여줄 대체 텍스트를  명시함</li>
+</ul>
+<h4><code>&lt;a&gt;</code> 태그</h4>
+<p>하이퍼 링크를 걸어주는 태그</p>
+<p>속성</p>
+<ul>
+  <li>href: 클릭 시 이동할 링크</li>
+  <li>target: 링크를 여는 방법
+<ul>
+  <li><code>_self</code>: 현재 페이지 (기본값)</li>
+  <li><code>_blank</code>: 새 탭</li>
+  <li><code>_parent</code>: 부모 페이지로, iframe 등이 사용된 환경에서 쓰입니다.</li>
+  <li><code>_top</code>: 최상위 페이지로, iframe 등이 사용된 환경에서 쓰입니다.</li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;html&gt;
+	&lt;body&gt;
+		&lt;a href="http://www.naver.com"&gt;Go Naver&lt;/a&gt;&lt;br&gt;
+		&lt;a href="http://google.co.kr" target="_blank"&gt;Go Google (new window)&lt;/a&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>

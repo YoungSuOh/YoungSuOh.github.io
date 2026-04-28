@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JSON — Naver Cloud Camp 정리 노트." />
+    <title>JSON · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-08-29 · Naver Cloud Camp</p>
+        <h1 class="article-title">JSON</h1>
+        <p class="article-lead muted">JSON — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">Front-End</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<p>JSON (JavaScript Object Notation)은 <code>데이터를 구조화된 형태로 저장하고 전송</code>하기 위해 사용되는 경량 데이터 교환 형식이다.</p>
+<h3>특징</h3>
+<ul>
+  <li><strong>텍스트 기반 형식</strong>: JSON은 텍스트 기반이기 때문에 쉽게 읽고 쓸 수 있습니다. 이로 인해 다양한 프로그래밍 언어에서 지원됩니다.</li>
+  <li><strong>키-값 쌍</strong>: JSON의 데이터 구조는 키-값 쌍의 집합으로 이루어져 있습니다. 이 키는 문자열로 표현되며, 값은 문자열, 숫자, 배열, 객체, <code>true</code>, <code>false</code>, <code>null</code> 등의 자료형을 가질 수 있습니다.</li>
+  <li><strong>중첩 구조</strong>: JSON은 중첩된 구조를 가질 수 있습니다. 객체 안에 객체나 배열을 포함할 수 있으며, 배열 안에 객체를 포함할 수도 있습니다.</li>
+  <li><strong>언어 독립성</strong>: JSON은 특정 프로그래밍 언어에 종속되지 않으며, 여러 언어에서 쉽게 파싱하고 생성할 수 있습니다.</li>
+</ul>
+<ul>
+  <li>exam01 - json 객체 받아오기</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        @import "../css/common.css";
+        @import "../css/reset.css";
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 class="title"&gt;$.ajax() 함수를 사용한 JSON 데이터 읽기&lt;/h1&gt;
+    &lt;div class="exec"&gt;
+        &lt;input type="button" value="JSON데이터 가져오기" id="mybtn"&gt;
+    &lt;/div&gt;
+
+    &lt;div class="console" id="result"&gt;&lt;/div&gt;
+
+&lt;script src="../js/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(function (){
+        $('#mybtn').click(function (){
+            $.ajax({
+                type: 'get',
+                url : './json1.json',
+                dataType : 'json',
+                success : function (data){
+                    console.log(JSON.stringify(data))  // json을 문자열로 변환하여 찍어줌
+
+                    let title = data.school.subject.title;
+                    let time = data.school.subject.time;
+                    let teacher =data.school.subject.teacher;
+                    console.log(title+" "+time+" "+teacher)
+
+/*                    let div = $(`&lt;div/&gt;`)
+                    let p1 = $(`&lt;p/&gt;`).html(title);
+                    let p2 = $(`&lt;p/&gt;`).html(time);
+                    let p3 = $(`&lt;p/&gt;`).html(teacher);*/
+
+                    // 메소드 체인
+                    /*div.append(p1).append(p2).append(p3)*/
+
+                    let result = `&lt;div&gt;&lt;p&gt;${title}&lt;/p&gt;&lt;p&gt;${time}&lt;/p&gt;&lt;p&gt;${teacher}&lt;/p&gt;&lt;/div&gt;`
+                    $('#result').append(result)
+                },
+                error : function (e){
+                    console.log(e)
+                }
+            })
+        });
+    })
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<ul>
+  <li>json1.json</li>
+</ul>
+<pre><code class="language-html">{
+  "school": {
+    "subject": {
+      "title": "Javascript+jQuery+Ajax",
+      "time": "매주 월/수/금 오후 7시00분~10시00분",
+      "teacher": "홍길동"
+    }
+  }
+}</code></pre>
+<ul>
+  <li>exam02 - json 배열 받아오기</li>
+</ul>
+<ul>
+  <li>json2.json -  json 배열</li>
+</ul>
+<pre><code class="language-html">{
+  "school": {
+    "subject": [   -- JSON 배열
+      {
+        "title": "Javascript+jQuery+Ajax",
+        "time": "매주 월/수/금 오후 7시00분~10시00분",  -- JSON 객체1
+        "teacher": "홍길동"
+      },{
+        "title": "HTML5+CSS3 기반의 반응형 웹",
+        "time": "매주 화/목 오후 7시00분~10시00분",  -- JSON 객체2
+        "teacher": "네오"
+      },{
+        "title": "Java 입문에서 활용까지",
+        "time": "매주 화/목 오후 7시00분~10시00분",  -- JSON 객체3
+        "teacher": "프로도"
+      }
+    ]
+  }
+}</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-json/img_001.png" alt="img_001.png">
+</figure>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

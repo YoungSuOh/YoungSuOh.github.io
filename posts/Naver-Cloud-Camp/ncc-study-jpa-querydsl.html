@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JPA Specification &amp; QueryDSL — Naver Cloud Camp 정리 노트." />
+    <title>JPA Specification &amp; QueryDSL · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-26 · Naver Cloud Camp</p>
+        <h1 class="article-title">JPA Specification &amp; QueryDSL</h1>
+        <p class="article-lead muted">JPA Specification &amp; QueryDSL — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">프로젝트</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>JPA Specification</h3>
+<ul>
+  <li>JPA를 쓸 때 동적 쿼리를 짜야 하는 경우가 많다.
+<ul>
+  <li>예를 들면 frontend에서 input을 <code>select</code> 로 선택을 할 때마다 api를 호출한다던지 등등..</li>
+</ul></li>
+  <li>이럴 때 <strong><code>쿼리문을 복잡하게 문자열로 이어 붙이는 대신,</code></strong> <strong>JPA Specification</strong>을 사용하면 좀 더 객체지향적으로 조건을 조합할 수 있다.
+
+</li>
+</ul>
+<h4>Why JPA Specification?</h4>
+<ol>
+  <li>가독성
+<ol>
+  <li>코드로 조건을 기술하니까 SQL 문자열로 직접 이어 붙이는 것보다 훨씬 깔끔하다
+<ol>
+  <li>쿼리문은 너무 더러워져.. ㅇㅅㅇ;</li>
+</ol></li>
+</ol></li>
+  <li>유연성
+<ol>
+  <li>조건을 분리해서 여러 개로 만들어놓고, 필요할 때만 붙여 써도 됨. 예를 들어 <code>AND</code>, <code>OR</code> 연산 같은 걸 자유롭게 쓸 수 있다.</li>
+</ol></li>
+  <li>재사용성
+<ol>
+  <li>특정 조건을 하나의 메서드로 만들어두면, 이후 여러 Repository에서 쉽게 재사용할 수 있다.</li>
+</ol></li>
+</ol>
+<h4>기본적인 사용 방법</h4>
+<ul>
+  <li>User 엔티티
+<pre><code class="language-javascript">@Entity
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private Boolean active;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    
+    private Set&lt;Role&gt; roles = new HashSet&lt;&gt;();
+    
+}</code></pre></li>
+</ul>
+<ol>
+  <li>Specification 인터페이스 구현
+<pre><code class="language-javascript">public class UserSpecifications {
+
+    public static Specification&lt;User&gt; hasName(String name) {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.get("name"), name);
+    }
+
+    public static Specification&lt;User&gt; isActive() {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.get("active"), true);
+    }
+
+    public static Specification&lt;User&gt; hasRole(String role) {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.join("roles").get("name"), role);
+    }
+}</code></pre>
+<ul>
+  <li><code>root</code>: 현재 엔티티를 가리키는 Root 객체 (엔티티 속성 접근)
+<ul>
+  <li><code>Specification&lt;User&gt;</code> 를 해줬으므로 <code>root</code> 가 User 엔티티를 가르키게 된다.</li>
+</ul></li>
+  <li><code>query</code>: 쿼리를 작성하는 <code>CriteriaQuery</code> 객체</li>
+  <li><code>cb</code>: CriteriaBuilder 객체 (조건, 정렬, 집계 등 기능 제공)</li>
+</ul></li>
+</ol>
+<ol>
+  <li>구현한 <code>Specification</code>을 <code>Repository</code>에서 사용
+<ol>
+  <li>Repository에 <code>JpaSpecificationExecutor&lt;User&gt;</code> 추가
+<ol>
+  <li><code>JpaSpecificationExecutor&lt;T&gt;</code> 인터페이스를 같이 상속해야 <code>findAll(Specification&lt;T&gt;)</code>를 쓸 수 있음.</li>
+</ol>
+<pre><code class="language-javascript">public interface UserRepository extends JpaRepository&lt;User, Long&gt;, JpaSpecificationExecutor&lt;User&gt; {
+}
+</code></pre></li>
+</ol></li>
+</ol>
+<ol>
+  <li>실제 호출 예시
+<pre><code class="language-javascript">import org.springframework.data.jpa.domain.Specification;
+
+public class UserSpecifications {
+
+    public static Specification&lt;User&gt; hasName(String name) {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.get("name"), name);
+    }
+
+    public static Specification&lt;User&gt; isActive() {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.get("active"), true);
+    }
+
+    public static Specification&lt;User&gt; hasRole(String role) {
+        return (root, query, criteriaBuilder) -&gt;
+                criteriaBuilder.equal(root.join("roles").get("name"), role);
+    }
+}
+</code></pre>
+<ul>
+  <li><code>hasName(String name)</code>
+<ul>
+  <li><code>User</code> 엔티티의 <code>name</code> 필드가 주어진 <code>name</code> 값과 같은지를 확인하는 조건을 생성</li>
+  <li><code>criteriaBuilder.equal</code>: 두 값을 비교하는 <code>=</code> 조건을 생성.</li>
+  <li>쿼리
+<ul>
+  <li><code>SELECT u FROM User u WHERE </code><code><a href="http://u.name/" target="_blank" rel="noopener">u.name</a></code><code> = :name</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ol>
+<div class="block-children">
+<ul>
+  <li><code>hasRole(String role)</code>
+<ul>
+  <li><code>User</code> 엔티티와 연관된 <code>Role</code> 엔티티의 <code>name</code> 필드가 주어진 <code>role</code> 값과 같은지를 확인하는 조건을 생성.</li>
+  <li><code>root.join("roles")</code>: <code>User</code>와 연관된 <code>roles</code> 컬렉션에 조인.(<code>roles</code>는 <code>@ManyToMany</code>로 매핑된 필드일 가능성이 높음.)</li>
+  <li><code>criteriaBuilder.equal</code>: 두 값을 비교하는 <code>=</code> 조건을 생성.</li>
+</ul></li>
+</ul>
+</div>
+<ol>
+  <li>AND/OR 연산 활용
+<pre><code class="language-javascript">import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public Page&lt;User&gt; searchUsers(String name, String role, Pageable pageable) {
+        Specification&lt;User&gt; spec = Specification.where(UserSpecifications.hasName(name))
+                .and(UserSpecifications.isActive())
+                .or(UserSpecifications.hasRole(role));
+
+        return userRepository.findAll(spec, pageable);
+    }
+}
+</code></pre></li>
+</ol>
+<ol>
+  <li>여러 조건을 DTO로 묶어서 관리
+<pre><code class="language-javascript">public class UserSearchDto {
+    private String name;
+    private Boolean active;
+    private String role;
+}</code></pre>
+<pre><code class="language-javascript">@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public Page&lt;User&gt; searchUsers(UserSearchDto searchDto, Pageable pageable) {
+        Specification&lt;User&gt; spec = UserSpecificationBuilder.build(searchDto);
+        return userRepository.findAll(spec, pageable);
+    }
+}
+</code></pre></li>
+</ol>
+<ol>
+  <li>추가 팁: <code>fetch</code>를 통한 관계 조회
+<ol>
+  <li><code>Specification</code>을 사용할 때 <code>fetch join</code>을 활용하면, 지연 로딩으로 인해 발생하는 N+1 문제를 방지할 수 있음.</li>
+</ol>
+<pre><code class="language-javascript">public static Specification&lt;User&gt; fetchRoles() {
+    return (root, query, criteriaBuilder) -&gt; {
+        root.fetch("roles", JoinType.LEFT);
+        return criteriaBuilder.conjunction();
+    };
+}
+</code></pre></li>
+</ol>
+<h3>Query DSL</h3>
+<ul>
+  <li>Query DSL은 주로 Java 기반 프로젝트에서 사용하는 타입 안전(type-safe) 쿼리 빌더 라이브러리이다.</li>
+  <li>데이터베이스나 JPA, MongoDB 등 다양한 스토어에 대해, 컴파일 시점에 오류를 잡을 수 있는 형식의 쿼리를 작성하도록 도와주는 게 핵심이다.</li>
+  <li>JPQL이나 SQL을 문자열로 작성할 때는 오타나 컬럼 이름 변경 같은 문제를 컴파일 시간에 발견하기 어려운데, Query DSL에서는 엔티티 필드를 기반으로 쿼리를 작성하니까 컴파일 시점에 에러를 찾을 수 있다.</li>
+</ul>
+<h4>사용 방법</h4>
+<ol>
+  <li>Gradle 설정
+<pre><code class="language-javascript">plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+dependencies {
+    implementation 'com.querydsl:querydsl-jpa'
+    annotationProcessor 'com.querydsl:querydsl-apt'
+    annotationProcessor 'javax.persistence:javax.persistence-api'
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslDir]
+        }
+    }
+}
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+</code></pre></li>
+  <li>엔티티 설정
+<pre><code class="language-javascript">@Entity
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private int age;
+
+    // Getter, Setter 생략
+}
+</code></pre></li>
+  <li>기본 쿼리
+<pre><code class="language-javascript">import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+
+public class UserRepository {
+
+    private final JPAQueryFactory queryFactory;
+
+    public UserRepository(EntityManager entityManager) {
+        this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    public List&lt;User&gt; findUsersByAgeGreaterThan(int age) {
+        QUser user = QUser.user;
+
+        return queryFactory
+                .selectFrom(user)
+                .where(user.age.gt(age)) // 나이가 age보다 큰 사용자 조회
+                .fetch(); // 리스트로 결과 가져오기
+    }
+}
+</code></pre></li>
+  <li>동적 쿼리 작성
+<pre><code class="language-javascript">import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+
+public class UserRepository {
+
+    private final JPAQueryFactory queryFactory;
+
+    public UserRepository(EntityManager entityManager) {
+        this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    public List&lt;User&gt; findUsers(String name, Integer minAge, Integer maxAge) {
+        QUser user = QUser.user;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        if (name != null) {
+            builder.and(user.name.eq(name)); // 이름 조건 추가
+        }
+        if (minAge != null) {
+            builder.and(user.age.goe(minAge)); // 최소 나이 조건 추가
+        }
+        if (maxAge != null) {
+            builder.and(user.age.loe(maxAge)); // 최대 나이 조건 추가
+        }
+
+        return queryFactory
+                .selectFrom(user)
+                .where(builder) // 동적 조건 추가
+                .fetch();
+    }
+}
+</code></pre></li>
+  <li>페이징 처리
+<pre><code class="language-javascript">import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.QueryResults;
+import java.util.List;
+
+public class UserRepository {
+
+    private final JPAQueryFactory queryFactory;
+
+    public UserRepository(EntityManager entityManager) {
+        this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    public List&lt;User&gt; findUsersWithPagination(int page, int size) {
+        QUser user = QUser.user;
+
+        return queryFactory
+                .selectFrom(user)
+                .orderBy(user.age.desc()) // 나이 기준 내림차순 정렬
+                .offset(page * size) // 시작 위치
+                .limit(size) // 가져올 데이터 개수
+                .fetch();
+    }
+}
+</code></pre></li>
+  <li>조인 쿼리
+<ol>
+  <li>다른 엔티티 Post
+<pre><code class="language-javascript">@Entity
+public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+
+    @ManyToOne
+    private User user;
+
+    // Getter, Setter 생략
+}
+</code></pre></li>
+  <li>조인 예시
+<pre><code class="language-javascript">public class PostRepository {
+
+    private final JPAQueryFactory queryFactory;
+
+    public PostRepository(EntityManager entityManager) {
+        this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    public List&lt;Post&gt; findPostsByUserName(String userName) {
+        QPost post = QPost.post;
+        QUser user = QUser.user;
+
+        return queryFactory
+                .selectFrom(post)
+                .join(post.user, user) // Post와 User 조인
+                .where(user.name.eq(userName)) // 사용자 이름 조건
+                .fetch();
+    }
+}
+</code></pre></li>
+</ol></li>
+</ol>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<h3>Kafka 생성</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-kafka/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>CMAK 접속 ID : dr-rate</li>
+  <li>CMAK 접속 Password : qwe123!@#</li>
+</ul>
+<h3>Kafka 환경  설정</h3>
+<ul>
+  <li><strong>클러스터 노드 목록을 확인해준다.</strong></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-kafka/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-kafka/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>application.yml에  Kafka <code>bootstrap-servers</code> 설정</li>
+</ul>
+<pre><code class="language-java">kafka:
+    bootstrap-servers: 
+      - dr-rate-kafka-b-6c0a-101173037.kr.cdss.naverncp.com:9094
+      - dr-rate-kafka-b-6c0b-101173037.kr.cdss.naverncp.com:9094
+      - dr-rate-kafka-b-6c0c-101173037.kr.cdss.naverncp.com:9094
+    consumer:
+      group-id: chat-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer</code></pre>
+<h3>ACG 설정 (VPC 내에서 열어줌)</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-deploy-kafka/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>9094 포트 열어줘야 됨</li>
+</ul>
+<h3>Kafka Config 수정</h3>
+<pre><code class="language-javascript">// Kafka 토픽 생성에 필요한 설정을 추가
+@Configuration
+public class KafkaConfig {
+
+    @Value("${spring.kafka.bootstrap-servers[0]}")
+    private String node1; // 첫 번째 Kafka 서버 주소
+
+    @Value("${spring.kafka.bootstrap-servers[1]}")
+    private String node2; // 두 번째 Kafka 서버 주소
+
+    @Value("${spring.kafka.bootstrap-servers[2]}")
+    private String node3; // 세 번째 Kafka 서버 주소
+
+    @Bean
+    public KafkaAdmin kafkaAdmin() {
+        return new KafkaAdmin(Map.of(
+                "bootstrap.servers", String.join(",", node1, node2, node3) // 각 노드를 쉼표로 연결
+        ));
+    }
+
+    @Bean
+    public AdminClient adminClient(KafkaAdmin kafkaAdmin) {
+        return AdminClient.create(kafkaAdmin.getConfigurationProperties());
+    }
+}</code></pre>

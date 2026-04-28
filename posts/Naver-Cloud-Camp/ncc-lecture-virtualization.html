@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="1강 가상화 — Naver Cloud Camp 정리 노트." />
+    <title>1강 가상화 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-02 · Naver Cloud Camp</p>
+        <h1 class="article-title">1강 가상화</h1>
+        <p class="article-lead muted">1강 가상화 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">NCP 특강</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<h3>클라우드의 역사</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_002.png" alt="img_002.png">
+</figure>
+<h4>하이퍼바이저(Hipervisor)</h4>
+<ul>
+  <li>하이퍼바이저 
+<ul>
+  <li>가상화를 가능하게 하는 소프트웨어 또는 펌웨어 계층으로, 물리적 하드웨어와 가상 머신(Virtual Machine, VM) 사이에서 자원을 관리</li>
+  <li>하이퍼바이저는 가상 머신들이 서로 간섭하지 않고 독립적으로 실행될 수 있도록 하며, 물리적 하드웨어를 효율적으로 분배하고 관리하는 역할을 한다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_001.png" alt="img_001.png">
+</figure>
+<table>
+  <tr><th>항목</th><th>전가상화 (Fully Virtualization)</th><th><strong>반가상화 (Paravirtualization)</strong></th></tr>
+  <tr><td>운영 체제 수정 여부</td><td>수정이 필요 없음. 기존 OS를 그대로 사용할 수 있음.</td><td>하이퍼바이저와 통신하도록 OS를 수정해야 함.</td></tr>
+  <tr><td>성능</td><td>에뮬레이션 때문에 약간의 오버헤드 발생.</td><td>하이퍼바이저와 직접 통신하여 더 높은 성능 제공.</td></tr>
+  <tr><td>호환성</td><td>기존 하드웨어 및 OS와 호환성이 높음.</td><td>하이퍼바이저에 최적화된 OS만 사용 가능.</td></tr>
+  <tr><td>예시</td><td>VMware, Microsoft Hyper-V, VirtualBox 등.</td><td>Xen 하이퍼바이저 (반가상화 지원).</td></tr>
+</table></li>
+</ul>
+<h3>NACL &amp; ACG</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_003.png" alt="img_003.png">
+</figure>
+<p>
+</p>
+<h3>Init Script</h3>
+<hr>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lecture-virtualization/img_005.png" alt="img_005.png">
+</figure>
+<pre><code class="language-javascript">#!/bin/bash
+wget -O /etc/yum.repos.d/Rocky-Extras.repo http://init.ncloud.com/server/linux/repo/rocky8/Rocky-Extras.repo
+yum clean all
+yum -y install httpd php mariadb-server php-mysqlnd redis
+sleep 60
+cd /var/www/html
+wget https://kr.object.ncloudstorage.com/ncp-manual/ncp/ncp-lab.tgz
+tar xvfz ncp-lab.tgz
+/usr/bin/cp -rf php.conf /etc/httpd/conf.d/php.conf
+/usr/bin/cp -rf www.conf /etc/php-fpm.d/www.conf
+systemctl enable mariadb
+systemctl enable httpd
+systemctl enable php-fpm
+systemctl start mariadb
+systemctl start httpd
+systemctl start php-fpm</code></pre>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

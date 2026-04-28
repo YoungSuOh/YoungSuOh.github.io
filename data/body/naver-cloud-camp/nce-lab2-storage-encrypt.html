@@ -1,0 +1,109 @@
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>스토리지 암호화 구성
+<ol>
+  <li>lnxsvr-en 서버 생성</li>
+  <li>Lnxsvr-en에 10GB 디스크 추가하고 인식시키기</li>
+</ol></li>
+</ol>
+<h3>1. 스토리지 암호화된 서버 생성</h3>
+<ul>
+  <li>Services &gt;Compute&gt;Server&gt;Server&gt;+서버 생성 선택
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>신규콘솔화면으로 접속해야 스토리지 암호화 설정 가능</li>
+  <li>신규 콘솔  화면에서 NCP 서버 이미지 선택 후 OS타입으로 ‘CentOS’선택</li>
+  <li>이미지는 Centos-7.8-64(XEN)을 선택합니다
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>스토리지 암호화 적용을 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_002.png" alt="img_002.png">
+</figure></li>
+</ul></li>
+</ul>
+<h3>2. 스토리지 암호화된 스토리지 생성</h3>
+<ul>
+  <li>Services &gt;Compute &gt;Server &gt;Server &gt;lnxsvr-en 선택</li>
+  <li>lnxsvr-en 서버를 선택한 후 상단의 ‘정지’ 버튼 클릭
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>정지가 완료 &gt; 상단 메뉴의 서버 관리 및 설정 변경을 선택 &gt; “스토리지 생성” 선택</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>스토리지 종류 : HDD</li>
+  <li>스토리지 이름 : lnxsvr-en-disk1</li>
+  <li>크기 : 10GB</li>
+  <li>스토리지 반납 보호 : 해제</li>
+  <li>하단의 ‘추가’버튼 클릭 &gt;‘확인’버튼 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>스토리지 추가가 완료되면 Services &gt; Compute &gt; Server 메뉴로 이동하여 lnxsvr-en 서버 선택 후,
+상단의 ‘시작’ 버튼 클릭하여 서버 재부팅</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_004.png" alt="img_004.png">
+</figure>
+<ul>
+  <li>lnxsvr-en 서버가 운영중인 상태로 전환되면, 서버에 접속하여 다음과 같이 작업 진행
+<ul>
+  <li>공인IP로 접속</li>
+  <li>Lnxsvr-en서버 선택 후 서버 관리 및 설정 변경 &gt; 관리자 비밀번호 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<ul>
+  <li>마운트 하기 위한 폴더를 생성
+<pre><code class="language-javascript">mkdir /disk1</code></pre></li>
+  <li>생성하여 Attach한 디스크의 파티션 생성을 진행
+<pre><code class="language-javascript">fdisk /dev/xvdb
+n
+p
+1
+w</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>생성한 /dev/xvdb1 파티션에 대해 포맷을 진행, 포맷이 안되는 것 확인
+<pre><code class="language-javascript">mkfs.ext4 /dev/xvdb1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>가비지 정보 업데이트
+<pre><code class="language-javascript">dmsetup status
+dmsetup remove_all
+dmsetup status
+
+mkfs.ext4 /dev/xvdb1</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>마운트 작업 진행하고 데이터를 생성
+<pre><code class="language-javascript">mount /dev/xvdb1 /disk1
+df
+cp -rf /etc/* /disk1/</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt/img_002.png" alt="img_002.png">
+</figure></li>
+</ul>

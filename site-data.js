@@ -48,9 +48,1246 @@ window.BLOG_DATA = {
     "System Design",
     "Algorithm",
     "Computer Science",
-    "Claude"
+    "Claude",
+    "Naver Cloud Camp"
   ],
   "posts": [
+    {
+      "id": "post-240",
+      "title": "NCP Disk 마운트",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP Disk 마운트 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-31",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-ncp-disk.html"
+    },
+    {
+      "id": "post-239",
+      "title": "Cloud Data Streaming Service(Kafka 연결)",
+      "category": "Naver Cloud Camp",
+      "summary": "Cloud Data Streaming Service(Kafka 연결) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-20",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-kafka.html"
+    },
+    {
+      "id": "post-238",
+      "title": "Spring  Boot  Cloud DB for Redis 연결",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring  Boot  Cloud DB for Redis 연결 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-20",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-spring-redis.html"
+    },
+    {
+      "id": "post-237",
+      "title": "Spring Boot 배포",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring Boot 배포 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-19",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-spring-boot.html"
+    },
+    {
+      "id": "post-236",
+      "title": "NCP Auto Scaling &  LoadBalancing (FrontEnd)",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP Auto Scaling &  LoadBalancing (FrontEnd) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-29",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-autoscaling.html"
+    },
+    {
+      "id": "post-235",
+      "title": "Certitication Manager  등록",
+      "category": "Naver Cloud Camp",
+      "summary": "Certitication Manager  등록 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-04",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-cert-manager.html"
+    },
+    {
+      "id": "post-234",
+      "title": "Front-end HTTPS 적용",
+      "category": "Naver Cloud Camp",
+      "summary": "Front-end HTTPS 적용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-28",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-deploy-frontend-https.html"
+    },
+    {
+      "id": "post-233",
+      "title": "JPA Specification & QueryDSL",
+      "category": "Naver Cloud Camp",
+      "summary": "JPA Specification & QueryDSL — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-26",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-jpa-querydsl.html"
+    },
+    {
+      "id": "post-232",
+      "title": "Access Token과 Refresh Token 정책",
+      "category": "Naver Cloud Camp",
+      "summary": "Access Token과 Refresh Token 정책 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-07",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-token.html"
+    },
+    {
+      "id": "post-231",
+      "title": "Kafka",
+      "category": "Naver Cloud Camp",
+      "summary": "Kafka — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-07",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-kafka.html"
+    },
+    {
+      "id": "post-230",
+      "title": "Redis 실습 (Cloud)",
+      "category": "Naver Cloud Camp",
+      "summary": "Redis 실습 (Cloud) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-07",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-redis-cloud.html"
+    },
+    {
+      "id": "post-229",
+      "title": "Redis 실습 (localhost)",
+      "category": "Naver Cloud Camp",
+      "summary": "Redis 실습 (localhost) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-07",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-redis-local.html"
+    },
+    {
+      "id": "post-228",
+      "title": "Redis 명령어 모음",
+      "category": "Naver Cloud Camp",
+      "summary": "Redis 명령어 모음 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-redis-commands.html"
+    },
+    {
+      "id": "post-227",
+      "title": "NCP 클라우드 구조",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP 클라우드 구조 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-03",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-ncp-arch.html"
+    },
+    {
+      "id": "post-226",
+      "title": "Cloud Architecture",
+      "category": "Naver Cloud Camp",
+      "summary": "Cloud Architecture — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-01",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-cloud-arch.html"
+    },
+    {
+      "id": "post-225",
+      "title": "Foward, Reverse Proxy & Load Balancer",
+      "category": "Naver Cloud Camp",
+      "summary": "Foward, Reverse Proxy & Load Balancer — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-29",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-proxy-lb.html"
+    },
+    {
+      "id": "post-224",
+      "title": "XSS & CSRF",
+      "category": "Naver Cloud Camp",
+      "summary": "XSS & CSRF — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-29",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-xss-csrf.html"
+    },
+    {
+      "id": "post-223",
+      "title": "Bcrypt 암호화",
+      "category": "Naver Cloud Camp",
+      "summary": "Bcrypt 암호화 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-29",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-bcrypt.html"
+    },
+    {
+      "id": "post-222",
+      "title": "Spring Framework HTTPS 적용",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring Framework HTTPS 적용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-28",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-spring-https.html"
+    },
+    {
+      "id": "post-221",
+      "title": "HTTP & HTTPS",
+      "category": "Naver Cloud Camp",
+      "summary": "HTTP & HTTPS — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-27",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-http-https.html"
+    },
+    {
+      "id": "post-220",
+      "title": "지연 로딩 문제",
+      "category": "Naver Cloud Camp",
+      "summary": "지연 로딩 문제 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-25",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-lazy-loading.html"
+    },
+    {
+      "id": "post-219",
+      "title": "Lombok @Data",
+      "category": "Naver Cloud Camp",
+      "summary": "Lombok @Data — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-19",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-lombok.html"
+    },
+    {
+      "id": "post-218",
+      "title": "리액트 프로젝트 구조",
+      "category": "Naver Cloud Camp",
+      "summary": "리액트 프로젝트 구조 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-12",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-study-react-structure.html"
+    },
+    {
+      "id": "post-217",
+      "title": "실시간 채팅 구현 (Kafka & MongoDB)",
+      "category": "Naver Cloud Camp",
+      "summary": "실시간 채팅 구현 (Kafka & MongoDB) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-10",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb.html"
+    },
+    {
+      "id": "post-216",
+      "title": "모니터링 추가",
+      "category": "Naver Cloud Camp",
+      "summary": "모니터링 추가 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-04",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-proj-monitoring.html"
+    },
+    {
+      "id": "post-215",
+      "title": "NCP 마이그레이션",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP 마이그레이션 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-01",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-proj-ncp-migration.html"
+    },
+    {
+      "id": "post-214",
+      "title": "실시간 채팅",
+      "category": "Naver Cloud Camp",
+      "summary": "실시간 채팅 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-12",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-proj-realtime-chat.html"
+    },
+    {
+      "id": "post-213",
+      "title": "PinterSemi 프로젝트 대댓글 기능",
+      "category": "Naver Cloud Camp",
+      "summary": "PinterSemi 프로젝트 대댓글 기능 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-20",
+      "tags": [
+        "프로젝트",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-proj-nested-comments.html"
+    },
+    {
+      "id": "post-212",
+      "title": "SW 테스트 이론",
+      "category": "Naver Cloud Camp",
+      "summary": "SW 테스트 이론 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-27",
+      "tags": [
+        "TDD",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-tdd-theory.html"
+    },
+    {
+      "id": "post-211",
+      "title": "Lab 10 ",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 10  — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-10",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab10.html"
+    },
+    {
+      "id": "post-210",
+      "title": "Lab 9 단축 URL로 URL  변환",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 9 단축 URL로 URL  변환 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-10",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab9-short-url.html"
+    },
+    {
+      "id": "post-209",
+      "title": "Lab 8 인증서 발급 및 Load Balancer에 적용",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 8 인증서 발급 및 Load Balancer에 적용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-10",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab8-lb.html"
+    },
+    {
+      "id": "post-208",
+      "title": "Lab 7  Security Checker",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 7  Security Checker — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-10",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab7-security.html"
+    },
+    {
+      "id": "post-207",
+      "title": "Lab 6 Hadoop (못함ㅠ.ㅠ)",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 6 Hadoop (못함ㅠ.ㅠ) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab6-hadoop.html"
+    },
+    {
+      "id": "post-206",
+      "title": "Lab 5 Object Storage Backup",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 5 Object Storage Backup — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab5-storage-backup.html"
+    },
+    {
+      "id": "post-205",
+      "title": "Lab 4 Ncloud Kubernetes Service",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 4 Ncloud Kubernetes Service — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab4-kubernetes.html"
+    },
+    {
+      "id": "post-204",
+      "title": "Lab 3 서버 추가 네트워크 인터페이스 설정",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 3 서버 추가 네트워크 인터페이스 설정 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab3-network.html"
+    },
+    {
+      "id": "post-203",
+      "title": "Lab2 스토리지 암호화 구성",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab2 스토리지 암호화 구성 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab2-storage-encrypt.html"
+    },
+    {
+      "id": "post-202",
+      "title": "Lab 1 내 서버 이미지 공유하기",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 1 내 서버 이미지 공유하기 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-09",
+      "tags": [
+        "NCE Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/nce-lab1-server-image.html"
+    },
+    {
+      "id": "post-201",
+      "title": "Lab 14 싱글 모드 진입",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 14 싱글 모드 진입 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab14-single-mode.html"
+    },
+    {
+      "id": "post-200",
+      "title": "Lab 13 Snapshot을 통한 mount",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 13 Snapshot을 통한 mount — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab13-snapshot.html"
+    },
+    {
+      "id": "post-199",
+      "title": "Lab 12 Data Query 서비스 활용(DataGrip 맹키로..)",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 12 Data Query 서비스 활용(DataGrip 맹키로..) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab12-dataquery.html"
+    },
+    {
+      "id": "post-198",
+      "title": "Lab 11 CLA 서비스 신청  및 적용",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 11 CLA 서비스 신청  및 적용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab11-cla.html"
+    },
+    {
+      "id": "post-197",
+      "title": "Lab 10 SubAccount & CloudInsight 모니터링 구성",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 10 SubAccount & CloudInsight 모니터링 구성 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab10-cloudinsight.html"
+    },
+    {
+      "id": "post-196",
+      "title": "Lab 9 Cloud DB for Redis 생성 및 접속",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 9 Cloud DB for Redis 생성 및 접속 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab9-clouddb-redis.html"
+    },
+    {
+      "id": "post-195",
+      "title": "Lab 8  CloudDB for MySQL 응용",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab 8  CloudDB for MySQL 응용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-06",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab8-clouddb-mysql.html"
+    },
+    {
+      "id": "post-194",
+      "title": "Lab7 CDN 사용해보기",
+      "category": "Naver Cloud Camp",
+      "summary": "Lab7 CDN 사용해보기 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-05",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab7-cdn.html"
+    },
+    {
+      "id": "post-193",
+      "title": "VPC Peering & LB 분기 처리(Lab5 & Lab6)",
+      "category": "Naver Cloud Camp",
+      "summary": "VPC Peering & LB 분기 처리(Lab5 & Lab6) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-05",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab5-6-vpc-lb.html"
+    },
+    {
+      "id": "post-192",
+      "title": "Container registry & NAS(Lab3 & Lab4)",
+      "category": "Naver Cloud Camp",
+      "summary": "Container registry & NAS(Lab3 & Lab4) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-05",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab3-4-registry-nas.html"
+    },
+    {
+      "id": "post-191",
+      "title": "서버 설정 및 Storage 마운트(Lab1 & Lab2)",
+      "category": "Naver Cloud Camp",
+      "summary": "서버 설정 및 Storage 마운트(Lab1 & Lab2) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-05",
+      "tags": [
+        "NCP Lab",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lab1-2-storage.html"
+    },
+    {
+      "id": "post-190",
+      "title": "로드 밸런서",
+      "category": "Naver Cloud Camp",
+      "summary": "로드 밸런서 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-03",
+      "tags": [
+        "NCP 특강",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-load-balancer.html"
+    },
+    {
+      "id": "post-189",
+      "title": "가상화 알아보기",
+      "category": "Naver Cloud Camp",
+      "summary": "가상화 알아보기 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-02",
+      "tags": [
+        "NCP 특강",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-virtualization.html"
+    },
+    {
+      "id": "post-188",
+      "title": "1강 가상화",
+      "category": "Naver Cloud Camp",
+      "summary": "1강 가상화 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-12-02",
+      "tags": [
+        "NCP 특강",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-lecture-virtualization.html"
+    },
+    {
+      "id": "post-187",
+      "title": "Shell",
+      "category": "Naver Cloud Camp",
+      "summary": "Shell — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-26",
+      "tags": [
+        "리눅스",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-shell.html"
+    },
+    {
+      "id": "post-186",
+      "title": "파일과 디렉토리",
+      "category": "Naver Cloud Camp",
+      "summary": "파일과 디렉토리 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-25",
+      "tags": [
+        "리눅스",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-linux-files.html"
+    },
+    {
+      "id": "post-185",
+      "title": "실습환경 구성과 서버 기본 사용",
+      "category": "Naver Cloud Camp",
+      "summary": "실습환경 구성과 서버 기본 사용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-25",
+      "tags": [
+        "리눅스",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-linux-setup.html"
+    },
+    {
+      "id": "post-184",
+      "title": "Jar vs War 파일",
+      "category": "Naver Cloud Camp",
+      "summary": "Jar vs War 파일 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-15",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jar-vs-war.html"
+    },
+    {
+      "id": "post-183",
+      "title": "Kubernetes",
+      "category": "Naver Cloud Camp",
+      "summary": "Kubernetes — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-06",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-kubernetes.html"
+    },
+    {
+      "id": "post-182",
+      "title": "Swagger UI 적용",
+      "category": "Naver Cloud Camp",
+      "summary": "Swagger UI 적용 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-06",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-swagger-ui.html"
+    },
+    {
+      "id": "post-181",
+      "title": "SSH 공개키 인증과정",
+      "category": "Naver Cloud Camp",
+      "summary": "SSH 공개키 인증과정 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-04",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-ssh-pubkey.html"
+    },
+    {
+      "id": "post-180",
+      "title": "React Jenkins Pipeline 구축(Nginx)",
+      "category": "Naver Cloud Camp",
+      "summary": "React Jenkins Pipeline 구축(Nginx) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-02",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-react-jenkins-nginx.html"
+    },
+    {
+      "id": "post-179",
+      "title": "React  배포",
+      "category": "Naver Cloud Camp",
+      "summary": "React  배포 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-01",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-react-deploy.html"
+    },
+    {
+      "id": "post-178",
+      "title": "NCP 실습",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP 실습 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-ncp-practice.html"
+    },
+    {
+      "id": "post-177",
+      "title": "Jenkins",
+      "category": "Naver Cloud Camp",
+      "summary": "Jenkins — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jenkins.html"
+    },
+    {
+      "id": "post-176",
+      "title": "NCP docker 설치 및 실습",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP docker 설치 및 실습 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-ncp-docker.html"
+    },
+    {
+      "id": "post-175",
+      "title": "NCP 서버 구축 및 접속",
+      "category": "Naver Cloud Camp",
+      "summary": "NCP 서버 구축 및 접속 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-ncp-server-setup.html"
+    },
+    {
+      "id": "post-174",
+      "title": "네이버 클라우드 NCP Object Storage",
+      "category": "Naver Cloud Camp",
+      "summary": "네이버 클라우드 NCP Object Storage — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-01",
+      "tags": [
+        "클라우드",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-ncp-object-storage.html"
+    },
+    {
+      "id": "post-173",
+      "title": "Spring Boot 배포",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring Boot 배포 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-02",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-spring-boot-deploy.html"
+    },
+    {
+      "id": "post-172",
+      "title": "Redis의 PUB/SUB 기능 (채팅/구독 알림)",
+      "category": "Naver Cloud Camp",
+      "summary": "Redis의 PUB/SUB 기능 (채팅/구독 알림) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-15",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-redis-pubsub.html"
+    },
+    {
+      "id": "post-171",
+      "title": "Redis (Remote Dictionary Server)",
+      "category": "Naver Cloud Camp",
+      "summary": "Redis (Remote Dictionary Server) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-13",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-redis.html"
+    },
+    {
+      "id": "post-170",
+      "title": "즉시 로딩(Eager Loading)과 지연 로딩(Lazy Loading)",
+      "category": "Naver Cloud Camp",
+      "summary": "즉시 로딩(Eager Loading)과 지연 로딩(Lazy Loading) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-12",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-eager-lazy-loading.html"
+    },
+    {
+      "id": "post-169",
+      "title": "Thymeleaf",
+      "category": "Naver Cloud Camp",
+      "summary": "Thymeleaf — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-05",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-thymeleaf.html"
+    },
+    {
+      "id": "post-168",
+      "title": "JPA",
+      "category": "Naver Cloud Camp",
+      "summary": "JPA — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-11",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jpa.html"
+    },
+    {
+      "id": "post-167",
+      "title": "Spring Boot",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring Boot — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-04",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-spring-boot.html"
+    },
+    {
+      "id": "post-166",
+      "title": "Spring Framework",
+      "category": "Naver Cloud Camp",
+      "summary": "Spring Framework — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-30",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-spring-framework.html"
+    },
+    {
+      "id": "post-165",
+      "title": "MVC 패턴",
+      "category": "Naver Cloud Camp",
+      "summary": "MVC 패턴 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-12",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-mvc-pattern.html"
+    },
+    {
+      "id": "post-164",
+      "title": "HTTP Cookie & Session",
+      "category": "Naver Cloud Camp",
+      "summary": "HTTP Cookie & Session — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-05",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-http-cookie-session.html"
+    },
+    {
+      "id": "post-163",
+      "title": "Java EE Web",
+      "category": "Naver Cloud Camp",
+      "summary": "Java EE Web — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-04",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-java-ee-web.html"
+    },
+    {
+      "id": "post-162",
+      "title": "서블릿(Servlet)",
+      "category": "Naver Cloud Camp",
+      "summary": "서블릿(Servlet) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-04",
+      "tags": [
+        "서버",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-servlet.html"
+    },
+    {
+      "id": "post-161",
+      "title": "WAS 스토리지",
+      "category": "Naver Cloud Camp",
+      "summary": "WAS 스토리지 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-29",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-was-storage.html"
+    },
+    {
+      "id": "post-160",
+      "title": "브라우저 스토리지",
+      "category": "Naver Cloud Camp",
+      "summary": "브라우저 스토리지 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-28",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-browser-storage.html"
+    },
+    {
+      "id": "post-159",
+      "title": "CORS 개념 & 해결법",
+      "category": "Naver Cloud Camp",
+      "summary": "CORS 개념 & 해결법 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-30",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-cors.html"
+    },
+    {
+      "id": "post-158",
+      "title": "React",
+      "category": "Naver Cloud Camp",
+      "summary": "React — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-react.html"
+    },
+    {
+      "id": "post-157",
+      "title": "ES6(ECMAScript6)",
+      "category": "Naver Cloud Camp",
+      "summary": "ES6(ECMAScript6) — Naver Cloud Camp 정리 노트.",
+      "date": "2024-10-21",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-es6.html"
+    },
+    {
+      "id": "post-156",
+      "title": "페이징 처리",
+      "category": "Naver Cloud Camp",
+      "summary": "페이징 처리 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-20",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-paging.html"
+    },
+    {
+      "id": "post-155",
+      "title": "sendRedirect / forward / Scope",
+      "category": "Naver Cloud Camp",
+      "summary": "sendRedirect / forward / Scope — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-12",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-redirect-forward-scope.html"
+    },
+    {
+      "id": "post-154",
+      "title": "EL/JSTL",
+      "category": "Naver Cloud Camp",
+      "summary": "EL/JSTL — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-11",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-el-jstl.html"
+    },
+    {
+      "id": "post-153",
+      "title": "BootStrap",
+      "category": "Naver Cloud Camp",
+      "summary": "BootStrap — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-29",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-bootstrap.html"
+    },
+    {
+      "id": "post-152",
+      "title": "JSON",
+      "category": "Naver Cloud Camp",
+      "summary": "JSON — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-29",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-json.html"
+    },
+    {
+      "id": "post-151",
+      "title": "XML",
+      "category": "Naver Cloud Camp",
+      "summary": "XML — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-28",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-xml.html"
+    },
+    {
+      "id": "post-150",
+      "title": "Jsp",
+      "category": "Naver Cloud Camp",
+      "summary": "Jsp — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-28",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jsp.html"
+    },
+    {
+      "id": "post-149",
+      "title": "jQuery",
+      "category": "Naver Cloud Camp",
+      "summary": "jQuery — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-22",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jquery.html"
+    },
+    {
+      "id": "post-148",
+      "title": "Javascript",
+      "category": "Naver Cloud Camp",
+      "summary": "Javascript — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-19",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-javascript.html"
+    },
+    {
+      "id": "post-147",
+      "title": "CSS",
+      "category": "Naver Cloud Camp",
+      "summary": "CSS — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-09",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-css.html"
+    },
+    {
+      "id": "post-146",
+      "title": "HTML",
+      "category": "Naver Cloud Camp",
+      "summary": "HTML — Naver Cloud Camp 정리 노트.",
+      "date": "2024-08-06",
+      "tags": [
+        "Front-End",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-html.html"
+    },
+    {
+      "id": "post-145",
+      "title": "Hibernate",
+      "category": "Naver Cloud Camp",
+      "summary": "Hibernate — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-05",
+      "tags": [
+        "DB",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-hibernate.html"
+    },
+    {
+      "id": "post-144",
+      "title": "MyBatis",
+      "category": "Naver Cloud Camp",
+      "summary": "MyBatis — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-05",
+      "tags": [
+        "DB",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-mybatis.html"
+    },
+    {
+      "id": "post-143",
+      "title": "Connection Pool",
+      "category": "Naver Cloud Camp",
+      "summary": "Connection Pool — Naver Cloud Camp 정리 노트.",
+      "date": "2024-09-05",
+      "tags": [
+        "DB",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-connection-pool.html"
+    },
+    {
+      "id": "post-142",
+      "title": "JDBC",
+      "category": "Naver Cloud Camp",
+      "summary": "JDBC — Naver Cloud Camp 정리 노트.",
+      "date": "2024-07-29",
+      "tags": [
+        "DB",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-jdbc.html"
+    },
+    {
+      "id": "post-141",
+      "title": "데이터 베이스",
+      "category": "Naver Cloud Camp",
+      "summary": "데이터 베이스 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-07-23",
+      "tags": [
+        "DB",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-database.html"
+    },
+    {
+      "id": "post-140",
+      "title": "팩토리 메서드",
+      "category": "Naver Cloud Camp",
+      "summary": "팩토리 메서드 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-04",
+      "tags": [
+        "OOP",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-factory-method.html"
+    },
+    {
+      "id": "post-139",
+      "title": "Builder 패턴",
+      "category": "Naver Cloud Camp",
+      "summary": "Builder 패턴 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-11-04",
+      "tags": [
+        "OOP",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-builder-pattern.html"
+    },
+    {
+      "id": "post-138",
+      "title": "자바",
+      "category": "Naver Cloud Camp",
+      "summary": "자바 — Naver Cloud Camp 정리 노트.",
+      "date": "2024-07-03",
+      "tags": [
+        "OOP",
+        "Naver Cloud Camp"
+      ],
+      "link": "posts/Naver-Cloud-Camp/ncc-java-oop.html"
+    },
     {
       "id": "post-077",
       "title": "Claude 실전 사용법",

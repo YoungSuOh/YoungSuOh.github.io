@@ -1,0 +1,45 @@
+<h3>학습 목표</h3>
+<hr>
+<ol>
+  <li>CLA 서비스 신청  및 적용</li>
+</ol>
+<p>CLA는 2가지 정책에 의해서 로그가 삭제가 된다</p>
+<ol>
+  <li>로그가 쌓인지 30일이 지났을 때</li>
+  <li>(Standart 요금제를 사용할 경우) 100GB  저장 용량이 꽉 찼을 때
+<ol>
+  <li>해결 방법 : Object Storage에 보냄</li>
+</ol></li>
+</ol>
+<ul>
+  <li>Services &gt; Storage &gt; object storage 이동</li>
+  <li>상단의 ‘+버킷 생성’ 클릭 </li>
+  <li>버킷 이름 : cla-log-export-오늘날짜 or 알파벳 추가 입력 후 하단의 ‘다음’ 버튼 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab11-cla/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>설정 관리, 암호화 관리, 권한 관리는 디폴트 값 그대로 두고 하단의 ‘다음’ 버튼 클릭 </li>
+  <li>최종 확인 페이지에서 ‘버킷 생성’ 클릭 </li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab11-cla/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>Services &gt; Management and Governance &gt; Cloud Log Analytics 이동 </li>
+  <li>Export Log 클릭 &gt; 자동 내보내기 설정 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab11-cla/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>이전 과정에서 만든 버킷(cla-log-export) 선택, 로그 종류는 secure 선택 후 하단의 ‘object storage
+로 내보내기’ 클릭</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab11-cla/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-lab11-cla/img_005.png" alt="img_005.png">
+</figure>

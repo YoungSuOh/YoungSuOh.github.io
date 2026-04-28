@@ -1,0 +1,45 @@
+<h3>Redis Publish / Subscribe</h3>
+<hr>
+<p>Publish / Subscribe란 특정한 주제(topic)에 대하여 해당 topic을 구독한 모두에게 메시지를 발행하는 통신 방법으로 <strong>채널을 구독한 수신자(클라이언트) 모두에게 메세지를 전송 하는것을 의미</strong>한다. 하나의 Client가 메세지를 Publish하면, 이 Topic에 연결되어 있는 다수의 클라이언트가 메세지를 받을 수 있는 구조이다.</p>
+<p>쉽게 생각하면, Youtube 채널 구독과 비슷하다. </p>
+<p>구독과 좋아요를 누르면, 나중에 크리에이터가 새로운 글을 발행(Publish)하면 구독자 한테만 알림(notification)이 오게 되는 원리라고 보면 된다.</p>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-redis-pubsub/img_001.png" alt="img_001.png">
+</figure>
+<p>그래서 레디스의 pub/sub 기능은 은 주로 채팅 기능이나, 푸시 알림등에 사용된다. </p>
+<ul>
+  <li>이를테면 날씨정보를 구독한 사람에게 주기적으로 날씨정보를 보내거나, </li>
+  <li>특정한 작업을 반복 수행하는 작업자에게 비동기적으로 작업을 보내 처리하도록 하거나 </li>
+  <li>현재 앱에 로그인한 유저에게 푸시를 발송하는 활동들이 모두 pub/sub의 원리로 만들어 진다고 보면 된다.</li>
+</ul>
+<p>다만 유의할점이 있는데, 이러한 redis의 pub/sub 시스템은 매우 단순한 구조로 되어 있다는 것이다.</p>
+<ul>
+  <li>Pub/Sub 시스템에서는 채널에 구독 신청을 한 모든 subscriber에게 메시지를 전달한다.</li>
+  <li>그런데 메시지를 "<strong>던지는</strong>" 시스템이기 때문에, <strong>메시지를 따로 보관하지도 않는다. </strong></li>
+  <li>즉, 수신자(클라이언트)가 메세지를 받는 것을 보장하지 않아, subscribe 대상이 하나도 없는 상황에서 메시지를 publish해도 역시 사라진다. </li>
+  <li>그래서 일반 메시지큐처럼 수신 확인을 하지 않는다.(전송 보장을 하지 않음)</li>
+</ul>
+<p>간단하게 정리하면 메시지를 보내는 쪽도 보내고 끝, 받는 쪽도 받고 끝이 되게 심플하게 되어 있다.</p>
+<p>근데 이렇게 단순한 기능만 제공하니 쓸모가 없지 않느냐고 생각할 수 있다. </p>
+<p>그러나 웹소켓을 이용할 경우 추가적인 네트워크 통신이 필요하기에 레이턴시(딜레이)가 약간 생길수 있다. </p>
+<p>반면 레디스는 In-Memory 기반이라 매우 바르게 메세지를 받을 수 있다. </p>
+<p>따라서 현재 접속 중인 클라이언트에게 짧고 간단한 메시지를 빠르게 보내고 싶을 때, 그리고 전송된 메시지를 따로 저장하거나 수신확인이 필요 없을 때, 마지막으로 100% 전송 보장은 하지 않아도 되는 데이터를 보낼때 이용하면 괜찮다.</p>
+<h3>Pub / Sub 명령어</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-redis-pubsub/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>Redis 서버를 매개로, Redis 클라이언트 간 통신을 도와줌</li>
+  <li>Redis 클라이언트는 Redis 서버내 “채널”을 생성함</li>
+  <li>메세지를 수신하고 싶은 클라이언트는 사전에 해당 채널에 메세지를 publish할 수 있음</li>
+</ul>
+<table>
+  <tr><td>Commands</td><td>Syntax</td><td>Description</td></tr>
+  <tr><td>subscribe</td><td>channel [channel ...]</td><td>채널을 구독하여, 메세지 수신 받는다. (동시에 여러 개 구독 가능)</td></tr>
+  <tr><td>publish</td><td>channel message</td><td>메세지를 지정한 채널로 송신</td></tr>
+  <tr><td>pubsub</td><td>subcommand
+[argument[argument..]]</td><td>서버에 등록된 채널이나 패턴을 조회</td></tr>
+  <tr><td>psubscribe</td><td>pattern[pattern …]</td><td>채널 이름을 패턴으로 등록</td></tr>
+  <tr><td>unsubscribe</td><td>[channel [channel …]]</td><td>subscribe로 등록한 채널 구독 해제</td></tr>
+  <tr><td>punsubscribe</td><td>[pattern [pattern …]]</td><td>psubscribe로 등록한 패턴 채널 구독 해</td></tr>
+</table>

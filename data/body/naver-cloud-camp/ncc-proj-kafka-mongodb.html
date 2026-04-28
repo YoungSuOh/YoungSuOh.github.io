@@ -1,0 +1,99 @@
+<h3>Kafka 설치 (Message Broker)</h3>
+<div class="block-children">
+<ul>
+  <li><a href="https://kafka.apache.org/downloads" target="_blank" rel="noopener">https://kafka.apache.org/downloads</a></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>아무 폴더에 압축 풀기</li>
+  <li>⭐ 이때 폴더 이름이 <code>kafka_2.13-3.9.0</code> 이렇게 나오는데 경로가 너무 길다고 억까를 시전한다.
+<ul>
+  <li><code>kafka</code> 로  폴더명을 바꿔주도록 하자</li>
+</ul></li>
+</ul>
+<h3>Kafka  실행</h3>
+<ul>
+  <li>kafka 경로로 가서 다음의 명령어 실행</li>
+  <li>먼저 zookeeper부터 실행을 해줘야 한다.</li>
+</ul>
+<ol>
+  <li>Zookeeper 실행
+<pre><code class="language-javascript">bin\windows\zookeeper-server-start.bat config\zookeeper.properties</code></pre></li>
+  <li>Kafka 실행
+<pre><code class="language-javascript">bin\windows\kafka-server-start.bat config\server.properties</code></pre></li>
+</ol>
+<ul>
+  <li>정상적으로 실행된 모습</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_003.png" alt="img_003.png">
+</figure>
+</div>
+<h3>Cloud DB for MongoDB 설정 (채팅 메세지 및 채팅방(topic) 저장)</h3>
+<div class="block-children">
+<ul>
+  <li>MongoDB 설정
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_002.png" alt="img_002.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_003.png" alt="img_003.png">
+</figure></li>
+  <li>생성됨 → acg 설정 gogo
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>acg설정 -완-
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>DataSource 접속 
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>application.yml
+<pre><code class="language-javascript">spring:
+  data: 
+     mongodb:
+       uri: mongodb://{User}:{Password}@{Host}:{Port}/{database}</code></pre></li>
+</ul>
+</div>
+<h3>ChatMessage와 ChatRoom 엔티티</h3>
+<ul>
+  <li>ChatMessage</li>
+</ul>
+<pre><code class="language-javascript">@Getter
+@Setter
+@Document(collection = "chatMessages")  // MongoDB의 컬렉션 이름
+public class ChatMessage extends BaseEntity {
+    private String roomId;
+    private String sender;
+    private String content;
+}</code></pre>
+<ul>
+  <li>ChatRoom</li>
+</ul>
+<pre><code class="language-javascript">@Getter @Setter
+@Document(collection = "chatRooms")
+public class ChatRoom extends BaseEntity {
+    @Id
+    private String id; 
+    private String sender;  
+    private String topicName; 
+}
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb?serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-proj-kafka-mongodb/img_001.png" alt="img_001.png">
+</figure>

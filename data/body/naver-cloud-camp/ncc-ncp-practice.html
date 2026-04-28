@@ -1,0 +1,334 @@
+<h3>실습</h3>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>demo이  있는 Configuration(환경 설정)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>add build step</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_005.png" alt="img_005.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_006.png" alt="img_006.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_007.png" alt="img_007.png">
+</figure>
+<ul>
+  <li>해당 결과가 나와야  젠킨스가  제대로 도는 것이다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_008.png" alt="img_008.png">
+</figure>
+<h3>NCP 실습</h3>
+<p>NCP</p>
+<ul>
+  <li>Spring Framework (Maven)</li>
+  <li>MyBatis (MySQL)</li>
+  <li>JSP</li>
+</ul>
+<ul>
+  <li>Git / Github</li>
+  <li>Docker</li>
+  <li>Jenkins</li>
+</ul>
+<p>Project : NCPSpringMaven</p>
+<ul>
+  <li>MainController
+<pre><code class="language-javascript">@Controller
+public class MainController {
+	@RequestMapping(value="/")
+	public String index() {
+		return "index";
+	}
+}
+</code></pre></li>
+  <li>index.jsp
+<pre><code class="language-javascript">&lt;%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;title&gt;Insert title here&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1&gt;Hello NCP!!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+  <li>결과창</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_009.png" alt="img_009.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_010.png" alt="img_010.png">
+</figure>
+<ol>
+  <li>젠킨스에 Maven 플러그인을 설치</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_011.png" alt="img_011.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_012.png" alt="img_012.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_013.png" alt="img_013.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_014.png" alt="img_014.png">
+</figure>
+<ul>
+  <li>설치 후 jekins 관리에서 maven 환경 설정</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_015.png" alt="img_015.png">
+</figure>
+<ul>
+  <li>Tool 접속 후 <strong>Maven installations찾아서 add 진행</strong></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_016.png" alt="img_016.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_017.png" alt="img_017.png">
+</figure>
+<p>프로젝트 → github ⇒ Jenkins가 끌어옴</p>
+<ol>
+  <li>Git 확인(젠킨스에 git이 되는지 안되는지 확인)
+<ol>
+  <li>젠킨스에 접속 : <code>docker exec -it {container NAMES} bash</code></li>
+  <li>git 되는지 확인 : <code>git --version</code></li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>프로젝트를 Github에 올리기</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_018.png" alt="img_018.png">
+</figure>
+<ol>
+  <li>Github에서 젠킨스로 가져오기
+<ol>
+  <li>아이템 추가</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure>
+<ol>
+  <li>Maven  프로젝트로 설정</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_002.png" alt="img_002.png">
+</figure>
+<ol>
+  <li>소스코드 관리</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_003.png" alt="img_003.png">
+</figure>
+<ol>
+  <li>젠킨스에서 Github 주소 입력</li>
+</ol>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_005.png" alt="img_005.png">
+</figure>
+<ul>
+  <li>clean compile package (항상 클린)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_006.png" alt="img_006.png">
+</figure></li>
+</ol>
+<ul>
+  <li>빌드 진행</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_019.png" alt="img_019.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_020.png" alt="img_020.png">
+</figure>
+<ul>
+  <li>톰켓 설치</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_021.png" alt="img_021.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_022.png" alt="img_022.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_023.png" alt="img_023.png">
+</figure>
+<ul>
+  <li><code>docker run -d -it --name tomcat -p 8090:8080 tomcat:9</code> : 컨테이너 생성
+<ul>
+  <li><code>tomcat:9</code> 는 도커허브(밀키트 가게) 에서 가져온다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure></li>
+  <li>http://223.130.157.178:8090
+<ul>
+  <li>아직 설정 안해서 404 뜸</li>
+</ul></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_024.png" alt="img_024.png">
+</figure>
+<ul>
+  <li><code>docker exec -it tomcat bash</code> : 톰켓 안으로 접속</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_025.png" alt="img_025.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_026.png" alt="img_026.png">
+</figure>
+<ul>
+  <li>기본 설정이 <code>webapps.dist</code>안에 다 있다. 처음에  <code>webapps</code> 에는 아무것도 없으므로 dist에서 cp 명령어로 복사해와야 한다.
+<pre><code class="language-javascript"> cp -r ../webapps.dist/* .</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_027.png" alt="img_027.png">
+</figure>
+<ul>
+  <li>이제 톰켓 컨테이너까지는 설치 됐다. 하지만 권한이 없다. 권한 설정을 해줘야 한다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_028.png" alt="img_028.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_029.png" alt="img_029.png">
+</figure>
+<ul>
+  <li><code>webapps/manager/META-INF</code> 까지 와준다. 근데 vim editor가 안깔려 있다.
+<pre><code class="language-javascript">cd manager
+cd META-INF
+
+=================
+
+apt-get update
+apt-get install vim</code></pre></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_030.png" alt="img_030.png">
+</figure>
+<ul>
+  <li>이후 <code>vi context.xml</code> 실행</li>
+  <li>이후 해당 부분을 주석 걸어준다. (보안 문제 주석처리)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_031.png" alt="img_031.png">
+</figure>
+<ul>
+  <li>다시 ManagerApp 접속 → 계정 만들어야 함.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_032.png" alt="img_032.png">
+</figure>
+<ul>
+  <li>톰켓 계정 만들기
+<pre><code class="language-javascript">vi tomcat-users.xml</code></pre></li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_033.png" alt="img_033.png">
+</figure>
+<ul>
+  <li>맨 밑에 해당 코드를 작성
+<pre><code class="language-javascript">&lt;user username="admin"
+        password="111"
+        roles="manager-gui, manager-script, manager-jmx, manager-status"/&gt;</code></pre></li>
+  <li>톰켓 열려따~~~</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_034.png" alt="img_034.png">
+</figure>
+<p>스프링은 war로 압축 부트는 jar로 압축해서 톰켓으로 보낸다.</p>
+<ul>
+  <li>다시 대시보드로 돌아온다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_035.png" alt="img_035.png">
+</figure>
+<ul>
+  <li>프로젝트 구성 들간다</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_036.png" alt="img_036.png">
+</figure>
+<ul>
+  <li>빌드 후 조치 → 톰켓에 던져야 함 (war 파일로 압축 후 톰켓에 보냄)</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_037.png" alt="img_037.png">
+</figure>
+<ul>
+  <li>어떤 경로의 파일이던 war파일로 묶어달라</li>
+  <li>Context path에는 나의 프로젝트명 작성</li>
+  <li>여기서 Containers 는 톰켓을 말함 ⇒ 톰켓으로 던짐
+<ul>
+  <li>jenkins 눌</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>아까 톰켓 계정 설정했던거 정보 입력</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_002.png" alt="img_002.png">
+</figure>
+<ul>
+  <li>이제 credentials 다시 잡는다.</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_003.png" alt="img_003.png">
+</figure>
+<ul>
+  <li>톰켓 주소 입력
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_001.png" alt="img_001.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_002.png" alt="img_002.png">
+</figure></li>
+</ul></li>
+  <li>빌드 성공</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_038.png" alt="img_038.png">
+</figure>
+<ul>
+  <li>성공 확인</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_039.png" alt="img_039.png">
+</figure>
+<ul>
+  <li>작업 공간의 target 디렉토리에 .war파일 ⇒ 배포 파일임</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-ncp-practice/img_040.png" alt="img_040.png">
+</figure>

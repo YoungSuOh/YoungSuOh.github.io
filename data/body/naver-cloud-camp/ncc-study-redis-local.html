@@ -1,0 +1,83 @@
+<ul>
+  <li>예시 api</li>
+</ul>
+<pre><code class="language-javascript">@RestController
+@RequestMapping("/api/test")
+@RequiredArgsConstructor
+public class TestRefreshTokenController {
+
+    private final RedisTemplate&lt;String, String&gt; redisTemplate;
+
+
+
+    /**
+     * Refresh Token 저장 (테스트용)
+     */
+    @PostMapping("/save")
+    public String saveTestToken() {
+        Long userId = 1L;
+        String refreshToken = "dgiquwgdiuq";
+        long ttl = 3600L; // 1시간 (3600초)
+
+        // Redis에 저장
+        String key = "refresh:user:" + userId;
+        redisTemplate.opsForValue().set(key, refreshToken, ttl, TimeUnit.SECONDS);
+
+        return "Test Refresh Token saved for userId: " + userId;
+    }
+
+    /**
+     * Refresh Token 조회 (테스트용)
+     */
+    @GetMapping("/get")
+    public String getTestToken() {
+        Long userId = 1L;
+
+        // Redis에서 조회
+        String key = "refresh:user:" + userId;
+        String refreshToken = redisTemplate.opsForValue().get(key);
+
+        return refreshToken != null
+                ? "Retrieved Refresh Token for userId " + userId + ": " + refreshToken
+                : "No Refresh Token found for userId: " + userId;
+    }
+
+    /**
+     * Refresh Token 삭제 (테스트용)
+     */
+    @DeleteMapping("/delete")
+    public String deleteTestToken() {
+        Long userId = 1L;
+
+        // Redis에서 삭제
+        String key = "refresh:user:" + userId;
+        redisTemplate.delete(key);
+
+        return "Test Refresh Token deleted for userId: " + userId;
+    }
+}
+</code></pre>
+<h3>Save api 호출</h3>
+<pre><code class="language-javascript">http://localhost:8080/api/test/save</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-local/img_001.png" alt="img_001.png">
+</figure>
+<ul>
+  <li>실행 결과</li>
+</ul>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-local/img_002.png" alt="img_002.png">
+</figure>
+<h3>Get api 호출</h3>
+<pre><code class="language-javascript">http://localhost:8080/api/test/get</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-local/img_003.png" alt="img_003.png">
+</figure>
+<h3>Delete api 호출</h3>
+<pre><code class="language-javascript">http://localhost:8080/api/test/get</code></pre>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-local/img_004.png" alt="img_004.png">
+</figure>
+<figure>
+  <img src="../../photo/posts/Naver-Cloud-Camp/ncc-study-redis-local/img_005.png" alt="img_005.png">
+</figure>

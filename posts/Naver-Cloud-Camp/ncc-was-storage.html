@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="WAS 스토리지 — Naver Cloud Camp 정리 노트." />
+    <title>WAS 스토리지 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-11-29 · Naver Cloud Camp</p>
+        <h1 class="article-title">WAS 스토리지</h1>
+        <p class="article-lead muted">WAS 스토리지 — Naver Cloud Camp 정리 노트.</p>
+        <div class="tags article-tags"><span class="tag">Front-End</span><span class="tag">Naver Cloud Camp</span></div>
+        <div class="article-body post-body">
+<p>WAS(Web Application Server)에는 다양한 스토리지 옵션이 존재해, 주로 애플리케이션의 상태를 관리하거나 데이터를 저장하는 데 사용돼. 다음은 일반적인 WAS 스토리지 종류야:</p>
+<hr>
+<h4>1. <strong>세션 저장소</strong></h4>
+<ul>
+  <li>사용자의 세션 데이터를 저장하기 위해 사용돼.</li>
+  <li>WAS 자체 메모리에서 관리하거나, 외부 스토리지를 활용해.
+<ul>
+  <li><strong>WAS 메모리 세션:</strong> 가장 빠르지만, 서버가 다운되거나 클러스터 환경에서는 비효율적.</li>
+  <li><strong>외부 세션 저장소:</strong> Redis, Memcached, DB 등에 저장해 세션을 유지.</li>
+</ul></li>
+  <li><strong>예시:</strong> Tomcat에서 <code>PersistentManager</code>를 설정하거나, Spring Session으로 Redis를 연동.</li>
+</ul>
+<hr>
+<h4>2. <strong>JNDI 기반의 데이터 소스</strong></h4>
+<ul>
+  <li>데이터베이스 연결을 관리하기 위해 사용돼.</li>
+  <li>WAS에 설정된 JNDI(Java Naming and Directory Interface)를 통해 데이터베이스 연결 정보를 가져와 효율적으로 관리.</li>
+  <li>예시: <code>java:comp/env/jdbc/myDataSource</code></li>
+</ul>
+<hr>
+<h4>3. <strong>JMS 큐 및 토픽</strong></h4>
+<ul>
+  <li>메시지 기반 애플리케이션에서 데이터(메시지)를 저장하는 곳.</li>
+  <li>일반적으로 ActiveMQ, RabbitMQ 등을 WAS와 함께 사용해 메시지를 관리.</li>
+</ul>
+<hr>
+<h4>4. <strong>캐시</strong></h4>
+<ul>
+  <li>애플리케이션 성능 향상을 위해 자주 사용되는 데이터를 저장.</li>
+  <li>WAS의 내장 캐시 또는 외부 캐시 도구를 사용해.
+<ul>
+  <li><strong>내장 캐시:</strong> WAS의 메모리를 활용.</li>
+  <li><strong>외부 캐시:</strong> Redis, Ehcache, Hazelcast, Memcached 등.</li>
+</ul></li>
+  <li><strong>예시:</strong> Spring Cache를 이용한 캐싱 설정.</li>
+</ul>
+<hr>
+<h4>5. <strong>파일 스토리지</strong></h4>
+<ul>
+  <li>업로드된 파일이나 WAS에서 생성된 데이터를 임시로 저장하는 곳.</li>
+  <li>파일시스템을 직접 사용할 수도 있고, 클라우드 스토리지(AWS S3, Naver Object Storage)와 연동.</li>
+  <li><strong>예시:</strong> <code>java.io.File</code> API나 Spring Boot의 <code>MultipartFile</code> 처리.</li>
+</ul>
+<hr>
+<h4>6. <strong>로그 스토리지</strong></h4>
+<ul>
+  <li>WAS에서 발생하는 로그 데이터를 저장.</li>
+  <li>디스크에 로컬 로그를 저장하거나, 로그 서버로 전송.</li>
+  <li><strong>예시:</strong> Logback, Log4j로 설정된 로그 저장소.</li>
+</ul>
+<hr>
+<h4>7. <strong>JPA 또는 Hibernate 2차 캐시</strong></h4>
+<ul>
+  <li>ORM 도구를 사용할 때 엔티티의 쿼리 결과를 캐싱.</li>
+  <li>데이터베이스와의 트랜잭션 부하를 줄이기 위해 사용.</li>
+  <li><strong>예시:</strong> Hibernate와 Ehcache 또는 Redis 연동.</li>
+</ul>
+<hr>
+<h4>8. <strong>기타</strong></h4>
+<ul>
+  <li><strong>쿠키 기반 스토리지:</strong> 세션 데이터를 쿠키에 저장해 클라이언트와 교환.</li>
+  <li><strong>클러스터링된 스토리지:</strong> WAS 클러스터 환경에서 세션과 같은 공유 데이터를 관리하기 위해 사용.</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
