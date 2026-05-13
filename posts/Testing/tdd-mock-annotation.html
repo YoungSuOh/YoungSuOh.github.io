@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="@Mock 어노테이션으로 외부 의존성(DB, API)을 차단하고 테스트를 빠르고 독립적으로 만드는 이유와 사용법을 정리합니다." />
+    <title>[TDD] @Mock · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2024-12-13 · Testing</p>
+        <h1 class="article-title">[TDD] @Mock</h1>
+        <p class="article-lead muted">@Mock 어노테이션으로 외부 의존성(DB, API)을 차단하고 테스트를 빠르고 독립적으로 만드는 이유와 사용법을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Testing</span><span class="tag">TDD</span><span class="tag">Mockito</span><span class="tag">Unit Test</span></div>
+        <div class="article-body post-body">
+<p><code>@Mock</code>은 테스트에서 <strong>가짜 객체(Mock 객체)</strong>를 만들어서 의존성을 통제하기 위한 도구이다.</p>
+
+<h2>✅ 핵심 요약</h2>
+<ol>
+  <li>실제 객체 대신 가짜 객체 생성</li>
+  <li>외부 의존성(DB, API 등)을 <strong>차단하고 테스트를 빠르게/독립적으로 수행</strong></li>
+</ol>
+
+<h2>🤔 왜 쓰나?</h2>
+<pre><code class="language-java">class CommentService {
+    private FanEventRepository repo;
+
+    public void save() {
+        repo.save(...); // 실제 DB 접근
+    }
+}</code></pre>
+
+<ul>
+  <li>
+    이 상태로 테스트하면…
+    <ul>
+      <li>DB 연결 필요</li>
+      <li>느림</li>
+      <li>테스트가 환경에 의존함</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>👍 해결: @Mock 사용</h2>
+<ul>
+  <li>실제 DB 접근 ❌</li>
+  <li>가짜 객체 생성됨</li>
+  <li>호출 여부 / 반환값 / 예외를 내가 컨트롤 가능</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

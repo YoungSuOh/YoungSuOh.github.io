@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="초당 요청 수(RPS)를 제한해 API 남용과 트래픽 폭주를 방어하는 RateLimiter — Token Bucket·Leaky Bucket 알고리즘 비교와 Spring Filter 적용 예시를 정리합니다." />
+    <title>RateLimiter (속도 제한기) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-05-01 · System Design</p>
+        <h1 class="article-title">RateLimiter (속도 제한기)</h1>
+        <p class="article-lead muted">초당 요청 수(RPS)를 제한해 API 남용과 트래픽 폭주를 방어하는 RateLimiter — Token Bucket·Leaky Bucket 알고리즘 비교와 Spring Filter 적용 예시를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">System Design</span><span class="tag">Rate Limiting</span><span class="tag">Spring</span><span class="tag">API</span></div>
+        <div class="article-body post-body">
+<p>초당 요청 수(RPS)를 강제로 제한하는 메커니즘.</p>
+
+<h2>✅ 언제 쓰나?</h2>
+<ul>
+  <li>API 남용 방지</li>
+  <li>트래픽 폭주 방어</li>
+  <li>공정성 보장 (user별 quota)</li>
+</ul>
+
+<h2>✅ 동작 방식</h2>
+<pre><code>Client → [RateLimiter] → Server</code></pre>
+<ul>
+  <li>초당 100개 제한이면 101번째 요청 → 거절 or 대기</li>
+</ul>
+
+<h2>대표 알고리즘</h2>
+
+<h3>1. Token Bucket</h3>
+<ul>
+  <li>일정 속도로 토큰 생성</li>
+  <li>요청이 토큰 소비</li>
+</ul>
+<p>→ burst 허용 가능</p>
+
+<h3>2. Leaky Bucket</h3>
+<ul>
+  <li>일정한 속도로 요청 처리</li>
+</ul>
+
+<h2>✅ Spring에서 예시</h2>
+<pre><code class="language-java">@Component
+public class RateLimitFilter extends OncePerRequestFilter {
+    protected void doFilterInternal(...) {
+        if (!rateLimiter.allow(key)) {
+            response.setStatus(429);
+            return;
+        }
+        filterChain.doFilter(request, response);
+    }
+}</code></pre>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

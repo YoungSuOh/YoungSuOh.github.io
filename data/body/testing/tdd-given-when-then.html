@@ -1,0 +1,54 @@
+<h2>✅ 핵심 요약</h2>
+<ul>
+  <li><strong>given</strong> — 테스트를 위한 준비 (mock, 데이터 세팅)</li>
+  <li><strong>when</strong> — 테스트 대상 실행</li>
+  <li><strong>then</strong> — 결과 검증 (assert + verify)</li>
+</ul>
+
+<h2>Mockito 예제로 바로 이해하기</h2>
+
+<h3>📌 상황</h3>
+<p><code>CommentService</code>가 있고, Repository를 통해 댓글을 저장한다고 가정.</p>
+
+<pre><code class="language-java">@ExtendWith(MockitoExtension.class)
+class CommentServiceTest {
+
+    @Mock
+    CommentRepository commentRepository;
+
+    @InjectMocks
+    CommentService commentService;
+
+    @Test
+    void 댓글을_저장한다() {
+        // given
+        // DB에 저장된 결과로 이런 객체가 나올 거라고 가정
+        Comment comment = new Comment("hello");
+
+        // Repository.save()가 호출되면 진짜 DB 가지 말고 그냥 이 comment를 반환해
+        when(commentRepository.save(any()))
+                .thenReturn(comment);
+
+        // when
+        // 실제 테스트 대상인 Service 메서드 실행
+        // 내부에서 new Comment("hello") 생성 후
+        // commentRepository.save(...) 호출됨
+        // → 위에서 정의한 mock 동작에 의해 comment가 반환됨
+        Comment saved = commentService.save("hello");
+
+        // then
+        // Service 내부에서 Repository.save()가 실제로 호출되었는지 검증 (행위 검증)
+        // → DB 저장 로직이 수행되었다는 흐름 확인
+        assertEquals("hello", saved.getContent());
+        verify(commentRepository).save(any());
+    }
+}
+
+class CommentService {
+    private final CommentRepository commentRepository;
+
+    public Comment save(String content) {
+        Comment comment = new Comment(content);
+        return commentRepository.save(comment);
+    }
+}</code></pre>

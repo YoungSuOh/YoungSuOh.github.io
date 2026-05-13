@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="k6 부하 테스트 도구의 기본 구조(init·setup·default·teardown)와 전역 변수(__ENV, __VU, __ITER), check·fail·group 등 핵심 API를 실전 예제와 함께 정리합니다." />
+    <title>k6 테스트 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-01-02 · Testing</p>
+        <h1 class="article-title">k6 테스트</h1>
+        <p class="article-lead muted">k6 부하 테스트 도구의 기본 구조(init·setup·default·teardown)와 전역 변수(__ENV, __VU, __ITER), check·fail·group 등 핵심 API를 실전 예제와 함께 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Testing</span><span class="tag">k6</span><span class="tag">Load Testing</span><span class="tag">Performance</span></div>
+        <div class="article-body post-body">
+<h2>기본 구조</h2>
+<ol>
+  <li>Init Stage (스크립트 로드 시 1회 실행)</li>
+  <li><code>setup()</code> — 테스트 시작 전 1회 실행</li>
+  <li><code>default()</code> — 각 Virtual User가 반복 실행</li>
+  <li><code>teardown()</code> — 테스트 종료 후 1회 실행</li>
+</ol>
+
+<h3>예제</h3>
+<pre><code class="language-javascript">import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+// 1. 테스트 옵션
+export const options = {
+  vus: 10,
+  duration: '30s',
+};
+
+// 2. 테스트 시작 전 1회
+export function setup() {
+  console.log('테스트 준비');
+
+  // 예: 로그인 토큰 발급
+  const token = 'sample-token';
+
+  return { token };
+}
+
+// 3. 각 VU가 반복 실행
+export default function (data) {
+  const res = http.get('https://test.k6.io', {
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
+
+  check(res, {
+    'status is 200': (r) =&gt; r.status === 200,
+  });
+
+  sleep(1);
+}
+
+// 4. 테스트 종료 후 1회
+export function teardown(data) {
+  console.log('테스트 종료');
+}</code></pre>
+
+<h2>k6가 제공하는 전역 변수 및 객체</h2>
+
+<h3>1. <code>__ENV</code> — 환경 변수 읽기</h3>
+<p><code>k6 run -e</code>로 전달한 값을 읽는 전역 객체</p>
+<pre><code class="language-javascript">k6 run -e BASE_URL=http://localhost:8080 script.js
+
+=================================
+
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:8090'; // 환경 변수 없으면 8090
+console.log(BASE_URL); // "http://localhost:8080"</code></pre>
+
+<h3>2. <code>__VU</code> — 현재 Virtual User 번호</h3>
+<ul>
+  <li>현재 실행 중인 가상 사용자 번호를 나타내는 전역 변수</li>
+  <li>1부터 시작, 각 VU마다 고유</li>
+</ul>
+<pre><code class="language-javascript">export const options = {
+  vus: 3,
+  iterations: 1,
+};
+
+export default function () {
+  console.log(`현재 VU 번호: ${__VU}`);
+}
+
+// result
+현재 VU 번호: 1
+현재 VU 번호: 2
+현재 VU 번호: 3</code></pre>
+
+<h3>3. <code>__ITER</code> — 현재 반복 횟수</h3>
+<ul>
+  <li>현재 VU가 몇 번째 반복을 수행 중인지 나타내는 전역 변수</li>
+</ul>
+<pre><code class="language-javascript">export const options = {
+  vus: 1,
+  iterations: 3,
+};
+
+export default function () {
+  console.log(`VU=${__VU}, ITER=${__ITER}`);
+}
+
+// result
+VU=1, ITER=0
+VU=1, ITER=1
+VU=1, ITER=2</code></pre>
+
+<h3>4. <code>export const options</code> — k6 실행 설정 정의</h3>
+<pre><code class="language-javascript">export const options = {
+  vus: 10,
+  duration: '30s',
+};</code></pre>
+
+<h3>5. <code>setup()</code>, <code>default()</code>, <code>teardown()</code> — k6가 자동 호출하는 특수 함수</h3>
+<pre><code>init stage
+   ↓
+setup()
+   ↓
+default()
+   ↓
+teardown()</code></pre>
+
+<ul>
+  <li>
+    <code>setup()</code> — 테스트 시작 전에 한 번 실행
+    <pre><code class="language-javascript">export function setup() {
+  return { token: 'abc123' };
+}</code></pre>
+  </li>
+  <li>
+    <code>default()</code> — 각 VU가 반복 실행
+    <pre><code class="language-javascript">export default function (data) {
+  console.log(data.token);
+}</code></pre>
+  </li>
+  <li>
+    <code>teardown()</code> — 테스트 종료 후 한 번 실행
+    <pre><code class="language-javascript">export function teardown(data) {
+  console.log('테스트 종료');
+}</code></pre>
+  </li>
+</ul>
+
+<h3>6. <code>open()</code> — 로컬 파일을 읽는 k6 전용 함수</h3>
+<pre><code class="language-javascript">// users.json
+[
+  { "email": "user1@test.com" },
+  { "email": "user2@test.com" }
+]
+
+const users = JSON.parse(open('./users.json'));</code></pre>
+
+<h3>7. <code>check()</code> — 응답 검증 함수</h3>
+<pre><code class="language-javascript">check(res, {
+  'status is 200': (r) =&gt; r.status === 200,
+});</code></pre>
+
+<h3>8. <code>fail()</code> — 즉시 테스트 중단</h3>
+<pre><code class="language-javascript">import { fail } from 'k6';
+
+if (res.status !== 200) {
+  fail('요청 실패');
+}</code></pre>
+
+<h3>9. <code>group()</code> — 여러 요청을 논리적으로 묶음</h3>
+<pre><code class="language-javascript">import { group } from 'k6';
+
+group('로그인', function () {
+  // 로그인 요청
+});</code></pre>
+
+<h2>실전 예제</h2>
+<pre><code class="language-javascript">import http from 'k6/http';
+
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
+const userEmail = `loaduser${__VU}@opay.test`;
+const idempotencyKey = `approve-${__VU}-${__ITER}`;
+
+export const options = {
+  vus: Number(__ENV.VUS || '3'),
+  iterations: 2,
+};
+
+export function setup() {
+  return {
+    token: 'sample-token',
+  };
+}
+
+export default function (data) {
+  console.log(
+    `VU=${__VU}, ITER=${__ITER}, TOKEN=${data.token}`
+  );
+
+  http.get(`${__ENV.BASE_URL || 'http://localhost:8080'}/health`);
+}
+
+export function teardown() {
+  console.log('done');
+}
+
+// command
+k6 run -e VUS=3 -e BASE_URL=http://localhost:8080 script.js
+
+// result
+VU=1, ITER=0, TOKEN=sample-token
+VU=1, ITER=1, TOKEN=sample-token
+VU=2, ITER=0, TOKEN=sample-token
+VU=2, ITER=1, TOKEN=sample-token
+VU=3, ITER=0, TOKEN=sample-token
+VU=3, ITER=1, TOKEN=sample-token</code></pre>
+
+<ul>
+  <li><code>export default function</code>의 파라미터 <code>data</code>는 k6가 <code>setup()</code>의 반환값을 자동으로 전달한 것</li>
+  <li>즉, <code>data === setup()</code>의 return 값이라고 이해하면 된다.</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

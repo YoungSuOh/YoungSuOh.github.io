@@ -1,0 +1,149 @@
+<h2>파티셔닝</h2>
+<p>하나의 큰 테이블을 여러 개의 작은 테이블처럼 나눠서 다루는 것.</p>
+<ul>
+  <li>데이터가 수천만~수억 건으로 커짐</li>
+  <li>하나의 테이블/저장소에 몰림</li>
+  <li>쿼리 느려짐 (특히 range, scan)</li>
+  <li>인덱스도 비대해짐</li>
+</ul>
+
+<h3>⚠️ 그냥 쿼리 사용</h3>
+<pre><code class="language-sql">SELECT *
+FROM orders
+WHERE created_at BETWEEN '2025-01-01' AND '2025-01-31';</code></pre>
+<p>→ 전체 테이블 스캔 ⇒ 성능 느려짐</p>
+
+<h3>✅ 파티셔닝 사용</h3>
+<pre><code>orders_2024
+orders_2025_01
+orders_2025_02</code></pre>
+<ul>
+  <li>DB 내부 구조가 다음처럼 나뉨</li>
+  <li>이 상태에서 <code>WHERE created_at BETWEEN '2025-01-01' AND '2025-01-31'</code> 쿼리가 들어올 경우 DB가 자동으로 <code>orders_2025_01</code>을 참조 판단</li>
+</ul>
+
+<h3>1. Range Partition (범위 기준)</h3>
+<ol>
+  <li>
+    시간, 숫자 범위로 나눔
+    <pre><code>orders_2024
+orders_2025</code></pre>
+  </li>
+  <li>로그, 주문 데이터에 많이 씀</li>
+  <li>기간 조회 빠름, 오래된 데이터 삭제 용이</li>
+</ol>
+
+<h3>2. Hash Partition (해시 기반)</h3>
+<ol>
+  <li>
+    key → hash → partition
+    <pre><code>user_id % 4 → 0, 1, 2, 3</code></pre>
+  </li>
+  <li>데이터 균등 분산 → 특정 파티션 쏠림 방지</li>
+</ol>
+
+<h3>3. List Partition (특정 값 기준)</h3>
+<ol>
+  <li>
+    명확한 분리
+    <pre><code>region = 'KR' → partition A
+region = 'US' → partition B</code></pre>
+  </li>
+</ol>
+
+<h2>샤딩</h2>
+<p>데이터를 여러 DB 서버로 쪼개서 저장하는 것.</p>
+
+<h3>✅ 파티셔닝 vs 샤딩</h3>
+<table>
+  <thead>
+    <tr><th>구분</th><th>파티셔닝</th><th>샤딩</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>위치</td><td>하나의 DB 내부</td><td>여러 DB 서버</td></tr>
+    <tr><td>목적</td><td>성능 최적화</td><td>수평 확장</td></tr>
+    <tr><td>관리</td><td>DB가 자동</td><td>애플리케이션이 직접</td></tr>
+  </tbody>
+</table>
+
+<h3>❌ 샤딩 없을 때</h3>
+<ul>
+  <li>DB 하나, <code>users</code> 테이블 1억 건 → 터짐 (CPU, I/O 한계)</li>
+</ul>
+
+<h3>✅ 샤딩 적용</h3>
+<pre><code>Shard 1 → user_id 1 ~ 100만
+Shard 2 → user_id 100만 ~ 200만
+Shard 3 → user_id 200만 ~</code></pre>
+<p>여러 DB가 나눠서 처리.</p>
+
+<h3>1. Range Sharding</h3>
+<pre><code>user_id 1 ~ 1000    → DB1
+user_id 1001 ~ 2000 → DB2</code></pre>
+<ul>
+  <li>특정 구간 쏠릴 가능성 있음 (Hot Shard)</li>
+</ul>
+
+<h3>2. Hash Sharding (가장 많이 씀)</h3>
+<pre><code>user_id % 4</code></pre>
+<ul>
+  <li>균등 분산</li>
+</ul>
+
+<h2>실무에서의 문제들</h2>
+
+<h3>1. Cross-Shard Query</h3>
+<ol>
+  <li>샤딩은 "어디 DB에 데이터가 있는지"를 특정 기준(샤딩 키)으로만 알 수 있음</li>
+  <li>
+    예시) 샤딩 키: <code>user_id</code>
+    <pre><code>Shard 1 → user_id 1 ~ 1000
+Shard 2 → user_id 1001 ~ 2000
+Shard 3 → user_id 2001 ~ 3000</code></pre>
+    <ul>
+      <li><code>SELECT * FROM users WHERE user_id = 1500;</code> → Shard 2에 있다는 걸 정확히 앎, 문제 없음</li>
+      <li>
+        <code>SELECT * FROM users WHERE age &gt; 20;</code> → "age가 20 이상인 유저가 어느 shard에 있냐?"
+        <pre><code>Shard 1
+  user_id: 1,    age: 25
+  user_id: 2,    age: 18
+
+Shard 2
+  user_id: 1500, age: 30
+  user_id: 1600, age: 15
+
+Shard 3
+  user_id: 2500, age: 40</code></pre>
+        <p>→ 모든 샤드를 다 봐야함 ⇒ 네트워크 비용, 응답 시간, 복잡도 증가</p>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3>2. Cross-Shard Join</h3>
+<pre><code class="language-sql">SELECT *
+FROM orders o
+JOIN users u ON o.user_id = u.id;</code></pre>
+<ul>
+  <li><code>orders</code> → shard A, <code>users</code> → shard B 일 경우 다른 DB 서버이므로 Join 불가</li>
+  <li>
+    따라서 비정규화로 테이블 데이터를 합치거나 다음과 같은 번거로운 Application Join을 해야 함
+    <pre><code>1. orders 조회
+2. user_id 추출
+3. users 조회
+4. 코드에서 join</code></pre>
+  </li>
+</ul>
+
+<h3>3. Distributed Transaction</h3>
+<pre><code>Shard A → 돈 차감
+Shard B → 돈 증가</code></pre>
+<ul>
+  <li>이와 같이 여러 DB 서버를 한 로직에서 참조하게 되면 데이터 정합성 깨질 확률 높음</li>
+</ul>
+
+<h2>🤔 언제 어느 조건에서 샤딩을 사용하나?</h2>
+<blockquote><strong>"한 DB로 더 이상 감당이 안 될 때 + 샤딩 키로 대부분의 트래픽을 처리할 수 있을 때"</strong></blockquote>
+<pre><code>WHERE user_id = ?
+WHERE user_id = ? AND ...</code></pre>
+<p>대부분의 쿼리 호출이 샤딩 키로 호출되고 + 대용량 트래픽이라고 가정할 때 적용한다.</p>

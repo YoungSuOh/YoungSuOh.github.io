@@ -1,0 +1,34 @@
+<p><code>@Mock</code>은 테스트에서 <strong>가짜 객체(Mock 객체)</strong>를 만들어서 의존성을 통제하기 위한 도구이다.</p>
+
+<h2>✅ 핵심 요약</h2>
+<ol>
+  <li>실제 객체 대신 가짜 객체 생성</li>
+  <li>외부 의존성(DB, API 등)을 <strong>차단하고 테스트를 빠르게/독립적으로 수행</strong></li>
+</ol>
+
+<h2>🤔 왜 쓰나?</h2>
+<pre><code class="language-java">class CommentService {
+    private FanEventRepository repo;
+
+    public void save() {
+        repo.save(...); // 실제 DB 접근
+    }
+}</code></pre>
+
+<ul>
+  <li>
+    이 상태로 테스트하면…
+    <ul>
+      <li>DB 연결 필요</li>
+      <li>느림</li>
+      <li>테스트가 환경에 의존함</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>👍 해결: @Mock 사용</h2>
+<ul>
+  <li>실제 DB 접근 ❌</li>
+  <li>가짜 객체 생성됨</li>
+  <li>호출 여부 / 반환값 / 예외를 내가 컨트롤 가능</li>
+</ul>

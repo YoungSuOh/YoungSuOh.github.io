@@ -1,0 +1,40 @@
+<p>초당 요청 수(RPS)를 강제로 제한하는 메커니즘.</p>
+
+<h2>✅ 언제 쓰나?</h2>
+<ul>
+  <li>API 남용 방지</li>
+  <li>트래픽 폭주 방어</li>
+  <li>공정성 보장 (user별 quota)</li>
+</ul>
+
+<h2>✅ 동작 방식</h2>
+<pre><code>Client → [RateLimiter] → Server</code></pre>
+<ul>
+  <li>초당 100개 제한이면 101번째 요청 → 거절 or 대기</li>
+</ul>
+
+<h2>대표 알고리즘</h2>
+
+<h3>1. Token Bucket</h3>
+<ul>
+  <li>일정 속도로 토큰 생성</li>
+  <li>요청이 토큰 소비</li>
+</ul>
+<p>→ burst 허용 가능</p>
+
+<h3>2. Leaky Bucket</h3>
+<ul>
+  <li>일정한 속도로 요청 처리</li>
+</ul>
+
+<h2>✅ Spring에서 예시</h2>
+<pre><code class="language-java">@Component
+public class RateLimitFilter extends OncePerRequestFilter {
+    protected void doFilterInternal(...) {
+        if (!rateLimiter.allow(key)) {
+            response.setStatus(429);
+            return;
+        }
+        filterChain.doFilter(request, response);
+    }
+}</code></pre>

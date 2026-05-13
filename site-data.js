@@ -48,10 +48,109 @@ window.BLOG_DATA = {
     "System Design",
     "Algorithm",
     "Computer Science",
+    "Testing",
     "Naver Cloud Camp",
     "Claude"
   ],
   "posts": [
+    {
+      "id": "post-248",
+      "title": "[TDD] 테스트 종류",
+      "category": "Testing",
+      "summary": "단위·통합·인수·E2E·회귀·성능·계약 테스트의 목적·범위·속도를 비교하고 테스트 피라미드 관점에서 정리합니다. JUnit, Spring Boot Test, Rest Assured 실전 예제 포함.",
+      "date": "2024-12-10",
+      "tags": [
+        "Testing",
+        "TDD",
+        "Unit Test",
+        "Integration Test"
+      ],
+      "link": "posts/Testing/tdd-test-types.html"
+    },
+    {
+      "id": "post-247",
+      "title": "[TDD] 테스트 코드 생명주기",
+      "category": "Testing",
+      "summary": "JUnit 테스트 생명주기 7단계 — 클래스 로딩 · @BeforeAll · 인스턴스 생성 · @BeforeEach · @Test · @AfterEach · @AfterAll의 실행 순서와 용도를 구조도와 함께 정리합니다.",
+      "date": "2024-12-14",
+      "tags": [
+        "Testing",
+        "TDD",
+        "JUnit",
+        "Lifecycle"
+      ],
+      "link": "posts/Testing/tdd-test-lifecycle.html"
+    },
+    {
+      "id": "post-246",
+      "title": "[TDD] Given-When-Then",
+      "category": "Testing",
+      "summary": "테스트의 가독성을 높이는 Given-When-Then 패턴 — 준비·실행·검증 단계 분리와 Mockito 기반 실전 예제(@Mock, @InjectMocks, when().thenReturn(), verify())를 정리합니다.",
+      "date": "2024-12-13",
+      "tags": [
+        "Testing",
+        "TDD",
+        "Mockito",
+        "Given-When-Then"
+      ],
+      "link": "posts/Testing/tdd-given-when-then.html"
+    },
+    {
+      "id": "post-245",
+      "title": "[TDD] @Mock",
+      "category": "Testing",
+      "summary": "@Mock 어노테이션으로 외부 의존성(DB, API)을 차단하고 테스트를 빠르고 독립적으로 만드는 이유와 사용법을 정리합니다.",
+      "date": "2024-12-13",
+      "tags": [
+        "Testing",
+        "TDD",
+        "Mockito",
+        "Unit Test"
+      ],
+      "link": "posts/Testing/tdd-mock-annotation.html"
+    },
+    {
+      "id": "post-244",
+      "title": "k6 테스트",
+      "category": "Testing",
+      "summary": "k6 부하 테스트 도구의 기본 구조(init·setup·default·teardown)와 전역 변수(__ENV, __VU, __ITER), check·fail·group 등 핵심 API를 실전 예제와 함께 정리합니다.",
+      "date": "2025-01-02",
+      "tags": [
+        "Testing",
+        "k6",
+        "Load Testing",
+        "Performance"
+      ],
+      "link": "posts/Testing/k6-load-testing.html"
+    },
+    {
+      "id": "post-243",
+      "title": "RateLimiter (속도 제한기)",
+      "category": "System Design",
+      "summary": "초당 요청 수(RPS)를 제한해 API 남용과 트래픽 폭주를 방어하는 RateLimiter — Token Bucket·Leaky Bucket 알고리즘 비교와 Spring Filter 적용 예시를 정리합니다.",
+      "date": "2026-05-01",
+      "tags": [
+        "System Design",
+        "Rate Limiting",
+        "Spring",
+        "API"
+      ],
+      "link": "posts/System-Design/rate-limiter.html"
+    },
+    {
+      "id": "post-242",
+      "title": "파티셔닝 & 샤딩",
+      "category": "Database",
+      "summary": "큰 테이블의 성능 한계를 해결하는 두 가지 접근 — 단일 DB 내부에서 나누는 파티셔닝과 여러 DB 서버로 분산하는 샤딩의 차이, Range/Hash/List 전략, 실무 문제(Cross-Shard Query·Join·분산 트랜잭션)와 적용 기준을 정리합니다.",
+      "date": "2026-02-14",
+      "tags": [
+        "Database",
+        "Partitioning",
+        "Sharding",
+        "Scaling"
+      ],
+      "link": "posts/Database/partitioning-sharding.html"
+    },
     {
       "id": "post-241",
       "title": "Notion → GitHub Blog 자동 임포트 파이프라인 구축",
@@ -1977,17 +2076,6 @@ window.BLOG_DATA = {
         "Database"
       ],
       "link": "posts/Database/replication.html"
-    },
-    {
-      "id": "post-117",
-      "title": "샤딩(Sharding)",
-      "category": "Database",
-      "summary": "샤딩(Sharding) 정리",
-      "date": "2024-06-21",
-      "tags": [
-        "Database"
-      ],
-      "link": "posts/Database/sharding.html"
     },
     {
       "id": "post-118",
