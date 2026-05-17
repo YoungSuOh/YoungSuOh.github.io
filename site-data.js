@@ -54,7 +54,7 @@ window.BLOG_DATA = {
       "title": "[GC] JFR (Java Flight Recorder) & JMC (JDK Mission Control)",
       "category": "Java",
       "summary": "JVM 내부 성능 이벤트를 낮은 오버헤드로 기록하는 JFR과 시각적으로 분석하는 JMC — 수집 가능한 이벤트(CPU·Memory·GC·Thread·I/O·Lock) 종류와 운영 환경 jcmd 명령 사용법을 정리합니다.",
-      "date": "2025-05-16",
+      "date": "2026-05-16",
       "tags": [
         "Java",
         "JVM",
