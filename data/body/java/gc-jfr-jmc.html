@@ -1,0 +1,132 @@
+<ul>
+  <li>
+    <strong>Java Flight Recorder (JFR)</strong>
+    <ul>
+      <li>JVM 내부에서 발생하는 성능 이벤트를 매우 낮은 오버헤드로 기록하는 프로파일링 기능</li>
+      <li>항공기의 Flight Recorder(블랙박스)와 유사하게 동작한다.</li>
+    </ul>
+  </li>
+  <li><strong>JDK Mission Control (JMC)</strong> — JFR 파일을 시각적으로 분석하는 GUI 도구</li>
+</ul>
+
+<blockquote>
+  <strong>JFR = 데이터 수집기</strong><br>
+  <strong>JMC = 데이터 분석기</strong>
+</blockquote>
+
+<h2>🤔 왜 필요한가?</h2>
+<p>운영 환경에서 다음과 같은 문제가 발생할 수 있다.</p>
+<ul>
+  <li>CPU 사용률 급증</li>
+  <li>GC pause 증가</li>
+  <li>메모리 누수</li>
+  <li>스레드 데드락</li>
+  <li>특정 메서드가 느림</li>
+  <li>Allocation 폭증</li>
+</ul>
+<p>이러한 문제를 파악하려면 JVM 내부 이벤트를 관찰해야 하는데, 일반적 프로파일러는 오버헤드가 커서 운영 환경에서 부담이 될 수 있어 만들어졌다.</p>
+
+<h2>JFR이 수집하는 이벤트</h2>
+
+<h3>1. CPU 관련</h3>
+<ul>
+  <li>Method Profiling</li>
+  <li>Hot Methods</li>
+  <li>Execution Samples</li>
+</ul>
+
+<h3>2. Memory 관련</h3>
+<ul>
+  <li>Object Allocation</li>
+  <li>TLAB Allocation</li>
+  <li>Outside TLAB Allocation</li>
+</ul>
+
+<h3>3. GC 관련</h3>
+<ul>
+  <li>Young GC</li>
+  <li>Full GC</li>
+  <li>Heap Usage</li>
+  <li>Pause Time</li>
+</ul>
+
+<h3>4. Thread 관련</h3>
+<ul>
+  <li>Thread Sleep</li>
+  <li>Monitor Enter</li>
+  <li>Thread Park</li>
+  <li>Deadlock</li>
+</ul>
+
+<h3>5. I/O 관련</h3>
+<ul>
+  <li>File Read/Write</li>
+  <li>Socket Read/Write</li>
+</ul>
+
+<h3>6. Lock 관련</h3>
+<ul>
+  <li>Contended Lock</li>
+</ul>
+
+<h3>7. Exception 관련</h3>
+<ul>
+  <li>Exception Throw</li>
+</ul>
+
+<h3>JFR의 장점</h3>
+<ol>
+  <li><strong>매우 낮은 오버헤드</strong></li>
+  <li><strong>JVM 내부 통합</strong> — 별도 Java Agent 없이 JVM 자체 기능으로 동작.</li>
+  <li><strong>운영 환경 사용 가능</strong> — 실서비스에서 장시간 켜 둠.</li>
+  <li><strong>이벤트 기반</strong> — 샘플링과 이벤트 기록을 통해 필요한 정보만 저장.</li>
+</ol>
+
+<h2>JMC (JDK Mission Control)</h2>
+<p>JMC는 JFR 파일을 분석하는 GUI 도구다.</p>
+
+<p><code>.jfr</code> 파일을 열어서 다음 정보를 시각적으로 확인할 수 있다.</p>
+<ul>
+  <li>CPU Hotspots</li>
+  <li>Memory Allocation</li>
+  <li>GC Activity</li>
+  <li>Thread 상태</li>
+  <li>Lock Contention</li>
+  <li>Exception 발생 빈도</li>
+</ul>
+
+<h3>✅ 구조</h3>
+<pre><code>Java Application
+       │
+       ▼
+JVM (JFR)
+       │  이벤트 기록
+       ▼
+recording.jfr
+       │
+       ▼
+JMC
+       │
+       ▼
+시각적 분석</code></pre>
+
+<h3>✅ 자주 쓰는 jcmd JFR 명령</h3>
+<pre><code class="language-bash"># 현재 활성 기록 목록
+jcmd &lt;pid&gt; JFR.check
+
+# 1분 프로파일 (트러블슈팅용)
+jcmd &lt;pid&gt; JFR.start name=adhoc duration=60s settings=profile \
+  filename=/tmp/profile.jfr
+
+# 무제한 시작 (운영용)
+jcmd &lt;pid&gt; JFR.start name=continuous settings=default \
+  maxage=1h maxsize=500m
+
+# 진행 중인 기록의 현재 시점 스냅샷
+jcmd &lt;pid&gt; JFR.dump name=continuous filename=/tmp/now.jfr
+
+# 중지
+jcmd &lt;pid&gt; JFR.stop name=continuous
+
+# 사용 가능한 설정/이벤트 목록
+jcmd &lt;pid&gt; JFR.configure</code></pre>

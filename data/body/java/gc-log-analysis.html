@@ -1,0 +1,125 @@
+<p>GC 로그는 <strong>"언제 GC가 발생했고, 얼마나 메모리를 회수했고, 애플리케이션이 얼마나 멈췄는지"</strong>를 기록한 실행 이력이다.</p>
+
+<p>실무에서는 GC 로그만 잘 읽어도 다음을 판단할 수 있다.</p>
+<ul>
+  <li>Minor GC가 너무 자주 발생하는가?</li>
+  <li>Promotion이 과도한가?</li>
+  <li>Full GC가 발생하는가?</li>
+  <li>Memory Leak이 있는가?</li>
+  <li>Heap 크기가 적절한가?</li>
+  <li>Pause Time이 SLA를 위반하는가?</li>
+</ul>
+
+<h2>GC 로그 활성화</h2>
+<p>Java 9 이상에서는 <strong>Unified Logging</strong> 방식으로 활성화한다.</p>
+
+<pre><code>-Xlog:gc*:file=gc.log:time,uptime,level,tags</code></pre>
+
+<ul>
+  <li><code>gc*</code> — GC 관련 세부 로그 출력</li>
+  <li><code>file=gc.log</code> — 파일 저장</li>
+  <li><code>time</code> — 실제 시각</li>
+  <li><code>uptime</code> — JVM 시작 후 경과 시간</li>
+  <li><code>level</code> — info/debug 수준</li>
+  <li><code>tags</code> — 로그 종류</li>
+</ul>
+
+<h2>기본적인 로그 예시</h2>
+
+<pre><code>[2.345s][info][gc] GC(12) Pause Young (Normal) (G1 Evacuation Pause) 256M-&gt;84M(512M) 18.7ms</code></pre>
+
+<ul>
+  <li><code>[2.345s]</code> — JVM 시작 후 2.345초 시점</li>
+  <li><code>GC(12)</code> — 12번째 GC 이벤트</li>
+  <li><code>(G1 Evacuation Pause)</code> — G1 GC가 살아있는 객체를 다른 Region으로 복사하는 단계</li>
+  <li>
+    <code>256M-&gt;84M(512M)</code>
+    <ul>
+      <li>GC 전 사용량: 256MB</li>
+      <li>GC 후 사용량: 84MB</li>
+      <li>전체 Heap 크기: 512MB</li>
+      <li>즉, 약 172MB를 회수했다.</li>
+    </ul>
+  </li>
+  <li><code>18.7ms</code> — 애플리케이션이 약 18.7ms 동안 일시 중지되었다.</li>
+</ul>
+
+<h2>주요 GC 이벤트 종류</h2>
+
+<ul>
+  <li><strong>Pause Young</strong> — Young Generation 수집</li>
+  <li><strong>Pause Full</strong> — Heap 전체 수집</li>
+  <li><strong>Concurrent Mark Cycle</strong> — Old 영역의 동시 마킹</li>
+  <li><strong>Mixed GC</strong> — Young + 일부 Old Region 동시 수집 (G1)</li>
+</ul>
+
+<h3>1. Full GC 로그 예시</h3>
+<pre><code>Pause Full (G1 Compaction Pause) 2.8s</code></pre>
+<ul>
+  <li>Full GC 수행</li>
+  <li>압축 (compaction 포함)</li>
+  <li>2.8초 동안 STW 수행</li>
+</ul>
+
+<h3>2. G1 특화 로그 예시</h3>
+<pre><code>Concurrent Mark Cycle
+Pause Young (Prepare Mixed)
+Pause Young (Mixed)</code></pre>
+<ul>
+  <li><strong>Concurrent Mark Cycle</strong> — Old Generation 전체의 생존 객체를 추적</li>
+  <li><strong>Prepare Mixed</strong> — Mixed GC 준비 단계</li>
+  <li><strong>Mixed</strong> — Young + 일부 Old Region 함께 수집</li>
+</ul>
+
+<h3>3. Allocation Failure</h3>
+<pre><code>Pause Young (Allocation Failure)</code></pre>
+<ul>
+  <li>새 객체를 생성할 공간이 부족해 Minor GC가 즉시 발생했다는 의미</li>
+</ul>
+
+<h3>4. Promotion Failure</h3>
+<ol>
+  <li>Young에서 살아남은 객체를 Old로 이동할 공간이 부족한 상황이다.</li>
+  <li>이 경우 Full GC로 이어질 수 있다.</li>
+</ol>
+
+<h2>로그에서 가장 중요한 지표</h2>
+<ol>
+  <li><strong>Pause Time</strong> — 응답 지연과 직접 연결됨</li>
+  <li><strong>GC Frequency</strong> — 얼마나 자주 발생하는지</li>
+  <li><strong>Reclaimed Memory</strong> — 얼마나 많이 회수했는지</li>
+  <li><strong>Full GC 여부</strong> — 심각한 문제 신호일 수 있음</li>
+  <li><strong>Heap After GC</strong> — GC 후에도 사용량이 높은지 확인</li>
+</ol>
+
+<h2>정상적인 패턴 예시</h2>
+<pre><code>Pause Young 5ms ~ 30ms
+Minor GC는 주기적으로 발생
+Full GC 거의 없음
+Heap after GC가 충분히 감소</code></pre>
+
+<h2>비정상적인 패턴 예시</h2>
+
+<h3>1. Full GC 반복</h3>
+<pre><code>Pause Full ... 3.5s
+Pause Full ... 4.1s</code></pre>
+
+<h3>2. GC 후 메모리 감소 거의 없음</h3>
+<pre><code>7.8G -&gt; 7.7G</code></pre>
+
+<h3>3. Pause Time 지속 증가</h3>
+<ol>
+  <li>메모리 압박 또는 누수 가능성.</li>
+</ol>
+
+<h3>✅ Memory Leak 징후</h3>
+<p>GC 후 사용량이 점진적으로 증가:</p>
+
+<pre><code>1.2G -&gt; 0.8G
+1.8G -&gt; 1.4G
+2.4G -&gt; 2.1G
+3.0G -&gt; 2.8G</code></pre>
+
+<ul>
+  <li>최저점이 계속 상승하면 누수를 의심한다.</li>
+</ul>

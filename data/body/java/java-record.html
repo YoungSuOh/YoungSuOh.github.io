@@ -1,0 +1,38 @@
+<p>DTO 객체를 훨씬 간결하게 만들기 위해 나온 문법.</p>
+
+<h2>✅ 핵심 한 줄</h2>
+<blockquote>
+  Record = <strong>필드 + 생성자 + getter + equals/hashCode/toString</strong>을 자동 생성해주는 <strong>불변 데이터 클래스</strong>
+</blockquote>
+
+<h3>기본 문법</h3>
+<pre><code class="language-java">public record User(String name, int age) {}</code></pre>
+
+<p>이 한 줄이 사실상 아래 클래스를 의미한다.</p>
+
+<pre><code class="language-java">public final class User {
+    private final String name;
+    private final int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String name() { return name; }
+    public int age() { return age; }
+
+    // equals, hashCode, toString 자동 생성
+}</code></pre>
+
+<h2>✅ 특징</h2>
+<ol>
+  <li><strong>불변 객체</strong> — 모든 필드는 <code>final</code>, setter 없음 (상태 변경 ❌)</li>
+  <li><strong>자동 생성</strong> — 생성자, <code>getter()</code>, <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code></li>
+  <li><strong>상속 제한</strong> — Record는 다른 클래스를 상속받을 수 없고, 자동으로 <code>final</code>이므로 다른 클래스가 상속받을 수도 없음</li>
+</ol>
+
+<h2>실무 사용 예시</h2>
+<p>보통 다음처럼 DTO에 많이 쓰인다.</p>
+
+<pre><code class="language-java">public record CreateUserRequest(String name, int age) {}</code></pre>

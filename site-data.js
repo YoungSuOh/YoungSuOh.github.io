@@ -32,10 +32,6 @@ window.BLOG_DATA = {
     {
       "label": "Contact",
       "href": "#contact"
-    },
-    {
-      "label": "Template",
-      "href": "template.html"
     }
   ],
   "blogCategories": [
@@ -53,6 +49,94 @@ window.BLOG_DATA = {
     "Claude"
   ],
   "posts": [
+    {
+      "id": "post-254",
+      "title": "[GC] JFR (Java Flight Recorder) & JMC (JDK Mission Control)",
+      "category": "Java",
+      "summary": "JVM 내부 성능 이벤트를 낮은 오버헤드로 기록하는 JFR과 시각적으로 분석하는 JMC — 수집 가능한 이벤트(CPU·Memory·GC·Thread·I/O·Lock) 종류와 운영 환경 jcmd 명령 사용법을 정리합니다.",
+      "date": "2025-05-16",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC",
+        "JFR",
+        "JMC",
+        "Profiling"
+      ],
+      "link": "posts/Java/gc-jfr-jmc.html"
+    },
+    {
+      "id": "post-253",
+      "title": "[GC] GC 로그",
+      "category": "Java",
+      "summary": "JVM GC 로그를 활성화하고 읽는 법 — Pause Young/Full, G1 Evacuation, Allocation/Promotion Failure 등 이벤트 종류와 Memory Leak 징후를 판별하는 실전 패턴을 정리합니다.",
+      "date": "2026-05-13",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC",
+        "Logging",
+        "Performance"
+      ],
+      "link": "posts/Java/gc-log-analysis.html"
+    },
+    {
+      "id": "post-252",
+      "title": "[GC] GC의 발전 흐름",
+      "category": "Java",
+      "summary": "Stop-The-World 시간을 줄이기 위한 Java GC의 진화 — Serial → Parallel → CMS → G1 → ZGC/Shenandoah까지 각 GC의 동작 방식과 트레이드오프, Concurrent 수행 비중의 확대 과정을 정리합니다.",
+      "date": "2026-05-13",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC",
+        "G1GC",
+        "ZGC"
+      ],
+      "link": "posts/Java/gc-evolution-history.html"
+    },
+    {
+      "id": "post-251",
+      "title": "[GC] GC 기본 개념 & Young/Old Generation",
+      "category": "Java",
+      "summary": "Reachability Analysis, Generational GC, Young/Old Generation 구조 — Eden·Survivor 이동, Minor/Major/Full GC, Stop-The-World까지 JVM 가비지 컬렉션의 동작 원리를 정리합니다.",
+      "date": "2026-05-13",
+      "tags": [
+        "Java",
+        "JVM",
+        "GC",
+        "Garbage Collection"
+      ],
+      "link": "posts/Java/gc-basics-young-old-generation.html"
+    },
+    {
+      "id": "post-250",
+      "title": "JVM (Java Virtual Machine)",
+      "category": "Java",
+      "summary": "바이트코드를 OS 독립적으로 실행하는 JVM의 동작 과정과 구조 — 컴파일·클래스 로더·실행 엔진(Interpreter/JIT)·메모리 영역·가비지 컬렉션까지 한눈에 정리합니다.",
+      "date": "2026-05-12",
+      "tags": [
+        "Java",
+        "JVM",
+        "Bytecode",
+        "JIT"
+      ],
+      "link": "posts/Java/java-jvm.html"
+    },
+    {
+      "id": "post-249",
+      "title": "Java Record",
+      "category": "Java",
+      "summary": "DTO를 간결하게 만들기 위한 Java Record — 필드·생성자·getter·equals·hashCode·toString을 자동 생성하는 불변 데이터 클래스의 문법과 특징을 정리합니다.",
+      "date": "2025-01-15",
+      "tags": [
+        "Java",
+        "Record",
+        "DTO",
+        "Immutable"
+      ],
+      "link": "posts/Java/java-record.html"
+    },
     {
       "id": "post-248",
       "title": "[TDD] 테스트 종류",

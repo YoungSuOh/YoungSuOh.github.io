@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="바이트코드를 OS 독립적으로 실행하는 JVM의 동작 과정과 구조 — 컴파일·클래스 로더·실행 엔진(Interpreter/JIT)·메모리 영역·가비지 컬렉션까지 한눈에 정리합니다." />
+    <title>JVM (Java Virtual Machine) · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-05-12 · Java</p>
+        <h1 class="article-title">JVM (Java Virtual Machine)</h1>
+        <p class="article-lead muted">바이트코드를 OS 독립적으로 실행하는 JVM의 동작 과정과 구조 — 컴파일·클래스 로더·실행 엔진(Interpreter/JIT)·메모리 영역·가비지 컬렉션까지 한눈에 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Java</span><span class="tag">JVM</span><span class="tag">Bytecode</span><span class="tag">JIT</span></div>
+        <div class="article-body post-body">
+<p>자바 코드를 직접 실행하는 게 아니라, <strong>바이트코드(.class 파일)</strong>를 해석하고 실행하는 역할을 한다.</p>
+<p>⇒ 즉, OS에 독립적으로 동작할 수 있도록 하는 핵심기.</p>
+
+<h2>JVM의 동작 과정</h2>
+
+<h3>1. Java 소스 코드(.java) 작성</h3>
+<ul>
+  <li>개발자가 Java 언어로 작성한 코드.</li>
+</ul>
+
+<h3>2. 컴파일 (.class 파일 생성)</h3>
+<ul>
+  <li><code>javac</code>(Java Compiler)가 <code>.java</code> 파일을 <strong>바이트코드(.class)</strong>로 변환.</li>
+</ul>
+
+<h3>3. JVM이 바이트코드 실행</h3>
+<ul>
+  <li>OS와 상관없이 바이트코드를 실행할 수 있도록 해석 (인터프리팅 or JIT 컴파일)</li>
+  <li>
+    굳이 왜 바이트 코드?
+    <ul>
+      <li>Java의 핵심 철학은 <strong>"Write Once, Run Anywhere" (한 번 작성하면 어디서든 실행할 수 있다)</strong>이다.</li>
+      <li>즉, <strong>Windows, Mac, Linux 등 어떤 운영체제에서도 동일한 코드가 실행</strong>될 수 있어야 한다.</li>
+    </ul>
+    <p>👉 그런데 <strong>기계어(어셈블리 코드)는 CPU나 OS마다 다름</strong><br>
+    👉 <strong>바이트코드는 JVM 위에서 실행되므로, OS/CPU의 영향을 받지 않음</strong></p>
+  </li>
+</ul>
+
+<h3>4. OS에 맞게 실행</h3>
+<ul>
+  <li>JVM이 OS와 상호작용하며 프로그램을 실행.</li>
+</ul>
+
+<h2>JVM의 구조도</h2>
+
+<figure>
+  <img src="../../photo/posts/Java/JVM/jvm.png" alt="JVM 구조도">
+</figure>
+
+<h3>1. JVM이 프로그램 실행을 위해 OS로부터 메모리를 할당받음</h3>
+<ul>
+  <li>Java 프로그램이 실행되면 <strong>JVM 프로세스가 생성</strong>되고, 운영체제(OS)로부터 <strong>Heap, Stack, Method Area</strong> 등 필요한 메모리를 할당받음.</li>
+  <li><strong>Method Area</strong> — 클래스 정보와 static 변수 등이 저장되는 영역</li>
+</ul>
+
+<h3>2. Java 소스 코드 컴파일 (Javac) → 바이트코드 생성</h3>
+<ul>
+  <li><strong>Java 컴파일러(Javac)</strong>가 <code>.java</code> 파일을 읽고 <code>.class</code> 바이트코드 파일로 변환함.</li>
+</ul>
+
+<h3>3. 클래스 로더 (Class Loader) → JVM 메모리로 로드</h3>
+<ul>
+  <li>클래스 파일을 <strong>JVM의 메모리(Runtime Data Area)</strong>에 올려서 실행할 준비를 한다.
+    <ul>
+      <li>이때, <strong>로딩 → 링킹 → 초기화</strong> 과정을 진행한다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>4. 실행 엔진 (Execution Engine) → 바이트코드 해석 및 실행</h3>
+<ul>
+  <li><strong>인터프리터 방식 (Interpreter)</strong> — 바이트코드를 한 줄씩 해석하며 실행 (속도가 느림)</li>
+  <li><strong>JIT (Just-In-Time) 컴파일러 방식</strong> — 자주 실행되는 코드를 <strong>기계어로 변환하여 캐싱</strong>하고, 다음 실행부터 빠르게 실행</li>
+</ul>
+
+<h3>5. 메모리 관리 및 가비지 컬렉션</h3>
+
+<h3>6. 최종적으로 프로그램 실행 결과 출력</h3>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

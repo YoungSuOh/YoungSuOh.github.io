@@ -1,0 +1,246 @@
+<h2>가비지 컬렉션 (Garbage Collection)</h2>
+<p>자바 이전에는 프로그래머가 모든 프로그램 메모리를 관리했음 → <code>new delete</code>를 통해 할당 &amp; 해제.</p>
+<p>하지만, 자바에서는 <strong>JVM</strong>이 프로그램 메모리를 관리한다.</p>
+<p>JVM은 <strong>가비지 컬렉션</strong>이라는 프로세스를 통해 메모리를 관리한다. 가비지 컬렉션은 자바 프로그램에서 사용되지 않는 메모리를 지속적으로 찾아내서 제거하는 역할을 한다.</p>
+
+<h3>Reachability Analysis</h3>
+<p>GC는 단순히 "참조 횟수"로 객체를 제거하지 않는다.</p>
+<p>대신 <strong>Reachability Analysis</strong> 알고리즘을 사용한다.</p>
+
+<blockquote>GC Root에서 도달 가능한 객체는 살아있는 객체로 판단한다.</blockquote>
+
+<p>GC Root의 대표적인 예시는 다음과 같다.</p>
+<ul>
+  <li>Stack의 지역 변수</li>
+  <li>static 변수</li>
+  <li>실행 중인 Thread</li>
+  <li>JNI Reference</li>
+</ul>
+
+<h4>✅ 예시</h4>
+<pre><code class="language-java">User user = new User();</code></pre>
+<ul>
+  <li><code>user</code> 참조 변수는 Stack에 저장되고</li>
+  <li>실제 <code>User</code> 객체는 Heap에 생성된다.</li>
+  <li>메서드 실행 중에는 Stack에서 Heap 객체를 참조하고 있으므로 해당 객체는 <strong>reachable</strong> 상태</li>
+  <li>하지만 메서드가 종료되면 Stack Frame이 제거되고 참조가 사라진다 ⇒ GC Root로부터 접근할 수 없는 객체 → <strong>GC 대상</strong></li>
+</ul>
+
+<h2>Garbage Collection 동작 과정</h2>
+
+<figure>
+  <img src="../../photo/posts/Java/GC/GC%20Basic/GC%EC%A0%84%EC%B2%B4%EA%B5%AC%EC%A1%B0.png" alt="GC 전체 구조">
+</figure>
+
+<h2>Generational GC</h2>
+
+<blockquote><strong>대부분의 객체는 생성된 직후 빠르게 사라진다.</strong></blockquote>
+
+<p>이를 <strong>Weak Generational Hypothesis</strong>라고 한다. 예를 들어 요청 처리 중 잠깐 생성되는 DTO, String, List 같은 객체들은 메서드가 끝나면 거의 대부분 필요 없어지기 때문에 오래 살아남지 않는다.</p>
+
+<p>JVM은 이 특성을 활용해 Heap을 두 개의 큰 영역으로 나눈다.</p>
+<ul>
+  <li><strong>Young Generation</strong> — 새로 생성된 객체가 저장되는 영역</li>
+  <li><strong>Old Generation</strong> — 여러 번 GC를 통과하며 오래 살아남은 객체가 저장되는 영역</li>
+</ul>
+
+<p>이 구조 덕분에 대부분의 "짧은 생명" 객체를 빠르게 정리할 수 있다.</p>
+
+<h2>1️⃣ Young Generation</h2>
+<p>Young Generation은 새 객체가 처음 생성되는 공간이다. 내부적으로 다음과 같이 구성된다.</p>
+
+<pre><code>Young Generation
+├── Eden
+├── Survivor 0 (S0)
+└── Survivor 1 (S1)</code></pre>
+
+<ul>
+  <li><strong>Eden</strong> — 새 객체가 처음 생성되는 영역</li>
+  <li><strong>Survivor 0, Survivor 1</strong> — 살아남은 객체를 번갈아 저장하는 영역</li>
+</ul>
+
+<h3>✅ Young Generation의 객체 이동 과정</h3>
+<ol>
+  <li>객체 생성 → Eden 저장</li>
+  <li>Eden 가득 참 → Minor GC 수행</li>
+  <li>
+    살아남은 객체 → To Survivor 이동
+    <pre><code>Eden → Survivor (age = 1)</code></pre>
+  </li>
+  <li>
+    다음 Minor GC는 Eden과 From Survivor를 검사한다. → 살아남은 객체는 To Survivor로 다시 복사된다.
+    <pre><code>Survivor → 다른 Survivor (age = 2)</code></pre>
+  </li>
+  <li>여러 번 살아남음</li>
+  <li>
+    일정 나이(age) 이상이면 Old Generation으로 Promotion
+    <pre><code>age &gt;= threshold
+→ Old Generation
+
+-XX:MaxTenuringThreshold=15 // 기본적으로 최대 15번까지 Survivor를 거칠 수 있다.</code></pre>
+  </li>
+</ol>
+
+<h3>✅ Minor GC — Young Generation만 대상으로 수행되는 GC</h3>
+
+<h4>📌 동작 과정</h4>
+<ol>
+  <li>Eden과 현재 Survivor 영역을 검사</li>
+  <li>Reachable 객체만 다른 Survivor로 복사</li>
+  <li>age 증가</li>
+  <li>일정 조건 충족 시 Old Generation으로 Promotion</li>
+  <li>기존 Young 영역 메모리 재사용</li>
+</ol>
+
+<h4>📌 특징</h4>
+<ul>
+  <li>매우 자주 발생</li>
+  <li>비교적 빠름</li>
+  <li>대부분의 객체가 즉시 제거됨</li>
+</ul>
+
+<h3>✅ Survivor 영역</h3>
+<p>Survivor는 To Survivor, From Survivor 2가지로 존재.</p>
+
+<p>Survivor는 다음 2가지 역할을 한다.</p>
+<ol>
+  <li>살아남은 객체를 임시 보관</li>
+  <li>객체의 나이(age)를 증가시키며 장수 여부 판단</li>
+</ol>
+
+<h4>🤔 왜 필요한가?</h4>
+<p>객체를 Eden에서 바로 Old Generation으로 보내면 문제가 생긴다.</p>
+
+<ul>
+  <li>
+    예시 — HTTP 요청 처리 중 생성되는 객체들은 잠깐 살아있다가 곧 사라질 수 있다.
+    <pre><code>요청 시작
+→ DTO 생성
+→ Service 처리
+→ 응답 생성
+→ 요청 종료</code></pre>
+    <ul>
+      <li>이 객체들은 몇 번의 Minor GC를 통과할 수 있지만 결국 금방 사라진다.</li>
+      <li>
+        이런 객체를 바로 Old로 보내면
+        <ul>
+          <li>Old Generation이 빠르게 증가</li>
+          <li>Major GC 빈도 증가</li>
+          <li>Pause Time 증가</li>
+          <li>따라서 JVM은 "조금 더 살아있는지 몇 번 확인한 뒤, 정말 오래 사는 객체만 Old로 보내자"</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4>From/To Survivor 예시</h4>
+<pre><code>// 첫 번째 Minor GC
+Eden (alive objects)
+   ↓
+Survivor 0 (age = 1)
+
+// 2번째 Minor GC
+Eden + Survivor 0
+   ↓
+Survivor 1 (age = 2)
+
+// 3번째 Minor GC
+Eden + Survivor 1
+   ↓
+Survivor 0 (age = 3)</code></pre>
+
+<ul>
+  <li>이처럼 두 Survivor는 번갈아 사용된다.</li>
+  <li>객체 Age는 Minor GC를 통과할 때마다 증가한다.</li>
+</ul>
+
+<h4>SurvivorRatio</h4>
+<ul>
+  <li>
+    Young Generation 내 비율을 조정하는 옵션.
+    <pre><code>-XX:SurvivorRatio=8 // 일반적으로 Eden : S0 : S1 = 8 : 1 : 1 정도로 구성된다.</code></pre>
+  </li>
+</ul>
+
+<h2>2️⃣ Old Generation</h2>
+<p>Old Generation은 여러 번 Minor GC를 통과하며 오래 살아남은 객체를 저장하는 영역이다.</p>
+<p>Young Generation에서 여러 번의 Minor GC를 거쳐 age threshold에 도달하게 되면 <strong>Old Generation으로 Promotion</strong>으로 승격된다.</p>
+
+<h3>✅ 특징</h3>
+<table>
+  <thead>
+    <tr><th>항목</th><th>설명</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>저장 대상</td><td>오래 살아남은 객체</td></tr>
+    <tr><td>크기</td><td>Young보다 일반적으로 큼</td></tr>
+    <tr><td>수집 빈도</td><td>낮음</td></tr>
+    <tr><td>수집 비용</td><td>높음</td></tr>
+    <tr><td>Pause Time</td><td>길어질 수 있음</td></tr>
+  </tbody>
+</table>
+
+<p>주로 다음과 같은 "오래 살아남는 객체"를 저장한다.</p>
+<ul>
+  <li>Spring Singleton Bean</li>
+  <li>캐시 데이터</li>
+  <li>세션 정보</li>
+  <li>static 컬렉션</li>
+</ul>
+
+<h3>✅ Major GC</h3>
+<p>Old 영역이 부족해지면 Old Generation을 정리하는 GC가 발생한다.</p>
+<p>이를 보통 <strong>Major GC</strong>라고 부른다.</p>
+
+<h3>✅ Compaction (압축)</h3>
+<p>Old Generation은 객체가 오래 머무르기 때문에 중간중간 빈 공간이 생긴다.</p>
+
+<pre><code>[객체][빈칸][객체][빈칸][객체]</code></pre>
+
+<p>이를 <strong>Fragmentation(단편화)</strong>라고 한다.</p>
+
+<p>Compaction 후:</p>
+<pre><code>[객체][객체][객체][빈칸][빈칸]</code></pre>
+
+<p>⚠️ <strong>Old Generation이 가득 차면 발생하는 문제</strong></p>
+
+<h2>Full GC</h2>
+<p>Full GC는 <strong>Heap 전체(Young Generation + Old Generation)</strong>를 대상으로 수행하는 GC이다.</p>
+<p>가장 비용이 큰 이벤트 중 하나이다.</p>
+
+<h3>✅ Full GC가 하는 일</h3>
+<ol>
+  <li>GC Root 탐색</li>
+  <li>Heap 전체 객체 Mark</li>
+  <li>Unreachable 객체 제거</li>
+  <li>객체 이동 (Compaction)</li>
+  <li>단편화 (Fragmentation) 정리</li>
+</ol>
+
+<p>Heap 전체를 다루기 때문에</p>
+<ul>
+  <li>처리해야 할 객체 수가 많고</li>
+  <li>메모리 이동 비용이 크며</li>
+  <li>애플리케이션이 멈추는 시간이 길어질 수 있다.</li>
+</ul>
+
+<h3>✅ Stop-The-World (STW)</h3>
+<p>Full GC가 실행되는 동안 대부분의 어플리케이션 스레드는 일시 중단된다.</p>
+
+<p>이 시간이 길어지면</p>
+<ul>
+  <li>API 응답 지연</li>
+  <li>타임아웃</li>
+  <li>Kafka Consumer 지연</li>
+  <li>WebSocket 끊김</li>
+</ul>
+
+<p>같은 문제가 발생할 수 있다.</p>
+
+<h3>✅ Full GC 발생 원인</h3>
+<ol>
+  <li><strong>Old Generation 공간 부족</strong> — 오래 살아남은 객체가 많아 Old 영역이 꽉 찬 경우</li>
+  <li><strong>Promotion Failure</strong> — Young에서 살아남은 객체를 Old로 이동할 공간이 부족한 경우</li>
+  <li><strong>Memory Leak</strong> — 사용되지 않지만 계속 참조되는 객체가 누적되는 경우</li>
+</ol>

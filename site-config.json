@@ -11,8 +11,7 @@
     { "label": "Blog", "href": "#blog" },
     { "label": "Projects", "href": "#projects" },
     { "label": "Archive", "href": "#archive" },
-    { "label": "Contact", "href": "#contact" },
-    { "label": "Template", "href": "template.html" }
+    { "label": "Contact", "href": "#contact" }
   ],
   "blogCategories": [
     "Java",
