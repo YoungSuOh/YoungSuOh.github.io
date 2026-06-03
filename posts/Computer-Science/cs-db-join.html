@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="INNER·LEFT/RIGHT OUTER·FULL OUTER·CROSS·SELF JOIN의 동작 차이와 실전 예제, PinterSemi 대댓글 실사례를 정리합니다." />
+    <title>[Database] JOIN · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-03-11 · Computer Science</p>
+        <h1 class="article-title">[Database] JOIN</h1>
+        <p class="article-lead muted">INNER·LEFT/RIGHT OUTER·FULL OUTER·CROSS·SELF JOIN의 동작 차이와 실전 예제, PinterSemi 대댓글 실사례를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DB</span></div>
+        <div class="article-body post-body">
+<p>두 개 이상의 테이블이나 데이터베이스를 연결하여 데이터를 검색하는 방법.</p>
+<h2>예제 테이블</h2>
+<table>
+<thead><tr><th colspan="3">EX_TABLE</th><th colspan="3">JOIN_TABLE</th></tr>
+<tr><th>NO_EMP</th><th>NAME</th><th>DEPT</th><th>NO_EMP</th><th>AGE</th><th>SALARY</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Alice</td><td>HR</td><td>1</td><td>25</td><td>50000</td></tr>
+<tr><td>2</td><td>Bob</td><td>IT</td><td>2</td><td>30</td><td>60000</td></tr>
+<tr><td>3</td><td>Charlie</td><td>Finance</td><td>4</td><td>40</td><td>70000</td></tr>
+</tbody></table>
+<h2>JOIN 종류</h2>
+<h3>INNER JOIN — 교집합</h3>
+<pre><code class="language-sql">SELECT A.NAME, B.AGE FROM EX_TABLE A
+INNER JOIN JOIN_TABLE B ON A.NO_EMP = B.NO_EMP</code></pre>
+<p>기준 테이블과 join 테이블의 <span class="kw">중복된 값</span>만 표시. → Alice, Bob</p>
+<h3>LEFT OUTER JOIN</h3>
+<pre><code class="language-sql">SELECT A.NAME, B.AGE FROM EX_TABLE A
+LEFT OUTER JOIN JOIN_TABLE B ON A.NO_EMP = B.NO_EMP</code></pre>
+<p>왼쪽 테이블 기준. Charlie는 매칭 없으므로 AGE = NULL</p>
+<h3>RIGHT OUTER JOIN</h3>
+<p>오른쪽 테이블 기준. NO_EMP=4(AGE 40)는 NAME = NULL</p>
+<h3>FULL OUTER JOIN</h3>
+<p>양쪽 모두 기준. 일치하지 않는 값은 NULL로 채움</p>
+<h3>CROSS JOIN — 카타시안 곱</h3>
+<p>모든 경우의 수 (3 × 3 = 9개 행)</p>
+<h3>SELF JOIN</h3>
+<p>자기자신과 조인. 계층 구조(상사-부하), 값 비교에 사용</p>
+<h2>JOIN 종류 한눈에</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">INNER</div>양쪽 매칭만</div>
+  <div class="compare-card"><div class="compare-title">LEFT OUTER</div>왼쪽 전부 + 매칭</div>
+  <div class="compare-card"><div class="compare-title">RIGHT OUTER</div>오른쪽 전부 + 매칭</div>
+  <div class="compare-card"><div class="compare-title">FULL OUTER</div>양쪽 전부</div>
+  <div class="compare-card"><div class="compare-title">CROSS</div>카타시안 곱</div>
+  <div class="compare-card"><div class="compare-title">SELF</div>자기 자신 조인</div>
+</div>
+<h2>실전 사례: PinterSemi 대댓글</h2>
+<div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body">JSP 프로젝트에서 대댓글 기능 구현 시 <strong>SELF-JOIN + WITH RECURSIVE</strong>로 계층적 조회, <strong>INNER JOIN</strong>으로 부모 댓글-대댓글 연결. DB에서 계층 정렬 후 JS에서 DFS로 트리 렌더링하여 클라이언트 부하 감소.</div></div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="커널 모드와 유저 모드의 권한 차이, 시스템 콜·인터럽트·컨텍스트 스위치를 통한 모드 전환 메커니즘을 정리합니다." />
+    <title>[OS] Kernel &amp; User Mode · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-02-02 · Computer Science</p>
+        <h1 class="article-title">[OS] Kernel &amp; User Mode</h1>
+        <p class="article-lead muted">커널 모드와 유저 모드의 권한 차이, 시스템 콜·인터럽트·컨텍스트 스위치를 통한 모드 전환 메커니즘을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">OS</span></div>
+        <div class="article-body post-body">
+<h2>두 가지 실행 모드</h2>
+<p>현대 OS에서 프로세스가 CPU를 사용할 수 있는 <span class="kw blue">권한 수준</span>을 나눈 두 가지 모드.</p>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">커널 모드 (Kernel Mode)</div><strong>최고 권한</strong>. 하드웨어 자원 직접 접근/제어. 모든 명령어 실행 허용</div>
+  <div class="compare-card"><div class="compare-title">유저 모드 (User Mode)</div><strong>제한된 권한</strong>. 하드웨어 직접 접근 불가, 시스템 콜로 커널에 요청</div>
+</div>
+<h2>커널 모드 특징</h2>
+<dl class="kv-list">
+  <dt>권한</dt><dd>무제한 — 모든 명령어와 메모리 주소 접근 가능</dd>
+  <dt>안정성</dt><dd>커널 코드 오류 = <span class="kw red">시스템 크래시</span></dd>
+  <dt>실행 대상</dt><dd>파일 시스템, 메모리 관리, 네트워크 스택, 장치 드라이버</dd>
+</dl>
+<h2>유저 모드 특징</h2>
+<dl class="kv-list">
+  <dt>권한</dt><dd>제한됨 — 하드웨어/특정 메모리 영역 접근 불가</dd>
+  <dt>안전성</dt><dd>한 유저 프로세스 오류가 <span class="kw green">다른 프로세스/시스템에 영향 없음</span></dd>
+  <dt>실행 대상</dt><dd>웹 브라우저, 사용자 애플리케이션</dd>
+</dl>
+<h2>모드 전환 메커니즘</h2>
+<h3>1. System Call</h3>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">유저 모드 프로세스가 시스템 콜 호출</span></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">CPU가 커널 모드로 전환</span></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">요청 작업 수행 후 유저 모드 복귀</span></div>
+</div>
+<h3>2. 하드웨어 인터럽트</h3>
+<p>I/O 장치 요청 등으로 유저 모드 실행 중 커널 모드로 전환.</p>
+<h3>3. 컨텍스트 스위치</h3>
+<p>스케줄러에 의해 실행 중인 프로세스가 변경될 때. 현재 프로세스 상태 저장 + 다른 프로세스 상태 복원.</p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

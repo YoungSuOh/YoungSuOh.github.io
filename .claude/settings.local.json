@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run:*)",
-      "Bash(node scripts/notion-import.mjs --batch scripts/notion-batch.json --build)"
+      "Bash(node scripts/notion-import.mjs --batch scripts/notion-batch.json --build)",
+      "mcp__claude_ai_Notion__notion-fetch"
     ]
   }
 }

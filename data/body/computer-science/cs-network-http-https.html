@@ -1,0 +1,30 @@
+<h2>HTTP</h2>
+<div class="def-box"><div class="def-term">HTTP</div><div class="def-desc">서버/클라이언트 모델을 따라 데이터를 주고 받기 위한 프로토콜. 인터넷에서 하이퍼텍스트를 교환하는 통신 규약. <strong>80번 포트</strong> 사용</div></div>
+<ul>
+  <li>애플리케이션 레벨 프로토콜, TCP/IP 위에서 작동</li>
+  <li>Stateless 프로토콜</li>
+  <li>Method, Path, Version, Headers, Body</li>
+</ul>
+<div class="callout danger"><div class="callout-icon">🚨</div><div class="callout-body">HTTP는 <strong>평문 데이터 전송</strong> → 비밀번호·주민등록번호 등을 주고받으면 제3자가 조회 가능. 이 문제 해결 위해 HTTPS 등장</div></div>
+<h2>HTTPS</h2>
+<div class="def-box"><div class="def-term">HTTPS</div><div class="def-desc">HTTP에 <strong>데이터 암호화</strong>가 추가된 프로토콜. <strong>443번 포트</strong> 사용. 중간 제3자가 정보를 볼 수 없도록 암호화</div></div>
+<h2>대칭키 vs 비대칭키</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">대칭키</div>클라이언트와 서버가 <strong>동일한 키</strong>로 암호화·복호화. 키 노출 시 위험, 연산 속도 빠름</div>
+  <div class="compare-card"><div class="compare-title">비대칭키</div><strong>공개키 + 개인키</strong> 쌍. 키 노출되어도 안전, 연산 속도 느림</div>
+</div>
+<h2>비대칭키 동작</h2>
+<dl class="kv-list">
+  <dt>공개키 암호화</dt><dd>공개키로 암호화 → 개인키로만 복호화. <span class="kw green">나만 볼 수 있음</span></dd>
+  <dt>개인키 암호화</dt><dd>개인키로 암호화 → 공개키로만 복호화. <span class="kw">신뢰성 보장</span></dd>
+</dl>
+<h2>HTTPS 동작 과정 (Hand-Shaking)</h2>
+<div class="callout info"><div class="callout-icon">🔐</div><div class="callout-body"><strong>핵심:</strong> 처음 연결 성립하여 안전하게 <strong>세션키를 공유하는 과정에서 비대칭키 사용</strong>. 이후 데이터 교환에서 빠른 속도를 위해 <strong>대칭키 사용</strong></div></div>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">클라이언트 연결 시도</span></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">서버 공개키 전달</span><div class="step-desc">인증서 형태로</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">인증서 검증 + 세션키 발급</span></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">공개키로 세션키 암호화 전송</span></div>
+  <div class="step-item"><span class="step-num">5</span><span class="step-title">서버 개인키로 복호화</span><div class="step-desc">세션키 획득</div></div>
+  <div class="step-item"><span class="step-num">6</span><span class="step-title">동일 세션키로 데이터 암호화 통신</span></div>
+</div>

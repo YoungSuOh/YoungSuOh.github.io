@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PCB(Process Control Block)의 구조와 관리 방식, Context Switching이 발생하는 시점과 오버헤드를 정리합니다." />
+    <title>[OS] PCB &amp; Context Switching · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-02-14 · Computer Science</p>
+        <h1 class="article-title">[OS] PCB &amp; Context Switching</h1>
+        <p class="article-lead muted">PCB(Process Control Block)의 구조와 관리 방식, Context Switching이 발생하는 시점과 오버헤드를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">OS</span></div>
+        <div class="article-body post-body">
+<h2>Process Management</h2>
+<p>CPU가 프로세스가 여러 개일 때 <span class="kw">CPU 스케줄링</span>을 통해 관리하는 것. CPU는 각 프로세스가 누군지 알아야 관리가 가능.</p>
+<h2>PCB (Process Control Block)</h2>
+<div class="def-box"><div class="def-term">PCB</div><div class="def-desc">프로세스 메타데이터들을 저장해 놓는 곳. <strong>한 PCB 안에는 한 프로세스의 정보</strong>가 담김</div></div>
+<dl class="kv-list">
+  <dt>Process ID</dt><dd>식별 번호</dd>
+  <dt>Process State</dt><dd>new, ready, running, waiting, terminated</dd>
+  <dt>Priority</dt><dd>우선순위</dd>
+  <dt>Registers</dt><dd>CPU 레지스터 값</dd>
+  <dt>Owner</dt><dd>소유자</dd>
+  <dt>CPU/Memory Usage</dt><dd>리소스 사용량</dd>
+</dl>
+<h3>PCB가 왜 필요한가?</h3>
+<div class="callout info"><div class="callout-icon">🔄</div><div class="callout-body">CPU에서는 프로세스 상태에 따라 교체 작업이 일어난다 (interrupt 발생 등). <strong>다시 수행할 대기 중인 프로세스의 저장 값을 PCB에 저장</strong>해두는 것이다.</div></div>
+<h3>관리 방식</h3>
+<p><span class="kw blue">Linked List</span> 방식. PCB List Head에 PCB들이 생성될 때마다 붙음. 주소값 연결이므로 삽입·삭제 용이.</p>
+<h2>Context Switching</h2>
+<div class="def-box"><div class="def-term">Context Switch</div><div class="def-desc">CPU가 이전 프로세스 상태를 PCB에 보관하고, 또 다른 프로세스의 정보를 PCB에 읽어 레지스터에 적재하는 과정</div></div>
+<h3>발생 시점</h3>
+<ul>
+  <li>인터럽트 발생</li>
+  <li>CPU 사용 허가시간 모두 소모</li>
+  <li>입출력을 위해 대기</li>
+</ul>
+<p>즉, <span class="kw">Ready → Running, Running → Ready, Running → Waiting</span> 상태 변경 시.</p>
+<h3>Context Switching의 오버헤드</h3>
+<div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body">오버헤드는 보통 안 좋은 말이지만, 프로세스 작업 중에는 감수해야 한다. I/O 이벤트로 대기 상태가 된 프로세스 대신 다른 프로세스를 수행시키는 것이 효율적. <strong>CPU가 놀지 않게 하고 사용자에게 빠르게 응답</strong>하기 위함.</div></div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

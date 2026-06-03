@@ -1,0 +1,294 @@
+<div class="def-box"><div class="def-term">인터럽트란?</div><div class="def-desc">프로그램을 실행하는 도중 예기치 않은 상황이 발생할 경우, <strong>현재 실행 중인 작업을 즉시 중단</strong>하고 발생된 상황의 우선 처리가 필요함을 <strong>CPU에게 알리는 것</strong></div></div>
+
+<h2>인터럽트의 종류</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">외부 인터럽트</div>입출력, 외부 신호, 전원 이상 등 <em>(하드웨어 신호)</em></div>
+  <div class="compare-card"><div class="compare-title">내부 인터럽트 (Trap)</div>0으로 나누기, 오버플로우, 명령어 오용 등 <em>(잘못된 명령/데이터)</em></div>
+  <div class="compare-card"><div class="compare-title">소프트웨어 인터럽트</div>명령어 수행에 의해 발생, 사용자가 프로그램 실행 시</div>
+</div>
+
+<h2>🔄 인터럽트 발생부터 처리까지 전체 흐름</h2>
+
+<figure style="text-align:center; margin: 20px 0;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 920" width="100%" style="max-width: 720px; height: auto; background: #fafbfc; border-radius: 10px; padding: 12px;">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <linearGradient id="g-blue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="g-red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fee2e2"/><stop offset="1" stop-color="#fecaca"/>
+    </linearGradient>
+    <linearGradient id="g-yellow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fef3c7"/><stop offset="1" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="g-green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dcfce7"/><stop offset="1" stop-color="#bbf7d0"/>
+    </linearGradient>
+    <linearGradient id="g-purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ede9fe"/><stop offset="1" stop-color="#ddd6fe"/>
+    </linearGradient>
+  </defs>
+
+  <text x="360" y="30" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#1e293b">인터럽트 처리 흐름도</text>
+
+  <rect x="240" y="55" width="240" height="60" rx="10" fill="url(#g-blue)" stroke="#3b82f6" stroke-width="2"/>
+  <text x="360" y="80" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1e3a8a">① 정상 프로그램 실행</text>
+  <text x="360" y="100" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475569">CPU가 명령어를 순차 실행 중</text>
+  <line x1="360" y1="115" x2="360" y2="140" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="220" y="148" width="280" height="60" rx="10" fill="url(#g-red)" stroke="#ef4444" stroke-width="2"/>
+  <text x="360" y="173" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#991b1b">⚡ ② 인터럽트 발생!</text>
+  <text x="360" y="193" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#7f1d1d">외부 / 내부(Trap) / 소프트웨어 인터럽트</text>
+  <line x1="360" y1="208" x2="360" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="240" y="240" width="240" height="55" rx="10" fill="url(#g-yellow)" stroke="#f59e0b" stroke-width="2"/>
+  <text x="360" y="263" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#78350f">③ 현재 명령어 완료 대기</text>
+  <text x="360" y="282" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#92400e">실행 중인 명령어는 끝까지 수행</text>
+  <line x1="360" y1="295" x2="360" y2="319" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="200" y="327" width="320" height="80" rx="10" fill="url(#g-purple)" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="360" y="352" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#5b21b6">💾 ④ 현재 상태 저장 (Context Save)</text>
+  <text x="360" y="372" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6d28d9">PC, 레지스터 값을 시스템 스택에 저장</text>
+  <text x="360" y="390" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7c3aed" font-style="italic">→ 인터럽트 처리 후 돌아오기 위해 필수</text>
+  <line x1="360" y1="407" x2="360" y2="431" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="220" y="439" width="280" height="55" rx="10" fill="url(#g-yellow)" stroke="#f59e0b" stroke-width="2"/>
+  <text x="360" y="462" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#78350f">⑤ 인터럽트 원인 식별</text>
+  <text x="360" y="481" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#92400e">인터럽트 벡터 테이블에서 ISR 주소 찾기</text>
+  <line x1="360" y1="494" x2="360" y2="518" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="200" y="526" width="320" height="80" rx="10" fill="url(#g-red)" stroke="#ef4444" stroke-width="2"/>
+  <text x="360" y="551" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#991b1b">🔧 ⑥ ISR 실행 (Interrupt Service Routine)</text>
+  <text x="360" y="571" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#7f1d1d">해당 인터럽트를 처리하는 핸들러 코드 실행</text>
+  <text x="360" y="589" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#dc2626" font-style="italic">예: 키보드 입력 → 입력 버퍼에 저장</text>
+  <line x1="360" y1="606" x2="360" y2="630" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="200" y="638" width="320" height="80" rx="10" fill="url(#g-purple)" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="360" y="663" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#5b21b6">♻️ ⑦ 상태 복원 (Context Restore)</text>
+  <text x="360" y="683" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6d28d9">스택에서 PC, 레지스터 값 꺼내 복원</text>
+  <text x="360" y="701" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7c3aed" font-style="italic">→ 이전 상태로 완벽히 되돌리기</text>
+  <line x1="360" y1="718" x2="360" y2="742" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="240" y="750" width="240" height="60" rx="10" fill="url(#g-green)" stroke="#22c55e" stroke-width="2"/>
+  <text x="360" y="775" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#166534">✅ ⑧ 정상 프로그램 재개</text>
+  <text x="360" y="795" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#15803d">중단된 명령어 다음부터 실행 계속</text>
+
+  <path d="M 240 780 Q 80 780 80 85 Q 80 75 230 85" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+  <text x="40" y="450" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b" font-style="italic" transform="rotate(-90 40 450)">반복</text>
+
+  <rect x="540" y="340" width="160" height="380" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="620" y="365" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#475569">Context Switch</text>
+  <text x="620" y="395" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">④와 ⑦은 한 쌍</text>
+  <text x="620" y="415" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">상태 저장 + 복원</text>
+  <text x="620" y="445" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">이 과정을</text>
+  <text x="620" y="465" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="700" fill="#1e3a8a">"문맥 교환"</text>
+  <text x="620" y="485" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#64748b">이라 부름</text>
+
+  <text x="360" y="850" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b" font-weight="600">색상 가이드</text>
+  <rect x="100" y="865" width="14" height="14" fill="url(#g-blue)" stroke="#3b82f6"/>
+  <text x="120" y="877" font-family="sans-serif" font-size="10" fill="#475569">정상 실행</text>
+  <rect x="190" y="865" width="14" height="14" fill="url(#g-red)" stroke="#ef4444"/>
+  <text x="210" y="877" font-family="sans-serif" font-size="10" fill="#475569">인터럽트/ISR</text>
+  <rect x="295" y="865" width="14" height="14" fill="url(#g-yellow)" stroke="#f59e0b"/>
+  <text x="315" y="877" font-family="sans-serif" font-size="10" fill="#475569">전이 단계</text>
+  <rect x="395" y="865" width="14" height="14" fill="url(#g-purple)" stroke="#8b5cf6"/>
+  <text x="415" y="877" font-family="sans-serif" font-size="10" fill="#475569">Context Switch</text>
+  <rect x="515" y="865" width="14" height="14" fill="url(#g-green)" stroke="#22c55e"/>
+  <text x="535" y="877" font-family="sans-serif" font-size="10" fill="#475569">실행 재개</text>
+</svg>
+<figcaption style="color:#64748b; font-size:0.85rem; margin-top:8px;">▲ 인터럽트 발생부터 처리 완료까지의 8단계 흐름</figcaption>
+</figure>
+
+<h2>Polling vs Interrupt — 왜 인터럽트인가?</h2>
+<div class="compare-grid">
+  <div class="compare-card con"><div class="compare-title">Polling</div>CPU가 일정 간격으로 자원 상태를 주기적으로 확인. 아무 일이 없어도 CPU 시간 낭비 → <span class="kw red">치명적 단점</span><br><br><em>비유: 교수님이 10분마다 학생들에게 "질문 있니?" 물어보기</em></div>
+  <div class="compare-card pro"><div class="compare-title">Interrupt</div>자원이 능동적으로 변화를 CPU에 알림. CPU는 따로 시간 안 들여도 됨 → <span class="kw green">신속 대응</span><br><br><em>비유: 학생들이 질문 생길 때마다 교수님께 손 들기</em></div>
+</div>
+
+<div class="callout tip"><div class="callout-icon">💡</div><div class="callout-body">인터럽트는 <strong>발생 시기를 예측하기 힘든 경우에 컨트롤러가 가장 빠르게 대응할 수 있는 방법</strong>이다. 하드웨어 지원이 필요하다는 제약이 있지만, 폴링에 비해 신속하다.</div></div>
+
+<h2>📋 인터럽트 벡터 테이블 (IVT)</h2>
+
+<p>CPU가 인터럽트 원인을 식별하면 어떤 ISR을 실행해야 할지 알아야 한다. 이를 위해 <span class="kw blue">인터럽트 벡터 테이블</span>이 존재한다.</p>
+
+<figure style="text-align:center; margin: 20px 0;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="100%" style="max-width: 700px; height: auto; background: #fafbfc; border-radius: 10px; padding: 12px;">
+  <text x="350" y="25" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#1e293b">Interrupt Vector Table</text>
+
+  <rect x="80" y="50" width="540" height="34" fill="#1e3a8a"/>
+  <text x="130" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">IRQ #</text>
+  <text x="280" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">인터럽트 종류</text>
+  <text x="460" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">ISR 주소</text>
+  <text x="575" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">우선순위</text>
+
+  <rect x="80" y="84" width="540" height="32" fill="#fff" stroke="#cbd5e1"/>
+  <text x="130" y="104" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x00</text>
+  <text x="280" y="104" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">System Timer</text>
+  <text x="460" y="104" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80101000</text>
+  <rect x="555" y="92" width="40" height="16" rx="3" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="575" y="104" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#991b1b">최고</text>
+
+  <rect x="80" y="116" width="540" height="32" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="130" y="136" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x01</text>
+  <text x="280" y="136" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">Keyboard</text>
+  <text x="460" y="136" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80102500</text>
+  <rect x="555" y="124" width="40" height="16" rx="3" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="575" y="136" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#9a3412">높음</text>
+
+  <rect x="80" y="148" width="540" height="32" fill="#fff" stroke="#cbd5e1"/>
+  <text x="130" y="168" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x02</text>
+  <text x="280" y="168" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">Disk Controller</text>
+  <text x="460" y="168" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80103A00</text>
+  <rect x="555" y="156" width="40" height="16" rx="3" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="575" y="168" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#9a3412">높음</text>
+
+  <rect x="80" y="180" width="540" height="32" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="130" y="200" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x03</text>
+  <text x="280" y="200" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">Network Card</text>
+  <text x="460" y="200" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80104F20</text>
+  <rect x="555" y="188" width="40" height="16" rx="3" fill="#fefce8" stroke="#fde047"/>
+  <text x="575" y="200" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#854d0e">중간</text>
+
+  <rect x="80" y="212" width="540" height="32" fill="#fff" stroke="#cbd5e1"/>
+  <text x="130" y="232" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x04</text>
+  <text x="280" y="232" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">Mouse</text>
+  <text x="460" y="232" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80105800</text>
+  <rect x="555" y="220" width="40" height="16" rx="3" fill="#fefce8" stroke="#fde047"/>
+  <text x="575" y="232" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#854d0e">중간</text>
+
+  <rect x="80" y="244" width="540" height="32" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="130" y="264" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="#1e293b">0x05</text>
+  <text x="280" y="264" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1e293b">Software Trap (Div/0)</text>
+  <text x="460" y="264" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="#475569">0x80106A40</text>
+  <rect x="555" y="252" width="40" height="16" rx="3" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="575" y="264" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#166534">낮음</text>
+
+  <text x="350" y="305" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b" font-style="italic">CPU는 IRQ # 를 인덱스로 사용해 해당 ISR 주소로 점프</text>
+</svg>
+<figcaption style="color:#64748b; font-size:0.85rem; margin-top:8px;">▲ 인터럽트 벡터 테이블 — CPU가 인터럽트 종류별 ISR 주소를 찾는 매핑 테이블</figcaption>
+</figure>
+
+<h2>📚 시스템 스택의 역할</h2>
+
+<p>인터럽트 처리 시 <strong>현재 작업을 안전하게 저장하고 복원</strong>하는 핵심 메커니즘이다.</p>
+
+<figure style="text-align:center; margin: 20px 0;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="100%" style="max-width: 700px; height: auto; background: #fafbfc; border-radius: 10px; padding: 12px;">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <text x="350" y="25" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#1e293b">시스템 스택과 Context Save/Restore</text>
+
+  <text x="120" y="60" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1e3a8a">① 인터럽트 발생 전</text>
+  <rect x="60" y="70" width="120" height="280" fill="#fff" stroke="#3b82f6" stroke-width="2" rx="4"/>
+  <text x="120" y="88" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#64748b">스택</text>
+  <rect x="65" y="320" width="110" height="25" fill="#dbeafe"/>
+  <text x="120" y="337" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1e3a8a">이전 데이터</text>
+  <text x="120" y="370" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#64748b">SP →</text>
+  <text x="120" y="385" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#475569">실행 중인 PC: 0x1000</text>
+
+  <line x1="200" y1="200" x2="225" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <text x="350" y="60" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#5b21b6">② Context Save</text>
+  <rect x="290" y="70" width="120" height="280" fill="#fff" stroke="#8b5cf6" stroke-width="2" rx="4"/>
+  <text x="350" y="88" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#64748b">스택</text>
+  <rect x="295" y="100" width="110" height="22" fill="#ede9fe"/>
+  <text x="350" y="115" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="#5b21b6">PC = 0x1000</text>
+  <rect x="295" y="124" width="110" height="22" fill="#ede9fe"/>
+  <text x="350" y="139" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="#5b21b6">EAX = 42</text>
+  <rect x="295" y="148" width="110" height="22" fill="#ede9fe"/>
+  <text x="350" y="163" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="#5b21b6">EBX = 100</text>
+  <rect x="295" y="172" width="110" height="22" fill="#ede9fe"/>
+  <text x="350" y="187" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="#5b21b6">FLAGS</text>
+  <text x="350" y="208" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#64748b">SP →</text>
+  <rect x="295" y="320" width="110" height="25" fill="#dbeafe"/>
+  <text x="350" y="337" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1e3a8a">이전 데이터</text>
+  <text x="350" y="370" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#475569">ISR 실행 중...</text>
+  <text x="350" y="385" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#7c3aed">PC: 0x80102500</text>
+
+  <line x1="430" y1="200" x2="455" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <text x="580" y="60" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#166534">③ Context Restore</text>
+  <rect x="520" y="70" width="120" height="280" fill="#fff" stroke="#22c55e" stroke-width="2" rx="4"/>
+  <text x="580" y="88" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#64748b">스택</text>
+  <text x="580" y="208" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#64748b">SP →</text>
+  <rect x="525" y="320" width="110" height="25" fill="#dbeafe"/>
+  <text x="580" y="337" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#1e3a8a">이전 데이터</text>
+  <text x="580" y="370" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#475569">레지스터 복원 완료</text>
+  <text x="580" y="385" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#15803d">PC: 0x1000 재개</text>
+
+  <path d="M 410 130 Q 470 80 530 130" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow2)"/>
+  <text x="475" y="75" text-anchor="middle" font-family="sans-serif" font-size="10" font-style="italic" fill="#166534">스택에서 pop</text>
+</svg>
+<figcaption style="color:#64748b; font-size:0.85rem; margin-top:8px;">▲ Context Save/Restore의 메모리 변화 — 인터럽트 처리 후 정확히 원래 상태로 복귀</figcaption>
+</figure>
+
+<h2>인터럽트 처리 과정 (상세)</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">현재 명령어 완료</span><div class="step-desc">실행 중인 명령어는 끝까지 마침 (원자성 보장)</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">PC 저장</span><div class="step-desc">다음 실행할 명령어 주소를 시스템 스택에 push</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">레지스터 저장</span><div class="step-desc">EAX, EBX, FLAGS 등 모든 CPU 상태를 스택에 push</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">IVT 조회</span><div class="step-desc">IRQ 번호로 인터럽트 벡터 테이블에서 ISR 주소 찾기</div></div>
+  <div class="step-item"><span class="step-num">5</span><span class="step-title">ISR 실행</span><div class="step-desc">PC를 ISR 주소로 변경, 인터럽트 처리 루틴 수행</div></div>
+  <div class="step-item"><span class="step-num">6</span><span class="step-title">레지스터 복원</span><div class="step-desc">스택에서 pop하여 원래 레지스터 값 복원</div></div>
+  <div class="step-item"><span class="step-num">7</span><span class="step-title">PC 복원</span><div class="step-desc">중단된 명령어 다음 위치로 PC 복원</div></div>
+  <div class="step-item"><span class="step-num">8</span><span class="step-title">실행 재개</span><div class="step-desc">원래 프로그램을 마치 아무 일도 없었던 듯 계속 실행</div></div>
+</div>
+
+<div class="callout info"><div class="callout-icon">🔄</div><div class="callout-body">이 일련의 과정 — <strong>현 상태의 정보를 임시 저장해두고 다시 복원하는 과정</strong> — 을 <span class="kw blue">문맥 교환(Context Switch)</span>이라고 부른다. 프로세스 간 스위칭도 동일한 메커니즘으로 동작한다.</div></div>
+
+<h2>🎯 실전 예시: 키보드 인터럽트</h2>
+
+<pre><code>[T = 0ms]  사용자가 문서 편집 중
+           CPU: 워드프로세서 코드 실행
+           PC = 0x1000
+
+[T = 5ms]  사용자가 'A' 키 누름!
+           키보드 컨트롤러 → CPU IRQ 1 신호 전송
+
+[T = 5.001ms]  CPU 인터럽트 감지
+           ① 현재 명령어 완료 (mov eax, ebx)
+           ② PC(0x1004), 레지스터 스택 push
+           ③ IVT[1] = 0x80102500 (키보드 ISR)
+           ④ PC ← 0x80102500
+
+[T = 5.002ms]  키보드 ISR 실행
+           - 키보드 포트에서 스캔코드 읽기
+           - 'A' = 0x1E를 입력 버퍼에 저장
+           - 운영체제에 입력 알림
+
+[T = 5.003ms]  ISR 종료
+           ⑤ 스택에서 레지스터, PC pop
+           ⑥ PC ← 0x1004 (원래 자리)
+           ⑦ 워드프로세서 코드 계속 실행
+
+[T = 5.004ms]  사용자 화면에 'A' 표시
+           워드프로세서는 인터럽트가 있었는지조차 모름!
+</code></pre>
+
+<div class="summary-box"><div><strong>핵심:</strong> 인터럽트는 <strong>발생 시기를 예측할 수 없는 비동기 이벤트</strong>를 효율적으로 처리하는 메커니즘. 컨텍스트 저장/복원으로 원래 프로그램은 인터럽트 발생을 모르고 계속 실행된다.</div></div>
+
+<h2>⚡ 다중 인터럽트 & 우선순위</h2>
+
+<p>인터럽트 처리 중에 또 다른 인터럽트가 발생하면 어떻게 될까?</p>
+
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Non-Nested (비중첩)</div>현재 ISR 종료까지 다른 인터럽트는 대기. 단순하지만 응답성↓</div>
+  <div class="compare-card pro"><div class="compare-title">Nested (중첩)</div>더 높은 우선순위 인터럽트가 현재 ISR을 중단시킬 수 있음. 응답성↑</div>
+</div>
+
+<div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><strong>임계 구역 (Critical Section):</strong> ISR 내에서 데이터 무결성이 중요한 코드는 <code>cli</code>(인터럽트 비활성화) → 작업 → <code>sti</code>(다시 활성화)로 보호. 너무 길게 비활성화하면 다른 중요 인터럽트를 놓칠 수 있다.</div></div>
+
+<h2>요약</h2>
+<dl class="kv-list">
+  <dt>본질</dt><dd>예측 불가능한 이벤트에 대한 <strong>비동기 알림 메커니즘</strong></dd>
+  <dt>장점</dt><dd>폴링 대비 CPU 효율↑, 신속한 대응↑</dd>
+  <dt>핵심</dt><dd>Context Save → ISR 실행 → Context Restore로 <strong>투명한 처리</strong></dd>
+  <dt>도구</dt><dd>인터럽트 벡터 테이블(IVT), 시스템 스택, ISR</dd>
+</dl>

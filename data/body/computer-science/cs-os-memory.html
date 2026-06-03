@@ -1,0 +1,44 @@
+<div class="def-box"><div class="def-term">메인 메모리</div><div class="def-desc"><strong>CPU가 직접 접근</strong>할 수 있는 기억장치. 프로세스가 실행되려면 프로그램이 메모리에 올라와야 함</div></div>
+<h2>MMU (Memory Management Unit)</h2>
+<dl class="kv-list">
+  <dt>역할</dt><dd>논리 주소를 물리 주소로 변환. <strong>CPU가 메모리에 접근하는 것을 총 관리</strong>하는 하드웨어</dd>
+  <dt>가상 주소</dt><dd>사용자가 보는 주소 공간. MMU가 가상 → 물리 주소 변환을 빠르게 처리</dd>
+  <dt>메모리 보호</dt><dd>base + limit 레지스터로 합법적 영역(<code>base ≤ x &lt; base+limit</code>) 외 접근 시 <span class="kw red">trap</span> 발생</dd>
+</dl>
+<div class="callout info"><div class="callout-icon">🛡️</div><div class="callout-body">base와 limit 레지스터는 안전성을 위해 <strong>커널 모드에서만 수정 가능</strong>하도록 설계</div></div>
+<h2>메모리 과할당 (Over Allocating)</h2>
+<p>실제 메모리 사이즈보다 더 큰 사이즈를 프로세스에 할당. 페이지 기법 등으로 사용자가 눈치채지 못하게 처리.</p>
+<h3>과할당 발생 시</h3>
+<ol>
+  <li>프로세스 실행 중 페이지 폴트 발생</li>
+  <li>페이지 위치를 디스크에서 찾음</li>
+  <li>메모리의 빈 프레임에 페이지를 올려야 하는데 빈 프레임이 없음 → <span class="kw red">문제!</span></li>
+</ol>
+<h3>해결: 페이지 교체</h3>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">페이지 부재 발생</span></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">디스크에서 페이지 위치 찾기</span></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">빈 프레임 확인</span><div class="step-desc">없으면 victim 프레임 선정 → 디스크 기록</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">새 페이지를 빈 프레임에 올림</span></div>
+</div>
+<h3>오버헤드 감소법</h3>
+<dl class="kv-list">
+  <dt>변경 비트</dt><dd>victim 페이지가 수정되지 않았으면 디스크 기록 생략</dd>
+  <dt>교체 알고리즘</dt><dd>FIFO, OPT, LRU 등 상황에 맞는 선택</dd>
+</dl>
+<h2>캐시 메모리</h2>
+<div class="def-box"><div class="def-term">Cache</div><div class="def-desc">주 기억장치 내용 일부를 임시 저장. <strong>CPU와 주 기억장치의 속도 차이로 인한 성능 저하 방지</strong></div></div>
+<h3>지역성의 원리</h3>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">시간 지역성</div>최근 참조된 주소가 곧 다시 참조됨 (반복문 인덱스 i)</div>
+  <div class="compare-card"><div class="compare-title">공간 지역성</div>참조 주소와 인접한 주소가 다시 참조됨 (배열 순회)</div>
+</div>
+<h3>Write 정책</h3>
+<table>
+<thead><tr><th>구분</th><th>Write Through</th><th>Write Back</th></tr></thead>
+<tbody>
+<tr><td>방식</td><td>캐시+주기억 동시 업데이트</td><td>블록 해제 시 메모리 저장</td></tr>
+<tr><td>장점</td><td>일관성 유지</td><td>빠름</td></tr>
+<tr><td>단점</td><td>속도 저하</td><td>일관성 깨질 수 있음</td></tr>
+</tbody></table>
+<div class="summary-box"><div><strong>실무 조합:</strong> Write-Back + Write Allocate가 일반적</div></div>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="TCP 흐름 제어(Stop&amp;Wait, Sliding Window)와 혼잡 제어(AIMD, Slow Start, Fast Retransmit, Fast Recovery), Tahoe vs Reno 정책을 정리합니다." />
+    <title>[Network] TCP 흐름제어 / 혼잡제어 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-04-12 · Computer Science</p>
+        <h1 class="article-title">[Network] TCP 흐름제어 / 혼잡제어</h1>
+        <p class="article-lead muted">TCP 흐름 제어(Stop&amp;Wait, Sliding Window)와 혼잡 제어(AIMD, Slow Start, Fast Retransmit, Fast Recovery), Tahoe vs Reno 정책을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">Network</span></div>
+        <div class="article-body post-body">
+<h2>흐름 제어 (Flow Control)</h2>
+<div class="def-box"><div class="def-term">흐름 제어</div><div class="def-desc">송신측과 수신측 사이의 <strong>데이터 처리 속도 차이를 제어</strong>하여 수신자 버퍼 오버플로우 방지</div></div>
+<h3>1. Stop & Wait</h3>
+<p>매번 패킷에 대해 ACK를 받으면 다음 패킷 전송. 하나씩 보내므로 <span class="kw red">비효율</span></p>
+<h3>2. Sliding Window</h3>
+<p>수신측 윈도우 크기만큼 송신측이 ACK 없이 패킷 전송. 데이터 흐름 동적 조절</p>
+<div class="callout info"><div class="callout-icon">📦</div><div class="callout-body"><strong>윈도우 크기:</strong> 송신자가 한 번에 전송 가능한 최대 패킷 개수. 수신자가 ACK에 담아 보낸 TCP 헤더(window size)</div></div>
+<h2>혼잡 제어 (Congestion Control)</h2>
+<div class="def-box"><div class="def-term">혼잡 제어</div><div class="def-desc">데이터의 양이 라우터 처리량을 초과하면 손실 → 재전송 → 네트워크 혼잡. <strong>송신측 전송 속도를 적절히 조절</strong></div></div>
+<h3>1. AIMD (Additive Increase / Multiplicative Decrease)</h3>
+<p>합 증가 / 곱 감소. 패킷 하나씩 보내고 문제 없으면 윈도우 +1, 실패하면 ÷2.</p>
+<p>단점: 모든 대역 활용까지 오래 걸림</p>
+<h3>2. Slow Start (느린 시작)</h3>
+<p>윈도우 크기를 <strong>1, 2, 4, 8...</strong> 지수적으로 증가시키다 혼잡 감지 시 윈도우를 1로</p>
+<h3>3. Fast Retransmit (빠른 재전송)</h3>
+<p><strong>3 중복 ACK</strong> 받으면 타임아웃 전에 즉시 재전송</p>
+<h3>4. Fast Recovery (빠른 회복)</h3>
+<p>혼잡 시 윈도우를 1이 아닌 <strong>반으로</strong> 줄이고 선형 증가</p>
+<h2>혼잡 제어 정책</h2>
+<h3>TCP Tahoe</h3>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">Slow Start</span><div class="step-desc">지수적 증가</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">ssthresh 도달</span><div class="step-desc">AIMD로 전환</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">혼잡 발생 시</span><div class="step-desc">윈도우를 1로 줄이고 ssthresh = 윈도우/2</div></div>
+</div>
+<h3>TCP Reno (Tahoe 이후)</h3>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">3 ACK Duplicate 시</div>윈도우를 1이 아닌 반으로 줄임 (빠른 회복)</div>
+  <div class="compare-card"><div class="compare-title">Timeout 시</div>Tahoe와 동일. 윈도우를 1로 줄이고 Slow Start</div>
+</div>
+<div class="summary-box"><div><strong>Reno의 핵심:</strong> ACK 중복은 Timeout보다 덜 심각한 혼잡으로 가정 → 혼잡 상황의 우선순위 둠</div></div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="제1·2·3·BCNF 정규형의 단계별 변환 과정과 반정규화(테이블 병합·중복 컬럼 추가)의 트레이드오프를 정리합니다." />
+    <title>[Database] 정규화 &amp; 반정규화 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-03-05 · Computer Science</p>
+        <h1 class="article-title">[Database] 정규화 &amp; 반정규화</h1>
+        <p class="article-lead muted">제1·2·3·BCNF 정규형의 단계별 변환 과정과 반정규화(테이블 병합·중복 컬럼 추가)의 트레이드오프를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DB</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">정규화</div><div class="def-desc">데이터의 중복을 줄이고 데이터 무결성을 유지하기 위해 <strong>데이터를 구조화하는 과정</strong></div></div>
+<h2>정규화의 목적</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">데이터 중복 제거</div></div>
+  <div class="compare-card pro"><div class="compare-title">데이터 무결성 유지</div></div>
+  <div class="compare-card pro"><div class="compare-title">갱신 이상 최소화</div>삽입/삭제/갱신 anomaly 감소</div>
+  <div class="compare-card pro"><div class="compare-title">확장성 향상</div></div>
+</div>
+<h2>정규화 단계</h2>
+<h3>1NF — 원자값</h3>
+<div class="callout info"><div class="callout-icon">1️⃣</div><div class="callout-body">도메인이 <strong>원자값(atomic value)</strong>만 포함하도록 변환</div></div>
+<table>
+<thead><tr><th>학생 ID</th><th>이름</th><th>수강</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>홍길동</td><td>수학, 영어</td></tr>
+</tbody>
+</table>
+<p>→ 1NF로 변환 (한 행에 하나의 과목)</p>
+<table>
+<thead><tr><th>학생 ID</th><th>이름</th><th>수강</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>홍길동</td><td>수학</td></tr>
+<tr><td>1</td><td>홍길동</td><td>영어</td></tr>
+</tbody>
+</table>
+<h3>2NF — 부분 함수 종속 제거</h3>
+<div class="callout info"><div class="callout-icon">2️⃣</div><div class="callout-body">기본키의 <strong>일부</strong>에만 종속된 컬럼이 있으면 제거. 완전 함수 종속 보장</div></div>
+<h3>3NF — 이행 함수 종속 제거</h3>
+<div class="callout info"><div class="callout-icon">3️⃣</div><div class="callout-body">기본키가 아닌 컬럼이 다른 비키 컬럼을 결정하면 분리</div></div>
+<h3>BCNF — 모든 결정자가 후보 키</h3>
+<div class="callout info"><div class="callout-icon">🅱️</div><div class="callout-body">강화된 3NF. <strong>모든 결정자(Determinant)가 후보 키</strong>여야 함</div></div>
+<h2>정규화 판단 기준</h2>
+<table>
+<thead><tr><th>상황</th><th>정규화 수준</th></tr></thead>
+<tbody>
+<tr><td>읽기 많음 (대시보드)</td><td>비정규화 일부 허용</td></tr>
+<tr><td>쓰기 많음 (금융, 거래)</td><td>높은 정규화</td></tr>
+<tr><td>스키마 고정 (회계)</td><td>높은 정규화</td></tr>
+<tr><td>수평 확장 필요</td><td>비정규화 허용</td></tr>
+</tbody></table>
+<h2>반정규화 (Denormalization)</h2>
+<p>정규화된 DB의 일부를 의도적으로 정규화 원칙에서 벗어나게 설계하여 <span class="kw">읽기 성능</span> 최적화.</p>
+<dl class="kv-list">
+  <dt>테이블 병합</dt><dd>여러 테이블을 하나로 통합. 조인 비용 감소</dd>
+  <dt>중복 컬럼 추가</dt><dd>자주 조회되는 데이터를 다른 테이블에 중복 저장</dd>
+  <dt>계산 컬럼 추가</dt><dd>자주 계산되는 값(예: total_price)을 미리 저장</dd>
+  <dt>중복 테이블 추가</dt><dd>요약 데이터를 별도 테이블로 관리</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">반정규화 장점</div>읽기 성능 개선, 쿼리 단순화, 응답 속도 향상</div>
+  <div class="compare-card con"><div class="compare-title">반정규화 단점</div>저장 공간 증가, 데이터 일관성 유지 어려움, 쓰기 비용 증가, 유지보수 복잡</div>
+</div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

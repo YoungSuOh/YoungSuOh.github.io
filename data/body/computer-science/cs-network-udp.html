@@ -1,0 +1,38 @@
+<div class="def-box"><div class="def-term">UDP</div><div class="def-desc">User Datagram Protocol. 데이터를 데이터그램 단위로 처리하는 <strong>비연결형·신뢰성 없는 전송 프로토콜</strong></div></div>
+<h2>TCP와 UDP 등장 배경</h2>
+<p>IP는 Host-to-Host만 지원 → 하나의 장비 내 수많은 프로그램 통신에는 한계 → <span class="kw">포트 번호 등장</span></p>
+<p>IP 오류는 ICMP가 알리지만 대처 불가 → TCP/UDP 등장</p>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">TCP</div>분실·중복·순서 뒤바뀜을 자동 보정하여 정확한 전달</div>
+  <div class="compare-card neutral"><div class="compare-title">UDP</div>IP가 제공하는 정도. 에러·재전송·순서 뒤바뀜은 애플리케이션에서 처리</div>
+</div>
+<h2>TCP vs UDP</h2>
+<table>
+<thead><tr><th>TCP</th><th>UDP</th></tr></thead>
+<tbody>
+<tr><td>연결지향형</td><td>비연결지향형</td></tr>
+<tr><td>바이트 스트림</td><td>메시지 스트림</td></tr>
+<tr><td>혼잡·흐름 제어</td><td>혼잡·흐름 제어 X</td></tr>
+<tr><td>순서 보장, 느림</td><td>순서 X, 빠름</td></tr>
+<tr><td>신뢰성 있는 전송</td><td>전송 보장 X</td></tr>
+<tr><td>세그먼트 패킷</td><td>데이터그램 패킷</td></tr>
+<tr><td>HTTP, Email, FTP</td><td>도메인, 실시간 동영상</td></tr>
+</tbody></table>
+<h2>UDP는 왜 사용?</h2>
+<div class="callout tip"><div class="callout-icon">⚡</div><div class="callout-body"><strong>데이터의 신속성</strong>. 실시간 방송, 온라인 게임에서 사용. 네트워크 안 좋을 때 끊기는 현상이 UDP 특성</div></div>
+<h3>DNS에서 UDP 사용 이유</h3>
+<ul>
+  <li>Request 양이 작아 UDP Request에 담길 수 있음</li>
+  <li>3 way handshake 연결 유지 불필요 (오버헤드)</li>
+  <li>Request 손실은 Application Layer에서 제어 가능</li>
+  <li>DNS port: 53번</li>
+  <li>예외: 크기가 512(UDP 제한)를 넘으면 TCP 사용</li>
+</ul>
+<h2>UDP Header</h2>
+<dl class="kv-list">
+  <dt>Source port</dt><dd>시작 포트</dd>
+  <dt>Destination port</dt><dd>도착지 포트</dd>
+  <dt>Length</dt><dd>길이</dd>
+  <dt>Checksum</dt><dd>오류 검출. 자료 무결성 보호</dd>
+</dl>
+<p>간단한 구조 덕분에 TCP보다 가볍고 빠르지만 신뢰도 낮음.</p>

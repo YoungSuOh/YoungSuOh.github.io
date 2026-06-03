@@ -1,0 +1,36 @@
+<p>컴퓨터에서 실수를 표현하는 방법은 <strong>고정 소수점</strong>과 <strong>부동 소수점</strong> 두 가지가 존재한다.</p>
+<h2>1. 고정 소수점 (Fixed Point)</h2>
+<div class="def-box"><div class="def-term">고정 소수점</div><div class="def-desc">소수점이 찍힐 위치를 <strong>미리 정해놓고</strong> 소수를 표현하는 방식 (정수부 + 소수부)</div></div>
+<h3>예제 (10비트, 소수부 6비트)</h3>
+<table>
+<thead><tr><th>부호 (1)</th><th>정수부 (3)</th><th>소수부 (6)</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>101</td><td>110000</td></tr>
+</tbody></table>
+<ul>
+  <li>101₂ = 5 (정수부)</li>
+  <li>110000₂ = 0.75 (소수부, 1/2 + 1/4)</li>
+  <li>최종: <strong>5.75</strong></li>
+</ul>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>정수 연산처럼 간단, 연산 속도 빠름</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>표현 범위 좁음, 소수점 위치 고정 → 유연성 부족</div>
+</div>
+<h2>2. 부동 소수점 (Floating Point)</h2>
+<div class="def-box"><div class="def-term">부동 소수점</div><div class="def-desc">소수점 위치가 <strong>가변적</strong>. 숫자를 가수(mantissa)와 지수(exponent)로 분리. IEEE 754 표준 사용</div></div>
+<h3>IEEE 754 단정밀도 (32비트)</h3>
+<table>
+<thead><tr><th>부호 (1)</th><th>지수 (8)</th><th>가수 (23)</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>10000010</td><td>10100000000000000000000</td></tr>
+</tbody></table>
+<ul>
+  <li>부호: 0 → 양수</li>
+  <li>지수: 10000010₂ = 130 → 실제 지수 = 130 - 127 = <strong>3</strong> (편향 지수)</li>
+  <li>가수: 1.101₂ (가수는 항상 1을 포함)</li>
+  <li>계산: 1.101₂ × 2³ = 1.625 × 8 = <strong>13.0</strong></li>
+</ul>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>매우 큰/작은 수 표현 가능, 정밀 연산 가능</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>연산 복잡·느림, <span class="kw red">반올림 오차</span> 발생 (0.1을 정확히 표현 불가)</div>
+</div>

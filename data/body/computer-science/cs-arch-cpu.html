@@ -1,0 +1,40 @@
+<div class="def-box"><div class="def-term">CPU</div><div class="def-desc">컴퓨터에서 가장 핵심적인 역할을 수행하는 <strong>'인간의 두뇌'</strong>. 연산장치, 제어장치, 레지스터 3가지로 구성</div></div>
+<h2>CPU 구성</h2>
+<dl class="kv-list">
+  <dt>연산장치 (ALU)</dt><dd>산술·논리 연산. 데이터를 레지스터에서 가져와 연산 결과를 레지스터로 저장</dd>
+  <dt>제어장치 (CU)</dt><dd>명령어를 해독하고 실행을 제어. ALU·주기억·I/O 장치에 제어 신호 전송</dd>
+  <dt>레지스터</dt><dd>CPU 내부 초고속 임시 저장. 범용 + 특수목적</dd>
+</dl>
+<h3>특수목적 레지스터</h3>
+<table>
+<thead><tr><th>레지스터</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td>MAR</td><td>읽거나 쓸 메모리 주소 저장</td></tr>
+<tr><td>PC</td><td>다음 실행할 명령어 메모리 주소</td></tr>
+<tr><td>IR</td><td>현재 실행 중인 명령어</td></tr>
+<tr><td>MBR</td><td>메모리에서 읽거나 저장할 데이터</td></tr>
+<tr><td>AC</td><td>연산 결과 (누산기)</td></tr>
+</tbody></table>
+<h2>명령어 세트 (Instruction Set)</h2>
+<dl class="kv-list">
+  <dt>연산</dt><dd>ADD, SUB, MUL</dd>
+  <dt>제어</dt><dd>JUMP, CALL, RETURN</dd>
+  <dt>데이터 전달</dt><dd>LOAD, STORE</dd>
+  <dt>입출력</dt><dd>IN, OUT</dd>
+</dl>
+<h2>명령어 사이클 (Instruction Cycle)</h2>
+<h3>Fetch 사이클</h3>
+<div class="diagram">T0: MAR ← PC
+T1: MBR ← M[MAR], PC ← PC + 1
+T2: IR ← MBR</div>
+<h3>Execute 사이클 — ADD addr</h3>
+<div class="diagram">T0: MAR ← IR(Addr)
+T1: MBR ← M[MAR]
+T2: AC ← AC + MBR</div>
+<h2>CPU 성능 결정 요소</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">클럭 속도</div>GHz. 1초당 실행 가능한 명령어 사이클</div>
+  <div class="compare-card"><div class="compare-title">코어 개수</div>독립 실행 장치 개수</div>
+  <div class="compare-card"><div class="compare-title">캐시 메모리</div>L1, L2, L3. 자주 쓰는 데이터 저장</div>
+  <div class="compare-card"><div class="compare-title">아키텍처</div>CISC(x86), RISC(ARM)</div>
+</div>

@@ -1,0 +1,33 @@
+<div class="def-box"><div class="def-term">CPU 스케줄링</div><div class="def-desc">CPU를 잘 사용하기 위한 프로세스 배정. <strong>오버헤드 ↓ / 사용률 ↑ / 기아 현상 ↓</strong></div></div>
+<h2>운영체제 유형별 스케줄링</h2>
+<table>
+<thead><tr><th>구분</th><th>Batch System</th><th>Interactive System</th><th>Real-time System</th></tr></thead>
+<tbody>
+<tr><td>처리 방식</td><td>일괄 처리</td><td>실시간 사용자 요청</td><td>실시간 작업 처리</td></tr>
+<tr><td>반응 시간</td><td>대기 시간 김</td><td>즉각 반응</td><td>엄격히 제한</td></tr>
+<tr><td>주 용도</td><td>대량 데이터(처리량)</td><td>사용자 중심 작업</td><td>안전·제어·실시간</td></tr>
+<tr><td>예시</td><td>급여 처리</td><td>웹 브라우저</td><td>항공기 제어</td></tr>
+</tbody></table>
+<h2>선점 vs 비선점</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">선점 (Preemptive)</div>OS가 CPU 사용권을 강제 회수. 처리시간 예측 어려움</div>
+  <div class="compare-card"><div class="compare-title">비선점 (Non-Preemptive)</div>프로세스 종료/I/O 이벤트까지 실행 보장. 처리시간 예측 용이</div>
+</div>
+<h2>비선점 스케줄링 알고리즘</h2>
+<dl class="kv-list">
+  <dt>FCFS</dt><dd><strong>First Come First Served</strong> — 큐에 도착한 순서대로 CPU 할당. <span class="kw red">실행시간이 짧은 게 뒤로 가면 평균 대기시간 길어짐</span></dd>
+  <dt>SJF</dt><dd><strong>Shortest Job First</strong> — 수행 시간이 가장 짧다고 판단되는 작업 먼저</dd>
+  <dt>HRN ⭐</dt><dd><strong>Highest Response-ratio Next</strong> — 우선순위 = (대기시간+실행시간)/실행시간. SJF 보완</dd>
+</dl>
+<h2>선점 스케줄링 알고리즘</h2>
+<dl class="kv-list">
+  <dt>Priority</dt><dd>우선순위 부여. <span class="kw red">starvation 발생</span> → Aging으로 해결</dd>
+  <dt>Round Robin</dt><dd>Time Quantum 만큼 CPU 할당. Quantum이 크면 FCFS, 작으면 오버헤드 증가</dd>
+  <dt>Multilevel Queue</dt><dd>우선순위/작업 유형별 여러 큐로 분류. 각 큐는 독립 스케줄링</dd>
+  <dt>Multilevel Feedback Queue</dt><dd>프로세스가 큐 간 이동. 짧게 실행되는 프로세스는 높은 우선순위 유지</dd>
+</dl>
+<h2>스케줄링 척도</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Response Time</div>작업이 처음 실행되기까지 걸린 시간</div>
+  <div class="compare-card"><div class="compare-title">Turnaround Time</div>실행시간 + 대기시간. 작업 완료까지 총 시간</div>
+</div>

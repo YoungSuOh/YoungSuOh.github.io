@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="파일 시스템의 접근 방법(순차/직접/색인)과 디렉토리 구조(1단계·2단계·트리·그래프)를 정리합니다." />
+    <title>[OS] 파일 시스템 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-02-11 · Computer Science</p>
+        <h1 class="article-title">[OS] 파일 시스템</h1>
+        <p class="article-lead muted">파일 시스템의 접근 방법(순차/직접/색인)과 디렉토리 구조(1단계·2단계·트리·그래프)를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">OS</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">파일 시스템</div><div class="def-desc">컴퓨터에서 파일이나 자료를 쉽게 발견할 수 있도록 유지·관리하는 방법</div></div>
+<h2>특징</h2>
+<ul>
+  <li>커널 영역에서 동작</li>
+  <li>파일 CRUD 기능 수행</li>
+  <li>계층적 디렉토리 구조</li>
+  <li>디스크 파티션별로 하나씩 둘 수 있음</li>
+</ul>
+<h2>접근 방법</h2>
+<dl class="kv-list">
+  <dt>순차 접근</dt><dd>가장 간단. 포인터에서 시스템 콜 발생 시 포인터를 앞으로 보내며 read/write. 뒤로 돌아갈 땐 offset 만큼 되감기 (테이프 모델)</dd>
+  <dt>직접 접근</dt><dd>순서 없이 빠르게 레코드 read/write. 무작위 파일 블록에 임의 접근 허용 → DB에서 활용</dd>
+  <dt>색인 접근</dt><dd>직접 접근 파일에 기반한 색인 구축</dd>
+</dl>
+<h2>디렉토리 구조</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">1단계 구조</span><div class="step-desc">가장 간단. 파일들은 서로 유일한 이름. 사용자가 다른 이름 사용 불가</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">2단계 구조</span><div class="step-desc">사용자별 개별 디렉토리 제공</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">트리 구조</span><div class="step-desc">2단계 확장. 다단계 트리. 한 비트로 일반 파일(0)/디렉토리(1) 구분</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">그래프 구조</span><div class="step-desc">하위 디렉토리가 아닌 파일에 대한 링크만 허용. 가비지 컬렉션으로 순환 방지</div></div>
+</div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

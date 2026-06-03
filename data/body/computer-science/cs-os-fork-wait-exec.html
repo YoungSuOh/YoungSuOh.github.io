@@ -1,0 +1,41 @@
+<h2>4가지 시스템 콜</h2>
+<dl class="kv-list">
+  <dt>fork()</dt><dd>새로운 프로세스 생성. <strong>parent ← child의 pid, child ← 0</strong></dd>
+  <dt>wait()</dt><dd>자식 프로세스 종료까지 대기. 좀비 프로세스 방지</dd>
+  <dt>execl(path, arg, ..., NULL)</dt><dd>현재 프로세스를 다른 프로그램으로 교체. <span class="kw red">절대/상대 경로</span> 지정</dd>
+  <dt>execlp(file, arg, ..., NULL)</dt><dd>execl과 동일하지만 <code>$PATH</code>에서 파일 검색</dd>
+</dl>
+<h2>예제 1: fork() + wait()</h2>
+<pre><code class="language-c">pid_t pid = fork();
+if (pid &gt; 0) {           // 부모
+  wait(NULL);
+  printf("자식 종료됨\n");
+} else if (pid == 0) {   // 자식
+  printf("자식 실행 중\n");
+  sleep(2);
+  printf("자식 종료\n");
+}
+</code></pre>
+<div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body"><code>wait(NULL);</code>이 없으면 부모가 먼저 종료되어 <strong>좀비 프로세스</strong>가 발생할 수 있다.</div></div>
+<h2>예제 2: execl() 실행</h2>
+<pre><code class="language-c">printf("실행 전\n");
+execl("/bin/ls", "ls", "-l", NULL);
+printf("출력될까?\n");   // 실행 안 됨
+</code></pre>
+<p>execl이 실행되면 현재 프로세스가 ls로 대체되므로 이후 코드는 실행되지 않는다.</p>
+<h2>예제 3: fork() 중첩</h2>
+<pre><code class="language-c">fork();  // 2개 프로세스
+fork();  // 4개 프로세스
+fork();  // 8개 프로세스 (2³)
+</code></pre>
+<p>fork()는 자식 프로세스들을 생성하고 또 fork하면 그 자식들도 자식을 낳는다. <span class="kw blue">2ⁿ</span></p>
+<h2>예제 4: 변수 공유</h2>
+<pre><code class="language-c">int value = 5;
+pid_t pid = fork();
+if (pid == 0) { value += 15; return 0; }
+else if (pid &gt; 0) {
+  wait(NULL);
+  printf("PARENT: value = %d", value);  // 5
+}
+</code></pre>
+<div class="callout info"><div class="callout-icon">📌</div><div class="callout-body">fork() 시 새 프로세스는 <strong>원래 프로세스 주소 공간의 복사본</strong>으로 구성. 부모와 자식의 메모리는 독립적이므로 자식의 변경이 부모에 반영되지 않는다.</div></div>

@@ -1,0 +1,26 @@
+<h2>⏳ Synchronous vs Asynchronous</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Synchronous (동기)</div>작업이 <strong>순차적으로 실행</strong>. 한 작업 끝나야 다음 작업 시작</div>
+  <div class="compare-card"><div class="compare-title">Asynchronous (비동기)</div>작업 실행 후 <strong>바로 다음 코드 실행</strong>. 응답이 오면 결과 처리. 여러 작업 <span class="kw green">동시 실행</span></div>
+</div>
+<h2>🏛 Blocking vs Non-blocking</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Blocking</div>작업 완료까지 <strong>현재 코드가 멈춤</strong></div>
+  <div class="compare-card"><div class="compare-title">Non-blocking</div>작업 완료 안 돼도 <strong>즉시 다음 코드로 넘어감</strong></div>
+</div>
+<h2>🎯 네트워크 프로그래밍 적용</h2>
+<table>
+<thead><tr><th>방식</th><th>설명</th><th>예</th></tr></thead>
+<tbody>
+<tr><td>Blocking I/O</td><td>recv() 호출 시 데이터 수신까지 멈춤</td><td><code>socket.recv(1024)</code></td></tr>
+<tr><td>Non-blocking I/O</td><td>recv() 호출해도 즉시 리턴</td><td><code>socket.setblocking(False)</code></td></tr>
+<tr><td>Synchronous I/O</td><td>네트워크 요청을 순차 처리</td><td>일반 HTTP 요청</td></tr>
+<tr><td>Asynchronous I/O</td><td>여러 요청을 동시 처리</td><td>asyncio 기반 서버</td></tr>
+</tbody></table>
+<h2>🔥 4가지 조합</h2>
+<div class="compare-grid">
+  <div class="compare-card con"><div class="compare-title">Blocking + Sync</div>직관적, but CPU가 놀게 됨. 소규모 앱</div>
+  <div class="compare-card"><div class="compare-title">Blocking + Async</div>병렬이지만 각 요청은 Blocking. 성능 제한적</div>
+  <div class="compare-card"><div class="compare-title">Non-blocking + Sync</div>여러 작업 처리 가능, but 응답 대기 길어질 수 있음. Node.js, Java NIO</div>
+  <div class="compare-card pro"><div class="compare-title">Non-blocking + Async</div><strong>가장 성능 뛰어남</strong>. 네트워크 서버, 대규모 시스템. Node.js, Python asyncio</div>
+</div>

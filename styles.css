@@ -1510,3 +1510,257 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ──────────────────────────────────────────────────────────
+   CS Blog — 시각적 학습 컴포넌트
+   ────────────────────────────────────────────────────────── */
+
+/* 콜아웃 — 정보 박스 */
+.post-body .callout {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  margin: 16px 0;
+  border-radius: 10px;
+  border-left: 4px solid var(--accent, #4a7cff);
+  background: #f0f4ff;
+  align-items: flex-start;
+}
+.post-body .callout-icon { font-size: 20px; flex-shrink: 0; }
+.post-body .callout-body { flex: 1; }
+.post-body .callout-body > *:first-child { margin-top: 0; }
+.post-body .callout-body > *:last-child { margin-bottom: 0; }
+.post-body .callout.info    { border-color: #4a7cff; background: #eef3ff; }
+.post-body .callout.success { border-color: #2ec27e; background: #ecfaf3; }
+.post-body .callout.warn    { border-color: #f5a524; background: #fff7e6; }
+.post-body .callout.danger  { border-color: #e5484d; background: #fff0f0; }
+.post-body .callout.tip     { border-color: #8b5cf6; background: #f4efff; }
+
+/* 정의 박스 */
+.post-body .def-box {
+  padding: 16px 18px;
+  margin: 18px 0;
+  background: linear-gradient(135deg, #f6f9ff 0%, #eef3fb 100%);
+  border: 1px solid #d8e3f5;
+  border-radius: 12px;
+}
+.post-body .def-box .def-term {
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 1.02rem;
+  margin-bottom: 4px;
+}
+.post-body .def-box .def-desc { color: #334155; line-height: 1.65; }
+
+/* 비교 카드 (2-3 컬럼 그리드) */
+.post-body .compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+.post-body .compare-card {
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.post-body .compare-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.post-body .compare-card .compare-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1e293b;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #e2e8f0;
+}
+.post-body .compare-card.pro    { border-color: #86efac; background: #f0fdf4; }
+.post-body .compare-card.pro    .compare-title { color: #166534; border-color: #86efac; }
+.post-body .compare-card.con    { border-color: #fca5a5; background: #fef2f2; }
+.post-body .compare-card.con    .compare-title { color: #991b1b; border-color: #fca5a5; }
+.post-body .compare-card.neutral{ border-color: #cbd5e1; background: #f8fafc; }
+
+/* 단계(step) 다이어그램 */
+.post-body .step-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  align-items: stretch;
+}
+.post-body .step-item {
+  flex: 1 1 200px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 2px solid #4a7cff;
+  border-radius: 10px;
+  position: relative;
+}
+.post-body .step-item .step-num {
+  display: inline-block;
+  width: 24px; height: 24px;
+  background: #4a7cff;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+.post-body .step-item .step-title {
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 4px;
+}
+.post-body .step-item .step-desc { font-size: 0.9rem; color: #475569; line-height: 1.55; }
+
+/* 키-밸류 라벨 박스 (특징 정리용) */
+.post-body .kv-list {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px 16px;
+  margin: 14px 0;
+  padding: 14px 16px;
+  background: #fafbfc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+.post-body .kv-list dt {
+  font-weight: 700;
+  color: #1e3a8a;
+  padding: 4px 8px;
+  background: #e0e7ff;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  align-self: start;
+  text-align: center;
+}
+.post-body .kv-list dd { margin: 0; padding: 4px 0; line-height: 1.6; color: #334155; }
+
+/* 강조 인라인 키워드 */
+.post-body .kw {
+  display: inline-block;
+  padding: 1px 8px;
+  background: #fef3c7;
+  color: #78350f;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.92em;
+}
+.post-body .kw.blue   { background: #dbeafe; color: #1e3a8a; }
+.post-body .kw.green  { background: #dcfce7; color: #166534; }
+.post-body .kw.red    { background: #fee2e2; color: #991b1b; }
+.post-body .kw.purple { background: #ede9fe; color: #5b21b6; }
+
+/* 다이어그램(ASCII art / 박스 다이어그램) 컨테이너 */
+.post-body .diagram {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 16px 20px;
+  border-radius: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 14px 0;
+}
+
+/* 한 줄 요약 박스 */
+.post-body .summary-box {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  margin: 18px 0;
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  align-items: center;
+}
+.post-body .summary-box::before {
+  content: "📌";
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.post-body .summary-box strong { color: #78350f; }
+
+/* ──────────────────────────────────────────────────────────
+   Blog 검색 박스
+   ────────────────────────────────────────────────────────── */
+.blog-search {
+  position: relative;
+  margin-bottom: 16px;
+}
+.blog-search__input {
+  width: 100%;
+  padding: 10px 40px 10px 40px;
+  border: 1px solid var(--line, #e2e8f0);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: #1e293b;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  font-family: inherit;
+}
+.blog-search__input:focus {
+  border-color: #4a7cff;
+  box-shadow: 0 0 0 3px rgba(74, 124, 255, 0.12);
+}
+.blog-search__input::placeholder {
+  color: #94a3b8;
+}
+.blog-search__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.blog-search__clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.blog-search__clear:hover {
+  background: #e2e8f0;
+}
+.blog-search__status {
+  margin: -8px 0 12px;
+  padding: 8px 12px;
+  background: #eef3ff;
+  border: 1px solid #dbe5fa;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #1e3a8a;
+}
+.blog-search__status strong {
+  color: #1e3a8a;
+}
+.blog-search__highlight {
+  background: #fef3c7;
+  color: #78350f;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: 600;
+}

@@ -15,7 +15,21 @@
   const data = getData();
 
   const POSTS_PER_PAGE = 6;
-  const blogState = { category: "All", page: 1 };
+  const blogState = { category: "All", page: 1, search: "" };
+
+  function normalize(str) {
+    return String(str || "").toLowerCase().trim();
+  }
+
+  function matchesSearch(post, query) {
+    if (!query) return true;
+    const q = normalize(query);
+    if (normalize(post.title).includes(q)) return true;
+    if (normalize(post.summary).includes(q)) return true;
+    if ((post.tags || []).some((t) => normalize(t).includes(q))) return true;
+    if (normalize(post.category).includes(q)) return true;
+    return false;
+  }
 
   function sortPostsByDateDesc(posts) {
     return posts.slice().sort((a, b) => {
@@ -108,10 +122,11 @@
     if (category !== undefined && category !== null) blogState.category = category;
     if (typeof page === "number" && page >= 1) blogState.page = page;
 
-    const { category: cat, page: pg } = blogState;
+    const { category: cat, search } = blogState;
 
-    const filtered =
+    const byCategory =
       cat === "All" ? data.posts : data.posts.filter((post) => post.category === cat);
+    const filtered = search ? byCategory.filter((p) => matchesSearch(p, search)) : byCategory;
 
     const sorted = sortPostsByDateDesc(filtered);
     const totalPages = Math.max(1, Math.ceil(sorted.length / POSTS_PER_PAGE));
@@ -121,12 +136,53 @@
     const start = (currentPage - 1) * POSTS_PER_PAGE;
     const slice = sorted.slice(start, start + POSTS_PER_PAGE);
 
-    root.innerHTML = slice.length
-      ? slice.map(postCard).join("")
+    const emptyMsg = search
+      ? `<div class="card muted">"${escapeHtml(search)}" 검색 결과가 없습니다.</div>`
       : `<div class="card muted">선택한 카테고리에 글이 없습니다.</div>`;
+    root.innerHTML = slice.length ? slice.map(postCard).join("") : emptyMsg;
 
     renderPager(totalPages, currentPage, sorted.length);
     renderCategories(cat);
+    renderSearchStatus(search, sorted.length);
+  }
+
+  function renderSearchStatus(query, total) {
+    const status = document.getElementById("blog-search-status");
+    if (!status) return;
+    if (!query) {
+      status.hidden = true;
+      status.innerHTML = "";
+      return;
+    }
+    status.hidden = false;
+    status.innerHTML = `<strong>"${escapeHtml(query)}"</strong> 검색 결과: <strong>${total}건</strong>`;
+  }
+
+  function setupSearch() {
+    const input = document.getElementById("blog-search-input");
+    const clearBtn = document.getElementById("blog-search-clear");
+    if (!input) return;
+
+    let debounceTimer;
+    input.addEventListener("input", (e) => {
+      const value = e.target.value;
+      clearBtn.hidden = !value;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        blogState.search = value;
+        renderPosts(undefined, 1);
+      }, 150);
+    });
+
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        input.value = "";
+        clearBtn.hidden = true;
+        blogState.search = "";
+        renderPosts(undefined, 1);
+        input.focus();
+      });
+    }
   }
 
   function renderProjects() {
@@ -216,6 +272,7 @@
   if (data) {
     renderNav();
     renderHero();
+    setupSearch();
     renderPosts("All", 1);
     renderProjects();
     renderArchive();

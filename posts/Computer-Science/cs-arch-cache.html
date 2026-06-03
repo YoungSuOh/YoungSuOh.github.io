@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="캐시의 동작 원리, 계층 구조(L1·L2·L3), 캐시 교체 알고리즘(LRU·LFU·FIFO), Write 정책 4가지 조합을 정리합니다." />
+    <title>[Architecture] Cache · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-04-27 · Computer Science</p>
+        <h1 class="article-title">[Architecture] Cache</h1>
+        <p class="article-lead muted">캐시의 동작 원리, 계층 구조(L1·L2·L3), 캐시 교체 알고리즘(LRU·LFU·FIFO), Write 정책 4가지 조합을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">Architecture</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">Cache</div><div class="def-desc">자주 사용하는 데이터를 빠르게 접근할 수 있도록 임시 저장하는 메모리 공간. <strong>CPU와 RAM 간 속도 차이를 줄이기 위해</strong> 사용</div></div>
+<h2>왜 캐시가 필요한가?</h2>
+<div class="callout warn"><div class="callout-icon">⚡</div><div class="callout-body"><strong>CPU 연산 속도</strong>는 ns 단위로 빠르지만 <strong>RAM 접근 속도</strong>는 µs 단위. CPU가 매번 RAM에서 가져오면 성능 크게 저하 → CPU 내부에 빠른 캐시로 자주 쓰는 데이터 미리 저장</div></div>
+<h2>동작 원리</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">CPU 데이터 요청</span><div class="step-desc">먼저 캐시 확인</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">Cache Hit</span><div class="step-desc">캐시에 있으면 바로 가져옴 (매우 빠름)</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">Cache Miss</span><div class="step-desc">캐시에 없으면 RAM에서 가져와 캐시에 저장 후 사용</div></div>
+</div>
+<h2>캐시 메모리 계층 구조</h2>
+<dl class="kv-list">
+  <dt>L1</dt><dd>가장 빠르고 작음</dd>
+  <dt>L2</dt><dd>중간</dd>
+  <dt>L3</dt><dd>가장 크고 느림</dd>
+</dl>
+<p>L1 → L2 → L3 순으로 검색하여 데이터를 빠르게 가져옴.</p>
+<h2>캐시 교체 알고리즘</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">LRU</div>Least Recently Used — 가장 오랫동안 사용되지 않은 데이터 제거</div>
+  <div class="compare-card"><div class="compare-title">LFU</div>Least Frequently Used — 가장 적게 사용된 데이터 제거</div>
+  <div class="compare-card"><div class="compare-title">FIFO</div>First In First Out — 먼저 들어온 데이터 제거</div>
+</div>
+<h2>활용 분야</h2>
+<dl class="kv-list">
+  <dt>CPU 캐시</dt><dd>L1/L2/L3로 RAM 속도 차이 해결</dd>
+  <dt>웹 브라우저</dt><dd>이미지·CSS·JS를 로컬 저장</dd>
+  <dt>DB 캐시</dt><dd>Redis, Memcached로 쿼리 결과 캐싱</dd>
+  <dt>CDN</dt><dd>전세계 캐시 서버로 콘텐츠 제공</dd>
+</dl>
+<h2>Write 정책</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Write-Through</div>캐시 + RAM 동시 기록. 일관성 ✓, 속도 ✗</div>
+  <div class="compare-card"><div class="compare-title">Write-Back</div>캐시만 먼저 → 제거될 때 RAM. 속도 ✓, 일관성 관리 어려움</div>
+</div>
+<h2>블록 할당 정책</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Write Allocate</div>Miss 시 캐시에 먼저 로드 후 쓰기. Write-Back과 함께</div>
+  <div class="compare-card"><div class="compare-title">No-Write Allocate</div>Miss 시 RAM에 직접 쓰기. 캐시는 그대로</div>
+</div>
+<h2>조합 정리</h2>
+<table>
+<thead><tr><th>조합</th><th>특징</th><th>사용</th></tr></thead>
+<tbody>
+<tr><td>Write-Back + No-Write Allocate</td><td>RAM 접근 최소, 쓰기 향상</td><td><span class="kw green">가장 일반적</span></td></tr>
+<tr><td>Write-Back + Write Allocate</td><td>적중률 향상</td><td>일부 CPU</td></tr>
+<tr><td>Write-Through + Write Allocate</td><td>일관성 유지</td><td>DB 등 일관성 중요</td></tr>
+<tr><td>Write-Through + No-Write Allocate</td><td>캐시 오염 방지</td><td>특수 경우</td></tr>
+</tbody></table>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

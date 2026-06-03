@@ -1,0 +1,37 @@
+<h2>Critical Section (임계 구역)</h2>
+<div class="def-box"><div class="def-term">임계 구역</div><div class="def-desc">여러 프로세스가 데이터를 공유하며 수행될 때, 각 프로세스에서 <strong>공유 데이터를 접근하는 코드 부분</strong></div></div>
+<p>한 프로세스가 임계구역을 수행할 때 다른 프로세스가 접근하지 못하도록 해야 한다.</p>
+<h2>세마포어 (Semaphore)</h2>
+<p>멀티 프로그래밍 환경에서 공유 자원에 접근을 제한하는 방법. <strong>들어가고 문 닫아버림</strong>의 개념.</p>
+<dl class="kv-list">
+  <dt>P 연산</dt><dd>임계 구역 들어가기 전 수행. 자원 개수(S)를 확인하고 진입 결정</dd>
+  <dt>V 연산</dt><dd>임계 구역 나올 때 수행. 자원 반납 + 대기 프로세스 깨움</dd>
+</dl>
+<pre><code>procedure P(S)
+  while S=0 do wait
+  S := S - 1
+end P
+
+// --- 임계 구역 ---
+
+procedure V(S)
+  S := S + 1
+end V
+</code></pre>
+<h2>뮤텍스 (Mutex)</h2>
+<div class="def-box"><div class="def-term">Mutex (Mutual Exclusion)</div><div class="def-desc">임계 구역을 가진 스레드들의 실행시간이 서로 겹치지 않고 단독으로 실행되게 하는 기술. <strong>lock/unlock</strong>으로 접근 조율</div></div>
+<h3>뮤텍스 알고리즘</h3>
+<dl class="kv-list">
+  <dt>Dekker</dt><dd>flag와 turn 변수로 진입할 프로세스/스레드 결정</dd>
+  <dt>Peterson</dt><dd>Dekker와 유사. 상대방에게 진입 기회를 <span class="kw">양보</span>하는 차이</dd>
+  <dt>Bakery</dt><dd>여러 프로세스 처리 가능. 가장 작은 번호표를 가진 프로세스가 진입</dd>
+</dl>
+<h2>Semaphore vs Mutex</h2>
+<table>
+<thead><tr><th>항목</th><th>Semaphore</th><th>Mutex</th></tr></thead>
+<tbody>
+<tr><td>자원 개수</td><td>여러 스레드 동시 가능</td><td>한 번에 하나</td></tr>
+<tr><td>소유권</td><td>없음 (어떤 스레드든 해제)</td><td>락 소유자만 해제</td></tr>
+<tr><td>유형</td><td>카운팅</td><td>바이너리</td></tr>
+<tr><td>사용</td><td>DB 연결 풀, 네트워크 자원</td><td>파일 쓰기, 단일 자원</td></tr>
+</tbody></table>

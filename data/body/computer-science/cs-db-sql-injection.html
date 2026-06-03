@@ -1,0 +1,43 @@
+<div class="def-box"><div class="def-term">SQL Injection</div><div class="def-desc">해커에 의해 조작된 SQL 쿼리문이 데이터베이스에 그대로 전달되어 <strong>비정상적 명령을 실행하는 공격 기법</strong></div></div>
+<h2>공격 방법</h2>
+<h3>1. 인증 우회</h3>
+<pre><code class="language-sql">-- 정상 쿼리
+SELECT * FROM USER WHERE ID = "abc" AND PASSWORD = "1234";
+
+-- SQL Injection 공격
+SELECT * FROM USER WHERE ID = "abc" AND PASSWORD = "1234" OR 1=1;
+</code></pre>
+<div class="callout danger"><div class="callout-icon">🚨</div><div class="callout-body"><code>OR 1=1</code>이 항상 TRUE이므로 WHERE 조건이 무조건 통과되어 <strong>비밀번호 없이 로그인 가능</strong></div></div>
+<h3>2. 데이터 노출</h3>
+<p>의도적으로 에러를 유발시켜 응답 메시지로 DB 구조 유추.</p>
+<h2>방어 방법</h2>
+<h3>1. 화이트리스트 입력 검증</h3>
+<pre><code class="language-java">String idPattern = "^[a-zA-Z0-9]{4,20}$";
+if (!input.matches(idPattern)) {
+    throw new IllegalArgumentException("Invalid input");
+}
+</code></pre>
+<h3>2. 권한 분리 (최소 권한)</h3>
+<p>DB 계정은 <strong>읽기 권한만</strong>, 수정 권한은 차단. 뷰(View) 활용.</p>
+<h3>3. PreparedStatement (가장 중요)</h3>
+<div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body">문제 코드: 사용자 입력을 그대로 SQL에 연결</div></div>
+<pre><code class="language-java">String query = "SELECT * FROM USERS WHERE username = '"
+    + username + "' AND password = '" + password + "'";
+</code></pre>
+<div class="callout success"><div class="callout-icon">✅</div><div class="callout-body">해결: PreparedStatement로 바인딩</div></div>
+<pre><code class="language-java">String query = "SELECT * FROM USERS WHERE username = ? AND password = ?";
+PreparedStatement pstmt = connection.prepareStatement(query);
+pstmt.setString(1, username);
+pstmt.setString(2, password);
+</code></pre>
+<p>특수문자 <code>'</code>는 SQL 문법의 의미를 잃고 데이터로 <span class="kw green">escape</span> 처리됨.</p>
+<h3>4. ORM 사용</h3>
+<pre><code class="language-java">// JPA
+return entityManager.createQuery(jpql, User.class)
+    .setParameter("username", username)
+    .getSingleResult();
+
+// Spring Data JPA
+User findByUsername(String username);
+</code></pre>
+<p>ORM은 기본적으로 SQL 바인딩과 escaping을 처리한다.</p>

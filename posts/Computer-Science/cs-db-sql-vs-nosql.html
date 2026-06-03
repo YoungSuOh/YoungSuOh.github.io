@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="관계형 vs 비관계형 데이터베이스의 핵심 차이(스키마·관계·확장 방식)와 각각의 적합한 사용 사례를 정리합니다." />
+    <title>[Database] SQL vs NoSQL · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-03-08 · Computer Science</p>
+        <h1 class="article-title">[Database] SQL vs NoSQL</h1>
+        <p class="article-lead muted">관계형 vs 비관계형 데이터베이스의 핵심 차이(스키마·관계·확장 방식)와 각각의 적합한 사용 사례를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DB</span></div>
+        <div class="article-body post-body">
+<p>프로젝트에 적합한 DB를 선택해야 한다. 단순히 프레임워크에 따라 결정하는 것이 아니다.</p>
+<h2>관계형 데이터베이스 (SQL)</h2>
+<div class="def-box"><div class="def-term">RDBMS의 두 가지 핵심 특징</div><div class="def-desc">① 데이터는 <strong>정해진 스키마</strong>에 따라 테이블에 저장<br>② 데이터는 <strong>관계</strong>를 통해 여러 테이블에 분산</div></div>
+<ul>
+  <li>스키마를 준수하지 않은 레코드는 추가 불가</li>
+  <li>중복을 피하기 위해 '관계'를 이용</li>
+  <li>한 테이블에서 중복 없이 하나의 데이터만 관리 → 부정확 위험 ↓</li>
+</ul>
+<h2>비관계형 데이터베이스 (NoSQL)</h2>
+<div class="def-box"><div class="def-term">NoSQL</div><div class="def-desc"><strong>스키마도 없고, 관계도 없다.</strong> 레코드를 문서(documents)라 부름. JSON과 비슷한 형태</div></div>
+<ul>
+  <li>다른 구조의 데이터를 같은 컬렉션에 추가 가능</li>
+  <li>여러 테이블에 나누어 담지 않고 동일한 컬렉션에 넣음</li>
+  <li><span class="kw red">JOIN 개념 없음</span> → 컬렉션 데이터 복제로 처리</li>
+</ul>
+<h2>확장 방식</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">수직 확장 (Scale-up)</div>서버 성능 향상 (CPU 업그레이드). SQL이 주로 사용</div>
+  <div class="compare-card"><div class="compare-title">수평 확장 (Scale-out)</div>서버 추가 분산. NoSQL에서만 가능</div>
+</div>
+<h2>SQL 사용이 적합한 경우</h2>
+<dl class="kv-list">
+  <dt>복잡한 관계</dt><dd>은행, ERP, CRM — 외래키·JOIN으로 관계 관리, ACID 보장</dd>
+  <dt>고정 스키마</dt><dd>회계, 재고 관리 — 정형 데이터, 무결성 보장</dd>
+  <dt>잦은 데이터 변경</dt><dd>전자상거래 — 중복 최소화, 일관성 유지</dd>
+  <dt>트랜잭션 중요</dt><dd>온라인 결제 — 원자성 보장</dd>
+</dl>
+<h2>NoSQL 사용이 적합한 경우</h2>
+<dl class="kv-list">
+  <dt>스키마 불확실</dt><dd>스타트업 초기 — schema-less, 빠른 변경</dd>
+  <dt>대량 데이터</dt><dd>IoT, 로그 — 분산 처리, 수평 확장</dd>
+  <dt>읽기 중심</dt><dd>SNS 뉴스피드, 캐시 — 빠른 읽기 최적화</dd>
+  <dt>수평 확장</dt><dd>아마존, 넷플릭스 — 서버 추가로 확장</dd>
+  <dt>비정형 데이터</dt><dd>JSON API, 이미지 메타데이터 — Document-Oriented</dd>
+</dl>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

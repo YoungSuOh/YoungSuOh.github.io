@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="커널 작업 중 인터럽트, Context Switch, 멀티 프로세서 환경에서 발생하는 Race Condition의 원인과 해결 방법을 정리합니다." />
+    <title>[OS] Race Condition · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-02-05 · Computer Science</p>
+        <h1 class="article-title">[OS] Race Condition</h1>
+        <p class="article-lead muted">커널 작업 중 인터럽트, Context Switch, 멀티 프로세서 환경에서 발생하는 Race Condition의 원인과 해결 방법을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">OS</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">Race Condition</div><div class="def-desc">공유 자원에 대해 <strong>여러 프로세스가 동시에 접근</strong>할 때, 결과 값에 영향을 줄 수 있는 상태</div></div>
+<h2>발생하는 3가지 경우</h2>
+<h3>1. 커널 작업 중 인터럽트</h3>
+<div class="callout danger"><div class="callout-icon">⚠️</div><div class="callout-body">프로세스가 커널 모드에서 공유 데이터 작업 중 하드웨어 인터럽트 발생 → 인터럽트 핸들러가 같은 데이터 조작 → <strong>데이터 손상</strong></div></div>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">해결: 인터럽트 비활성화</div>중요 작업 중에는 인터럽트를 비활성화하여 CPU 제어권 유지</div>
+  <div class="compare-card pro"><div class="compare-title">해결: 원자적 연산</div>공유 데이터 작업을 원자적 연산으로 처리</div>
+</div>
+<h3>2. System Call 중 Context Switch</h3>
+<p>프로세스1이 커널 모드에서 공유 데이터 조작 중 시간 초과로 Context Switch 발생 → 프로세스2가 같은 데이터 조작 → <span class="kw red">데이터 불일치</span></p>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">해결: 시간 초과 방지</div>커널 모드 작업 중 CPU 제어권 넘기지 않도록 설정</div>
+  <div class="compare-card pro"><div class="compare-title">해결: 락 기반 동기화</div>공유 데이터에 락 설정 → 한 번에 한 프로세스만 접근</div>
+</div>
+<h3>3. 멀티 프로세서 환경의 공유 메모리</h3>
+<p>두 개 이상의 CPU가 동시에 공유 메모리 데이터를 수정 → 데이터 손상</p>
+<dl class="kv-list">
+  <dt>Lock / Unlock</dt><dd>공유 데이터 사용 시 락 걸고 해제</dd>
+  <dt>Spinlock</dt><dd>멀티 프로세서에서 CPU가 락을 기다리며 실행 상태 유지</dd>
+  <dt>CAS</dt><dd>Compare-And-Swap 하드웨어 명령어로 원자적 처리</dd>
+</dl>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

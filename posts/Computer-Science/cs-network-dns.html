@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="브라우저에 URL 입력 시 통신 흐름, DHCP·ARP로 DNS 서버 주소 찾기, 계층화된 DNS 서버 구조와 웹 서버 접속 과정을 정리합니다." />
+    <title>[Network] DNS · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-03-30 · Computer Science</p>
+        <h1 class="article-title">[Network] DNS</h1>
+        <p class="article-lead muted">브라우저에 URL 입력 시 통신 흐름, DHCP·ARP로 DNS 서버 주소 찾기, 계층화된 DNS 서버 구조와 웹 서버 접속 과정을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">Network</span></div>
+        <div class="article-body post-body">
+<h2>URL 입력 시 통신 흐름</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">도메인 입력</span><div class="step-desc">사용자가 브라우저에 입력</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">DNS 검색</span><div class="step-desc">Domain → IP 변환</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">HTTP 요청</span><div class="step-desc">HTTP 메시지 생성</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">TCP 전송</span><div class="step-desc">IP 주소의 서버로 전송</div></div>
+  <div class="step-item"><span class="step-num">5</span><span class="step-title">서버 응답</span><div class="step-desc">응답 메시지 전송</div></div>
+  <div class="step-item"><span class="step-num">6</span><span class="step-title">렌더링</span><div class="step-desc">웹페이지 데이터 변환·출력</div></div>
+</div>
+<h2>DNS 서버 주소 찾기</h2>
+<h3>DHCP (Dynamic Host Configuration Protocol)</h3>
+<p>호스트의 IP 주소와 TCP/IP 설정을 클라이언트에 자동 제공하는 응용 계층 프로토콜. 사용자는 DHCP 서버에서 <strong>자신의 IP, 라우터 IP, DNS 서버 IP</strong>를 받는다.</p>
+<h3>ARP (Address Resolution Protocol)</h3>
+<p>IP 주소 → 물리적 네트워크 주소(MAC) 변환. DHCP로 얻은 라우터 IP를 MAC 주소로 변환.</p>
+<h2>DNS 서버 계층 구조</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">통신사 DNS 서버</span><div class="step-desc">DNS Query 전송</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">루트 네임 서버</span><div class="step-desc">.com IP 반환</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">.com 네임 서버</span><div class="step-desc">example.com IP 반환</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">example.com 네임 서버</span><div class="step-desc">www.example.com IP 반환</div></div>
+</div>
+<div class="callout info"><div class="callout-icon">🌍</div><div class="callout-body">최상위 계층(.com, .kr 등) 담당 DNS 서버는 <strong>전세계에 13개 뿐</strong></div></div>
+<h2>웹 서버 접속</h2>
+<ol>
+  <li>HTTP Request 위해 TCP 소켓 개방·연결</li>
+  <li>TCP 연결 성공 시 HTTP Request 전송</li>
+  <li>웹페이지 정보가 응답으로 돌아옴</li>
+</ol>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

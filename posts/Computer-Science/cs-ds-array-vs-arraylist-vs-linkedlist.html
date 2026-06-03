@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="3가지 자료구조의 메모리 구조, 시간 복잡도, 장단점을 비교하여 어떤 상황에 어떤 자료구조를 써야 하는지 정리합니다." />
+    <title>[Data Structure] Array vs ArrayList vs LinkedList · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-05-04 · Computer Science</p>
+        <h1 class="article-title">[Data Structure] Array vs ArrayList vs LinkedList</h1>
+        <p class="article-lead muted">3가지 자료구조의 메모리 구조, 시간 복잡도, 장단점을 비교하여 어떤 상황에 어떤 자료구조를 써야 하는지 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DataStructure</span></div>
+        <div class="article-body post-body">
+<h2>Array (배열)</h2>
+<dl class="kv-list">
+  <dt>크기</dt><dd>한번 정해지면 <strong>변경 불가</strong></dd>
+  <dt>메모리</dt><dd>연속된 메모리 공간</dd>
+  <dt>조회</dt><dd>인덱스 O(1)</dd>
+  <dt>삽입·삭제</dt><dd>O(n) — 이후 요소 이동</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>빠른 인덱스 접근 O(1), 메모리 사용 적음 (오버헤드 없음)</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>크기 변경 불가, 삽입·삭제 비효율, 메모리 낭비 가능</div>
+</div>
+<h2>ArrayList (동적 배열)</h2>
+<dl class="kv-list">
+  <dt>크기</dt><dd><strong>동적 크기 조정</strong>. 부족하면 더 큰 배열 생성·복사</dd>
+  <dt>메모리</dt><dd>연속된 메모리 공간</dd>
+  <dt>조회</dt><dd>O(1)</dd>
+  <dt>삽입·삭제</dt><dd>O(n) — 느림</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>크기 변경 가능, 빠른 조회 O(1), LinkedList보다 캐시 효율성 높음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>삽입·삭제 시 성능 저하 O(n), 크기 증가 시 복사 오버헤드</div>
+</div>
+<h2>LinkedList (연결 리스트)</h2>
+<dl class="kv-list">
+  <dt>구조</dt><dd>노드(Node)와 포인터</dd>
+  <dt>메모리</dt><dd><strong>비연속적</strong> 메모리 공간</dd>
+  <dt>조회</dt><dd>O(n) — 앞에서부터 탐색</dd>
+  <dt>삽입·삭제</dt><dd>O(1) — 중간에서도 가능</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>삽입·삭제 빠름 O(1), 크기 제한 없음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>조회 느림 O(n), 포인터 저장 메모리 추가, 캐시 효율성 낮음</div>
+</div>
+<h2>비교 요약</h2>
+<table>
+<thead><tr><th>특징</th><th>Array</th><th>ArrayList</th><th>LinkedList</th></tr></thead>
+<tbody>
+<tr><td>크기</td><td>고정</td><td>동적</td><td>동적</td></tr>
+<tr><td>조회</td><td>O(1)</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>삽입/삭제</td><td>O(n)</td><td>O(n)</td><td>O(1)</td></tr>
+<tr><td>메모리</td><td>연속</td><td>연속</td><td>비연속</td></tr>
+<tr><td>캐시 효율</td><td>높음</td><td>높음</td><td>낮음</td></tr>
+</tbody></table>
+<div class="summary-box"><div><strong>선택 기준:</strong> 조회 위주 → ArrayList / 삽입·삭제 위주 → LinkedList / 크기 고정 + 빠른 접근 → Array</div></div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

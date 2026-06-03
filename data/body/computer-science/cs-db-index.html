@@ -1,0 +1,49 @@
+<div class="def-box"><div class="def-term">Index</div><div class="def-desc">데이터를 효율적으로 검색하기 위해 테이블의 특정 열(또는 조합)에 대해 생성되는 데이터 구조. <strong>책의 색인</strong>처럼 동작</div></div>
+<h2>1. 기본 개념</h2>
+<dl class="kv-list">
+  <dt>검색 속도</dt><dd>순차 탐색 없이 빠르게 데이터를 찾음</dd>
+  <dt>저장 공간</dt><dd>인덱스 저장을 위한 추가 디스크 공간 필요</dd>
+  <dt>수정 비용</dt><dd>삽입/삭제/업데이트 시 인덱스도 갱신 → 성능 영향</dd>
+</dl>
+<h3>Index 생성 예제</h3>
+<pre><code class="language-sql">-- 단일 열 인덱스
+CREATE INDEX idx_user_name ON users(name);
+
+-- 복합 인덱스
+CREATE INDEX idx_user_name_email ON users(name, email);
+
+-- 고유 인덱스
+CREATE UNIQUE INDEX idx_unique_email ON users(email);
+</code></pre>
+<h2>2. Index 종류</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">B-Tree</div>대부분의 RDBMS 기본. 정렬된 상태로 저장, 탐색·삽입·삭제 효율적</div>
+  <div class="compare-card"><div class="compare-title">Hash</div>정확한 매칭 검색에 유리, 범위 검색 부적합</div>
+  <div class="compare-card"><div class="compare-title">Bitmap</div>값 범위가 작거나 중복 많은 경우. 데이터 웨어하우스에서 사용</div>
+  <div class="compare-card"><div class="compare-title">Full-text</div>텍스트 검색에 최적화, 긴 텍스트의 키워드 검색</div>
+</div>
+<h2>3. 장단점</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>검색·정렬·그룹화 성능 향상, 중복 데이터 방지(UNIQUE)</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>인덱스 많으면 INSERT/DELETE/UPDATE 성능 저하, 추가 저장 공간, 너무 많으면 오히려 성능 저하</div>
+</div>
+<h2>4. Sequence와의 차이</h2>
+<table>
+<thead><tr><th>특징</th><th>Index</th><th>Sequence</th></tr></thead>
+<tbody>
+<tr><td>역할</td><td>빠른 검색</td><td>고유 순차 숫자 생성</td></tr>
+<tr><td>대상</td><td>특정 열</td><td>테이블 독립</td></tr>
+<tr><td>속도</td><td>검색 속도 향상</td><td>직접 영향 없음</td></tr>
+<tr><td>관리</td><td>테이블 연관</td><td>독립 객체</td></tr>
+</tbody></table>
+<div class="summary-box"><div><strong>실무:</strong> Sequence로 PK 생성 → PK에 자동으로 인덱스 생성. 시퀀스는 값 생성, 인덱스는 빠른 조회</div></div>
+<h2>5. 실전 예시: 쇼핑몰 상품 테이블</h2>
+<pre><code class="language-sql">-- 상품명 단일 인덱스
+CREATE INDEX idx_product_name ON products (name);
+SELECT * FROM products WHERE name = 'Laptop';  -- 빠른 조회
+
+-- 카테고리 + 가격 복합 인덱스
+CREATE INDEX idx_category_price ON products (category, price);
+SELECT * FROM products
+WHERE category = 'Electronics' AND price BETWEEN 500 AND 1500;
+</code></pre>

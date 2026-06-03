@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="트리의 특징, 4가지 순회 방식(전위·중위·후위·레벨), 트리를 사용하는 4가지 이유(탐색·구조화·확장성·경로 탐색)를 정리합니다." />
+    <title>[Data Structure] Tree · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-05-07 · Computer Science</p>
+        <h1 class="article-title">[Data Structure] Tree</h1>
+        <p class="article-lead muted">트리의 특징, 4가지 순회 방식(전위·중위·후위·레벨), 트리를 사용하는 4가지 이유(탐색·구조화·확장성·경로 탐색)를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DataStructure</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">Tree</div><div class="def-desc">값을 가진 <strong>노드(Node)</strong>와 노드들을 연결해주는 <strong>간선(Edge)</strong>으로 이루어진 자료구조</div></div>
+<h2>특징</h2>
+<ul>
+  <li>사이클 존재할 수 없음 (사이클 있으면 그래프)</li>
+  <li>모든 노드는 자료형으로 표현 가능</li>
+  <li>루트에서 한 노드로 가는 경로는 유일</li>
+  <li>노드 N개면 간선 N-1개</li>
+</ul>
+<h2>트리 순회 방식</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">전위 순회 (pre-order)</div>부모 → 왼쪽 → 오른쪽</div>
+  <div class="compare-card"><div class="compare-title">중위 순회 (in-order)</div>왼쪽 → 부모 → 오른쪽 (정렬된 순서)</div>
+  <div class="compare-card"><div class="compare-title">후위 순회 (post-order)</div>왼쪽 → 오른쪽 → 부모</div>
+  <div class="compare-card"><div class="compare-title">레벨 순회 (level-order)</div>계층 별로 방문 (BFS)</div>
+</div>
+<h2>트리를 사용하는 이유</h2>
+<h3>1. 탐색 속도 향상 🚀</h3>
+<div class="callout success"><div class="callout-icon">⚡</div><div class="callout-body">배열에서 탐색: <strong>O(n)</strong> / 이진 탐색 트리: <strong>O(log n)</strong></div></div>
+<p>예시: <strong>BST, B-Tree(DB 인덱스), Trie(문자열 검색)</strong></p>
+<h3>2. 효율적 데이터 저장 & 구조화 📂</h3>
+<p>부모-자식 관계가 있는 <strong>계층적 데이터</strong>에 적합</p>
+<div class="diagram">Root
+ ├── Users
+ │   ├── Alice
+ │   ├── Bob
+ │   └── Charlie
+ ├── Program Files
+ └── Windows</div>
+<p>예시: 파일 시스템, HTML DOM, 회사 조직도</p>
+<h3>3. 유연한 확장성 🔄</h3>
+<p>배열은 크기 고정·삽입/삭제 어렵지만 트리는 <strong>동적 크기 조절</strong></p>
+<p>예시: B-Tree, B+Tree (DB 인덱스), AI 의사결정 트리</p>
+<h3>4. 최적화된 경로 탐색 🛤️</h3>
+<p>경로 찾기에 최적</p>
+<p>예시: 네트워크 라우팅, 다익스트라, A* 알고리즘</p>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

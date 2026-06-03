@@ -1,0 +1,53 @@
+<div class="def-box"><div class="def-term">Stored Procedure</div><div class="def-desc">데이터베이스에 저장된 SQL 쿼리들의 집합. <strong>마치 하나의 함수처럼 실행</strong>하기 위한 쿼리 집합</div></div>
+<h2>왜 사용하는가?</h2>
+<ul>
+  <li>여러 줄의 쿼리문을 한 번의 요청으로 실행</li>
+  <li>인자만 바뀌고 동일한 로직의 복잡한 쿼리를 매번 작성하는 비효율 해결</li>
+</ul>
+<h2>구조</h2>
+<pre><code class="language-sql">DELIMITER $$
+
+CREATE PROCEDURE 프로시저명 (매개변수)
+BEGIN
+    -- SQL Statements
+END $$
+
+DELIMITER ;
+</code></pre>
+<dl class="kv-list">
+  <dt>DELIMITER</dt><dd>프로시저 정의 끝 구분을 위해 사용</dd>
+  <dt>IN</dt><dd>호출 시 값 전달만</dd>
+  <dt>OUT</dt><dd>프로시저 내에서 값 설정해 반환</dd>
+  <dt>INOUT</dt><dd>값을 전달받고 수정된 값을 반환</dd>
+</dl>
+<h2>사용 사례</h2>
+<h3>1. 반복적인 조회 작업</h3>
+<pre><code class="language-sql">CREATE PROCEDURE GetCustomerInfo(IN customerId INT)
+BEGIN
+    SELECT * FROM Customers WHERE id = customerId;
+END $$
+
+CALL GetCustomerInfo(5);
+</code></pre>
+<h3>2. 데이터 삽입 + 로그 기록</h3>
+<pre><code class="language-sql">CREATE PROCEDURE InsertOrder(IN customerId INT, IN productId INT, IN quantity INT)
+BEGIN
+    INSERT INTO Orders(customer_id, product_id, quantity, order_date)
+    VALUES (customerId, productId, quantity, NOW());
+
+    INSERT INTO Logs(action, log_time)
+    VALUES ('New order added', NOW());
+END $$
+</code></pre>
+<h2>장단점</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">트래픽 감소</div>SQL이 서버에 저장됨 → 네트워크 트래픽 감소</div>
+  <div class="compare-card pro"><div class="compare-title">재사용</div>한 번 작성하면 여러 앱·사용자가 재사용</div>
+  <div class="compare-card pro"><div class="compare-title">성능 향상</div>최초 실행 시 컴파일 후 캐시. 다음 실행부터 빠름</div>
+  <div class="compare-card pro"><div class="compare-title">보안</div>참조 중인 테이블 접근 차단 가능</div>
+</div>
+<div class="compare-grid">
+  <div class="compare-card con"><div class="compare-title">호환성</div>SQL/PSM 표준 호환성 낮음, 재사용성 나쁨</div>
+  <div class="compare-card con"><div class="compare-title">성능</div>문자/숫자 연산은 C, Java보다 느림</div>
+  <div class="compare-card con"><div class="compare-title">디버깅</div>에러 위치 추적 어려움</div>
+</div>

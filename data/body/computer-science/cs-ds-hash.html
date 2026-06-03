@@ -1,0 +1,53 @@
+<div class="def-box"><div class="def-term">Hash</div><div class="def-desc"><strong>키(key)와 값(value)을 매핑</strong>하여 데이터를 저장하는 구조. 빠른 검색·삽입·삭제 가능. HashMap, HashTable, Dictionary 등</div></div>
+<h2>구성 요소</h2>
+<dl class="kv-list">
+  <dt>해시 함수</dt><dd>키를 일정 범위 인덱스로 변환</dd>
+  <dt>해시 테이블</dt><dd>해시 함수로 데이터를 저장하는 배열</dd>
+  <dt>해시 충돌</dt><dd>서로 다른 키가 동일 인덱스로 매핑</dd>
+</dl>
+<h2>좋은 해시 함수의 조건</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">빠른 계산</div></div>
+  <div class="compare-card pro"><div class="compare-title">고유한 값</div>충돌 최소화</div>
+  <div class="compare-card pro"><div class="compare-title">균등한 분포</div></div>
+  <div class="compare-card pro"><div class="compare-title">눈사태 효과</div>입력이 비슷해도 해시값은 크게 다름</div>
+</div>
+<h2>충돌 해결</h2>
+<h3>1. 체이닝 (Chaining)</h3>
+<p>같은 해시값이면 <strong>연결 리스트</strong>로 저장</p>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>유연한 저장, 테이블 부족해도 OK</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>추가 메모리(포인터), 탐색 속도 저하</div>
+</div>
+<h3>2. 오픈 어드레싱 (Open Addressing)</h3>
+<p>충돌 시 <strong>다른 빈 공간</strong>을 찾아 저장</p>
+<dl class="kv-list">
+  <dt>선형 탐사</dt><dd><code>index = (hash + i) % size</code></dd>
+  <dt>이차 탐사</dt><dd><code>index = (hash + i²) % size</code></dd>
+  <dt>이중 해싱</dt><dd><code>index = (hash1 + i × hash2) % size</code></dd>
+</dl>
+<h2>시간 복잡도</h2>
+<table>
+<thead><tr><th>연산</th><th>평균</th><th>최악 (충돌 많을 때)</th></tr></thead>
+<tbody>
+<tr><td>검색</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>삽입</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>삭제</td><td>O(1)</td><td>O(n)</td></tr>
+</tbody></table>
+<h2>해시 버킷 동적 확장</h2>
+<div class="def-box"><div class="def-term">Load Factor</div><div class="def-desc"><code>Load Factor = 저장 데이터 / 버킷 개수</code>. 보통 <strong>0.7~0.8</strong> 초과 시 버킷 확장</div></div>
+<h3>Rehashing</h3>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">버킷 크기 증가</span><div class="step-desc">보통 2배</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">모든 데이터 다시 해싱</span><div class="step-desc">새 크기에 맞춰 재배치</div></div>
+</div>
+<div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-body">버킷 크기가 바뀌면 해시 값도 달라짐 → <strong>모든 기존 데이터를 새 테이블에 다시 해싱</strong>해야 함</div></div>
+<p>Java HashMap은 load factor 0.75 초과 시 자동 리해싱.</p>
+<h2>활용 분야</h2>
+<dl class="kv-list">
+  <dt>검색·저장</dt><dd>HashMap, Dictionary</dd>
+  <dt>캐싱</dt><dd>LRU Cache</dd>
+  <dt>중복 제거</dt><dd>HashSet</dd>
+  <dt>암호화</dt><dd>SHA-256, MD5</dd>
+  <dt>로드 밸런싱</dt><dd>Consistent Hashing</dd>
+</dl>

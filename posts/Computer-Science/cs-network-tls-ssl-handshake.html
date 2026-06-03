@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="HTTPS의 SSL/TLS 핸드셰이크 5단계(Client Hello → Server Hello → 인증서 검증 → 키 교환 → Finished)를 정리합니다." />
+    <title>[Network] TLS/SSL HandShake · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-04-15 · Computer Science</p>
+        <h1 class="article-title">[Network] TLS/SSL HandShake</h1>
+        <p class="article-lead muted">HTTPS의 SSL/TLS 핸드셰이크 5단계(Client Hello → Server Hello → 인증서 검증 → 키 교환 → Finished)를 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">Network</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">TLS/SSL Handshake</div><div class="def-desc">HTTPS에서 클라이언트와 서버 간 통신 전 <strong>SSL 인증서로 신뢰성을 판단</strong>하기 위해 연결하는 방식</div></div>
+<h2>핸드셰이크 5단계</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">Client Hello</span><div class="step-desc">지원 암호화 방식(Cipher Suite), TLS 버전, 랜덤 값 전송</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">Server Hello</span><div class="step-desc">서버가 암호화 방식 선택, 서버 랜덤 값 + SSL/TLS 인증서(공개키 포함) 전달</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">인증서 검증</span><div class="step-desc">신뢰할 수 있는 CA에서 발급되었는지 확인. 유효하지 않으면 연결 종료</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">키 교환</span><div class="step-desc">클라이언트가 세션 키 생성, 서버의 공개키로 암호화하여 전송</div></div>
+  <div class="step-item"><span class="step-num">5</span><span class="step-title">Finished</span><div class="step-desc">공유 세션 키로 메시지 암호화. 핸드셰이크 종료 후 모든 데이터 암호화 전송</div></div>
+</div>
+<div class="callout info"><div class="callout-icon">🔐</div><div class="callout-body"><strong>비대칭키로 세션키 안전하게 교환 → 이후 대칭키(세션키)로 빠른 데이터 통신</strong></div></div>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

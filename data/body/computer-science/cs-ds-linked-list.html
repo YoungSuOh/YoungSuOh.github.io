@@ -1,0 +1,51 @@
+<div class="def-box"><div class="def-term">Linked List</div><div class="def-desc"><strong>연속적인 메모리 위치에 저장되지 않는</strong> 선형 데이터 구조. 포인터로 연결. 각 노드는 데이터 + 다음 노드 참조</div></div>
+<h2>왜 사용?</h2>
+<div class="callout warn"><div class="callout-icon">📦</div><div class="callout-body">배열은 크기 고정, 새 요소 삽입에 비용이 많이 듬(공간 만들고 기존 요소 전부 이동)</div></div>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>동적 크기, 삽입/삭제 용이</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>임의 액세스 불가 (순차 액세스), 포인터 메모리 추가 필요</div>
+</div>
+<h2>구현 (Node 구조)</h2>
+<pre><code class="language-cpp">struct Node {
+    int data;
+    struct Node *next;
+};
+</code></pre>
+<h2>4가지 종류</h2>
+<h3>1. Single Linked List</h3>
+<ul>
+  <li><strong>한 방향(→) 연결</strong>. 다음 노드만 가리킴</li>
+  <li>중간 삽입/삭제 시 앞 노드 찾아야 해서 O(n) 필요</li>
+  <li><strong>단순, 메모리 절약</strong> (뒤로 가는 포인터 없음)</li>
+</ul>
+<p>📌 <strong>사용:</strong> Stack, Queue, 간단한 데이터 연결</p>
+<h3>2. Doubly Linked List</h3>
+<ul>
+  <li><strong>양방향(↔) 연결</strong>. prev + next 포인터</li>
+  <li><strong>뒤로 이동 가능</strong></li>
+  <li>삽입/삭제 O(1) (중간 삽입 시 앞 노드 찾으면 빠름)</li>
+  <li>메모리 사용량 증가</li>
+</ul>
+<p>📌 <strong>사용:</strong> 웹 브라우저 히스토리, LRU 캐시</p>
+<h3>3. Circular Singly Linked List</h3>
+<ul>
+  <li>마지막 노드가 nullptr이 아니라 <strong>처음으로 돌아감</strong></li>
+  <li>항상 순환 — 무한 루프 가능, 종료 조건 필요</li>
+</ul>
+<p>📌 <strong>사용:</strong> Round-robin 스케줄링, 멀티플레이어 턴 시스템, 음악 반복 재생</p>
+<h3>4. Circular Doubly Linked List</h3>
+<ul>
+  <li>양방향 + 순환</li>
+  <li>메모리 가장 많이 사용</li>
+  <li><strong>빠른 접근 가능</strong></li>
+</ul>
+<p>📌 <strong>사용:</strong> 시계 시스템, 데이터 버퍼, 게임 UI 메뉴 순환</p>
+<h2>비교 요약</h2>
+<table>
+<thead><tr><th>종류</th><th>방향</th><th>순환</th><th>메모리</th></tr></thead>
+<tbody>
+<tr><td>Singly</td><td>→</td><td>X</td><td>적음</td></tr>
+<tr><td>Doubly</td><td>↔</td><td>X</td><td>중간</td></tr>
+<tr><td>Circular Singly</td><td>→</td><td>O</td><td>적음</td></tr>
+<tr><td>Circular Doubly</td><td>↔</td><td>O</td><td>많음</td></tr>
+</tbody></table>

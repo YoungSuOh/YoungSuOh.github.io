@@ -458,6 +458,19 @@
             <ul id="category-list" class="category-list"></ul>
           </aside>
           <div class="blog-posts-column">
+            <div class="blog-search">
+              <input
+                type="search"
+                id="blog-search-input"
+                class="blog-search__input"
+                placeholder="제목 · 요약 · 태그 검색..."
+                aria-label="블로그 글 검색"
+                autocomplete="off"
+              />
+              <span class="blog-search__icon" aria-hidden="true">🔍</span>
+              <button type="button" id="blog-search-clear" class="blog-search__clear" aria-label="검색 지우기" hidden>✕</button>
+            </div>
+            <div id="blog-search-status" class="blog-search__status" hidden></div>
             <div id="post-list" class="grid"></div>
             <nav id="blog-pager" class="blog-pager" aria-label="블로그 글 페이지"></nav>
           </div>

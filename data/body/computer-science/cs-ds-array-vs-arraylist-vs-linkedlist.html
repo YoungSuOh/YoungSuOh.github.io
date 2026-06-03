@@ -1,0 +1,44 @@
+<h2>Array (배열)</h2>
+<dl class="kv-list">
+  <dt>크기</dt><dd>한번 정해지면 <strong>변경 불가</strong></dd>
+  <dt>메모리</dt><dd>연속된 메모리 공간</dd>
+  <dt>조회</dt><dd>인덱스 O(1)</dd>
+  <dt>삽입·삭제</dt><dd>O(n) — 이후 요소 이동</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>빠른 인덱스 접근 O(1), 메모리 사용 적음 (오버헤드 없음)</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>크기 변경 불가, 삽입·삭제 비효율, 메모리 낭비 가능</div>
+</div>
+<h2>ArrayList (동적 배열)</h2>
+<dl class="kv-list">
+  <dt>크기</dt><dd><strong>동적 크기 조정</strong>. 부족하면 더 큰 배열 생성·복사</dd>
+  <dt>메모리</dt><dd>연속된 메모리 공간</dd>
+  <dt>조회</dt><dd>O(1)</dd>
+  <dt>삽입·삭제</dt><dd>O(n) — 느림</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>크기 변경 가능, 빠른 조회 O(1), LinkedList보다 캐시 효율성 높음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>삽입·삭제 시 성능 저하 O(n), 크기 증가 시 복사 오버헤드</div>
+</div>
+<h2>LinkedList (연결 리스트)</h2>
+<dl class="kv-list">
+  <dt>구조</dt><dd>노드(Node)와 포인터</dd>
+  <dt>메모리</dt><dd><strong>비연속적</strong> 메모리 공간</dd>
+  <dt>조회</dt><dd>O(n) — 앞에서부터 탐색</dd>
+  <dt>삽입·삭제</dt><dd>O(1) — 중간에서도 가능</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>삽입·삭제 빠름 O(1), 크기 제한 없음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>조회 느림 O(n), 포인터 저장 메모리 추가, 캐시 효율성 낮음</div>
+</div>
+<h2>비교 요약</h2>
+<table>
+<thead><tr><th>특징</th><th>Array</th><th>ArrayList</th><th>LinkedList</th></tr></thead>
+<tbody>
+<tr><td>크기</td><td>고정</td><td>동적</td><td>동적</td></tr>
+<tr><td>조회</td><td>O(1)</td><td>O(1)</td><td>O(n)</td></tr>
+<tr><td>삽입/삭제</td><td>O(n)</td><td>O(n)</td><td>O(1)</td></tr>
+<tr><td>메모리</td><td>연속</td><td>연속</td><td>비연속</td></tr>
+<tr><td>캐시 효율</td><td>높음</td><td>높음</td><td>낮음</td></tr>
+</tbody></table>
+<div class="summary-box"><div><strong>선택 기준:</strong> 조회 위주 → ArrayList / 삽입·삭제 위주 → LinkedList / 크기 고정 + 빠른 접근 → Array</div></div>

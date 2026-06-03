@@ -1,0 +1,24 @@
+<div class="def-box"><div class="def-term">운영체제(OS)란?</div><div class="def-desc">하드웨어와 컴퓨터 시스템의 자원들을 효율적으로 관리하고, 사용자가 컴퓨터를 편리하게 사용할 수 있게 하는 소프트웨어</div></div>
+<h2>운영체제의 5가지 역할</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">프로세스 관리</span><div class="step-desc">프로세스·스레드, 스케줄링, 동기화, IPC 통신</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">저장장치 관리</span><div class="step-desc">메모리, 가상 메모리, 파일 시스템</div></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">네트워킹</span><div class="step-desc">TCP/IP, 기타 프로토콜</div></div>
+  <div class="step-item"><span class="step-num">4</span><span class="step-title">사용자 관리</span><div class="step-desc">계정·접근권한 관리</div></div>
+  <div class="step-item"><span class="step-num">5</span><span class="step-title">디바이스 드라이버</span><div class="step-desc">순차/임의 접근 장치, 네트워크 장치</div></div>
+</div>
+<h2>각 역할 상세</h2>
+<h3>1. 프로세스 관리</h3>
+<p>현재 CPU를 점유해야 할 프로세스를 결정하고, 실제로 CPU를 프로세스에 할당하며, 프로세스 간 공유 자원 접근과 통신을 관리한다.</p>
+<h3>2. 저장장치 관리</h3>
+<dl class="kv-list">
+  <dt>1차 저장장치</dt><dd>Main Memory — 프로세스 메모리 영역 할당/해제, 영역 간 침범 방지, 가상 메모리</dd>
+  <dt>2차 저장장치</dt><dd>HDD, NAND — 파일 형식 데이터 저장, FAT/NTFS/EXT2/JFS/XFS 등 파일 시스템</dd>
+</dl>
+<h3>3. 네트워킹</h3>
+<p>TCP/IP 기반 인터넷에 연결하거나 응용 프로그램이 네트워크를 사용하려면 <span class="kw blue">운영체제에서 네트워크 프로토콜을 지원</span>해야 한다.</p>
+<h3>4. 사용자 관리</h3>
+<p>하나의 PC를 여러 사용자가 쓰는 환경을 지원해야 한다. 사용자별 프라이버시·보안을 위해 개인 파일에 다른 사용자가 접근할 수 없도록 한다.</p>
+<h3>5. 디바이스 드라이버</h3>
+<p>운영체제 안에 하드웨어를 추상화해주는 계층이 디바이스 드라이버다. 응용 프로그램이 하드웨어를 사용할 수 있게 만든다.</p>
+<div class="summary-box"><div><strong>한 줄 요약:</strong> OS는 프로세스·저장장치·네트워킹·사용자·디바이스 드라이버 5가지를 관리한다.</div></div>

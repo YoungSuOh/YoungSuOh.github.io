@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="우선순위 큐를 위한 완전 이진 트리 구조의 힙. Max Heap·Min Heap의 특징, 부모-자식 인덱스 관계, 삽입(Up Heap)·삭제(Down Heap) 동작을 정리합니다." />
+    <title>[Data Structure] Heap · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2025-05-19 · Computer Science</p>
+        <h1 class="article-title">[Data Structure] Heap</h1>
+        <p class="article-lead muted">우선순위 큐를 위한 완전 이진 트리 구조의 힙. Max Heap·Min Heap의 특징, 부모-자식 인덱스 관계, 삽입(Up Heap)·삭제(Down Heap) 동작을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Computer Science</span><span class="tag">DataStructure</span></div>
+        <div class="article-body post-body">
+<div class="def-box"><div class="def-term">Heap</div><div class="def-desc"><strong>우선순위 큐</strong>를 위해 만들어진 자료구조. <strong>완전 이진 트리</strong>의 일종. 중복된 값 허용 (BST는 중복 X)</div></div>
+<h2>2가지 종류</h2>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">Max Heap</div>부모 ≥ 자식. 최댓값이 루트</div>
+  <div class="compare-card"><div class="compare-title">Min Heap</div>부모 ≤ 자식. 최솟값이 루트</div>
+</div>
+<h2>부모-자식 인덱스 관계</h2>
+<pre><code>왼쪽 자식 index = (부모 index) × 2
+오른쪽 자식 index = (부모 index) × 2 + 1
+부모 index = (자식 index) / 2</code></pre>
+<div class="callout info"><div class="callout-icon">💡</div><div class="callout-body">index 0은 안 씀 — 부모-자식 2배 관계를 유지하기 위해</div></div>
+<h2>힙의 삽입 (Up Heap)</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">마지막 노드에 새 요소 추가</span></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">부모와 비교 후 교환</span><div class="step-desc">부모보다 크면(Max Heap) 교환</div></div>
+</div>
+<pre><code class="language-cpp">void insert_max_heap(int x) {
+    maxHeap[++heapSize] = x;  // 마지막 노드에 추가
+    for (int i = heapSize; i &gt; 1; i /= 2) {
+        if (maxHeap[i/2] &lt; maxHeap[i]) swap(i/2, i);
+        else break;
+    }
+}
+</code></pre>
+<h2>힙의 삭제 (Down Heap)</h2>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">루트 노드 삭제</span><div class="step-desc">최대 힙: 최댓값 = 루트</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">마지막 노드를 루트로 이동</span></div>
+  <div class="step-item"><span class="step-num">3</span><span class="step-title">힙 재구성</span><div class="step-desc">자식 중 큰 값과 교환</div></div>
+</div>
+<pre><code class="language-cpp">int delete_max_heap() {
+    int item = maxHeap[1];          // 루트 저장
+    maxHeap[1] = maxHeap[heapSize]; // 마지막을 루트로
+    maxHeap[heapSize--] = 0;
+    // ... heapify down
+    return item;
+}
+</code></pre>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

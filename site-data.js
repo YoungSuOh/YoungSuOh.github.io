@@ -50,6 +50,546 @@ window.BLOG_DATA = {
   ],
   "posts": [
     {
+      "id": "post-299",
+      "title": "[Data Structure] Stack & Queue",
+      "category": "Computer Science",
+      "summary": "LIFO 스택과 FIFO 큐의 구조, push/pop/enQueue/deQueue 동작, 스택 포인터·front/rear 개념을 정리합니다.",
+      "date": "2025-05-26",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-stack-queue.html"
+    },
+    {
+      "id": "post-298",
+      "title": "[Data Structure] Linked List",
+      "category": "Computer Science",
+      "summary": "연결 리스트의 구조와 4가지 종류(Single·Doubly·Circular Single·Circular Doubly)를 비교하여 각각의 특징과 사용 예시를 정리합니다.",
+      "date": "2025-05-22",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-linked-list.html"
+    },
+    {
+      "id": "post-297",
+      "title": "[Data Structure] Heap",
+      "category": "Computer Science",
+      "summary": "우선순위 큐를 위한 완전 이진 트리 구조의 힙. Max Heap·Min Heap의 특징, 부모-자식 인덱스 관계, 삽입(Up Heap)·삭제(Down Heap) 동작을 정리합니다.",
+      "date": "2025-05-19",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-heap.html"
+    },
+    {
+      "id": "post-296",
+      "title": "[Data Structure] Hash",
+      "category": "Computer Science",
+      "summary": "해시 자료구조의 개념, 해시 함수, 충돌 해결(체이닝·오픈 어드레싱), 시간 복잡도, 리해싱(Rehashing), Load Factor를 정리합니다.",
+      "date": "2025-05-16",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-hash.html"
+    },
+    {
+      "id": "post-295",
+      "title": "[Data Structure] AVL Tree & Red-Black Tree",
+      "category": "Computer Science",
+      "summary": "균형 이진 트리인 AVL과 Red-Black Tree의 특징·삽입/삭제 동작·장단점을 비교하여 언제 어떤 것을 선택해야 하는지 정리합니다.",
+      "date": "2025-05-13",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-avl-redblack-tree.html"
+    },
+    {
+      "id": "post-294",
+      "title": "[Data Structure] Binary Search Tree",
+      "category": "Computer Science",
+      "summary": "이진 탐색 트리의 특징, 핵심 연산, 시간 복잡도(균등 vs 편향), 삭제의 3가지 경우, 편향 문제 해결책(AVL·Red-Black)을 정리합니다.",
+      "date": "2025-05-10",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-binary-search-tree.html"
+    },
+    {
+      "id": "post-293",
+      "title": "[Data Structure] Tree",
+      "category": "Computer Science",
+      "summary": "트리의 특징, 4가지 순회 방식(전위·중위·후위·레벨), 트리를 사용하는 4가지 이유(탐색·구조화·확장성·경로 탐색)를 정리합니다.",
+      "date": "2025-05-07",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-tree.html"
+    },
+    {
+      "id": "post-292",
+      "title": "[Data Structure] Array vs ArrayList vs LinkedList",
+      "category": "Computer Science",
+      "summary": "3가지 자료구조의 메모리 구조, 시간 복잡도, 장단점을 비교하여 어떤 상황에 어떤 자료구조를 써야 하는지 정리합니다.",
+      "date": "2025-05-04",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-array-vs-arraylist-vs-linkedlist.html"
+    },
+    {
+      "id": "post-291",
+      "title": "[Data Structure] 자료구조 한눈에 보기",
+      "category": "Computer Science",
+      "summary": "Array·List·ArrayList·Stack·Queue·Deque·Tree·Hash Table 등 핵심 자료구조의 특징과 시간 복잡도를 한눈에 정리합니다.",
+      "date": "2025-04-30",
+      "tags": [
+        "Computer Science",
+        "DataStructure"
+      ],
+      "link": "posts/Computer-Science/cs-ds-readme.html"
+    },
+    {
+      "id": "post-290",
+      "title": "[Architecture] Cache",
+      "category": "Computer Science",
+      "summary": "캐시의 동작 원리, 계층 구조(L1·L2·L3), 캐시 교체 알고리즘(LRU·LFU·FIFO), Write 정책 4가지 조합을 정리합니다.",
+      "date": "2025-04-27",
+      "tags": [
+        "Computer Science",
+        "Architecture"
+      ],
+      "link": "posts/Computer-Science/cs-arch-cache.html"
+    },
+    {
+      "id": "post-289",
+      "title": "[Architecture] Fixed Point & Floating Point",
+      "category": "Computer Science",
+      "summary": "고정 소수점과 부동 소수점(IEEE 754) 표현 방식의 비교 — 비트 구조, 연산 속도, 표현 범위, 정밀도 차이를 정리합니다.",
+      "date": "2025-04-24",
+      "tags": [
+        "Computer Science",
+        "Architecture"
+      ],
+      "link": "posts/Computer-Science/cs-arch-fixed-floating-point.html"
+    },
+    {
+      "id": "post-288",
+      "title": "[Architecture] CPU",
+      "category": "Computer Science",
+      "summary": "CPU의 구성(ALU·CU·레지스터), 명령어 사이클(Fetch·Decode·Execute), 성능 결정 요소(클럭·코어·캐시·ISA)를 정리합니다.",
+      "date": "2025-04-21",
+      "tags": [
+        "Computer Science",
+        "Architecture"
+      ],
+      "link": "posts/Computer-Science/cs-arch-cpu.html"
+    },
+    {
+      "id": "post-287",
+      "title": "[Network] Synchronous/Asynchronous & Blocking/Non-blocking",
+      "category": "Computer Science",
+      "summary": "동기/비동기와 블로킹/논블로킹의 차이, 4가지 조합(Blocking+Sync, Non-blocking+Async 등)의 특징을 정리합니다.",
+      "date": "2025-04-18",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-sync-async-blocking-nonblocking.html"
+    },
+    {
+      "id": "post-286",
+      "title": "[Network] TLS/SSL HandShake",
+      "category": "Computer Science",
+      "summary": "HTTPS의 SSL/TLS 핸드셰이크 5단계(Client Hello → Server Hello → 인증서 검증 → 키 교환 → Finished)를 정리합니다.",
+      "date": "2025-04-15",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-tls-ssl-handshake.html"
+    },
+    {
+      "id": "post-285",
+      "title": "[Network] TCP 흐름제어 / 혼잡제어",
+      "category": "Computer Science",
+      "summary": "TCP 흐름 제어(Stop&Wait, Sliding Window)와 혼잡 제어(AIMD, Slow Start, Fast Retransmit, Fast Recovery), Tahoe vs Reno 정책을 정리합니다.",
+      "date": "2025-04-12",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-tcp-flow-congestion-control.html"
+    },
+    {
+      "id": "post-284",
+      "title": "[Network] HTTP & HTTPS (private, public key)",
+      "category": "Computer Science",
+      "summary": "HTTP의 평문 전송 한계, HTTPS의 SSL/TLS 암호화, 대칭키·비대칭키 암호화 방식, HTTPS 핸드셰이크 동작 과정을 정리합니다.",
+      "date": "2025-04-08",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-http-https.html"
+    },
+    {
+      "id": "post-283",
+      "title": "[Network] UDP",
+      "category": "Computer Science",
+      "summary": "UDP의 특징(비연결·신뢰성 없음·빠름), TCP vs UDP 비교, DNS가 UDP를 사용하는 이유, UDP 헤더 구조를 정리합니다.",
+      "date": "2025-04-05",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-udp.html"
+    },
+    {
+      "id": "post-282",
+      "title": "[Network] 멀티 스레드",
+      "category": "Computer Science",
+      "summary": "멀티 프로세스의 한계와 스레드 등장 배경, 메모리 구조 비교, POSIX 스레드 생성(pthread_create/join), 임계영역과 동시 접근 문제를 정리합니다.",
+      "date": "2025-04-02",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-multithread.html"
+    },
+    {
+      "id": "post-281",
+      "title": "[Network] DNS",
+      "category": "Computer Science",
+      "summary": "브라우저에 URL 입력 시 통신 흐름, DHCP·ARP로 DNS 서버 주소 찾기, 계층화된 DNS 서버 구조와 웹 서버 접속 과정을 정리합니다.",
+      "date": "2025-03-30",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-dns.html"
+    },
+    {
+      "id": "post-280",
+      "title": "[Network] TCP (3 Way Handshake) + MultiProcess",
+      "category": "Computer Science",
+      "summary": "TCP 통신 과정, 소켓 시스템 콜(socket·bind·listen·accept), 3 Way Handshake, 서버의 멀티 프로세스/멀티 스레드 처리를 정리합니다.",
+      "date": "2025-03-27",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-tcp-3-way-handshake.html"
+    },
+    {
+      "id": "post-279",
+      "title": "[Network] OSI 7 계층",
+      "category": "Computer Science",
+      "summary": "네트워크 통신 과정을 7단계로 나눈 OSI 7 계층 모델의 개요를 정리합니다.",
+      "date": "2025-03-24",
+      "tags": [
+        "Computer Science",
+        "Network"
+      ],
+      "link": "posts/Computer-Science/cs-network-osi-7-layer.html"
+    },
+    {
+      "id": "post-278",
+      "title": "[Database] Stored Procedure",
+      "category": "Computer Science",
+      "summary": "여러 SQL을 함수처럼 묶어 실행하는 Stored Procedure의 구조(DELIMITER·IN/OUT/INOUT), 장단점, 실전 사용 사례를 정리합니다.",
+      "date": "2025-03-21",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-stored-procedure.html"
+    },
+    {
+      "id": "post-277",
+      "title": "[Database] SQL Injection",
+      "category": "Computer Science",
+      "summary": "SQL Injection 공격 방법(인증 우회·데이터 노출)과 방어 기법(화이트리스트·권한 분리·PreparedStatement·ORM)을 정리합니다.",
+      "date": "2025-03-18",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-sql-injection.html"
+    },
+    {
+      "id": "post-276",
+      "title": "[Database] Index",
+      "category": "Computer Science",
+      "summary": "DB 인덱스의 기본 개념, B-Tree·Hash·Bitmap·Full-text 종류, 단일/복합 인덱스 예제와 장단점을 정리합니다.",
+      "date": "2025-03-14",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-index.html"
+    },
+    {
+      "id": "post-275",
+      "title": "[Database] JOIN",
+      "category": "Computer Science",
+      "summary": "INNER·LEFT/RIGHT OUTER·FULL OUTER·CROSS·SELF JOIN의 동작 차이와 실전 예제, PinterSemi 대댓글 실사례를 정리합니다.",
+      "date": "2025-03-11",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-join.html"
+    },
+    {
+      "id": "post-274",
+      "title": "[Database] SQL vs NoSQL",
+      "category": "Computer Science",
+      "summary": "관계형 vs 비관계형 데이터베이스의 핵심 차이(스키마·관계·확장 방식)와 각각의 적합한 사용 사례를 정리합니다.",
+      "date": "2025-03-08",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-sql-vs-nosql.html"
+    },
+    {
+      "id": "post-273",
+      "title": "[Database] 정규화 & 반정규화",
+      "category": "Computer Science",
+      "summary": "제1·2·3·BCNF 정규형의 단계별 변환 과정과 반정규화(테이블 병합·중복 컬럼 추가)의 트레이드오프를 정리합니다.",
+      "date": "2025-03-05",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-normalization.html"
+    },
+    {
+      "id": "post-272",
+      "title": "[Database] Transaction Isolation Level",
+      "category": "Computer Science",
+      "summary": "트랜잭션 격리 수준 4단계(Read Uncommitted·Read Committed·Repeatable Read·Serializable)와 Dirty Read·Non-Repeatable Read·Phantom Read 문제를 정리합니다.",
+      "date": "2025-03-02",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-transaction-isolation-level.html"
+    },
+    {
+      "id": "post-271",
+      "title": "[Database] Transaction",
+      "category": "Computer Science",
+      "summary": "트랜잭션의 정의, ACID 4가지 특성(원자성·일관성·독립성·지속성)과 Commit/Rollback을 정리합니다.",
+      "date": "2025-02-27",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-transaction.html"
+    },
+    {
+      "id": "post-270",
+      "title": "[Database] Key",
+      "category": "Computer Science",
+      "summary": "후보키·기본키·대체키·슈퍼키·외래키 — 데이터베이스의 5가지 키 종류와 유일성·최소성 조건을 정리합니다.",
+      "date": "2025-02-24",
+      "tags": [
+        "Computer Science",
+        "DB"
+      ],
+      "link": "posts/Computer-Science/cs-db-key.html"
+    },
+    {
+      "id": "post-269",
+      "title": "[OS] Scheduling Algorithm",
+      "category": "Computer Science",
+      "summary": "FCFS의 Convoy Effect와 SJF(Shortest Job First) 스케줄링 알고리즘의 동작 원리를 정리합니다.",
+      "date": "2025-02-20",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-scheduling-algorithm.html"
+    },
+    {
+      "id": "post-268",
+      "title": "[OS] fork() · wait() · execl() · execlp()",
+      "category": "Computer Science",
+      "summary": "프로세스 생성/제어 시스템 콜인 fork·wait·execl·execlp의 동작 원리와 실전 예제 8가지를 정리합니다.",
+      "date": "2025-02-17",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-fork-wait-exec.html"
+    },
+    {
+      "id": "post-267",
+      "title": "[OS] PCB & Context Switching",
+      "category": "Computer Science",
+      "summary": "PCB(Process Control Block)의 구조와 관리 방식, Context Switching이 발생하는 시점과 오버헤드를 정리합니다.",
+      "date": "2025-02-14",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-pcb-context-switching.html"
+    },
+    {
+      "id": "post-266",
+      "title": "[OS] 파일 시스템",
+      "category": "Computer Science",
+      "summary": "파일 시스템의 접근 방법(순차/직접/색인)과 디렉토리 구조(1단계·2단계·트리·그래프)를 정리합니다.",
+      "date": "2025-02-11",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-file-system.html"
+    },
+    {
+      "id": "post-265",
+      "title": "[OS] Memory",
+      "category": "Computer Science",
+      "summary": "MMU의 역할, 가상 메모리, 메모리 과할당과 페이지 교체, 캐시 메모리의 지역성과 Write 정책을 정리합니다.",
+      "date": "2025-02-08",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-memory.html"
+    },
+    {
+      "id": "post-264",
+      "title": "[OS] Race Condition",
+      "category": "Computer Science",
+      "summary": "커널 작업 중 인터럽트, Context Switch, 멀티 프로세서 환경에서 발생하는 Race Condition의 원인과 해결 방법을 정리합니다.",
+      "date": "2025-02-05",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-race-condition.html"
+    },
+    {
+      "id": "post-263",
+      "title": "[OS] Kernel & User Mode",
+      "category": "Computer Science",
+      "summary": "커널 모드와 유저 모드의 권한 차이, 시스템 콜·인터럽트·컨텍스트 스위치를 통한 모드 전환 메커니즘을 정리합니다.",
+      "date": "2025-02-02",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-kernel-user-mode.html"
+    },
+    {
+      "id": "post-262",
+      "title": "[OS] 데드락 (DeadLock)",
+      "category": "Computer Science",
+      "summary": "교착 상태의 4가지 발생 조건과 예방/회피/탐지·회복 처리 방법을 정리합니다. 은행원 알고리즘과 자원 할당 그래프 포함.",
+      "date": "2025-01-29",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-deadlock.html"
+    },
+    {
+      "id": "post-261",
+      "title": "[OS] Semaphore & Mutex",
+      "category": "Computer Science",
+      "summary": "Critical Section, 세마포어의 P/V 연산, 뮤텍스 알고리즘(Dekker·Peterson·Bakery), 세마포어 vs 뮤텍스 비교를 정리합니다.",
+      "date": "2025-01-26",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-semaphore-mutex.html"
+    },
+    {
+      "id": "post-260",
+      "title": "[OS] Process & Thread",
+      "category": "Computer Science",
+      "summary": "프로세스와 스레드의 메모리 구조, PCB, 멀티 프로세스 vs 멀티 스레드의 트레이드오프를 정리합니다.",
+      "date": "2025-01-23",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-process-thread.html"
+    },
+    {
+      "id": "post-259",
+      "title": "[OS] System Call",
+      "category": "Computer Science",
+      "summary": "운영체제 커널 서비스를 응용 프로그램에 제공하는 인터페이스. 시스템 콜이 필요한 이유와 6가지 유형, fork/wait/exec 예제를 정리합니다.",
+      "date": "2025-01-20",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-system-call.html"
+    },
+    {
+      "id": "post-258",
+      "title": "[OS] CPU Scheduling",
+      "category": "Computer Science",
+      "summary": "선점/비선점 스케줄링, FCFS·SJF·HRN·RR·Multilevel Queue·Multilevel Feedback Queue까지 CPU 스케줄링 알고리즘을 정리합니다.",
+      "date": "2025-01-17",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-cpu-scheduling.html"
+    },
+    {
+      "id": "post-257",
+      "title": "[OS] CPU",
+      "category": "Computer Science",
+      "summary": "CPU의 주요 구성 요소(CU·ALU·레지스터·캐시·버스)와 프로세스 처리 구조를 정리합니다.",
+      "date": "2025-01-14",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-cpu.html"
+    },
+    {
+      "id": "post-256",
+      "title": "[OS] 인터럽트",
+      "category": "Computer Science",
+      "summary": "폴링 vs 인터럽트, 외부·내부·소프트웨어 인터럽트 종류와 처리 과정(문맥 교환)을 정리합니다.",
+      "date": "2025-01-11",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-interrupt.html"
+    },
+    {
+      "id": "post-255",
+      "title": "[OS] Operating System",
+      "category": "Computer Science",
+      "summary": "운영체제의 5가지 핵심 역할 — 프로세스·저장장치·네트워킹·사용자·디바이스 드라이버 관리를 한눈에 정리합니다.",
+      "date": "2025-01-08",
+      "tags": [
+        "Computer Science",
+        "OS"
+      ],
+      "link": "posts/Computer-Science/cs-os-operating-system.html"
+    },
+    {
       "id": "post-254",
       "title": "[GC] JFR (Java Flight Recorder) & JMC (JDK Mission Control)",
       "category": "Java",

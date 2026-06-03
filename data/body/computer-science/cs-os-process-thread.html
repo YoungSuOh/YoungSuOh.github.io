@@ -1,0 +1,29 @@
+<h2>프로세스</h2>
+<div class="def-box"><div class="def-term">Process</div><div class="def-desc">실행 중인 프로그램. OS로부터 주소공간·파일·메모리 등을 할당받음. 각 프로세스는 독립된 메모리 공간을 사용하며 프로세스 간 데이터 공유는 어려움</div></div>
+<h3>PCB (Process Control Block)</h3>
+<p>특정 프로세스의 중요한 정보를 저장하는 <span class="kw blue">OS 자료구조</span>. 프로세스 생성과 동시에 고유한 PCB 생성.</p>
+<dl class="kv-list">
+  <dt>PID</dt><dd>프로세스 식별자</dd>
+  <dt>상태</dt><dd>new, ready, running, waiting, terminated</dd>
+  <dt>PC</dt><dd>다음 실행할 명령어 주소</dd>
+  <dt>레지스터</dt><dd>CPU 레지스터 값</dd>
+  <dt>스케줄링</dt><dd>우선순위, 큐 포인터</dd>
+  <dt>메모리</dt><dd>페이지/세그먼트 테이블</dd>
+</dl>
+<h2>스레드</h2>
+<div class="def-box"><div class="def-term">Thread</div><div class="def-desc">프로세스 내에서 실행되는 독립적인 작업 흐름. 같은 프로세스 내 스레드는 <strong>메모리(힙 영역)를 공유</strong>하여 통신이 간단하지만 동기화 문제가 발생할 수 있음</div></div>
+<h2>멀티 프로세스 vs 멀티 스레드</h2>
+<table>
+<thead><tr><th>구분</th><th>멀티 프로세스</th><th>멀티 스레드</th></tr></thead>
+<tbody>
+<tr><td>메모리 구조</td><td>서로 분리된 메모리 공간</td><td>프로세스 내 메모리 공유</td></tr>
+<tr><td>생성/종료 비용</td><td>큼</td><td>작음</td></tr>
+<tr><td>안정성</td><td>한 프로세스 죽어도 영향 없음</td><td>한 스레드 문제가 전체에 영향</td></tr>
+<tr><td>통신</td><td>IPC(파이프/소켓/공유메모리)</td><td>메모리 공유로 빠름. 동기화 주의</td></tr>
+<tr><td>사용 예</td><td>독립 모듈 분리, MSA</td><td>병렬 계산, 빠른 협업</td></tr>
+</tbody></table>
+<h2>선택 기준</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">멀티 프로세스 유리</div>독립 모듈 분리·안전성, 하나가 죽어도 다른 모듈에 영향 없음, OS 보호 활용</div>
+  <div class="compare-card pro"><div class="compare-title">멀티 스레드 유리</div>공유 데이터 많음, 쓰레드 간 빠른 통신, 여러 코어 활용 (이미지 처리·ML)</div>
+</div>

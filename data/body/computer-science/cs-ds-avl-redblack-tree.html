@@ -1,0 +1,35 @@
+<h2>AVL Tree</h2>
+<div class="def-box"><div class="def-term">AVL Tree</div><div class="def-desc"><strong>높이 균형 트리</strong>. 모든 노드에서 왼쪽·오른쪽 서브트리 높이 차이가 최대 1 유지. 삽입·삭제 시 균형 맞춰 O(log n) 유지</div></div>
+<h3>균형 조건</h3>
+<div class="callout info"><div class="callout-icon">⚖️</div><div class="callout-body"><strong>Balance Factor = 왼쪽 높이 - 오른쪽 높이</strong>. <code>|BF| ≤ 1</code>을 항상 만족</div></div>
+<h3>삽입 시 회전(Rotation) 유형</h3>
+<div class="compare-grid">
+  <div class="compare-card"><div class="compare-title">LL</div>오른쪽 회전</div>
+  <div class="compare-card"><div class="compare-title">RR</div>왼쪽 회전</div>
+  <div class="compare-card"><div class="compare-title">LR</div>왼쪽 → 오른쪽 회전</div>
+  <div class="compare-card"><div class="compare-title">RL</div>오른쪽 → 왼쪽 회전</div>
+</div>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>탐색 빠름 O(log n), 높이 낮음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>삽입/삭제 시 회전 많음, 균형 유지 비용</div>
+</div>
+<h2>Red-Black Tree</h2>
+<div class="def-box"><div class="def-term">Red-Black Tree</div><div class="def-desc">균형 이진 탐색 트리. <strong>완벽한 균형은 아니지만 평균적 균형 유지</strong> → O(log n) 보장. 삽입/삭제 균형 비용이 AVL보다 적음</div></div>
+<h3>5가지 규칙</h3>
+<ol>
+  <li>노드는 <strong>빨강 또는 검정</strong></li>
+  <li>루트는 항상 <strong>검정</strong></li>
+  <li>모든 리프(NIL)는 검정</li>
+  <li>빨강 노드는 <strong>연속될 수 없음</strong> (Red-Red 불가)</li>
+  <li>모든 경로에서 <strong>검정 노드 개수 동일</strong> (Black Height 유지)</li>
+</ol>
+<h3>삽입/삭제</h3>
+<dl class="kv-list">
+  <dt>삽입</dt><dd>BST 규칙 + 삽입 노드는 <strong>항상 빨강</strong> + 속성 위반 시 Color Flip 또는 Rotation</dd>
+  <dt>삭제</dt><dd>BST 삭제 + 검정 노드 삭제 시 속성 확인 + 균형 유지</dd>
+</dl>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">장점</div>삽입/삭제 AVL보다 빠름, 회전 적음, 메모리 오버헤드 적음</div>
+  <div class="compare-card con"><div class="compare-title">단점</div>탐색은 AVL보다 느림 (높이가 더 큼), 구현 어려움</div>
+</div>
+<div class="summary-box"><div><strong>결론:</strong> AVL = 탐색 속도 최적화 / Red-Black = 삽입·삭제 속도 최적화</div></div>

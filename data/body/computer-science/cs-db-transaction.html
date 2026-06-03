@@ -1,0 +1,22 @@
+<div class="def-box"><div class="def-term">트랜잭션</div><div class="def-desc">데이터베이스의 상태를 변화시키기 위해 수행하는 <strong>작업 단위</strong>. SQL 질의어를 통해 DB에 접근하는 것</div></div>
+<h2>SELECT도 트랜잭션?</h2>
+<div class="callout info"><div class="callout-icon">📌</div><div class="callout-body">데이터 변경(INSERT/UPDATE/DELETE)만 트랜잭션이라 생각하기 쉽지만, <strong>SELECT도 isolation level 안에서 수행</strong>되므로 DBMS 입장에선 트랜잭션 범위에 들어간다. REPEATABLE READ나 SERIALIZABLE에선 같은 SELECT를 여러 번 실행해도 동일 결과를 보장해야 함.</div></div>
+<h2>작업 단위 예시</h2>
+<p>사용자 A가 사용자 B에게 만원 송금</p>
+<div class="step-flow">
+  <div class="step-item"><span class="step-num">1</span><span class="step-title">A의 잔고 차감</span><div class="step-desc">UPDATE A</div></div>
+  <div class="step-item"><span class="step-num">2</span><span class="step-title">B의 잔고 증가</span><div class="step-desc">UPDATE B</div></div>
+</div>
+<p>두 UPDATE가 모두 성공해야 <span class="kw green">Commit</span>, 하나라도 실패하면 <span class="kw red">Rollback</span>.</p>
+<h2>ACID — 트랜잭션의 4가지 특성</h2>
+<dl class="kv-list">
+  <dt>Atomicity</dt><dd><strong>원자성</strong> — 모두 반영되거나 전혀 반영되지 않아야 함</dd>
+  <dt>Consistency</dt><dd><strong>일관성</strong> — 처리 결과는 항상 일관성 있어야 함</dd>
+  <dt>Isolation</dt><dd><strong>독립성</strong> — 둘 이상의 트랜잭션이 동시 실행 시 서로 끼어들 수 없음</dd>
+  <dt>Durability</dt><dd><strong>지속성</strong> — 성공한 트랜잭션 결과는 영구 반영</dd>
+</dl>
+<h2>Commit vs Rollback</h2>
+<div class="compare-grid">
+  <div class="compare-card pro"><div class="compare-title">Commit</div>하나의 트랜잭션이 성공적으로 끝났고 DB가 일관성 있는 상태임을 알림</div>
+  <div class="compare-card con"><div class="compare-title">Rollback</div>비정상 종료로 원자성이 깨진 경우, 마지막 일관성 상태(트랜잭션 시작 상태)로 복귀</div>
+</div>
