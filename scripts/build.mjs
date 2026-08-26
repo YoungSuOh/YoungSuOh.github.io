@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createHash } from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -175,8 +176,22 @@ function main() {
   }
 
   const siteDataPath = path.join(root, "site-data.js");
-  fs.writeFileSync(siteDataPath, buildSiteDataJs(config, postsMeta), "utf8");
+  const siteDataJs = buildSiteDataJs(config, postsMeta);
+  fs.writeFileSync(siteDataPath, siteDataJs, "utf8");
   console.log("Wrote", path.relative(root, siteDataPath));
+
+  // index.html의 캐시 버스터를 site-data.js 내용 해시로 갱신 (내용이 같으면 그대로)
+  const indexPath = path.join(root, "index.html");
+  const hash = createHash("sha1").update(siteDataJs).digest("hex").slice(0, 10);
+  const indexHtml = fs.readFileSync(indexPath, "utf8");
+  const updated = indexHtml.replace(
+    /site-data\.js\?v=[^"']*/,
+    `site-data.js?v=${hash}`
+  );
+  if (updated !== indexHtml) {
+    fs.writeFileSync(indexPath, updated, "utf8");
+    console.log("Wrote", `index.html (site-data.js?v=${hash})`);
+  }
 }
 
 main();

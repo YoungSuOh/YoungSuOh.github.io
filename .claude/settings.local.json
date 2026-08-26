@@ -1,9 +1,29 @@
 {
+  "env": {
+    "ENABLE_TOOL_SEARCH": "true",
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8787"
+  },
   "permissions": {
     "allow": [
       "Bash(npm run:*)",
       "Bash(node scripts/notion-import.mjs --batch scripts/notion-batch.json --build)",
-      "mcp__claude_ai_Notion__notion-fetch"
+      "mcp__claude_ai_Notion__notion-fetch",
+      "Bash(node -e \"const a=require\\('./data/posts.json'\\); console.log\\(JSON.stringify\\(a.slice\\(0,4\\).map\\(x=>\\({id:x.id,slug:x.slug,cat:x.category,date:x.date}\\)\\),null,1\\)\\)\")",
+      "Bash(node -e ' *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Users/paul9/.local/bin/headroom.EXE wrap selfheal --marker headroom-wrap-selfheal",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

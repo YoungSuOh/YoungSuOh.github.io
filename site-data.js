@@ -43,12 +43,42 @@ window.BLOG_DATA = {
     "DevOps / Infra",
     "System Design",
     "Algorithm",
+    "Coding Test",
     "Computer Science",
     "Testing",
     "Naver Cloud Camp",
     "Claude"
   ],
   "posts": [
+    {
+      "id": "post-301",
+      "title": "MCP(Model Context Protocol)란?",
+      "category": "Claude",
+      "summary": "LLM이 외부 도구·데이터·서비스와 표준화된 방식으로 연결되도록 만든 프로토콜 — N×M 통합 문제부터 Host/Client/Server 구조, Tools·Resources·Prompts, 전송 방식까지 정리합니다.",
+      "date": "2026-04-21",
+      "tags": [
+        "Claude",
+        "MCP",
+        "LLM",
+        "AI",
+        "Developer Tools"
+      ],
+      "link": "posts/Claude/mcp-model-context-protocol.html"
+    },
+    {
+      "id": "post-300",
+      "title": "Greedy vs DP",
+      "category": "Coding Test",
+      "summary": "문제 텍스트만 보고 그리디인지 DP인지 가려내는 판단 노트 — 신호 → 가설 → 검증(반례 사냥·교환 논법) 순서로 접근한다.",
+      "date": "2026-06-03",
+      "tags": [
+        "Coding Test",
+        "Algorithm",
+        "Greedy",
+        "DP"
+      ],
+      "link": "posts/Coding-Test/greedy-vs-dp.html"
+    },
     {
       "id": "post-299",
       "title": "[Data Structure] Stack & Queue",

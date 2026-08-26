@@ -1,0 +1,155 @@
+<div class="summary-box"><div><strong>MCP(Model Context Protocol)</strong> — LLM이 외부 도구·데이터·서비스와 <strong>표준화된 방식</strong>으로 연결되도록 만든 프로토콜.</div></div>
+
+<h2>1. 왜 필요한가?</h2>
+
+<p>LLM 자체가 기본적으로 가지고 있는 능력은 단순합니다. 입력을 받아 텍스트를 생성하는 것, 그게 전부입니다.</p>
+
+<div class="diagram">  사용자              LLM
+    |                  |
+    |---- 질문 ------->|
+    |                  |── 학습된 지식으로 추론
+    |&lt;--- 텍스트 -------|
+    |                  |
+  (외부 세계와의 연결 없음)</div>
+
+<p>하지만 실제 개발에서는 이런 요청이 들어옵니다.</p>
+
+<blockquote>"내 GitHub 저장소에서 최근 PR을 보고 버그 원인을 분석해줘."</blockquote>
+
+<p>이 요청을 처리하려면 LLM이 <span class="kw">GitHub에 직접 접근</span>할 수 있어야 합니다. 문제는 여기서 시작됩니다.</p>
+
+<h3>1.1 연결이 늘어날수록 폭발하는 통합 비용</h3>
+
+<p>서비스마다 개별 연동 코드를 붙이면 이런 모습이 됩니다.</p>
+
+<div class="diagram">  Claude ────────── (전용 연동 코드 #1) ──────────> GitHub API
+  Claude ────────── (전용 연동 코드 #2) ──────────> Slack API
+  Claude ────────── (전용 연동 코드 #3) ──────────> DB
+  Claude ────────── (전용 연동 코드 #4) ──────────> 파일 시스템
+  Claude ────────── (전용 연동 코드 #5) ──────────> Jira API
+  Claude ────────── (전용 연동 코드 #6) ──────────> AWS</div>
+
+<div class="callout warn">
+  <div class="callout-icon">🚧</div>
+  <div class="callout-body">
+    <strong>N × M 문제</strong> — AI 클라이언트가 <em>N</em>개, 붙일 서비스가 <em>M</em>개면 만들어야 할 연동 코드는 <strong>N × M</strong>개.
+    클라이언트가 하나 늘어날 때마다 모든 서비스 연동을 처음부터 다시 작성해야 합니다.
+  </div>
+</div>
+
+<h3>1.2 MCP의 해법 — 공통 프로토콜</h3>
+
+<p>MCP는 이 문제를 <span class="kw green">하나의 표준 프로토콜</span>로 흡수합니다. 클라이언트는 MCP만 말할 줄 알면 되고, 서비스는 MCP 서버만 한 번 구현하면 됩니다.</p>
+
+<div class="diagram">                          ┌──> GitHub
+                          │
+                          ├──> PostgreSQL
+                          │
+  Claude ──[ MCP 규약 ]───┼──> Slack
+                          │
+                          ├──> Filesystem
+                          │
+                          └──> AWS
+
+  N × M  →  N + M</div>
+
+<div class="callout tip">
+  <div class="callout-icon">💡</div>
+  <div class="callout-body">USB-C에 비유하면 이해가 빠릅니다. 기기마다 전용 충전 케이블을 만들 필요 없이, <strong>포트 규격 하나</strong>만 맞추면 되는 구조입니다.</div>
+</div>
+
+<h2>2. MCP의 핵심 구조</h2>
+
+<p>MCP는 <strong>Host</strong>, <strong>Client</strong>, <strong>Server</strong> 세 역할로 나뉩니다.</p>
+
+<dl class="kv-list">
+  <dt>MCP Host</dt><dd>사용자가 직접 쓰는 애플리케이션. Claude Desktop, Claude Code, VS Code 등. LLM을 품고 있고 MCP Client를 띄웁니다.</dd>
+  <dt>MCP Client</dt><dd>Host 안에서 <strong>서버 하나당 하나씩</strong> 생성되는 연결 담당자. 프로토콜 메시지를 주고받는 실제 주체입니다.</dd>
+  <dt>MCP Server</dt><dd>외부 시스템을 MCP 규약으로 감싼 어댑터. GitHub MCP Server, DB MCP Server, Filesystem Server 등.</dd>
+</dl>
+
+<div class="diagram">  MCP Host              MCP Client            MCP Server           실제 시스템
+  (Claude Code)         (연결 1:1)            (GitHub Server)      (GitHub API)
+      |                     |                      |                     |
+      |--- 서버 실행 ------>|                      |                     |
+      |                     |--- initialize ------>|                     |
+      |                     |&lt;-- 서버 정보 --------|                     |
+      |                     |--- tools/list ------>|                     |
+      |                     |&lt;-- 도구 목록 --------|                     |
+      |&lt;-- 사용 가능 도구 --|                      |                     |
+      |                     |                      |                     |
+      |==== 여기까지가 세션 초기화 (연결 시 1회) ====|                     |</div>
+
+<h3>2.1 실제 요청이 흐르는 순서</h3>
+
+<p>"최근 PR을 보고 버그 원인을 분석해줘"라는 요청이 들어왔을 때의 전체 흐름입니다.</p>
+
+<div class="diagram">  사용자        Host + LLM        MCP Client        MCP Server        GitHub API
+    |               |                  |                 |                 |
+    |-- 질문 ------>|                  |                 |                 |
+    |               |── 도구 목록 보고 |                 |                 |
+    |               |   호출 결정      |                 |                 |
+    |               |                  |                 |                 |
+    |               |-- tools/call --->|                 |                 |
+    |               |  (list_pulls)    |-- JSON-RPC ---->|                 |
+    |               |                  |                 |-- REST 호출 --->|
+    |               |                  |                 |&lt;-- PR 데이터 ---|
+    |               |                  |&lt;-- 결과 --------|                 |
+    |               |&lt;-- 도구 결과 ----|                 |                 |
+    |               |                  |                 |                 |
+    |               |── 결과를 컨텍스트에 넣고 재추론      |                 |
+    |&lt;-- 분석 답변 -|                  |                 |                 |</div>
+
+<div class="callout info">
+  <div class="callout-icon">📌</div>
+  <div class="callout-body">핵심은 <strong>LLM이 직접 GitHub를 호출하지 않는다</strong>는 점입니다. LLM은 "어떤 도구를 어떤 인자로 부를지"만 결정하고, 실제 네트워크 호출과 인증은 MCP Server가 담당합니다.</div>
+</div>
+
+<h2>3. MCP 서버가 제공하는 3가지</h2>
+
+<div class="compare-grid">
+  <div class="compare-card">
+    <div class="compare-title">Tools</div>
+    <p><strong>모델이 실행하는 동작.</strong> PR 조회, 쿼리 실행, 파일 쓰기처럼 <em>부수효과가 있을 수 있는</em> 함수. LLM이 호출 여부를 판단합니다.</p>
+  </div>
+  <div class="compare-card">
+    <div class="compare-title">Resources</div>
+    <p><strong>모델이 읽는 데이터.</strong> 파일 내용, 스키마, 문서처럼 URI로 식별되는 읽기 전용 컨텍스트. 보통 Host/사용자가 선택해서 붙입니다.</p>
+  </div>
+  <div class="compare-card">
+    <div class="compare-title">Prompts</div>
+    <p><strong>미리 정의된 프롬프트 템플릿.</strong> "이 PR 리뷰해줘" 같은 반복 작업을 서버가 슬래시 명령 형태로 제공합니다.</p>
+  </div>
+</div>
+
+<h2>4. 전송 방식 (Transport)</h2>
+
+<p>메시지 형식은 <span class="kw blue">JSON-RPC 2.0</span>으로 고정되어 있고, 그 메시지를 실어 나르는 채널만 두 가지로 갈립니다.</p>
+
+<table>
+  <thead>
+    <tr><th>방식</th><th>동작</th><th>쓰이는 곳</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>stdio</code></td><td>Host가 서버를 자식 프로세스로 실행하고 표준 입출력으로 통신</td><td>로컬 도구 (파일 시스템, 로컬 DB, CLI 래퍼)</td></tr>
+    <tr><td><code>Streamable HTTP</code></td><td>HTTP POST + SSE 스트리밍으로 원격 서버와 통신</td><td>원격/공유 서버 (사내 API, SaaS 연동)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout danger">
+  <div class="callout-icon">🔒</div>
+  <div class="callout-body">
+    MCP 서버는 <strong>내 자격 증명으로 실제 시스템을 건드립니다</strong>. 신뢰할 수 없는 서버를 붙이면 토큰 탈취·데이터 유출로 직결됩니다.
+    검증된 서버만 등록하고, 토큰은 최소 권한으로 발급하세요.
+  </div>
+</div>
+
+<h2>5. 정리</h2>
+
+<dl class="kv-list">
+  <dt>문제</dt><dd>LLM은 텍스트 생성만 할 뿐, 외부 시스템과 단절되어 있다. 개별 연동은 N × M으로 폭발한다.</dd>
+  <dt>해결</dt><dd>MCP라는 공통 프로토콜을 두고 클라이언트와 서비스가 각각 한 번씩만 구현한다 → N + M.</dd>
+  <dt>구조</dt><dd>Host(앱) → Client(연결 1:1) → Server(어댑터) → 실제 시스템.</dd>
+  <dt>제공</dt><dd>Tools(실행), Resources(읽기), Prompts(템플릿).</dd>
+  <dt>주의</dt><dd>서버는 실제 권한으로 동작하므로 신뢰 경계를 반드시 확인할 것.</dd>
+</dl>
