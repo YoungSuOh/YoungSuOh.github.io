@@ -2954,6 +2954,19 @@ window.BLOG_DATA = {
         "System Design"
       ],
       "link": "posts/System-Design/template-method-pattern.html"
+    },
+    {
+      "id": "post-302",
+      "title": "N+1 문제 (Java Spring / JPA)",
+      "category": "Database",
+      "summary": "Spring Data JPA에서 N+1 문제가 발생하는 원인과 Fetch Join, @EntityGraph, Batch Size, DTO 직접 조회로 해결하는 방법 정리",
+      "date": "2026-08-08",
+      "tags": [
+        "Database",
+        "JPA",
+        "Spring"
+      ],
+      "link": "posts/Database/n-plus-one-jpa.html"
     }
   ],
   "projects": [
