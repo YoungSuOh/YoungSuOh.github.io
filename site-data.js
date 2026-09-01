@@ -51,6 +51,22 @@ window.BLOG_DATA = {
   ],
   "posts": [
     {
+      "id": "post-303",
+      "title": "Graphify + Headroom + Ponytail을 통한 토큰 사용 효율화",
+      "category": "Claude",
+      "summary": "Claude Code에서 토큰이 새는 3가지 지점 — 반복 탐색, 과도한 도구 결과, 과잉 코드 생성 — 을 Graphify·Headroom·Ponytail로 줄이는 방법과 headroom savings로 확인한 실제 절감 결과를 정리합니다.",
+      "date": "2026-08-01",
+      "tags": [
+        "Claude",
+        "Claude Code",
+        "토큰 최적화",
+        "Graphify",
+        "Headroom",
+        "Ponytail"
+      ],
+      "link": "posts/Claude/token-efficiency-graphify-headroom-ponytail.html"
+    },
+    {
       "id": "post-301",
       "title": "MCP(Model Context Protocol)란?",
       "category": "Claude",
