@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JaCoCo의 바이트코드 계측 원리와 Line/Branch 등 커버리지 지표, Gradle 설정과 jacocoTestCoverageVerification으로 최소 기준을 강제하는 방법을 정리합니다." />
+    <title>JaCoCo 코드 커버리지 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-08-10 · Testing</p>
+        <h1 class="article-title">JaCoCo 코드 커버리지</h1>
+        <p class="article-lead muted">JaCoCo의 바이트코드 계측 원리와 Line/Branch 등 커버리지 지표, Gradle 설정과 jacocoTestCoverageVerification으로 최소 기준을 강제하는 방법을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Testing</span><span class="tag">JaCoCo</span><span class="tag">Gradle</span><span class="tag">Coverage</span></div>
+        <div class="article-body post-body">
+<h2>JaCoCo란</h2>
+<p>JaCoCo(Java Code Coverage)는 테스트가 실제 코드를 얼마나 실행했는지 측정하는 코드 커버리지 도구다. 바이트코드에 <strong>프로브(probe)</strong>를 심어 클래스가 로드·실행되는 시점을 계측(instrumentation)하는 방식으로 동작하며, 소스 컴파일 결과물을 건드리지 않고도 실행 경로를 추적할 수 있다.</p>
+
+<h2>커버리지 지표</h2>
+<ul>
+  <li><strong>Instructions (C0)</strong> — 바이트코드 명령어 단위 실행 여부. 가장 세밀한 지표</li>
+  <li><strong>Branches (C1)</strong> — <code>if</code>, <code>switch</code> 등 분기 중 실제로 탄 경로의 비율</li>
+  <li><strong>Line</strong> — 실행된 소스 라인 비율. 가장 직관적으로 보는 지표</li>
+  <li><strong>Complexity</strong> — 순환 복잡도(Cyclomatic Complexity) 기준으로 커버된 경로 비율</li>
+  <li><strong>Method / Class</strong> — 최소 1개 이상의 인스트럭션이 실행된 메서드·클래스 비율</li>
+</ul>
+<p>실무에서는 대개 <strong>Line</strong>과 <strong>Branch</strong> 커버리지를 기준으로 목표치를 관리한다. Line만 보면 분기 하나가 누락돼도 100%로 보일 수 있어서, 조건문이 많은 코드는 Branch 커버리지를 함께 봐야 한다.</p>
+
+<h2>Gradle 설정</h2>
+<pre><code class="language-groovy">plugins {
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.11'
+}
+
+test {
+    finalizedBy jacocoTestReport // test 실행 후 리포트 자동 생성
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = true // SonarQube 등 외부 연동 시 필요
+    }
+}</code></pre>
+<pre><code class="language-bash">./gradlew test jacocoTestReport
+# 결과: build/reports/jacoco/test/html/index.html</code></pre>
+
+<h2>커버리지 최소 기준 강제 (jacocoTestCoverageVerification)</h2>
+<p>빌드 시점에 커버리지가 기준치 미만이면 빌드를 실패시켜, 커버리지 하락을 CI 단계에서 막을 수 있다.</p>
+<pre><code class="language-groovy">jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                minimum = 0.80
+            }
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.70
+            }
+        }
+
+        rule {
+            element = 'CLASS'
+            excludes = ['**.*Application', '**.*Config', '**.dto.*']
+            limit {
+                counter = 'LINE'
+                minimum = 0.80
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification</code></pre>
+
+<h2>측정 대상 제외</h2>
+<p>DTO, Config, Application 진입점처럼 비즈니스 로직이 없는 클래스는 커버리지 지표를 왜곡하므로 제외하는 것이 일반적이다.</p>
+<pre><code class="language-groovy">jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, excludes: [
+                    '**/*Application*',
+                    '**/dto/**',
+                    '**/config/**'
+                ])
+            })
+        )
+    }
+}</code></pre>
+
+<h2>동작 원리 — 왜 바이트코드 계측인가</h2>
+<ul>
+  <li>소스코드가 아닌 <strong>클래스 파일 로딩 시점</strong>에 On-the-fly로 프로브를 주입한다 (Java Agent 방식)</li>
+  <li>각 프로브는 boolean 배열의 특정 인덱스를 true로 표시하는 역할만 하므로 런타임 오버헤드가 작다</li>
+  <li>테스트 실행이 끝나면 JVM 종료 시점 또는 <code>dump()</code> 호출 시점에 프로브 데이터를 <code>.exec</code> 파일로 직렬화한다</li>
+  <li>리포트 생성 단계에서 <code>.exec</code> 파일과 원본 클래스 파일(디버그 심볼 포함)을 대조해 라인/분기 단위로 매핑한다</li>
+</ul>
+<p>이 방식 때문에 컴파일 시 디버그 정보(<code>-g</code>, 라인 넘버 테이블)가 없으면 라인 단위 매핑이 부정확해질 수 있다.</p>
+
+<h2>흔한 함정</h2>
+<ul>
+  <li><strong>Lombok <code>@Data</code>, <code>@Builder</code> 생성 코드</strong>가 커버리지 분모에 포함되어 수치가 낮아 보이는 경우 → <code>lombok.config</code>에 <code>lombok.addLombokGeneratedAnnotation = true</code>를 추가하면 JaCoCo가 자동으로 제외한다</li>
+  <li><strong>테스트가 있어도 assert가 없는 경우</strong> — 실행만 되고 검증은 안 되므로 커버리지는 높아도 버그를 못 잡는다. 커버리지는 "실행됨"을 보장할 뿐 "검증됨"을 보장하지 않는다</li>
+  <li><strong>100% 커버리지를 맹목적 목표로 삼는 것</strong> — getter/setter, 단순 위임 코드까지 억지로 테스트를 채우면 유지보수 비용만 늘어난다. 비즈니스 로직·분기 위주로 목표를 잡는 편이 낫다</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>

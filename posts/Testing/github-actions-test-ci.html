@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GitHub Actions로 PR마다 테스트를 자동 실행하고, 테스트 리포트·커버리지 검증을 붙여 브랜치 보호와 연결하는 CI 워크플로 구성을 정리합니다." />
+    <title>GitHub Actions로 테스트 CI 자동화 · YoungSuOh Dev Log</title>
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">YoungSuOh Dev Log</a>
+        <nav>
+          <ul class="nav-list">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../index.html#blog">Blog</a></li>
+            <li><a href="../../index.html#archive">Archive</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container article-page">
+      <article class="card article-shell">
+        <p class="article-meta">2026-08-12 · Testing</p>
+        <h1 class="article-title">GitHub Actions로 테스트 CI 자동화</h1>
+        <p class="article-lead muted">GitHub Actions로 PR마다 테스트를 자동 실행하고, 테스트 리포트·커버리지 검증을 붙여 브랜치 보호와 연결하는 CI 워크플로 구성을 정리합니다.</p>
+        <div class="tags article-tags"><span class="tag">Testing</span><span class="tag">CI/CD</span><span class="tag">GitHub Actions</span><span class="tag">DevOps</span></div>
+        <div class="article-body post-body">
+<h2>왜 CI에서 테스트를 자동화하는가</h2>
+<p>로컬에서만 테스트를 돌리면 "내 컴퓨터에서는 됐는데" 문제를 피할 수 없다. PR이 올라올 때마다 동일한 환경에서 전체 테스트 스위트를 실행해 회귀를 조기에 잡고, 리뷰어가 커버리지·빌드 결과를 신뢰하고 머지 여부를 판단할 수 있게 하는 것이 CI의 역할이다. GitHub Actions는 저장소에 <code>.github/workflows/*.yml</code> 파일만 추가하면 별도 서버 없이 이를 구성할 수 있다.</p>
+
+<h2>기본 워크플로 — PR마다 테스트 실행</h2>
+<pre><code class="language-yaml">name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle' # ~/.gradle/caches 캐싱 → 빌드 시간 단축
+
+      - name: Run tests
+        run: ./gradlew test</code></pre>
+<p><code>on.pull_request</code>과 <code>on.push</code>를 함께 두면 PR 단계와 main 머지 시점 양쪽에서 검증된다. <code>cache: 'gradle'</code>은 의존성·빌드 캐시를 저장해 매 실행마다 전체 다운로드를 반복하지 않게 한다.</p>
+
+<h2>테스트 결과 리포트 남기기</h2>
+<p>테스트가 실패했을 때 어떤 케이스가 깨졌는지 Actions 로그를 뒤지지 않고 PR 화면에서 바로 보려면 결과를 아티팩트나 체크로 남긴다.</p>
+<pre><code class="language-yaml">      - name: Run tests
+        run: ./gradlew test
+
+      - name: Publish test report
+        if: always() # 테스트가 실패해도 리포트는 업로드
+        uses: dorny/test-reporter@v1
+        with:
+          name: JUnit Results
+          path: '**/build/test-results/test/*.xml'
+          reporter: java-junit</code></pre>
+<p><code>if: always()</code>가 없으면 이전 스텝(테스트)이 실패했을 때 리포트 업로드 스텝 자체가 스킵돼, 정작 실패 원인을 확인할 수 없게 된다.</p>
+
+<h2>커버리지 기준 강제</h2>
+<p><a href="jacoco-coverage.html">JaCoCo</a>의 <code>jacocoTestCoverageVerification</code>을 CI 스텝으로 실행하면 커버리지가 기준선 아래로 떨어지는 PR을 빌드 실패로 자동 차단할 수 있다.</p>
+<pre><code class="language-yaml">      - name: Verify coverage
+        run: ./gradlew jacocoTestReport jacocoTestCoverageVerification
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/html</code></pre>
+
+<h2>브랜치 보호와 연결</h2>
+<p>워크플로가 초록불이어도 강제하지 않으면 무시하고 머지할 수 있다. 저장소 Settings → Branches → Branch protection rule에서 <code>main</code>에 대해 <strong>Require status checks to pass before merging</strong>을 켜고 CI 워크플로의 job 이름(예: <code>test</code>)을 필수 체크로 지정해야, 테스트가 실패한 PR은 물리적으로 머지 버튼이 막힌다.</p>
+
+<h2>실행 시간 최적화</h2>
+<ul>
+  <li><strong>의존성 캐싱</strong> — <code>setup-java</code>의 <code>cache: 'gradle'</code> 또는 <code>actions/cache</code>로 <code>~/.gradle</code>, <code>node_modules</code> 등을 캐싱</li>
+  <li><strong>매트릭스 대신 필요한 조합만</strong> — 여러 JDK/OS 조합을 <code>strategy.matrix</code>로 다 돌리면 비례해서 느려지므로, 실제로 지원해야 하는 조합만 남긴다</li>
+  <li><strong>테스트 분할(sharding)</strong> — 테스트가 많아지면 <code>--tests</code> 필터나 병렬 job으로 스위트를 나눠 wall-clock 시간을 줄인다</li>
+  <li><strong>불필요한 트리거 제거</strong> — 문서(<code>*.md</code>)만 변경된 커밋까지 전체 테스트를 돌릴 필요는 없으므로 <code>paths-ignore</code>로 제외한다</li>
+</ul>
+
+<h2>흔한 함정</h2>
+<ul>
+  <li><strong>로컬과 CI의 JDK/Gradle 버전 불일치</strong> — 로컬은 통과하는데 CI만 실패하는 원인의 상당수가 버전 차이다. <code>gradle-wrapper.properties</code>로 Gradle 버전을 고정하고 <code>setup-java</code> 버전을 명시한다</li>
+  <li><strong>Flaky 테스트를 재실행으로만 덮는 것</strong> — <code>retry</code> 액션으로 실패를 감추면 근본 원인(테스트 간 상태 공유, 타이밍 의존)이 누적된다. 재시도는 임시방편이고 원인 제거가 우선이다</li>
+  <li><strong>시크릿을 워크플로 로그에 그대로 출력</strong> — <code>run: echo ${{ secrets.DB_PASSWORD }}</code> 같은 디버그 로그는 마스킹되긴 하지만, 문자열 조합·인코딩으로 우회 노출될 수 있어 애초에 로그에 찍지 않는다</li>
+</ul>
+        </div>
+        <p class="article-back">
+          <a class="text-link" href="../../index.html#blog">← 목록으로</a>
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>© 2026 YoungSuOh Dev Log</small>
+      </div>
+    </footer>
+  </body>
+</html>
