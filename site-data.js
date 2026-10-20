@@ -3002,7 +3002,7 @@ window.BLOG_DATA = {
       ],
       "link": "projects/opay/index.html",
       "thumbnail": "photo/project/opay/OPAY_thumbnail.png",
-      "period": "2026.01.26 ~ 현재"
+      "period": "2026.01.26 ~ 2026.04.07"
     },
     {
       "name": "Dr-Rate",

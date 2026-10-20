@@ -451,7 +451,7 @@ stock 감소 + order 확정</code></pre>
           </figure>
           <figure class="screenshot-item" style="margin: 1rem 0">
             <img src="../../photo/posts/TroubleShooting/OPay-동시성테스트/8.png" alt="400 VU 테스트" loading="lazy" />
-            <figcaption class="muted"><code>photo/posts/TroubleShooting/OPay-동시성테스트/8.png</code> — 1품목 400 동시 요청</figcaption>
+            <figcaption class="muted"><code>photo/posts/TroubleShooting/OPay-동시성테스트/8.png</code> — 1품목 400 동시 요청 (전 건 실패)</figcaption>
           </figure>
 
           <h3>전체 구조 (요약)</h3>
@@ -725,9 +725,16 @@ public void onMessage(@Payload String payload) throws Exception {
 
           <h2>정리</h2>
           <p>
-            구조 변경 후 비동기 경로(<code>createOrderQueued</code>) 기준으로 동시 400건 수준에서도 성공률이 크게 개선되었다. 이후에는 부하 테스트로
-            <code>createOrder</code>(동기)와 <code>createOrderQueued</code>(비동기)를 어느 구간에서 선택할지 운영·SLO에 맞게 튜닝하는 단계가 남는다.
+            구조 변경 후 비동기 경로(<code>createOrderQueued</code>) 기준으로 단일 상품 200 VU에서는 비정상 실패 없이 처리되었다. 다만 400 VU에서는 전 건 실패했고,
+            원인은 분석하지 못한 채로 남았다. <code>createOrder</code>(동기)와 <code>createOrderQueued</code>(비동기)를 어느 구간에서 선택할지 운영·SLO에 맞게 튜닝하는 작업도 진행하지 못했다.
           </p>
+
+          <h2>프로젝트 상태</h2>
+          <ul>
+            <li>200 VU 단일 상품 시나리오에서 비정상 실패 0% 확인</li>
+            <li>400 VU 단일 상품 시나리오는 전 건 실패로, 원인 분석 전에 프로젝트를 종료함</li>
+            <li>이후 동시성 학습은 BackEnd-API-Test 저장소에서 이어감</li>
+          </ul>
         </div>
 
         <p class="article-back article-back--action">
